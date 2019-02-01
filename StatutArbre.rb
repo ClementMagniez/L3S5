@@ -11,7 +11,7 @@ class StatutArbre < Statut
 	# Cycle d'un cran, sur le cycle "décoché -> coché"
 	# return self 
 	def cycle
-		if statut.isArbreCoche?
+		if self.isArbreCoche?
 			self.statut=ARBREDECOCHE
 		else
 			self.statut=ARBRECOCHE
@@ -19,6 +19,11 @@ class StatutArbre < Statut
 		self
 	end
 
-	
+	def to_s
+		case self.statut
+			when ARBRECOCHE then '✓'
+			when ARBREDECOCHE then 'A'
+		end
+	end
 	
 end
