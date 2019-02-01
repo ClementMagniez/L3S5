@@ -1,4 +1,5 @@
 require_relative 'Case'
+require_relative 'StatutVide'
 
 # Implémente Case pour les cases apparaissant vides au joueur à la création de 
 # la grille. Un clic sur ces cases en modifie l'apparence et met à jour les
@@ -9,25 +10,25 @@ require_relative 'Case'
 class CaseVide < Case
 	
 	def initialize(etat)
-		super
-		@statutVisible=Statut.new(VIDE)
+		@statutVisible=StatutVide.new(VIDE)
 	end
 		
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
 	# TODO - vérifier que les i,j sont bien cohérents
-	def cycle(i,j,arrayColonnes, arrayLignes)
+	def cycle(i,j,arrayLignes, arrayColonnes)
 		self.statutVisible.cycle
 		
 		if self.statutVisible.isTente? # le statut vient de devenir "tente" 
-			arrayColonnes[i]+=1
-			arrayLignes[j]+=1
+			arrayLignes[i]-=1
+			arrayColonnes[j]-=1
 		elsif self.statutVisible.isVide? # le statut était "tente" 
-			arrayColonnes[i]-=1
-			arrayLignes[j]-=1
+			arrayLignes[i]+=1
+			arrayColonnes[j]+=1
 		end	
 		self
 	end
+	
 
 	protected
 	attr_reader :statutVisible

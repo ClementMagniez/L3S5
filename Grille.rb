@@ -30,12 +30,23 @@ class Grille
 	# Affiche la grille complète - pourra être supprimé quand on aura la GUI
 	def to_s
 		str=""
-		grille.each { |ligne| str+=ligne.join(" | ") + "\n" }
+		self.grille.each_with_index do |ligne,i|
+			str+=ligne.join(" | ")
+			str+=" | "
+			str+=self.tentesLigne[i].to_s + "\n"
+		end
+		self.tentesCol.each { |j| str+="#{j} | "}
 		str
 	end
 	
+	def [](val)
+		self.grille.fetch(val)
+	end
+
 	private
 	attr_writer :grille, :tentesCol, :tentesLigne
+
+
 	
 	# Prend une ligne de texte sortie du fichier listant les grilles et la parse
 	# de sorte à compléter la grille : matrice de jeu, arrays récapitulant les
@@ -72,21 +83,21 @@ class Grille
 	# Prend un unique caractère de la ligne passée à parseLigne et génère une case
 	# dans la matrice selon ce caractère
 	def parseChar(chr, i,j)
-		grille[i][j]=createCase(chr)
+		self.grille[i][j]=createCase(chr)
 	end
 	
 	# Complète la liste des nombres de tentes par ligne
 	# Exemple : si _nb_==5 et _index_==3, considère que la grille a 5 tentes en 
 	# ligne 3
 	def parseLigneNum(nb,index)
-		tentesLigne[index]=nb.to_i;
+		self.tentesLigne[index]=nb.to_i;
 	end
 
 	# Complète la liste des nombres de colonnes par ligne
 	# Exemple : si _nb_==5 et _index_==3, considère que la grille a 5 tentes en 
 	# colonne 3
 	def parseColNum(nb,index)
-		tentesCol[index]=nb.to_i;
+		self.tentesCol[index]=nb.to_i;
 	end	
 	
 	# Initialise une Case de la grille selon la valeur du caractère fourni

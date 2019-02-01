@@ -23,14 +23,22 @@ class StatutVide < Statut
 	# Cycle d'un cran, sur le cycle "case vide -> gazon -> tente"
 	# return self
 	def cycle
-		if statut.isTente?
+		if self.isTente?
 			self.statut=VIDE
-		elsif statut.isVide?
+		elsif self.isVide?
 			self.statut=GAZON
 		else
 			self.statut=TENTE
 		end
 		self
+	end
+
+	def to_s
+		case self.statut
+			when VIDE then '-'
+			when GAZON then '#'
+			when TENTE then 'T'
+		end
 	end
 
 	
