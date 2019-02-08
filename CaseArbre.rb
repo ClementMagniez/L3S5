@@ -4,7 +4,7 @@ require_relative 'StatutArbre'
 class CaseArbre < Case
 
 	def initialize
-		@statut=StatutArbre.new(ARBRE)
+		super(ARBRE)
 		@statutVisible=StatutArbre.new(ARBREDECOCHE)
 	end
 		
