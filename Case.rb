@@ -10,4 +10,6 @@ class Case
 		"#{self.statutVisible}"
 	end
 	
+	attr_reader :statut, :statutVisible
+	
 end
