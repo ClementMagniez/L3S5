@@ -7,7 +7,7 @@ require_relative 'StatutConstantes'
 class Case 
 	include StatutConstantes
 	def initialize(etat)
-		@statut=etat
+		@statut=Statut.new(etat)
 	end
 	
 	def to_s
