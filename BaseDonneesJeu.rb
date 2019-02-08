@@ -6,18 +6,17 @@
 # Le fichier "BaseDonneesJeu.rb" contient toutes les instructions nécessaires à la création de la base de données de l'application.
 # La bibliothèque SQL utilisé est +SQLite3+. Il fait appel aux classes *Profil*, *Grille* et *Score* pour pouvoir fonctionner correctement.
 #
-
 require "rubygems"
 require "active_record"
-require "connectSqlite3.rb"
-require "Profil.rb"
-require "Grille.rb"
-require "Score.rb"
+require_relative "connectSqlite3.rb"
+require_relative "Profil.rb"
+require_relative "Grille.rb"
+require_relative "Score.rb"
 
 
 profilTest = Profil.new(
 	:pseudonyme => "Test",
-	:mdp_encrypted => "azerty"
+	:mdpEncrypted => "azerty"
 );
 profilTest.save;
 
@@ -28,7 +27,9 @@ grilleTest = Grille.new(
 grilleTest.save;
 
 scoreTest = Score.new(
-	:montant_score => "2500"
+	:montantScore => "2500",
+	:modeJeu	=> "Aventure",
+	:dateObtention => "01/01/2019"
 );
 scoreTest.joueur_id = profilTest;
 scoreTest.grille_id = grilleTest;
