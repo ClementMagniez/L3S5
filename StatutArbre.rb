@@ -1,5 +1,13 @@
 require_relative 'Statut'
 
+
+# On veut pouvoir ecrire Case.statut==VIDE ou Case.statut==Case.statut
+#
+#
+#
+
+
+
 # Implémentation de Statut pour les cases de type 'arbre'
 class StatutArbre < Statut
 	
@@ -18,6 +26,14 @@ class StatutArbre < Statut
 		end
 		self
 	end
+	
+	def ==(statut)
+		if statut.statutVisible==ARBRECOCHE || statut.statutVisible==ARBREDECOCHE
+			return true;
+		end
+		return super(statut);
+	end
+	
 
 	def to_s
 		case self.statut
