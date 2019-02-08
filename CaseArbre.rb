@@ -14,8 +14,4 @@ class CaseArbre < Case
 	def cycle(i,j,arrayColonnes, arrayLignes)
 		self.statutVisible.cycle
 	end
-
-	protected
-		attr_reader :statutVisible
-
 end

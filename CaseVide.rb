@@ -28,9 +28,4 @@ class CaseVide < Case
 		end	
 		self
 	end
-	
-
-	protected
-	attr_reader :statutVisible
-
 end
