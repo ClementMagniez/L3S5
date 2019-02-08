@@ -6,6 +6,10 @@ require_relative 'StatutConstantes'
 # Cette classe est à considérer abstraite.
 class Case 
 	include StatutConstantes
+	def initialize(etat)
+		@statut=etat
+	end
+	
 	def to_s
 		"#{self.statutVisible}"
 	end

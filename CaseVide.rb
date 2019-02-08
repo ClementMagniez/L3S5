@@ -10,6 +10,7 @@ require_relative 'StatutVide'
 class CaseVide < Case
 	
 	def initialize(etat)
+		super(etat)
 		@statutVisible=StatutVide.new(VIDE)
 	end
 		
