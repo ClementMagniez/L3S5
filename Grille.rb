@@ -1,6 +1,7 @@
 ##
 # @title Grille
 # @author KAJAK Rémi
+# @version 0.1
 # 
 # Ce fichier gère le modèle de la table *Grille*, qui contient les informations des grilles de l'application.
 # 

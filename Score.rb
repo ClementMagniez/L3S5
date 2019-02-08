@@ -1,8 +1,9 @@
 ##
 # @title Score
 # @author KAJAK Rémi
+# @version 0.1
 # 
-# Ce fichier gère le modèle de la table *Score*, qui contient les informations des Scores de l'application.
+# Ce fichier gère le modèle de la table *Score*, qui contient les informations des scores de l'application.
 # 
 
 ##
