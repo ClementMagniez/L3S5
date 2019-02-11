@@ -3,7 +3,7 @@ require_relative 'Grille'
 ### Démo
 
 # Création et affichage de la grille de base (générée via la ligne 40) 
-grille=Grille.new(40,"grilles.txt");
+grille=Grille.new(0,"grilles.txt");
 puts grille, "\n---------"
 
 
