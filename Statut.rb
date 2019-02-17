@@ -17,7 +17,7 @@ class Statut
 	def ==(statut)
 		self.statut==statut.statut
 	end
-	
+
 	protected
-	attr_accessor :statut
+	attr_accessor :statut, :statutVisible
 end

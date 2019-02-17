@@ -19,7 +19,6 @@ class Grille
 			n.times do 
 				result=file.gets
 			end
-			result=file.gets if 0==n
 		end
 		@grille=Array.new(matSize) { Array.new(matSize) {0} }
 		@tentesCol=Array.new(matSize)

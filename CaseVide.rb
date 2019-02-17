@@ -10,7 +10,7 @@ require_relative 'StatutVide'
 class CaseVide < Case
 	
 	def initialize(etat)
-		super(etat)
+		@statut=StatutVide.new(etat)
 		@statutVisible=StatutVide.new(VIDE)
 	end
 		
@@ -20,13 +20,13 @@ class CaseVide < Case
 	def cycle(i,j,arrayLignes, arrayColonnes)
 		self.statutVisible.cycle
 		
-		if self.statutVisible.isTente? # le statut vient de devenir "tente" 
-			arrayLignes[i]-=1
-			arrayColonnes[j]-=1
-		elsif self.statutVisible.isVide? # le statut était "tente" 
-			arrayLignes[i]+=1
-			arrayColonnes[j]+=1
-		end	
+		# if self.statutVisible.isTente? # le statut vient de devenir "tente" 
+		# 	arrayLignes[i]-=1
+		# 	arrayColonnes[j]-=1
+		# elsif self.statutVisible.isVide? # le statut était "tente" 
+		# 	arrayLignes[i]+=1
+		# 	arrayColonnes[j]+=1
+		# end	
 		self
 	end
 end
