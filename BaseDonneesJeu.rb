@@ -13,24 +13,23 @@ require_relative "Profil.rb"
 require_relative "Grille.rb"
 require_relative "Score.rb"
 
-
-profilTest = Profil.new(
+profilTest = Profil.create(
 	:pseudonyme => "Test",
 	:mdpEncrypted => "azerty"
-);
-profilTest.save;
+)
+profilTest.save
 
-grilleTest = Grille.new(
+grilleTest = Grille.create(
 	:taille => "16x16",
 	:difficulte => "Normal"
-);
-grilleTest.save;
+)
+grilleTest.save
 
-scoreTest = Score.new(
+scoreTest = Score.create(
 	:montantScore => "2500",
 	:modeJeu	=> "Aventure",
 	:dateObtention => "01/01/2019"
 );
-scoreTest.joueur_id = profilTest;
-scoreTest.grille_id = grilleTest;
-scoreTest.save;
+scoreTest.joueur_id = profilTest
+scoreTest.grille_id = grilleTest
+scoreTest.save

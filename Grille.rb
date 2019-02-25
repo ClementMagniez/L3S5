@@ -14,7 +14,7 @@ require "active_record"
 #
 class Grille < ActiveRecord::Base
 	# Une grille possède plusieurs scores (un par joueur l'ayant tenté)
-	has_many :scores
+	has_and_belongs_to_many :scores
 
 	# @id_grille, @taille, @difficulte - L'identifiant de la grille, un entier représentant sa taille en longueur et en largeur, une chaîne de caractères indiquant sa difficulté
 

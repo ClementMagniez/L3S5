@@ -13,10 +13,7 @@ require "active_record"
 # à compléter - classe intermédiaire
 #
 class Score < ActiveRecord::Base
-	# Un score appartient à un joueur et à une grille.
-	has_and_belongs_to_many :profil, :grille
-
-	# @id_score, @montantScore, @modeJeu, @dateObtention, @joueur_id, @grille_id - L'identifiant du score, un entier strictement positif, une chaine de caractères indiquant le mode de jeu où le score a été obtenu, la date où le score a été obtenu, l'identifiant d'un joueur, l'identifiant d'une grille
+	# @montantScore, @modeJeu, @dateObtention, @joueur_id, @grille_id - Un entier strictement positif, une chaine de caractères indiquant le mode de jeu où le score a été obtenu, la date où le score a été obtenu, l'identifiant d'un joueur, l'identifiant d'une grille
 
 	##
 	# == to_s
