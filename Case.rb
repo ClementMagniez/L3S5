@@ -12,6 +12,11 @@ class Case
 		"#{self.statutVisible}"
 	end
 	
+	# Renvoie true si la case est correcte, false si elle est erronée
+	def estValide?
+		self.statut==self.statutVisible
+	end
+	
 	attr_reader :statut, :statutVisible
 	
 end

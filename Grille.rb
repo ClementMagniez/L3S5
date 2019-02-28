@@ -10,21 +10,40 @@ class Grille
 
 	attr_reader :tentesCol, :tentesLigne, :grille
 
+	# Obtient et génère la grille à partir du fichier filePath, ligne n
+	# L'indexation se fait à partir de 1
 	# n - ligne du fichier où se trouve la source de la grille 
 	# filePath - path du fichier de génération, typiquement "./grilles.txt"
 	def initialize(n,filePath)
+		raise("Indexer à 1") if 0==n
+	
 		result=nil # TODO - hideux, à remplacer
 		matSize=n/100+6
-		File.open(filePath,"r") do |file| 
-			n.times do 
-				result=file.gets
-			end
+
+		File.open(filePath,"r") do |file|
+			n.times { result=file.gets }
+
 		end
 		@grille=Array.new(matSize) { Array.new(matSize) {0} }
 		@tentesCol=Array.new(matSize)
 		@tentesLigne=Array.new(matSize)
 		parseText(result)			
 					
+	end
+	
+	# Renvoie true si la grille est complète et valide, false sinon
+	def estComplete?
+		res=true
+	
+		self.grille.each do |ligne|
+			ligne.each do |cell| 
+				res=res && cell.estValide?
+				break if !res
+			end 
+		end
+		
+		res
+		
 	end
 	
 	# Affiche la grille complète - pourra être supprimé quand on aura la GUI
