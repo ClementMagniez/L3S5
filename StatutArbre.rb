@@ -28,7 +28,10 @@ class StatutArbre < Statut
 	end
 	
 	def ==(statut)
+
+		#print " nig rgr \n"
 		if statut.statutVisible==ARBRECOCHE || statut.statutVisible==ARBREDECOCHE
+			#print " aofjaefjegz \n"
 			return true;
 		end
 		return super(statut);
@@ -38,7 +41,8 @@ class StatutArbre < Statut
 	def to_s
 		case self.statut
 			when ARBRECOCHE then '✓'
-			when ARBREDECOCHE then 'A'
+			when ARBREDECOCHE then 'X'
+			when ARBRE then 'A'
 		end
 	end
 	

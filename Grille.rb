@@ -19,8 +19,10 @@ class Grille
 	
 		result=nil # TODO - hideux, à remplacer
 		matSize=n/100+6
+
 		File.open(filePath,"r") do |file|
 			n.times { result=file.gets }
+
 		end
 		@grille=Array.new(matSize) { Array.new(matSize) {0} }
 		@tentesCol=Array.new(matSize)
