@@ -7,6 +7,14 @@
 #
 require "active_record"
 
+ActiveRecord::Schema.define do
+	create_table :scores do |c|
+		c.integer :montantScore
+		c.string :modeJeu
+		c.date :dateObtention
+	end
+end
+
 ##
 # == Classe *Score*
 #
@@ -21,6 +29,6 @@ class Score < ActiveRecord::Base
 	# On redéfinit la méthode *to_s* dans cette classe pour qu'elle puisse afficher les informations de l'objet appelé.
 	#
 	def to_s
-		return "Score du joueur n°#{@joueur_id} pour la grille n°#{@grille_id} (difficulté #{@modeJeu}) : #{@montantScore}, obtenu le #{@dateObtention}."
+		return "Score du joueur n°#{@profil_id} pour la grille n°#{@map_id} (difficulté #{@modeJeu}) : #{@montantScore}, obtenu le #{@dateObtention}."
 	end
 end

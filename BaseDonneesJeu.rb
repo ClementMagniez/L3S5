@@ -10,7 +10,7 @@ require "rubygems"
 require "active_record"
 require_relative "connectSqlite3.rb"
 require_relative "Profil.rb"
-require_relative "Grille.rb"
+require_relative "Map.rb"
 require_relative "Score.rb"
 
 profilTest = Profil.create(
@@ -19,17 +19,21 @@ profilTest = Profil.create(
 )
 profilTest.save
 
-grilleTest = Grille.create(
+mapTest = Map.create(
 	:taille => "16x16",
 	:difficulte => "Normal"
 )
-grilleTest.save
+mapTest.save
 
 scoreTest = Score.create(
 	:montantScore => "2500",
 	:modeJeu	=> "Aventure",
 	:dateObtention => "01/01/2019"
 );
-scoreTest.joueur_id = profilTest
-scoreTest.grille_id = grilleTest
+#scoreTest.profil_id = profilTest
+#scoreTest.map_id = grilleTest
 scoreTest.save
+
+puts mapTest
+puts profilTest
+puts scoreTest

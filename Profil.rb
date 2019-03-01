@@ -7,6 +7,13 @@
 #
 require "active_record"
 
+ActiveRecord::Schema.define do
+	create_table :profils do |c|
+		c.string :pseudonyme
+		c.string :mdpEncrypted
+	end
+end
+
 ##
 # == Classe *Profil*
 #
@@ -24,6 +31,6 @@ class Profil < ActiveRecord::Base
 	# On redéfinit la méthode *to_s* dans cette classe pour qu'elle puisse afficher les informations de l'objet appelé.
 	#
 	def to_s
-		return "Joueur n°#{@id_joueur} : #{@pseudonyme}, mot de passe du compte (encrypté) : #{@mdp_encrypted}"
+		return "Joueur n°#{@id_profil} : #{@pseudonyme}, mot de passe du compte (encrypté) : #{@mdp_encrypted}"
 	end
 end
