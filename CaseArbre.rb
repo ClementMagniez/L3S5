@@ -19,4 +19,13 @@ class CaseArbre < Case
 	def cycle(i,j,arrayColonnes, arrayLignes)
 		self.statutVisible.cycle
 	end
+
+	def affichage
+		if self.statutVisible.isArbreCoche?
+			'img/arbreCoche.png'
+		else
+			'img/arbre.png'
+		end
+	end
+	
 end
