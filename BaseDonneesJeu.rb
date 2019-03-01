@@ -13,22 +13,22 @@ require_relative "Profil.rb"
 require_relative "Map.rb"
 require_relative "Score.rb"
 
-profilTest = Profil.create(
-	:pseudonyme => "Test",
-	:mdpEncrypted => "azerty"
+profilTest = Profil.new(
+	pseudonyme: "Test",
+	mdpEncrypted: "azerty"
 )
 profilTest.save
 
-mapTest = Map.create(
-	:taille => "16x16",
-	:difficulte => "Normal"
+mapTest = Map.new(
+	taille: "16x16",
+	difficulte: "Normal"
 )
 mapTest.save
 
-scoreTest = Score.create(
-	:montantScore => "2500",
-	:modeJeu	=> "Aventure",
-	:dateObtention => "01/01/2019"
+scoreTest = Score.new(
+	montantScore: "2500",
+	modeJeu: "Aventure",
+	dateObtention: "01/01/2019"
 );
 #scoreTest.profil_id = profilTest
 #scoreTest.map_id = grilleTest
@@ -37,3 +37,7 @@ scoreTest.save
 puts mapTest
 puts profilTest
 puts scoreTest
+
+p mapTest
+p profilTest
+p scoreTest
