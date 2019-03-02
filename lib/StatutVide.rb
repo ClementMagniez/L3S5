@@ -40,6 +40,11 @@ class StatutVide < Statut
 			when TENTE then 'T'
 		end
 	end
+	
+	def reset
+		self.statut=VIDE
+		self
+	end
 
 	
 end

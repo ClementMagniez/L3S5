@@ -20,14 +20,21 @@ class StatutArbre < Statut
 		self
 	end
 	
+	# Compare self et _statut_
+	# Return true si _statut_ est un arbre, appelle Statut#== sinon 
 	def ==(statut)
 
-		if statut.statutVisible==ARBRECOCHE || statut.statutVisible==ARBREDECOCHE
+		if statut.statut==ARBRE
 			return true;
 		end
 		return super(statut);
 	end
 	
+
+	def reset
+		self.statut=ARBREDECOCHE
+		self
+	end
 
 	def to_s
 		case self.statut

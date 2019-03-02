@@ -1,10 +1,11 @@
+require_relative "Pwd.rb"
 require_relative 'Grille'
 require_relative 'Aide'
 
 ### Démo pour les aides ###
 
 # Création et affichage de la grille de base (générée via la ligne 40) 
-grille=Grille.new(40,"grilles.txt");
+grille=Grille.new(40, File.expand_path("grilles.txt"));
 puts grille, "\n---------"
 
 aide = Aide.new(grille)
