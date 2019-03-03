@@ -1,6 +1,6 @@
 require_relative 'Grille'
 require_relative 'Aide'
-require_relative 'test.rb'
+require_relative 'interface.rb'
 ### Démo pour les aides ###
 
 # Création et affichage de la grille de base (générée via la ligne 40) 
