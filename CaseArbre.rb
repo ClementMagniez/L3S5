@@ -22,9 +22,9 @@ class CaseArbre < Case
 
 	def affichage
 		if self.statutVisible.isArbreCoche?
-			'img/arbreCoche.png'
+			'ihm/img/arbreCoche.png'
 		else
-			'img/arbre.png'
+			'ihm/img/arbre.png'
 		end
 	end
 	

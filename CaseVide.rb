@@ -31,9 +31,9 @@ class CaseVide < Case
 	end
 	def affichage
 		if self.statutVisible.isGazon?
-			'img/gazon.png'
+			'ihm/img/gazon.png'
 		elsif self.statutVisible.isTente?
-			'img/tente.png'
+			'ihm/img/tente.png'
 		end
 	end
 end
