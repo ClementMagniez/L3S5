@@ -1,4 +1,7 @@
-require_relative 'HudAccueil.rb'
+require 'gtk3'
+require_relative 'HudAccueil'
+require_relative 'HudModeDeJeu'
+
 class Fenetre < Gtk::Window
 	def initialize
 		super()
