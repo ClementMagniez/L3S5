@@ -7,13 +7,6 @@
 #
 require "active_record"
 
-ActiveRecord::Schema.define do
-	create_table :maps do |c|
-    c.string :taille
-    c.string :difficulte
-  end
-end
-
 ##
 # == Classe *Map*
 #
@@ -31,6 +24,6 @@ class Map < ActiveRecord::Base
 	# On redéfinit la méthode *to_s* dans cette classe pour qu'elle puisse afficher les informations de l'objet appelé.
 	#
 	def to_s
-		return "Grille n°#{@id_map} : Taille = #{@taille}, difficulté : #{@difficulte}"
+		return "Grille n°#{@id} : Taille = #{@taille}, difficulté : #{@difficulte}"
 	end
 end

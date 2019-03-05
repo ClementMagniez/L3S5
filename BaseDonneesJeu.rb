@@ -3,8 +3,8 @@
 # @author KAJAK Rémi
 # @version 0.1
 #
-# Le fichier "BaseDonneesJeu.rb" contient toutes les instructions nécessaires à la création de la base de données de l'application.
-# La bibliothèque SQL utilisé est +SQLite3+. Il fait appel aux classes *Profil*, *Grille* et *Score* pour pouvoir fonctionner correctement.
+# Le fichier "BaseDonneesJeu.rb" contient toutes les instructions nécessaires à la manipulation des données de l'application.
+# La bibliothèque SQL utilisé est +SQLite3+. Il fait appel aux classes *Profil*, *Map* et *Score* pour pouvoir fonctionner correctement.
 #
 require "rubygems"
 require "active_record"
@@ -30,14 +30,15 @@ scoreTest = Score.new(
 	modeJeu: "Aventure",
 	dateObtention: "01/01/2019"
 );
-#scoreTest.profil_id = profilTest
-#scoreTest.map_id = grilleTest
+scoreTest.profil_id = profilTest.id
+scoreTest.map_id = mapTest.id
 scoreTest.save
 
-puts mapTest
 puts profilTest
+puts mapTest
 puts scoreTest
+puts "\n"
 
-p mapTest
 p profilTest
+p mapTest
 p scoreTest
