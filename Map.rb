@@ -10,20 +10,23 @@ require "active_record"
 ##
 # == Classe *Map*
 #
-# à compléter
+# La classe *Map* a pour rôle d'établir le modèle pour la table éponyme. Elle est reliée à la table
+# *Profil* grâce à une table intermédiaire nommée *Score*.
 #
 class Map < ActiveRecord::Base
 	# Une grille possède plusieurs scores (un par joueur l'ayant tenté)
 	has_and_belongs_to_many :scores
 
-	# @id_grille, @taille, @difficulte - L'identifiant de la grille, un entier représentant sa taille en longueur et en largeur, une chaîne de caractères indiquant sa difficulté
+	# @id, @taille, @difficulte - L'identifiant de la grille, un entier représentant sa taille en longueur
+	# et en largeur, une chaîne de caractères indiquant sa difficulté
 
 	##
 	# == to_s
 	#
-	# On redéfinit la méthode *to_s* dans cette classe pour qu'elle puisse afficher les informations de l'objet appelé.
+	# On redéfinit la méthode *to_s* dans cette classe pour qu'elle puisse afficher les informations de
+	# l'objet appelé.
 	#
 	def to_s
-		return "Grille n°#{@id} : Taille = #{@taille}, difficulté : #{@difficulte}"
+		return "Map n°#{id} : Taille = #{taille}, difficulté : #{difficulte}"
 	end
 end

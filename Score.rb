@@ -8,19 +8,23 @@
 require "active_record"
 
 ##
-# == Classe *Score*
+# = Classe *Score*
 #
-# à compléter - classe intermédiaire
+# La classe *Score* a pour rôle d'établir le modèle pour la table éponyme. Elle fait office de lien
+# entre les tables *Map* et *Profil*, car un score concerne obligatoirement un joueur et une grille.
 #
 class Score < ActiveRecord::Base
-	# @montantScore, @modeJeu, @dateObtention, @joueur_id, @grille_id - Un entier strictement positif, une chaine de caractères indiquant le mode de jeu où le score a été obtenu, la date où le score a été obtenu, l'identifiant d'un joueur, l'identifiant d'une grille
+	# @id, @montantScore, @modeJeu, @dateObtention, @joueur_id, @grille_id - L'identifiant du score, un
+	# entier strictement positif, une chaine de caractères indiquant le mode de jeu où le score a été
+	# obtenu, la date où le score a été obtenu, l'identifiant d'un joueur, l'identifiant d'une map
 
 	##
 	# == to_s
 	#
-	# On redéfinit la méthode *to_s* dans cette classe pour qu'elle puisse afficher les informations de l'objet appelé.
+	# On redéfinit la méthode *to_s* dans cette classe pour qu'elle puisse afficher les informations de
+	# l'objet appelé.
 	#
 	def to_s
-		return "Score du joueur n°#{@profil} pour la grille n°#{@map} (difficulté #{@modeJeu}) : #{@montantScore}, obtenu le #{@dateObtention}."
+		return "Score (\##{id}) du joueur n°#{profil_id} pour la grille n°#{map_id} (mode \"#{modeJeu}\") : #{montantScore}, obtenu le #{dateObtention}."
 	end
 end

@@ -7,7 +7,6 @@
 # La bibliothèque SQL utilisé est +SQLite3+. Il fait appel aux classes *Profil*, *Map* et *Score* pour pouvoir fonctionner correctement.
 #
 require "rubygems"
-require "active_record"
 require_relative "connectSqlite3.rb"
 require_relative "Profil.rb"
 require_relative "Map.rb"
@@ -38,7 +37,3 @@ puts profilTest
 puts mapTest
 puts scoreTest
 puts "\n"
-
-p profilTest
-p mapTest
-p scoreTest
