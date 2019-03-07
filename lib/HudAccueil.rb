@@ -20,13 +20,36 @@ class HudAccueil < Gtk::Grid
 		self.attach(@entIdentifiant,8,6,4,2)
 		self.attach(@entMotDePasse,8,8,4,2)
 
+		#Bouton option
+		@btnOption = Gtk::Button.new :label => "Options"
+		@btnQuitter = Gtk::Button.new :label => "Quitter"
+
+		self.attach(@btnOption,4,14,4,2)
+		self.attach(@btnQuitter,14,14,4,2)
+
 		self.initBoutonConnecter
+		self.initBoutonQuitter
+		self.initBoutonOptions
 	end
 
 
 	def initBoutonConnecter
 		@btnConnecter.signal_connect("clicked") {
 				@fenetre.changerWidget(self,HudModeDeJeu.new(@fenetre))
+		}
+	end
+
+	def initBoutonQuitter
+		
+		@btnQuitter.signal_connect('clicked') { 
+			puts "Fermeture de l'application !"
+			Gtk.main_quit
+		}
+	end
+
+	def initBoutonOptions
+		@btnOption.signal_connect("clicked") {
+				@fenetre.changerWidget(self,HudOption.new(@fenetre))
 		}
 	end
 end

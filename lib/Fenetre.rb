@@ -1,6 +1,7 @@
 require 'gtk3'
 require_relative 'HudAccueil'
 require_relative 'HudModeDeJeu'
+require_relative 'HudOption'
 
 class Fenetre < Gtk::Window
 	def initialize
