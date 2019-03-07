@@ -1,7 +1,6 @@
-class HudOption < Gtk::Grid
+class HudOption < Hud
 	def initialize(window)
-		super()
-		@fenetre=window
+		super(window)
 
 		#Label titre : OPTIONS
 		@lblTitreOpt = Gtk::Label.new(" Options ")
