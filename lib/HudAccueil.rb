@@ -1,7 +1,7 @@
-class HudAccueil < Gtk::Grid
+class HudAccueil < Hud
 	def initialize(window)
-		super()
-		@fenetre=window
+		super(window)
+
 		#Boutons : S'inscrire et Se connecter
 		@btnInscrire = Gtk::Button.new
 		@btnInscrire.set_label("S'inscrire")
@@ -47,9 +47,4 @@ class HudAccueil < Gtk::Grid
 		}
 	end
 
-	def initBoutonOptions
-		@btnOption.signal_connect("clicked") {
-				@fenetre.changerWidget(self,HudOption.new(@fenetre))
-		}
-	end
 end
