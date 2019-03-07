@@ -5,11 +5,34 @@ class Hud < Gtk::Grid
 		super()
 		@fenetre = window
 	end
+
 	def initBoutonOptions
 		@btnOption.signal_connect("clicked") {
 				@fenetre.changerWidget(self,HudOption.new(@fenetre))
 		}
 	end
+
+	def initBoutonReset(taille,grille,listButton)
+		@btnReset.signal_connect("clicked") {
+			compteur = 0
+			0.upto(taille-1) { |i|
+				0.upto(taille-1){ |j|
+					grille[i][j].reset
+					listButton.at(compteur).set_image(Gtk::Image.new :file => grille[i][j].affichage)
+					compteur = compteur +1
+				}
+			}
+
+		}
+	end
+
+	def initBoutonAide(aide)
+		@btnAide.signal_connect("clicked") {
+			@lblAide.set_label(aide.cycle)
+		}
+
+	end
+
 	def lancementAventure(taille)
 		grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"grilles.txt");
 		aide = Aide.new(grille)

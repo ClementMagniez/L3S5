@@ -8,6 +8,13 @@ class HudAccueil < Hud
 		@btnConnecter = Gtk::Button.new
 		@btnConnecter.set_label("Se connecter")
 
+		#Label : Identifiant et mot de passe
+		@lblId = Gtk::Label.new("Identifiant : ")
+		@lbMdp = Gtk::Label.new("Mot de passe : ")
+
+		self.attach(@lblId,8,6,2,2)
+		self.attach(@lbMdp,8,8,2,2)
+
 		#Mise des boutons dans la grille
 		self.attach(@btnInscrire,8,10,2,2)
 		self.attach(@btnConnecter,10,10,2,2)
@@ -17,8 +24,8 @@ class HudAccueil < Hud
 		@entMotDePasse = Gtk::Entry.new
 
 		#Mise des entrées dans la grille
-		self.attach(@entIdentifiant,8,6,4,2)
-		self.attach(@entMotDePasse,8,8,4,2)
+		self.attach(@entIdentifiant,10,6,2,2)
+		self.attach(@entMotDePasse,10,8,2,2)
 
 		#Bouton option
 		@btnOption = Gtk::Button.new :label => "Options"

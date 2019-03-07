@@ -11,6 +11,7 @@ class Fenetre < Gtk::Window
 		#icone
 		#nom
         #self.set_default_size(300,50)
+        self.set_resizable(true) 
         self.signal_connect('destroy') { Gtk.main_quit }
         self.initAccueil
 	end

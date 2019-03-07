@@ -51,14 +51,14 @@ class HudModeDeJeu < Hud
 		
 		}
 		@btnMoyenAv.signal_connect('clicked') {
-			puts "Lancement du mode facile d'Aventure"
+			puts "Lancement du mode moyen d'Aventure"
 			#Niveau entre 9 et 12
 			taille = 9 + Random.rand(3)
 			lancementAventure(taille)		
 		}
 		@btnDifficileAv.signal_connect('clicked') {
-			puts "Lancement du mode facile d'Aventure"
-			#Niveau entre 9 et 12
+			puts "Lancement du mode difficile d'Aventure"
+			#Niveau entre 12 et 16
 			taille = 12 + Random.rand(4)
 			lancementAventure(taille)		
 		}
