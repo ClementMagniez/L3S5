@@ -41,7 +41,7 @@ class Hud < Gtk::Grid
 	def initBoutonOptions
 		@btnOptions = Gtk::Button.new(:label=>"Options")
 		@btnOptions.signal_connect("clicked") {
-				@fenetre.changerWidget(self,HudOption.new(@fenetre))
+				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
 		}
 	end
 

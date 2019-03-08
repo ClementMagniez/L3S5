@@ -1,6 +1,7 @@
 class HudOption < Hud
-	def initialize(window)
+	def initialize(window,fenetrePrecedente)
 		super(window)
+		@fenetrePrecedente = fenetrePrecedente
 
 		#Label titre : OPTIONS
 		@lblTitreOpt = Gtk::Label.new(" Options ")
@@ -18,7 +19,7 @@ class HudOption < Hud
 		@btnFenetre = Gtk::Button.new :label => "- Fenetre -"
 		self.attach(@btnFenetre,6,4,2,2)
 
-		#Bouton : Retour 
+		#Bouton : Retour
 		@btnRetour = Gtk::Button.new :label => "- Retour -"
 		self.attach(@btnRetour,14,14,4,2)
 
@@ -43,7 +44,7 @@ class HudOption < Hud
 	def initBoutonRetour
 		#Pour l'instant il renvoie qu'au menu de connection
 		@btnRetour.signal_connect("clicked") {
-				@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
+				@fenetre.changerWidget(self,@fenetrePrecedente)
 		}
 	end
 end
