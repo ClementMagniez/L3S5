@@ -45,10 +45,12 @@ class Hud < Gtk::Grid
 		}
 	end
 
+	# Modifie la description : le texte en haut de la page
 	def setDesc(str)
 		@lblDescription.set_text(str)
 	end
 
+	# Modifie le titre de la fenetre
 	def setTitre(str)
 		@fenetre.set_title(str)
 	end

@@ -31,12 +31,6 @@ class Grille
 
 	end
 
-
-	def length
-		return @grille.length
-	end
-
-
 	# Renvoie true si la grille est complète et valide, false sinon
 	def estComplete?
 		res=true
@@ -50,6 +44,10 @@ class Grille
 
 		res
 
+	end
+
+	def length
+		return @grille.length
 	end
 
 	# Affiche la grille complète - pourra être supprimé quand on aura la GUI

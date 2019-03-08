@@ -5,7 +5,7 @@ class HudRapide < HudJeu
 		#Label titre : MODE AVENTURE
 		# @lblTitreAv = Gtk::Label.new(" MODE RAPIDE ")
 		# self.attach(@lblTitreAv,6,2,4,2)
-		self.setTitre("Jeu rapide")
+		self.setTitre("Partie rapide")
 		self.setDesc("Ici la desc du mode rapide")
 		#Bouton des aides et du reset de la grille
 		# self.attach(@btnAide,taille+4,taille,2,1)
