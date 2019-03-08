@@ -11,11 +11,8 @@ class Fenetre < Gtk::Window
 	def initialize
 		super()
         self.set_resizable(true)
+		self.maximize
         self.signal_connect('destroy') { Gtk.main_quit }
-        self.initAccueil
-	end
-
-	def initAccueil
 		self.add(HudAccueil.new(self))
 		self.show_all
 		Gtk.main
