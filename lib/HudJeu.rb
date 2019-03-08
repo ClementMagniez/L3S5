@@ -37,9 +37,19 @@ class HudJeu < Hud
 		# positionne les indices autour de la table @gridJeu
 		1.upto(taille) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
-			@gridJeu.attach(Gtk::Label.new(@grille.tentesCol.fetch(i-1).to_s),i,0,1,1)
+			btnIndiceCol = Gtk::Button.new(:label=>@grille.tentesCol.fetch(i-1).to_s)
+			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
+			@gridJeu.attach(btnIndiceCol,i,0,1,1)
+			btnIndiceCol.signal_connect("clicked") {
+				puts "Clique sur le bouton de la colonne " + i.to_s
+			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
-			@gridJeu.attach(Gtk::Label.new(@grille.tentesLigne.fetch(i-1).to_s),0,i,1,1)
+			btnIndicesLig = Gtk::Button.new(:label=>@grille.tentesLigne.fetch(i-1).to_s)
+			btnIndicesLig.set_relief(Gtk::ReliefStyle::NONE)
+			@gridJeu.attach(btnIndicesLig,0,i,1,1)
+			btnIndicesLig.signal_connect("clicked") {
+				puts "Clique sur le bouton de la ligne " + i.to_s
+			}
 		}
 
 		# positionne les boutons qui servent de case sur la grid
