@@ -1,15 +1,27 @@
-class HudTutoriel < Hud
-	def initialize (window)
+class HudRapide < Hud 
+	def initialize(window,grille,taille,aide)
 		super(window)
 
 		#Label titre : MODE AVENTURE 
-		@lblTitreAv = Gtk::Label.new(" MODE TUTORIEL ")
+		@lblTitreAv = Gtk::Label.new(" MODE RAPIDE ")
 		self.attach(@lblTitreAv,6,2,4,2)
 		#Bouton des aides et du reset de la grille
 		@btnAide = Gtk::Button.new :label => " Aide "
 		@btnReset = Gtk::Button.new :label => " Reset "
 		self.attach(@btnAide,taille+4,taille,2,1)
 		self.attach(@btnReset,taille+4,taille+1,2,1)
+
+		#Timer
+		#@lblTime = Gtk::Label.new (" Time : 0:00")
+		#@timer = Gtk::Timer.new
+		#@lblTime.set_label(@timer.start)
+
+		#self.attach(@lblTime,taille+4,taille-2,2,1)
+
+		#Bouton pause
+		@btnPause = Gtk::Button.new :label => "Pause"
+		self.attach(@btnPause,taille+4,taille-1,2,1)
+
 
 		#Grille de jeu
 		@gridJeu = Gtk::Table.new(taille+1,taille+1,true)
@@ -34,5 +46,19 @@ class HudTutoriel < Hud
 		self.initBoutonOptions
 		self.initBoutonReset(taille,grille,@listBouton)
 		self.initBoutonAide(aide)
+		self.initBoutonPause
 	end
+
+	def initBoutonPause
+		@btnPause.signal_connect('clicked'){
+			@timer.stop
+			@btnPause.set_label("Play")
+				@btnPause.signal_connect('clicked'){
+					@timer.continue
+				}
+		}
+
+	end	
+
+
 end

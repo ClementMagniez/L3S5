@@ -39,6 +39,7 @@ class HudModeDeJeu < Hud
 		self.attach(@btnOption,2,20,2,2)
 		self.initBoutonOptions
 		self.initBoutonAventure
+		self.initBoutonRapide
 
 	end
 
@@ -61,6 +62,28 @@ class HudModeDeJeu < Hud
 			#Niveau entre 12 et 16
 			taille = 12 + Random.rand(4)
 			lancementAventure(taille)		
+		}
+	end
+
+	def initBoutonRapide
+		@btnFacileRap.signal_connect('clicked') {		
+			puts "Lancement du mode facile de rapide"
+			#Niveau entre 6 et 9
+			taille = 6 + Random.rand(3)
+			lancementRapide(taille)
+		
+		}
+		@btnMoyenRap.signal_connect('clicked') {
+			puts "Lancement du mode moyen de rapide"
+			#Niveau entre 9 et 12
+			taille = 9 + Random.rand(3)
+			lancementRapide(taille)		
+		}
+		@btnDifficileRap.signal_connect('clicked') {
+			puts "Lancement du mode difficile de rapide"
+			#Niveau entre 12 et 16
+			taille = 12 + Random.rand(4)
+			lancementRapide(taille)		
 		}
 	end
 
