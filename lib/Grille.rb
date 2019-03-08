@@ -8,7 +8,7 @@ require_relative 'CaseGazon'
 # comme grille de jeu
 class Grille
 
-	attr_reader :tentesCol, :tentesLigne, :grille
+	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille
 
 	# Obtient et génère la grille à partir du fichier filePath, ligne n
 	# L'indexation se fait à partir de 1
@@ -28,6 +28,8 @@ class Grille
 		@tentesCol=Array.new(matSize)
 		@tentesLigne=Array.new(matSize)
 		parseText(result)
+		@varTentesCol=@tentesCol.dup
+		@varTentesLigne=@tentesLigne.dup
 
 	end
 
