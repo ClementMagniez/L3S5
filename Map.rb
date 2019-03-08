@@ -17,8 +17,9 @@ class Map < ActiveRecord::Base
 	# Une grille possède plusieurs scores (un par joueur l'ayant tenté)
 	has_and_belongs_to_many :scores
 
-	# @id, @taille, @difficulte - L'identifiant de la grille, un entier représentant sa taille en longueur
-	# et en largeur, une chaîne de caractères indiquant sa difficulté
+	# @id, @hash_name, @taille, @difficulte - L'identifiant de la grille, son hashcode pour la reconnaître lors d'une
+	# recherche, un entier représentant sa taille en longueur et en largeur, une chaîne de caractères indiquant sa
+	# difficulté
 
 	##
 	# == to_s
@@ -27,6 +28,6 @@ class Map < ActiveRecord::Base
 	# l'objet appelé.
 	#
 	def to_s
-		return "Map n°#{id} : Taille = #{taille}, difficulté : #{difficulte}"
+		return "Map n°#{id} : Hashcode = #{hash_name}, Taille = #{taille}, difficulté : #{difficulte}"
 	end
 end

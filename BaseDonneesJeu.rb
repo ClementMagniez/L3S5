@@ -1,10 +1,11 @@
 ##
-# @title Base de Données de l'application "Des tentes et des arbres"
+# @title Base de Données de l'application "Des Tentes et des Arbres"
 # @author KAJAK Rémi
 # @version 0.1
 #
-# Le fichier "BaseDonneesJeu.rb" contient toutes les instructions nécessaires à la manipulation des données de l'application.
-# La bibliothèque SQL utilisé est +SQLite3+. Il fait appel aux classes *Profil*, *Map* et *Score* pour pouvoir fonctionner correctement.
+# Le fichier "BaseDonneesJeu.rb" contient toutes les instructions nécessaires à la manipulation des
+# données de l'application. La bibliothèque SQL utilisé est +SQLite3+. Il fait appel aux classes
+# *Profil*, *Map* et *Score* pour pouvoir fonctionner correctement.
 #
 require "rubygems"
 require_relative "connectSqlite3.rb"
@@ -19,6 +20,7 @@ profilTest = Profil.new(
 profilTest.save
 
 mapTest = Map.new(
+	hash_name: "fjslfdjfzoiejfzklsdfljk",
 	taille: "16x16",
 	difficulte: "Normal"
 )

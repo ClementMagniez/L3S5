@@ -31,10 +31,11 @@ ActiveRecord::Schema.define do
 	#
 	# == Table *Map*
 	#
-	# Contient l'identifiant d'une grille de jeu, sa taille (nombre de cases en longueur/largeur) et sa
-	# difficulté.
+	# Contient l'identifiant d'une grille de jeu, son nom sous forme de hashcode, sa taille (nombre de cases en
+	# longueur/largeur) et sa difficulté.
 	#
   create_table :maps do |c|
+		c.string :hash_name
     c.string :taille
     c.string :difficulte
   end
