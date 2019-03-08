@@ -14,6 +14,8 @@ Les grilles n'ont pas d'ID par défaut (grilles.txt). Résultat, impossible d'ef
 
 Solution :
 	=> Générer un hashcode pour chaque grille à partir de leur composition
+		-> Méthode disponible dans Grille.rb (parseText)
+			--> Générer ce hashcode directement à partir de ce fichier ?
 _____
 Grille.rb :
 	=> Rien à retoucher, mais voir où sera placé le prédicat "estComplete?"
