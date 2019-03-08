@@ -23,5 +23,4 @@ class Fenetre < Gtk::Window
 		self.show_all
 		return self
 	end
-
 end

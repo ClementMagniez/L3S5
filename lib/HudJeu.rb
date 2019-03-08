@@ -9,11 +9,12 @@ class HudJeu < Hud
 	# @aide
 	# @grille
 
-	def initialize(window,grille,aide)
+	def initialize(window,grille)
 		super(window)
-		@grille = grille
-		@aide = aide
+		@aide = Aide.new(grille)
 		@gridJeu = Gtk::Grid.new#(@grille.length+1,@grille.length+1,true)
+		@grille = grille
+		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
 
 		initBoutonAide
 		initBoutonReset
@@ -21,8 +22,9 @@ class HudJeu < Hud
 
 		self.attach(@gridJeu,2,4,1,1)
 		self.attach(@btnReset,5,2,1,1)
-		self.attach(@btnAide,5,2,1,1)
+		self.attach(@btnAide,5,1,1,1)
 		self.attach(@btnRetour,16,25,2,2)
+		self.attach(@lblAide, 16, 8, 7,7)
 
 		chargementGrille
 	end
@@ -58,8 +60,7 @@ class HudJeu < Hud
 
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide
-		taille = @grille.length
-		@btnAide = Gtk::Button.new :label => " Aide "
+		@btnAide = Gtk::Button.new :label => "Aide"
 		@btnAide.signal_connect("clicked") {
 			@lblAide.set_label(@aide.cycle)
 		}
