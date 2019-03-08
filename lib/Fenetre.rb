@@ -2,6 +2,7 @@ require 'gtk3'
 require_relative 'Hud'
 require_relative 'HudAccueil'
 require_relative 'HudOption'
+require_relative 'HudJeu'
 require_relative 'HudModeDeJeu'
 require_relative 'HudAventure'
 require_relative 'HudRapide'
@@ -9,10 +10,7 @@ require_relative 'HudRapide'
 class Fenetre < Gtk::Window
 	def initialize
 		super()
-		#icone
-		#nom
-        #self.set_default_size(300,50)
-        self.set_resizable(true) 
+        self.set_resizable(true)
         self.signal_connect('destroy') { Gtk.main_quit }
         self.initAccueil
 	end
