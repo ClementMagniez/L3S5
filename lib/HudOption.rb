@@ -10,9 +10,9 @@ class HudOption < Hud
 		self.setTitre("Options")
 		self.setDesc("Ici la description des options")
 
-		self.initBoutonFenetre
-		self.initBoutonPlEcran
-		self.initBoutonRetour
+		initBoutonFenetre
+		initBoutonPlEcran
+		initBoutonRetour
 
 
 		self.attach(@btnFenetre,6,4,2,2)

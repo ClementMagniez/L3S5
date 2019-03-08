@@ -10,9 +10,9 @@ class HudAccueil < Hud
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 
-		self.initBoutonConnecter
-		self.initBoutonInscription
-		self.initBoutonQuitter
+		initBoutonConnecter
+		initBoutonInscription
+		initBoutonQuitter
 
 		self.attach(@btnConnecter,10,10,2,2)
 		self.attach(@btnInscrire,8,10,2,2)

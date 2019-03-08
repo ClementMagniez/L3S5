@@ -1,65 +1,51 @@
 class HudModeDeJeu < Hud
+	# @btnTutoriel
+	# @btnAvFacile
+	# @btnAvMoyen
+	# @btnAvDifficile
+	# @btnRapideFacile
+	# @btnRapideMoyen
+	# @btnRapideDifficile
+
 	def initialize (window)
 		super(window)
 
-		#Label titre : MODE DE JEU
-		# @lblTitreMdj = Gtk::Label.new(" MODE DE JEU ")
-		# self.attach(@lblTitreMdj,1,0,4,2)
 		self.setDesc("Ici la description des modes de jeu")
 		self.setTitre("MODE DE JEU")
 
-		#Bouton tutoriel : MODE TUTORIEL
-		@btnTutoriel = Gtk::Button.new :label => " Tutoriel"
+		initBoutonsAventure
+		initBoutonsRapide
+		initBoutonTuto
+
+		self.attach(@btnAvFacile,7,6,2,2)
+		self.attach(@btnAvMoyen,7,8,2,2)
+		self.attach(@btnAvDifficile,7,10,2,2)
 		self.attach(@btnTutoriel,5,2,2,2)
-
-		#Label : MODE AVENTURE
-		@lblAventure = Gtk::Label.new("Mode Aventure")
-		self.attach(@lblAventure,5,4,2,2)
-
-		#Bouton difficulte : FACILE MOYEN DIFFICILE
-		@btnFacileAv = Gtk::Button.new :label => " - Facile - "
-		@btnMoyenAv = Gtk::Button.new :label => " - Moyen - "
-		@btnDifficileAv = Gtk::Button.new :label => " - Difficile - "
-		self.attach(@btnFacileAv,7,6,2,2)
-		self.attach(@btnMoyenAv,7,8,2,2)
-		self.attach(@btnDifficileAv,7,10,2,2)
-
-		#Label : MODE RAPIDE
-		@lblRapide = Gtk::Label.new("Mode Rapide")
-		self.attach(@lblRapide,5,12,2,2)
-
-		#Bouton difficulte : FACILE MOYEN DIFFICILE
-		@btnFacileRap = Gtk::Button.new :label => " - Facile - "
-		@btnMoyenRap = Gtk::Button.new :label => " - Moyen - "
-		@btnDifficileRap = Gtk::Button.new :label => " - Difficile - "
-		self.attach(@btnFacileRap,7,14,2,2)
-		self.attach(@btnMoyenRap,7,16,2,2)
-		self.attach(@btnDifficileRap,7,18,2,2)
-
-		#Bouton Option
-		# @btnOption = Gtk::Button.new :label => "Options"
-		# self.attach(@btnOption,2,20,2,2)
-		# self.initBoutonOptions
-		self.initBoutonAventure
-		self.initBoutonRapide
-
+		self.attach(@btnRapideFacile,7,14,2,2)
+		self.attach(@btnRapideMoyen,7,16,2,2)
+		self.attach(@btnRapideDifficile,7,18,2,2)
+		self.attach(Gtk::Label.new("Mode Aventure"),5,4,2,2)
+		self.attach(Gtk::Label.new("Partie rapide"),5,12,2,2)
 	end
 
-	def initBoutonAventure
-		@btnFacileAv.signal_connect('clicked') {
+	def initBoutonsAventure
+		@btnAvFacile = Gtk::Button.new :label => "Facile"
+		@btnAvMoyen = Gtk::Button.new :label => "Moyen"
+		@btnAvDifficile = Gtk::Button.new :label => "Difficile"
+
+		@btnAvFacile.signal_connect('clicked') {
 			puts "Lancement du mode facile d'Aventure"
 			#Niveau entre 6 et 9
 			taille = 6 + Random.rand(3)
 			lancementAventure(taille)
-
 		}
-		@btnMoyenAv.signal_connect('clicked') {
+		@btnAvMoyen.signal_connect('clicked') {
 			puts "Lancement du mode moyen d'Aventure"
 			#Niveau entre 9 et 12
 			taille = 9 + Random.rand(3)
 			lancementAventure(taille)
 		}
-		@btnDifficileAv.signal_connect('clicked') {
+		@btnAvDifficile.signal_connect('clicked') {
 			puts "Lancement du mode difficile d'Aventure"
 			#Niveau entre 12 et 16
 			taille = 12 + Random.rand(4)
@@ -67,21 +53,24 @@ class HudModeDeJeu < Hud
 		}
 	end
 
-	def initBoutonRapide
-		@btnFacileRap.signal_connect('clicked') {
+	def initBoutonsRapide
+		@btnRapideFacile = Gtk::Button.new :label => "Facile"
+		@btnRapideMoyen = Gtk::Button.new :label => "Moyen"
+		@btnRapideDifficile = Gtk::Button.new :label => "Difficile"
+
+		@btnRapideFacile.signal_connect('clicked') {
 			puts "Lancement du mode facile de rapide"
 			#Niveau entre 6 et 9
 			taille = 6 + Random.rand(3)
 			lancementRapide(taille)
-
 		}
-		@btnMoyenRap.signal_connect('clicked') {
+		@btnRapideMoyen.signal_connect('clicked') {
 			puts "Lancement du mode moyen de rapide"
 			#Niveau entre 9 et 12
 			taille = 9 + Random.rand(3)
 			lancementRapide(taille)
 		}
-		@btnDifficileRap.signal_connect('clicked') {
+		@btnRapideDifficile.signal_connect('clicked') {
 			puts "Lancement du mode difficile de rapide"
 			#Niveau entre 12 et 16
 			taille = 12 + Random.rand(4)
@@ -89,5 +78,7 @@ class HudModeDeJeu < Hud
 		}
 	end
 
-
+	def initBoutonTuto
+		@btnTutoriel = Gtk::Button.new :label => " Tutoriel"
+	end
 end
