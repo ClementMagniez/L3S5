@@ -2,10 +2,12 @@ class HudOption < Hud
 	# @btnPlEcran
 	# @btnRetour
 	# @fenetrePrecedente
+	# @fullscreen
 
 	def initialize(window,fenetrePrecedente)
 		super(window)
 		@fenetrePrecedente = fenetrePrecedente
+		@fullscreen = false
 
 		self.setTitre("Options")
 		self.setDesc("Ici la description des options")
@@ -31,10 +33,16 @@ class HudOption < Hud
 	end
 
 	def initBoutonPlEcran
-		@btnPlEcran = Gtk::Button.new :label =>"- Plein écran -"
-		 @btnPlEcran.signal_connect('clicked') {
-		 	@fenetre.fullscreen
-		 }
+		@btnPlEcran = Gtk::Button.new :label =>"Plein écran"
+		@btnPlEcran.signal_connect('clicked') {
+			if @fullscreen
+				@fenetre.unfullscreen
+				@fullscreen = false
+			else
+				@fenetre.fullscreen
+				@fullscreen = true
+			end
+		}
 	end
 
 	def initBoutonRetour
