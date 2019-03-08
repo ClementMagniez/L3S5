@@ -4,8 +4,10 @@ class HudAventure < HudJeu
 		taille = grille.length
 
 		#Label titre : MODE AVENTURE
-		@lblTitreAv = Gtk::Label.new(" MODE AVENTURE ")
-		self.attach(@lblTitreAv,6,2,4,2)
+		# @lblTitreAv = Gtk::Label.new(" MODE AVENTURE ")
+		# self.attach(@lblTitreAv,6,2,4,2)
+		self.setTitre("Aventure")
+		self.setDesc("Ici la desc du mode aventure")
 		#Bouton des aides et du reset de la grille
 		# @btnAide = Gtk::Button.new :label => " Aide "
 		# @btnReset = Gtk::Button.new :label => " Reset "
@@ -24,7 +26,7 @@ class HudAventure < HudJeu
 		# => besoin de confirmation de choix "Etes vous sur de vouloir quitter votre grille?"
 		# @btnRetour = Gtk::Button.new :label => "Retour"
 		# self.attach(@btnRetour,16,25,2,2)
-		self.chargementGrille
+	# self.chargementGrille
 		#Chargement de la grille et mise en place de la liste de bouton que contient la grille
 		# @listBouton = chargementGrille(grille,taille)
 

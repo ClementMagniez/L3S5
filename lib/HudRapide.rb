@@ -3,8 +3,10 @@ class HudRapide < HudJeu
 		super(window,grille,aide)
 
 		#Label titre : MODE AVENTURE
-		@lblTitreAv = Gtk::Label.new(" MODE RAPIDE ")
-		self.attach(@lblTitreAv,6,2,4,2)
+		# @lblTitreAv = Gtk::Label.new(" MODE RAPIDE ")
+		# self.attach(@lblTitreAv,6,2,4,2)
+		self.setTitre("Jeu rapide")
+		self.setDesc("Ici la desc du mode rapide")
 		#Bouton des aides et du reset de la grille
 		# self.attach(@btnAide,taille+4,taille,2,1)
 		# self.attach(@btnReset,taille+4,taille+1,2,1)
@@ -36,7 +38,7 @@ class HudRapide < HudJeu
 
 		#Chargement de la grille et mise en place de la liste de bouton que contient la grille
 		# @listBouton = chargementGrille(grille,taille)
-		self.chargementGrille
+	# self.chargementGrille
 		#Label d'aide
 		@lblAide = Gtk::Label.new("Bonjour et bienvenue sur notre super jeu !")
 		self.attach(@lblAide,taille+15,taille/2+3,5,5)

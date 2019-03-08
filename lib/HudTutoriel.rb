@@ -3,8 +3,10 @@ class HudTutoriel < HudJeu
 		super(window,grille,aide)
 
 		#Label titre : MODE AVENTURE
-		@lblTitreAv = Gtk::Label.new(" MODE TUTORIEL ")
-		self.attach(@lblTitreAv,6,2,4,2)
+		# @lblTitreAv = Gtk::Label.new(" MODE TUTORIEL ")
+		# self.attach(@lblTitreAv,6,2,4,2)
+		self.setTitre("Tutoriel")
+		self.setDesc("Ici la desc du mode tuto")
 		#Bouton des aides et du reset de la grille
 		# @btnAide = Gtk::Button.new :label => " Aide "
 		# @btnReset = Gtk::Button.new :label => " Reset "
@@ -26,7 +28,7 @@ class HudTutoriel < HudJeu
 
 		#Chargement de la grille et mise en place de la liste de bouton que contient la grille
 		# @listBouton = chargementGrille(grille,taille)
-		self.chargementGrille
+	# self.chargementGrille
 		#Label d'aide
 		@lblAide = Gtk::Label.new("Bonjour et bienvenue sur notre super jeu !")
 		self.attach(@lblAide,taille+15,taille/2+3,5,5)

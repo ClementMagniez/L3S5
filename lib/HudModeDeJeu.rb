@@ -3,8 +3,10 @@ class HudModeDeJeu < Hud
 		super(window)
 
 		#Label titre : MODE DE JEU
-		@lblTitreMdj = Gtk::Label.new(" MODE DE JEU ")
-		self.attach(@lblTitreMdj,1,0,4,2)
+		# @lblTitreMdj = Gtk::Label.new(" MODE DE JEU ")
+		# self.attach(@lblTitreMdj,1,0,4,2)
+		self.setDesc("Ici la description des modes de jeu")
+		self.setTitre("MODE DE JEU")
 
 		#Bouton tutoriel : MODE TUTORIEL
 		@btnTutoriel = Gtk::Button.new :label => " Tutoriel"

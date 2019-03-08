@@ -23,6 +23,8 @@ class HudJeu < Hud
 		self.attach(@btnReset,5,2,1,1)
 		self.attach(@btnAide,5,2,1,1)
 		self.attach(@btnRetour,16,25,2,2)
+
+		chargementGrille
 	end
 
 
@@ -69,14 +71,10 @@ class HudJeu < Hud
 		taille = @grille.length
 		@btnReset = Gtk::Button.new :label => "Reset"
 		@btnReset.signal_connect("clicked") {
-			# compteur = 0
 			1.upto(taille) { |i|
 				1.upto(taille){ |j|
-					# puts "I=" + i.to_s + " j=" + j.to_s
 					@grille[i-1][j-1].reset
 					@gridJeu.get_child_at(j,i).set_image(Gtk::Image.new(:file=>@grille[i-1][j-1].affichage))
-					# listButton.at(compteur).set_image(Gtk::Image.new :file => grille[i][j].affichage)
-					# compteur = compteur +1
 				}
 			}
 		}
