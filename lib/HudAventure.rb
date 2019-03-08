@@ -13,12 +13,12 @@ class HudAventure < HudJeu
 		# self.attach(@btnReset,taille+4,taille+1,2,1)
 
 		#Grille de jeu
-		@gridJeu = Gtk::Table.new(taille+1,taille+1,true)
-		self.attach(@gridJeu,2,4,taille+1,taille+1)
+		# @gridJeu = Gtk::Table.new(taille+1,taille+1,true)
+		# self.attach(@gridJeu,2,4,taille+1,taille+1)
 
 		#Bouton option
-		@btnOption = Gtk::Button.new :label => "Options"
-		self.attach(@btnOption,2,25,2,2)
+		# @btnOption = Gtk::Button.new :label => "Options"
+		# self.attach(@btnOption,2,25,2,2)
 
 		#Bouton retour aux choix de mode de jeu
 		# => besoin de confirmation de choix "Etes vous sur de vouloir quitter votre grille?"

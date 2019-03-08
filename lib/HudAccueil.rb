@@ -28,15 +28,15 @@ class HudAccueil < Hud
 		self.attach(@entMotDePasse,10,8,2,2)
 
 		#Bouton option
-		@btnOption = Gtk::Button.new :label => "Options"
+		# @btnOption = Gtk::Button.new :label => "Options"
 		@btnQuitter = Gtk::Button.new :label => "Quitter"
 
-		self.attach(@btnOption,4,14,4,2)
+		# self.attach(@btnOption,4,14,4,2)
 		self.attach(@btnQuitter,14,14,4,2)
 
 		self.initBoutonConnecter
 		self.initBoutonQuitter
-		self.initBoutonOptions
+		# self.initBoutonOptions
 	end
 
 
@@ -47,8 +47,8 @@ class HudAccueil < Hud
 	end
 
 	def initBoutonQuitter
-		
-		@btnQuitter.signal_connect('clicked') { 
+
+		@btnQuitter.signal_connect('clicked') {
 			puts "Fermeture de l'application !"
 			Gtk.main_quit
 		}

@@ -35,9 +35,9 @@ class HudModeDeJeu < Hud
 		self.attach(@btnDifficileRap,7,18,2,2)
 
 		#Bouton Option
-		@btnOption = Gtk::Button.new :label => "Options"
-		self.attach(@btnOption,2,20,2,2)
-		self.initBoutonOptions
+		# @btnOption = Gtk::Button.new :label => "Options"
+		# self.attach(@btnOption,2,20,2,2)
+		# self.initBoutonOptions
 		self.initBoutonAventure
 		self.initBoutonRapide
 
