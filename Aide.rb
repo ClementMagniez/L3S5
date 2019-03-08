@@ -148,8 +148,11 @@ class Aide
             ok = false
           end            
           # print "\n\nValeur de i et j = " + i.to_s + " " + j.to_s + "\n" if ok
- 
-          return grille[i][j] if ok
+
+          # MODIF EN TEST
+          caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
+          return caseCoord if ok
+          # return grille[i][j] if ok
         end
       end
     end
