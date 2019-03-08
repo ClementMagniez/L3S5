@@ -9,6 +9,7 @@ class HudOption < Hud
 
 		self.setTitre("Options")
 		self.setDesc("Ici la description des options")
+		@btnOptions.destroy
 
 		initBoutonFenetre
 		initBoutonPlEcran
