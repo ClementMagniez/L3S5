@@ -28,7 +28,7 @@ class Grille
 		@tentesCol=Array.new(matSize)
 		@tentesLigne=Array.new(matSize)
 		parseText(result)
-
+		# Ajout d'une méthode d'insertion dans la BDD ici
 	end
 
 

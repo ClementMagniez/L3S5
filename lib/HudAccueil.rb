@@ -39,9 +39,14 @@ class HudAccueil < Hud
 		self.initBoutonOptions
 	end
 
-	# intégrer la connexion à la BDD
+	# Intégrer la connexion à la BDD
 	def initBoutonConnecter
+		# @entIdentifiant et @entMotDePasse à prendre en compte
+		# Requête SQL pour trouver ces identifiants (le mot de passe sera crypté avant l'envoi)
+		# Gestion des cas de succès et d'échecs
 		@btnConnecter.signal_connect("clicked") {
+				login = Profil.find(:all, :conditions => "pseudonyme=#{@entIdentifiant}")
+
 				@fenetre.changerWidget(self,HudModeDeJeu.new(@fenetre))
 		}
 	end
