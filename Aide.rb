@@ -1,10 +1,10 @@
-# require_relative 'Grille'
  
 class Aide
  
   include StatutConstantes
  
-
+  #####################################################################################################
+  # Class CaseCoordonnees permettant de lier une case avec ces coordonnées en abscisse et en ordonnée
   Object.const_set("CaseCoordonnees", Class.new)
   laClasse = Object.const_get("CaseCoordonnees")
   
@@ -26,7 +26,7 @@ class Aide
     }
 
   }
-
+  #####################################################################################################
 
   def initialize(grille)
     @grille=grille
@@ -509,30 +509,56 @@ class Aide
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
   def cycle
  
+    tableau = Array.new
+
     if (funcReturn=self.casesIncorrect) != 0
-      return "Il y a " + funcReturn.to_s + " erreur(s)"
+      # return "Il y a " + funcReturn.to_s + " erreur(s)"
+      tableau.push(nil, "Il y a " + funcReturn.to_s + " erreur(s)")
+      return tableau
     elsif (funcReturn=self.resteQueTentesLigne) != 0
-      return "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s
+      # return "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s
+      tableau.push(nil, "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s)
+      return tableau
     elsif (funcReturn=self.resteQueTentesColonne) != 0
-      return "Il ne reste que des tentes à placer sur la colonne "+ funcReturn.to_s
+      # return "Il ne reste que des tentes à placer sur la colonne " + funcReturn.to_s
+      tableau.push(nil, "Il ne reste que des tentes à placer sur la colonne " + funcReturn.to_s)
+      return tableau
     elsif (funcReturn=self.resteQueHerbeLigne) != 0
-      return "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s
+      # return "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s
+      tableau.push(nil, "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s)
+      return tableau
     elsif (funcReturn=self.resteQueHerbeColonne) != 0
-      return "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s
+      # return "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s
+      tableau.push(nil, "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s)
+      return tableau
     elsif (funcReturn=self.casePasACoteArbre) != 0
-      return "La case " + funcReturn.class.to_s + " est forcement du gazon\n"
+      # return "La case " + funcReturn.class.to_s + " est forcement du gazon"
+      tableau.push(funcReturn, "La case " + funcReturn.class.to_s + " est forcement du gazon")
+      return tableau
     elsif (funcReturn=self.uniquePossibiliteArbre) != 0
-      return "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre " + funcReturn.class.to_s
+      # return "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre " + funcReturn.class.to_s
+      tableau.push(funcReturn, "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre " + funcReturn.class.to_s)
+      return tableau
     elsif (funcReturn=self.dispositionPossibleLigne) != 0
-      return "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s
+      # return "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s
+      tableau.push(funcReturn, "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s)
+      return tableau
     elsif (funcReturn=self.dispositionPossibleColonne) != 0
-      return "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s
+      # return "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s
+      tableau.push(funcReturn, "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s)
+      return tableau
     elsif (funcReturn=self.arbreAutourCasePossedeTente) != 0
-      return "La case " + funcReturn.class.to_s + " est forcement du gazon puisque tous les arbres autours ont leurs tentes"
+      # return "La case " + funcReturn.class.to_s + " est forcement du gazon puisque tous les arbres autours ont leurs tentes"
+      tableau.push(funcReturn, "La case " + funcReturn.class.to_s + " est forcement du gazon puisque tous les arbres autours ont leurs tentes")
+      return tableau
     elsif (funcReturn=self.caseArbreAssocieTente) != 0
-      return "La case " + funcReturn.class.to_s + " n'a pas encore placé sa tente"
+      # return "La case " + funcReturn.class.to_s + " n'a pas encore placé sa tente"
+      tableau.push(funcReturn, "La case " + funcReturn.class.to_s + " n'a pas encore placé sa tente")
+      return tableau
     else
-      return "Aucune aide disponible ..."
+      # return "Aucune aide disponible ..."
+      tableau.push(nil, "Aucune aide disponible ...")
+      return tableau
     end
      
   end
