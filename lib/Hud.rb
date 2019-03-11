@@ -11,10 +11,10 @@ class Hud < Gtk::Grid
 		@lblDescription = Gtk::Label.new
 
 		initBoutonOptions
-
+		
 		self.attach(@btnOptions, 0, 25, 1, 1)
 		self.attach(@lblDescription, 0, 0, 25, 1)
-
+		
 
 		self.halign = Gtk::Align::CENTER
 		self.valign = Gtk::Align::CENTER
@@ -29,9 +29,19 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
 	end
 
+	def lancementAccueil
+		puts "Retour à l'accueil"
+		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
+	end
+
 	def lancementModeJeu
 		puts "Retour au menu"
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
+	end
+
+	def lancementInscription
+		puts " Page d'inscription "
+		@fenetre.changerWidget(self, HudInscription.new(@fenetre))
 	end
 
 	def lancementRapide(taille)
@@ -58,4 +68,7 @@ class Hud < Gtk::Grid
 	def setTitre(str)
 		@fenetre.set_title(str)
 	end
+
+
+	
 end
