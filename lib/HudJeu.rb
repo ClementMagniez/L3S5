@@ -33,20 +33,21 @@ class HudJeu < Hud
 
 	def chargementGrille
 		taille = @grille.length
+		puts(taille)
 
 		# positionne les indices autour de la table @gridJeu
-		1.upto(taille) { |i|
+		0.upto(taille-1) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
-			btnIndiceCol = Gtk::Button.new(:label=>@grille.tentesCol.fetch(i-1).to_s)
+			btnIndiceCol = Gtk::Button.new(:label=>@grille.tentesCol.fetch(i).to_s)
 			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
-			@gridJeu.attach(btnIndiceCol,i,0,1,1)
+			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
 			btnIndiceCol.signal_connect("clicked") {
 				puts "Clique sur le bouton de la colonne " + i.to_s
 			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
-			btnIndicesLig = Gtk::Button.new(:label=>@grille.tentesLigne.fetch(i-1).to_s)
+			btnIndicesLig = Gtk::Button.new(:label=> @grille.tentesLigne.fetch(i).to_s)
 			btnIndicesLig.set_relief(Gtk::ReliefStyle::NONE)
-			@gridJeu.attach(btnIndicesLig,0,i,1,1)
+			@gridJeu.attach(btnIndicesLig,0,i+1,1,1)
 			btnIndicesLig.signal_connect("clicked") {
 				puts "Clique sur le bouton de la ligne " + i.to_s
 			}
@@ -82,10 +83,11 @@ class HudJeu < Hud
 		taille = @grille.length
 		@btnReset = Gtk::Button.new :label => "Reset"
 		@btnReset.signal_connect("clicked") {
-			1.upto(taille) { |i|
-				1.upto(taille){ |j|
-					@grille[i-1][j-1].reset
-					@gridJeu.get_child_at(j,i).set_image(Gtk::Image.new(:file=>@grille[i-1][j-1].affichage))
+			1.upto(taille-1) { |i|
+				1.upto(taille-1){ |j|
+					@grille[i][j].reset
+					#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
+					@gridJeu.get_child_at(j,i).set_image(Gtk::Image.new(:file=>@grille[i-1][j].affichage))
 				}
 			}
 		}
