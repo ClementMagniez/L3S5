@@ -34,6 +34,14 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
 	end
 
+
+	def lancementTutoriel(taille)
+		grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"grilles.txt")
+		puts "Retour à l'accueil"
+		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
+	end
+
+
 	def lancementModeJeu
 		puts "Retour au menu"
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))

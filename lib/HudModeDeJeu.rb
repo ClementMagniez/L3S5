@@ -28,6 +28,7 @@ class HudModeDeJeu < Hud
 		self.attach(Gtk::Label.new("Partie rapide"),5,12,2,2)
 	end
 
+
 	def initBoutonsAventure
 		@btnAvFacile = Gtk::Button.new :label => "Facile"
 		@btnAvMoyen = Gtk::Button.new :label => "Moyen"
@@ -80,5 +81,11 @@ class HudModeDeJeu < Hud
 
 	def initBoutonTuto
 		@btnTutoriel = Gtk::Button.new :label => " Tutoriel"
+		@btnTutoriel.signal_connect('clicked') {
+			puts "Lancement du mode tutoriel"
+			#Niveau le plus facile : 6
+			taille = 6
+			lancementTutoriel(taille)
+		}
 	end
 end

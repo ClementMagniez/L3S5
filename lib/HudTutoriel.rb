@@ -6,5 +6,7 @@ class HudTutoriel < HudJeu
 		self.setDesc("Ici la desc du mode tuto")
 
 		self.initBoutonOptions
+
+		
 	end
 end
