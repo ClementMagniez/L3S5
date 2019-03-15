@@ -44,8 +44,8 @@ class HudJeu < Hud
 				0.upto(taille-1) { |k|
 					if @grille[k][i].statutVisible.isVide?
 						@grille[k][i].cycle(k,i, @grille.tentesLigne, @grille.tentesCol)
-						# @gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[k][i].affichage)))
-						@gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(k,i))
+						@gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[k][i].affichage)))
+						# @gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(k,i))
 					end
 				}
 				# puts "Clique sur le bouton de la colonne " + i.to_s
@@ -55,16 +55,13 @@ class HudJeu < Hud
 			btnIndicesLig.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndicesLig,0,i+1,1,1)
 			btnIndicesLig.signal_connect("clicked") {
-
 				0.upto(taille-1) { |k|
-
 					if @grille[i][k].statutVisible.isVide?
 						@grille[i][k].cycle(i,k, @grille.tentesLigne, @grille.tentesCol)
-						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[i][k].affichage)))
-						@gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
+						@gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[i][k].affichage)))
+						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 					end
 				}
-
 			}
 		}
 
@@ -73,17 +70,17 @@ class HudJeu < Hud
 			0.upto(taille-1){ |j|
 				button = Gtk::Button.new()
 				button.set_relief(Gtk::ReliefStyle::NONE)
-				# button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
-				button.set_image(scaleImage(i,j))
+				button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
+				# button.set_image(scaleImage(i,j))
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
-					# button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
-					button.set_image(i,j)
+					button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
+					# button.set_image(i,j)
 					if @caseSurbrillanceList != nil
 						while not @caseSurbrillanceList.empty?
 								caseSubr = @caseSurbrillanceList.shift
-								# @gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(Gtk::Image.new :file => @grille[caseSubr.getI][caseSubr.getJ].affichage)
-								@gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(scaleImage(caseSubr.getI,caseSubr.getJ))
+								@gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(scaleImage(Gtk::Image.new :file => @grille[caseSubr.getI][caseSubr.getJ].affichage))
+								# @gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(scaleImage(caseSubr.getI,caseSubr.getJ))
 						end
 					end
 
@@ -97,13 +94,13 @@ class HudJeu < Hud
 
 	# Retourne l'image à poser sur la position x, y de la grille de jeu
 	# Retourne l'image redimensionnée
-	def scaleImage(x, y)
+	def scaleImage(image)
 		winX = @fenetre.size.fetch(0)
 		winY = @fenetre.size.fetch(1)
 		taille = @grille.length
 		imgSize = winY / (taille+4)
 
-		image = Gtk::Image.new :file => @grille[x][y].affichage
+		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 
 		return image
@@ -120,7 +117,6 @@ class HudJeu < Hud
 				# puts ("pouetpouetpouet")
 				if caseAide.class == CaseCoordonnees
 
-					# @gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
 					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
 					# puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
 
@@ -144,8 +140,8 @@ class HudJeu < Hud
 				0.upto(taille-1){ |j|
 					@grille[i][j].reset
 					#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
-					# @gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[i][j].affichage)))
-					@gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(i,j))
+					@gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[i][j].affichage)))
+					# @gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(i,j))
 				}
 			}
 		}

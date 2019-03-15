@@ -85,5 +85,4 @@ class HudRapide < HudJeu
 
 		}
 	end
-
 end
