@@ -1,7 +1,7 @@
 class HudRapide < HudJeu
 	# @btnPause
 	# @timer
-	
+
 	def initialize(window,grille)
 		super(window,grille)
 		@btnPause = Gtk::Button.new :label => "Pause"
@@ -11,18 +11,16 @@ class HudRapide < HudJeu
 		@horloge = 0
 		@stockHorloge = 0
 		self.setTitre("Partie rapide")
-		self.setDesc("Ici la desc du mode rapide")
+		# self.setDesc("Ici la desc du mode rapide")
 
 
 		self.initBoutonOptions
 		initBoutonPause
-
 		initBoutonAide
-		self.attach(@btnAide,@tailleGrille-1,0,1,1)
-		
 
-		self.attach(@btnPause,5,0,2,1)
-		self.attach(@lblTime,0,2,1,1)
+		self.attach(@btnAide,@tailleGrille-1,0,1,1)
+		self.attach(@btnPause,@tailleGrille-2,0,1,1)
+		self.attach(@lblTime,@tailleGrille-3,0,1,1)
 
 		@t=Thread.new{timer}
 	end
@@ -62,7 +60,7 @@ class HudRapide < HudJeu
 				@btnPause.set_label("Pause")
 			end
 		}
-	
+
 	end
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide
