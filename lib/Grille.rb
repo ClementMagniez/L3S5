@@ -2,13 +2,14 @@ require_relative 'Case'
 require_relative 'CaseArbre'
 require_relative 'CaseTente'
 require_relative 'CaseGazon'
+require_relative 'ScorePartie'
 
 
 # Parse le fichier de génération des grilles et l'implémente
 # comme grille de jeu
 class Grille
 
-	attr_reader :tentesCol, :tentesLigne, :grille
+	attr_reader :tentesCol, :tentesLigne, :grille, :score
 
 	# Obtient et génère la grille à partir du fichier filePath, ligne n
 	# L'indexation se fait à partir de 1
@@ -27,6 +28,7 @@ class Grille
 		@grille=Array.new(matSize) { Array.new(matSize) {0} }
 		@tentesCol=Array.new(matSize)
 		@tentesLigne=Array.new(matSize)
+		@score = ScorePartie.new()
 		parseText(result)
 		# Ajout d'une méthode d'insertion dans la BDD ici
 	end
@@ -136,5 +138,4 @@ class Grille
 			else abort("Erreur de parsing : #{chr}")
 		end
 	end
-
 end
