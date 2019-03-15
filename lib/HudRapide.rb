@@ -48,6 +48,19 @@ class HudRapide < HudJeu
 		}
 
 	end
+	def initBoutonReset
+		super()
+		@btnReset.signal_connect("clicked") {
+			@t.kill
+			@stockHorloge =0
+			@timer = Time.now
+			@t = Thread.new{timer}
+			if @pause
+				@btnPause.set_label("Pause")
+			end
+		}
+	
+	end
 
 
 end

@@ -17,6 +17,10 @@ class Statut
 	def ==(statut)
 		self.statut==statut.statut
 	end
+
+	def isVide?
+		return false
+	end
 	
 
 	protected

@@ -12,12 +12,23 @@ class CaseArbre < Case
 	def estValide?
 		true
 	end
+	def isVide?
+		return false
+	end
 	
 	# Fait cycler la case sur "coché->décoché" et met à jour les indicateurs
 	# de tente restante
 	# TODO - vérifier que les i,j sont bien cohérents
 	def cycle(i,j,arrayColonnes, arrayLignes)
 		self.statutVisible.cycle
+	end
+
+	def affichageSubr
+		if self.statutVisible.isArbreCoche?
+			'../img/arbreCocheSubr.png'
+		else
+			'../img/arbreSubr.png'
+		end
 	end
 
 	def affichage

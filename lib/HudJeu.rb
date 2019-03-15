@@ -22,7 +22,6 @@ class HudJeu < Hud
 
 		self.attach(@gridJeu,2,4,1,1)
 		self.attach(@btnReset,5,2,1,1)
-		self.attach(@btnAide,5,1,1,1)
 		self.attach(@btnRetour,16,25,2,2)
 		self.attach(@lblAide, 16, 8, 7,7)
 
@@ -42,6 +41,15 @@ class HudJeu < Hud
 			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
 			btnIndiceCol.signal_connect("clicked") {
+				0.upto(taille-1) { |k|
+					puts (@grille[k][i].statutVisible.isVide?)
+					puts ("i :"+i.to_s+"j:"+k.to_s)
+					if @grille[k][i].statutVisible.isVide?
+						puts ("t nul")
+						@grille[k][i].cycle(k,i, @grille.tentesLigne, @grille.tentesCol)
+						@gridJeu.get_child_at(i+1,k+1).set_image(Gtk::Image.new(:file => @grille[k][i].affichage))
+					end
+				}
 				puts "Clique sur le bouton de la colonne " + i.to_s
 			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
@@ -49,7 +57,16 @@ class HudJeu < Hud
 			btnIndicesLig.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndicesLig,0,i+1,1,1)
 			btnIndicesLig.signal_connect("clicked") {
-				puts "Clique sur le bouton de la ligne " + i.to_s
+				
+				0.upto(taille-1) { |k|
+					
+					if @grille[i][k].statutVisible.isVide?
+						puts ("t nul")
+						@grille[i][k].cycle(i,k, @grille.tentesLigne, @grille.tentesCol)
+						@gridJeu.get_child_at(k+1,i+1).set_image(Gtk::Image.new(:file => @grille[i][k].affichage))
+					end
+				}
+				
 			}
 		}
 
@@ -62,7 +79,12 @@ class HudJeu < Hud
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
 					button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
+					if @caseSurbrillance != nil
+						@gridJeu.get_child_at(@caseSurbrillance.getJ+1,@caseSurbrillance.getI+1).set_image(Gtk::Image.new :file => @grille[@caseSurbrillance.getI][@caseSurbrillance.getJ].affichage)
+						@caseSurbrillance = nil
+					end
 				}
+				
 				@gridJeu.attach(button,j+1,i+1,1,1)
 			}
 		}
@@ -71,9 +93,26 @@ class HudJeu < Hud
 
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide
-		@btnAide = Gtk::Button.new :label => "Aide"
+		taille = @grille.length
+		@btnAide = Gtk::Button.new :label => " Aide "
+		self.attach(@btnAide,taille+4,taille,1,1)
 		@btnAide.signal_connect("clicked") {
-			@lblAide.set_label(@aide.cycle)
+			tableau = @aide.cycle
+			caseAide = tableau.at(0)
+			if caseAide != nil then
+				puts ("pouetpouetpouet")
+				if caseAide.class == CaseCoordonnees
+
+					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+					puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
+
+					@caseSurbrillance =caseAide
+				end
+				
+			end
+
+			@lblAide.set_label(tableau.at(1))
+
 		}
 	end
 

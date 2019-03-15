@@ -21,6 +21,7 @@ class Case
 		self.statutVisible.reset
 		self
 	end
+
 	
 	attr_reader :statut, :statutVisible
 	
