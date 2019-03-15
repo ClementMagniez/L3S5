@@ -33,8 +33,6 @@ class HudJeu < Hud
 
 	def chargementGrille
 		taille = @grille.length
-		puts(taille)
-
 		# positionne les indices autour de la table @gridJeu
 		0.upto(taille-1) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
@@ -58,15 +56,28 @@ class HudJeu < Hud
 			0.upto(taille-1){ |j|
 				button = Gtk::Button.new()
 				button.set_relief(Gtk::ReliefStyle::NONE)
-				button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
+				button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
-					button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
+					button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
 				}
 				@gridJeu.attach(button,j+1,i+1,1,1)
 			}
 		}
 		return self
+	end
+
+	# Redimensionne l'image donnée aux dimmensions de la fenetre
+	# Retourne l'image redimensionnée
+	def scaleImage(image)
+		winX = @fenetre.size.fetch(0)
+		winY = @fenetre.size.fetch(1)
+		taille = @grille.length
+		imgSize = (winY-200) / (taille+1)
+
+		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
+
+		return image
 	end
 
 	# Créé et initialise le bouton d'aide
