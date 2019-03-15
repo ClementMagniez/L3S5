@@ -74,9 +74,11 @@ class HudJeu < Hud
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
 					button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
-					while not @caseSurbrillanceList.empty?
-							caseSubr = @caseSurbrillanceList.shift
-							@gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(Gtk::Image.new :file => @grille[caseSubr.getI][caseSubr.getJ].affichage)
+					if @caseSurbrillanceList != nil
+						while not @caseSurbrillanceList.empty?
+								caseSubr = @caseSurbrillanceList.shift
+								@gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(Gtk::Image.new :file => @grille[caseSubr.getI][caseSubr.getJ].affichage)
+						end
 					end
 				}
 
