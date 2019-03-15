@@ -13,6 +13,8 @@ class HudJeu < Hud
 		super(window)
 		@aide = Aide.new(grille)
 		@gridJeu = Gtk::Grid.new
+			@gridJeu.set_column_homogeneous(true)
+			@gridJeu.set_row_homogeneous(true)
 		@grille = grille
 		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
 
