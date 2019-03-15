@@ -21,11 +21,11 @@ class HudJeu < Hud
 		initBoutonRetour
 
 			tailleGrille = @grille.length+1
-		self.attach(@gridJeu,1,1,tailleGrille, tailleGrille)
-		self.attach(@btnReset,tailleGrille,0,1,1)
-		self.attach(@btnAide,tailleGrille-1,0,1,1)
-		self.attach(@btnRetour,tailleGrille,tailleGrille+1,1,1)
-		self.attach(@lblAide, 1, tailleGrille+1, tailleGrille, tailleGrille)
+		self.attach(@gridJeu,1,1,tailleGrille, tailleGrille)		# attache la grille de jeu dans la grid du HUD
+		self.attach(@btnAide,tailleGrille-1,0,1,1)					# bouton aide au dessus à droite de la grille de jeu
+		self.attach(@btnReset,tailleGrille,0,1,1)					# Bouton reset e droite du bouton aide en haut de la grille de jeu
+		self.attach(@btnRetour,tailleGrille,tailleGrille+1,1,1)		# bouton retour en dessous à droite de la grille de jeu
+		self.attach(@lblAide, 1, tailleGrille+1, tailleGrille-1, 1)	# Texte de l'aide en dessous de la grille de jeu
 
 		chargementGrille
 	end
@@ -42,12 +42,12 @@ class HudJeu < Hud
 			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
 			btnIndiceCol.signal_connect("clicked") {
 				0.upto(taille-1) { |k|
-					puts (@grille[k][i].statutVisible.isVide?)
-					puts ("i :"+i.to_s+"j:"+k.to_s)
+					# puts (@grille[k][i].statutVisible.isVide?)
+					# puts ("i :"+i.to_s+"j:"+k.to_s)
 					if @grille[k][i].statutVisible.isVide?
-						puts ("t nul")
+						# puts ("t nul")
 						@grille[k][i].cycle(k,i, @grille.tentesLigne, @grille.tentesCol)
-						@gridJeu.get_child_at(i+1,k+1).set_image(Gtk::Image.new(:file => @grille[k][i].affichage))
+						@gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[k][i].affichage)))
 					end
 				}
 				# puts "Clique sur le bouton de la colonne " + i.to_s
@@ -61,9 +61,9 @@ class HudJeu < Hud
 				0.upto(taille-1) { |k|
 
 					if @grille[i][k].statutVisible.isVide?
-						puts ("t nul")
+						# puts ("t nul")
 						@grille[i][k].cycle(i,k, @grille.tentesLigne, @grille.tentesCol)
-						@gridJeu.get_child_at(k+1,i+1).set_image(Gtk::Image.new(:file => @grille[i][k].affichage))
+						@gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[i][k].affichage)))
 					end
 				}
 
@@ -78,13 +78,14 @@ class HudJeu < Hud
 				button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
-					button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
+					button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
 					if @caseSurbrillance != nil
 						@gridJeu.get_child_at(@caseSurbrillance.getJ+1,@caseSurbrillance.getI+1).set_image(Gtk::Image.new :file => @grille[@caseSurbrillance.getI][@caseSurbrillance.getJ].affichage)
 						@caseSurbrillance = nil
 					end
-				}
 
+					self.jeuTermine		if @grille.estComplete?
+				}
 				@gridJeu.attach(button,j+1,i+1,1,1)
 			}
 		}
@@ -97,7 +98,8 @@ class HudJeu < Hud
 		winX = @fenetre.size.fetch(0)
 		winY = @fenetre.size.fetch(1)
 		taille = @grille.length
-		imgSize = (winY-200) / (taille+1)
+		imgSize = winY / (taille+4)
+		# puts "taille image = " + imgSize.to_s
 
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 
@@ -108,7 +110,6 @@ class HudJeu < Hud
 	def initBoutonAide
 		taille = @grille.length
 		@btnAide = Gtk::Button.new :label => " Aide "
-		self.attach(@btnAide,taille+4,taille,1,1)
 		@btnAide.signal_connect("clicked") {
 			tableau = @aide.cycle
 			caseAide = tableau.at(0)
@@ -139,7 +140,7 @@ class HudJeu < Hud
 				0.upto(taille-1){ |j|
 					@grille[i][j].reset
 					#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
-					@gridJeu.get_child_at(j+1,i+1).set_image(Gtk::Image.new(:file=>@grille[i][j].affichage))
+					@gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[i][j].affichage)))
 				}
 			}
 		}
@@ -151,5 +152,10 @@ class HudJeu < Hud
 		@btnRetour.signal_connect("clicked") {
 			self.lancementModeJeu
 		}
+	end
+
+	# Comportement a la fin du jeu
+	def jeuTermine
+		self.lancementModeJeu
 	end
 end

@@ -7,4 +7,10 @@ class HudAventure < HudJeu
 
 		self.initBoutonOptions
 	end
+
+	# Comportement a la fin du jeu
+	def jeuTermine
+		self.lancementAventure(@grille.length+1)
+		
+	end
 end
