@@ -11,10 +11,10 @@ class Hud < Gtk::Grid
 		@lblDescription = Gtk::Label.new
 
 		initBoutonOptions
-		
+
 		self.attach(@btnOptions, 0, 25, 1, 1)
-		self.attach(@lblDescription, 0, 0, 25, 1)
-		
+		self.attach(@lblDescription, 0, 0, 6, 1)
+
 
 		self.halign = Gtk::Align::CENTER
 		self.valign = Gtk::Align::CENTER
@@ -78,5 +78,5 @@ class Hud < Gtk::Grid
 	end
 
 
-	
+
 end
