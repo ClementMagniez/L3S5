@@ -7,6 +7,41 @@ class HudTutoriel < HudJeu
 
 		self.initBoutonOptions
 
+		initBoutonAide
+		self.attach(@btnAide,@tailleGrille-1,0,1,1)
 		
 	end
+
+	# Créé et initialise le bouton d'aide
+	def initBoutonAide
+		taille = @grille.length
+		@caseSurbrillanceList = Array.new
+
+		@btnAide = Gtk::Button.new :label => " Aide "
+		self.attach(@btnAide,taille+4,taille,1,1)
+		@btnAide.signal_connect("clicked") {
+			tableau = @aide.cycle("tuto")
+			premAide = tableau.at(0)
+			if premAide != nil then
+				
+				if premAide.class == CaseCoordonnees
+					@gridJeu.get_child_at(premAide.getJ+1,premAide.getI+1).set_image(Gtk::Image.new :file => premAide.getCase.affichageSubr)
+					# puts(" X :" + premAide.getI.to_s + " Y :" +premAide.getJ.to_s )
+
+					@caseSurbrillanceList.push(premAide)
+				else
+					while not premAide.empty?
+						caseAide = premAide.shift
+						@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+						@caseSurbrillanceList.push(caseAide)
+					end
+				end
+
+			end
+
+			@lblAide.set_label(tableau.at(1))
+
+		}
+	end
+
 end
