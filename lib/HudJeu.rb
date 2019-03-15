@@ -20,19 +20,12 @@ class HudJeu < Hud
 		initBoutonReset
 		initBoutonRetour
 
-<<<<<<< HEAD
-		self.attach(@gridJeu,2,4,1,1)
-		self.attach(@btnReset,5,2,1,1)
-		self.attach(@btnRetour,16,25,2,2)
-		self.attach(@lblAide, 16, 8, 7,7)
-=======
 			tailleGrille = @grille.length+1
 		self.attach(@gridJeu,1,1,tailleGrille, tailleGrille)
 		self.attach(@btnReset,tailleGrille,0,1,1)
 		self.attach(@btnAide,tailleGrille-1,0,1,1)
 		self.attach(@btnRetour,tailleGrille,tailleGrille+1,1,1)
 		self.attach(@lblAide, 1, tailleGrille+1, tailleGrille, tailleGrille)
->>>>>>> f8c910d8a3a788d6beb32a0a6333e62511f1f265
 
 		chargementGrille
 	end
@@ -57,23 +50,23 @@ class HudJeu < Hud
 						@gridJeu.get_child_at(i+1,k+1).set_image(Gtk::Image.new(:file => @grille[k][i].affichage))
 					end
 				}
-				puts "Clique sur le bouton de la colonne " + i.to_s
+				# puts "Clique sur le bouton de la colonne " + i.to_s
 			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
 			btnIndicesLig = Gtk::Button.new(:label=> @grille.tentesLigne.fetch(i).to_s)
 			btnIndicesLig.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndicesLig,0,i+1,1,1)
 			btnIndicesLig.signal_connect("clicked") {
-				
+
 				0.upto(taille-1) { |k|
-					
+
 					if @grille[i][k].statutVisible.isVide?
 						puts ("t nul")
 						@grille[i][k].cycle(i,k, @grille.tentesLigne, @grille.tentesCol)
 						@gridJeu.get_child_at(k+1,i+1).set_image(Gtk::Image.new(:file => @grille[i][k].affichage))
 					end
 				}
-				
+
 			}
 		}
 
@@ -85,17 +78,13 @@ class HudJeu < Hud
 				button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
-<<<<<<< HEAD
 					button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
 					if @caseSurbrillance != nil
 						@gridJeu.get_child_at(@caseSurbrillance.getJ+1,@caseSurbrillance.getI+1).set_image(Gtk::Image.new :file => @grille[@caseSurbrillance.getI][@caseSurbrillance.getJ].affichage)
 						@caseSurbrillance = nil
 					end
-=======
-					button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
->>>>>>> f8c910d8a3a788d6beb32a0a6333e62511f1f265
 				}
-				
+
 				@gridJeu.attach(button,j+1,i+1,1,1)
 			}
 		}
@@ -124,15 +113,15 @@ class HudJeu < Hud
 			tableau = @aide.cycle
 			caseAide = tableau.at(0)
 			if caseAide != nil then
-				puts ("pouetpouetpouet")
+				# puts ("pouetpouetpouet")
 				if caseAide.class == CaseCoordonnees
 
 					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
-					puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
+					# puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
 
 					@caseSurbrillance =caseAide
 				end
-				
+
 			end
 
 			@lblAide.set_label(tableau.at(1))
