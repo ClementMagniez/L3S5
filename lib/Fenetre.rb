@@ -12,6 +12,7 @@ require_relative 'HudTutoriel'
 class Fenetre < Gtk::Window
 	def initialize
 		super()
+		@fullscreen = false
         self.set_resizable(true)
 		self.maximize
         self.signal_connect('destroy') { Gtk.main_quit }
@@ -23,6 +24,22 @@ class Fenetre < Gtk::Window
 	def changerWidget(ancien,nouveau)
 		self.remove(ancien).add(nouveau)
 		self.show_all
+		return self
+	end
+
+	def isFullscreen?
+		return @fullscreen
+	end
+
+	def fullscreen
+		super
+		@fullscreen = true
+		return self
+	end
+
+	def unfullscreen
+		super
+		@fullscreen = false
 		return self
 	end
 end

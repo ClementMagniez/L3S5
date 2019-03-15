@@ -7,7 +7,6 @@ class HudOption < Hud
 	def initialize(window,fenetrePrecedente)
 		super(window)
 		@fenetrePrecedente = fenetrePrecedente
-		@fullscreen = false
 
 		self.setTitre("Options")
 		@btnOptions.destroy
@@ -22,16 +21,18 @@ class HudOption < Hud
 	end
 
 	def initBoutonFenetre
-		@btnFenetre = Gtk::Button.new :label =>"Plein écran"
+		if @fenetre.isFullscreen?
+			@btnFenetre = Gtk::Button.new :label =>"Fenêtré"
+		else
+			@btnFenetre = Gtk::Button.new :label =>"Plein écran"
+		end
 		@btnFenetre.signal_connect('clicked') {
-			if @fullscreen
+			if @fenetre.isFullscreen?
 				@fenetre.unfullscreen
-				@fullscreen = false
 				@btnFenetre.set_label("Plein écran")
 			else
 				@fenetre.fullscreen
-				@fullscreen = true
-				@btnFenetre.set_label("Fenetré")
+				@btnFenetre.set_label("Fenêtré")
 			end
 		}
 	end
