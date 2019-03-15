@@ -11,10 +11,11 @@ class Hud < Gtk::Grid
 		@lblDescription = Gtk::Label.new
 
 		initBoutonOptions
+		#fond = Gtk::Image.new( :file => "../img/fond2.png")
 
-		self.attach(@btnOptions, 0, 25, 1, 1)
+		self.attach(@btnOptions, 2, 16, 2, 2)
 		self.attach(@lblDescription, 0, 0, 6, 1)
-
+		#self.attach(fond,0,0,30,20)
 
 		self.halign = Gtk::Align::CENTER
 		self.valign = Gtk::Align::CENTER
@@ -47,6 +48,11 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
 	end
 
+	def lancementFinDeJeu
+		puts "Fin de jeu"
+		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre))
+	end
+
 	def lancementInscription
 		puts " Page d'inscription "
 		@fenetre.changerWidget(self, HudInscription.new(@fenetre))
@@ -61,9 +67,21 @@ class Hud < Gtk::Grid
 	# Créé et initialise le bouton des options
 	# Le bouton affiche le menu des options
 	def initBoutonOptions
-		@btnOptions = Gtk::Button.new(:label=>"Options")
+		lblOption = Gtk::Label.new
+		lblOption.use_markup = true
+		lblOption.set_markup ("<span weight='ultrabold' foreground='white' size='x-large'>Options</span>");
+		@btnOptions = Gtk::Button.new
+		@btnOptions.add(lblOption)
+		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
+		@btnOptions.signal_connect("enter-notify-event"){
+			
+
+			@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
+			puts ("pouet")
+		}
 		@btnOptions.signal_connect("clicked") {
 				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
+				lblOption.set_markup ("<span weight='ultrabold' foreground='black' size='x-large'>Options</span>");
 		}
 	end
 
@@ -76,6 +94,8 @@ class Hud < Gtk::Grid
 	def setTitre(str)
 		@fenetre.set_title(str)
 	end
+
+
 
 
 

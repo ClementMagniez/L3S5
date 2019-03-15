@@ -14,13 +14,20 @@ class HudAccueil < Hud
 		initBoutonInscription
 		initBoutonQuitter
 
-		self.attach(@btnConnecter,10,10,2,2)
-		self.attach(@btnInscrire,8,10,2,2)
-		self.attach(@btnQuitter,14,14,4,2)
-		self.attach(@entryIdentifiant,10,6,2,2)
-		self.attach(@entryMotDePasse,10,8,2,2)
-		self.attach(Gtk::Label.new("Identifiant : "),8,6,2,2)
-		self.attach(Gtk::Label.new("Mot de passe : "),8,8,2,2)
+
+
+		fond = Gtk::Image.new( :file => "../img/fond.png")
+		#fond.pixbuf = fond.pixbuf.scale(@fenetre.size.fetch(0),@fenetre.size.fetch(1))
+
+
+		self.attach(@btnConnecter,22,10,4,2)
+		self.attach(@btnInscrire,18,10,4,2)
+		self.attach(@btnQuitter,26,16,2,2)
+		self.attach(@entryIdentifiant,22,6,4,2)
+		self.attach(@entryMotDePasse,22,8,4,2)
+		self.attach(Gtk::Label.new("Identifiant : "),18,6,4,2)
+		self.attach(Gtk::Label.new("Mot de passe : "),18,8,4,2)
+		self.attach(fond,0,0,30,20)
 	end
 
 

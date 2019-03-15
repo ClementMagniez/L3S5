@@ -157,6 +157,6 @@ class HudJeu < Hud
 
 	# Comportement a la fin du jeu
 	def jeuTermine
-		self.lancementModeJeu
+		self.lancementFinDeJeu
 	end
 end

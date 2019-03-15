@@ -1,3 +1,4 @@
+# Classe Aide contenant toutes les méthodes permettant d'aider le joueur
 class Aide
  
   include StatutConstantes
@@ -68,6 +69,56 @@ class Aide
     return tabCasesErr.empty? ? 0 : tabCasesErr
   end
  
+  # renvoie la premiere case vide adjacente à une tente, il s'agit donc de gazon
+  def impossibleTenteAdjacente
+ 
+    newStatutVide = StatutVide.new(VIDE)
+    newStatutTente = StatutVide.new(TENTE)
+    grille=@grille.grille
+ 
+    for i in 0..grille.length-1
+      for j in 0..grille.length-1
+
+        # Si la case est une caseVide
+        if grille[i][j].statutVisible == newStatutVide
+          caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
+            # On prend connaissance pour les 8 cases adjacentes
+
+            # D'abord les diagonales
+            if i-1 >= 0 && j-1 >= 0
+              return caseCoord if grille[i-1][j-1].statutVisible == newStatutTente
+            end
+            if i-1 >= 0 && j+1 <= grille.length-1
+              return caseCoord if grille[i-1][j+1].statutVisible == newStatutTente
+            end
+            if i+1 <= grille.length-1 && j-1 >= 0
+              return caseCoord if grille[i+1][j-1].statutVisible == newStatutTente
+            end
+            if i+1 <= grille.length-1 && j+1 <= grille.length-1
+              return caseCoord if grille[i+1][j+1].statutVisible == newStatutTente
+            end
+
+            # Puis les 4 cases à cotés
+            if i-1 >= 0
+              return caseCoord if grille[i-1][j].statutVisible == newStatutTente
+            end
+            if i+1 <= grille.length-1
+              return caseCoord if grille[i+1][j].statutVisible == newStatutTente
+            end
+            if j-1 >= 0
+              return caseCoord if grille[i][j-1].statutVisible == newStatutTente
+            end
+            if j+1 <= grille.length-1
+              return caseCoord if grille[i][j+1].statutVisible == newStatutTente
+            end
+            
+        end
+      end
+    end # FinForI
+
+    return 0
+  end
+
   # indique la ligne où il ne reste plus que des tentes à mettre, sinon renvoie 0
   def resteQueTentesLigne
     resteQueLigne(TENTE)
@@ -537,6 +588,9 @@ class Aide
       return tableau
     elsif (funcReturn=self.casesIncorrect) != 0 && tutoOuRapide == "tuto"
       tableau.push(funcReturn, "Les cases en surbrillance sont fausses")
+      return tableau
+    elsif (funcReturn=self.impossibleTenteAdjacente) != 0
+      tableau.push(funcReturn, "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon")
       return tableau
     elsif (funcReturn=self.resteQueTentesLigne) != 0
       tableau.push(nil, "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s)
