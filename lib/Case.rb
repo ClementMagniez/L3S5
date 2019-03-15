@@ -17,6 +17,11 @@ class Case
 		self.statut==self.statutVisible
 	end
 	
+	def reset
+		self.statutVisible.reset
+		self
+	end
+	
 	attr_reader :statut, :statutVisible
 	
 end
