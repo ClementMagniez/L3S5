@@ -1,4 +1,4 @@
- 
+# Classe Aide contenant toutes les méthodes permettant d'aider le joueur
 class Aide
  
   include StatutConstantes
@@ -28,12 +28,13 @@ class Aide
   }
   #####################################################################################################
 
+  # initialise @grille avec la grille passé en argument
   def initialize(grille)
     @grille=grille
   end
  
-  # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est "vide", ce n'est pas une erreur)
-  def casesIncorrect
+  # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
+  def nbCasesIncorrect
  
     nbErr = 0
     newStatutVide = StatutVide.new(VIDE)
@@ -50,14 +51,31 @@ class Aide
     end
     return nbErr
   end
+
+  # renvoie un tableau de cases contenant les erreurs qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
+  def casesIncorrect
+ 
+    newStatutVide = StatutVide.new(VIDE)
+    newStatutArbre = StatutArbre.new(ARBRE)
+    tabCasesErr = Array.new
+    grille=@grille.grille
+    for i in 0..grille.length-1
+      for j in 0..grille.length-1
+        
+        tabCasesErr.unshift(CaseCoordonnees.new(grille[i][j], i, j)) if (grille[i][j].statutVisible != grille[i][j].statut && grille[i][j].statutVisible != newStatutVide && grille[i][j].statut != newStatutArbre)
+        
+      end
+    end
+    return tabCasesErr.empty? ? 0 : tabCasesErr
+  end
  
   # indique la ligne où il ne reste plus que des tentes à mettre, sinon renvoie 0
   def resteQueTentesLigne
     resteQueLigne(TENTE)
   end
  
-  # indique la ligne où il ne reste plus que de l'herbe à mettre, sinon renvoie 0
-  def resteQueHerbeLigne
+  # indique la ligne où il ne reste plus que du gazon à mettre, sinon renvoie 0
+  def resteQueGazonLigne
     resteQueLigne(GAZON)
   end
  
@@ -67,8 +85,8 @@ class Aide
     resteQueColonne(TENTE)
   end
  
-  # indique la colonne où il ne reste plus que de l'herbe à mettre, sinon renvoie 0
-  def resteQueHerbeColonne
+  # indique la colonne où il ne reste plus que du gazon à mettre, sinon renvoie 0
+  def resteQueGazonColonne
     resteQueColonne(GAZON)
   end
  
@@ -83,10 +101,10 @@ class Aide
   end
  
  
-  # Metaméthode O(N²) : parcourt la grille en ligne ou en colonne selon col?
+  # Metaméthode O(N²) : parcourt la grille en ligne ou en colonne selon col
   # et renvoie une valeur dépendant de gazonOuTente :
   # * TENTE - cf. resteQueTentesColonne et resteQueTentesLigne
-  # * GAZON - cf. resteQueHerbeColonne et resteQueHerbeLigne
+  # * GAZON - cf. resteQueGazonColonne et resteQueGazonLigne
   # * autres - 0
   def resteQue(gazonOuTente, col)
  
@@ -197,17 +215,21 @@ class Aide
     return 0
   end
  
-  # renvoie la premiere case où tous les arbres autour de la case possèdent leur tente, donc la case contient de l'herbe
+  # renvoie la premiere case où tous les arbres autour de la case possèdent leur tente, donc la case contient du gazon
   def arbreAutourCasePossedeTente
-    arbreAssocieTente("vide")
+    arbreAssocieTente(VIDE)
   end
 
   # renvoie la première caseArbre qui n'a pas placer sa tente et qui ne possède qu'une case seule caseVide à côté d'elle
   def caseArbreAssocieTente
-    arbreAssocieTente("arbre")
+    arbreAssocieTente(ARBRE)
   end
 
-
+  # Metaméthode O(??) :
+  # renvoie une valeur dépendant de arbreOuVide :
+  # * 'arbre' - cf. caseArbreAssocieTente
+  # * 'vide' - cf. arbreAutourCasePossedeTente
+  # * autres - 0
   def arbreAssocieTente(arbreOuVide)
 
     newStatutVide = StatutVide.new(VIDE)
@@ -286,7 +308,7 @@ class Aide
     end
 
 
-    if arbreOuVide == "arbre"
+    if arbreOuVide == ARBRE
 
       for i in 0..grille.length-1
         for j in 0..grille.length-1
@@ -314,7 +336,7 @@ class Aide
         end
       end
 
-    elsif arbreOuVide == "vide"
+    elsif arbreOuVide == VIDE
 
       for i in 0..grille.length-1
         for j in 0..grille.length-1
@@ -355,17 +377,17 @@ class Aide
   end
 
  
-  # renvoie la premiere case où les dispositions possibles de la ligne obligeront la case à etre de l'herbe
+  # renvoie la premiere case où les dispositions possibles de la ligne obligeront la case à etre du gazon
   def dispositionPossibleLigne
     dispositionPossible(false)
   end
  
-  # renvoie la premiere case où les dispositions possibles de la colonne obligeront la case à etre de l'herbe
+  # renvoie la premiere case où les dispositions possibles de la colonne obligeront la case à etre du gazon
   def dispositionPossibleColonne
     dispositionPossible(true)
   end
 
-
+  # Metaméthode O(??) : parcourt la grille en ligne ou en colonne selon col
   def dispositionPossible(col)
 
     newStatutVide = StatutVide.new(VIDE)
@@ -507,56 +529,47 @@ class Aide
   end
 
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
-  def cycle
+  def cycle(tutoOuRapide)
  
     tableau = Array.new
 
-    if (funcReturn=self.casesIncorrect) != 0
-      # return "Il y a " + funcReturn.to_s + " erreur(s)"
+    if (funcReturn=self.nbCasesIncorrect) != 0 && tutoOuRapide == "rapide"
       tableau.push(nil, "Il y a " + funcReturn.to_s + " erreur(s)")
       return tableau
+    elsif (funcReturn=self.casesIncorrect) != 0 && tutoOuRapide == "tuto"
+      tableau.push(funcReturn, "Les cases en surbrillance sont fausses")
+      return tableau
     elsif (funcReturn=self.resteQueTentesLigne) != 0
-      # return "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s
       tableau.push(nil, "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s)
       return tableau
     elsif (funcReturn=self.resteQueTentesColonne) != 0
-      # return "Il ne reste que des tentes à placer sur la colonne " + funcReturn.to_s
       tableau.push(nil, "Il ne reste que des tentes à placer sur la colonne " + funcReturn.to_s)
       return tableau
-    elsif (funcReturn=self.resteQueHerbeLigne) != 0
-      # return "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s
+    elsif (funcReturn=self.resteQueGazonLigne) != 0
       tableau.push(nil, "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s)
       return tableau
-    elsif (funcReturn=self.resteQueHerbeColonne) != 0
-      # return "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s
+    elsif (funcReturn=self.resteQueGazonColonne) != 0
       tableau.push(nil, "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s)
       return tableau
     elsif (funcReturn=self.casePasACoteArbre) != 0
-      # return "La case " + funcReturn.class.to_s + " est forcement du gazon"
       tableau.push(funcReturn, "La case en surbrillance est forcement du gazon")
       return tableau
     elsif (funcReturn=self.uniquePossibiliteArbre) != 0
-      # return "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre " + funcReturn.class.to_s
       tableau.push(funcReturn, "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance")
       return tableau
     elsif (funcReturn=self.dispositionPossibleLigne) != 0
-      # return "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s
       tableau.push(funcReturn, "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case en surbrillance")
       return tableau
     elsif (funcReturn=self.dispositionPossibleColonne) != 0
-      # return "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s
       tableau.push(funcReturn, "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case en surbrillance")
       return tableau
     elsif (funcReturn=self.arbreAutourCasePossedeTente) != 0
-      # return "La case " + funcReturn.class.to_s + " est forcement du gazon puisque tous les arbres autours ont leurs tentes"
       tableau.push(funcReturn, "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes")
       return tableau
     elsif (funcReturn=self.caseArbreAssocieTente) != 0
-      # return "La case " + funcReturn.class.to_s + " n'a pas encore placé sa tente"
       tableau.push(funcReturn, "La case en surbrillance n'a pas encore placé sa tente")
       return tableau
     else
-      # return "Aucune aide disponible ..."
       tableau.push(nil, "Aucune aide disponible ...")
       return tableau
     end
