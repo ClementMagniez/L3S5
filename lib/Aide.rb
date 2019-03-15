@@ -1,10 +1,11 @@
-# require_relative 'Grille'
- 
+# Classe Aide contenant toutes les méthodes permettant d'aider le joueur
 class Aide
  
   include StatutConstantes
  
 
+  #####################################################################################################
+  # Class CaseCoordonnees permettant de lier une case avec ces coordonnées en abscisse et en ordonnée
   Object.const_set("CaseCoordonnees", Class.new)
   laClasse = Object.const_get("CaseCoordonnees")
   
@@ -26,15 +27,15 @@ class Aide
     }
 
   }
+  #####################################################################################################
 
-
+  # initialise @grille avec la grille passé en argument
   def initialize(grille)
     @grille=grille
   end
  
-  # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est "vide", ce n'est pas une erreur)
-  def casesIncorrect
- 
+  # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
+  def nbCasesIncorrect
     nbErr = 0
     newStatutVide = StatutVide.new(VIDE)
     newStatutArbre = StatutArbre.new(ARBRE)
@@ -50,25 +51,42 @@ class Aide
     end
     return nbErr
   end
+
+  # renvoie un tableau de cases contenant les erreurs qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
+  def casesIncorrect
+ 
+    newStatutVide = StatutVide.new(VIDE)
+    newStatutArbre = StatutArbre.new(ARBRE)
+    tabCasesErr = Array.new
+    grille=@grille.grille
+    for i in 0..grille.length-1
+      for j in 0..grille.length-1
+        
+        tabCasesErr.unshift(CaseCoordonnees.new(grille[i][j], i, j)) if (grille[i][j].statutVisible != grille[i][j].statut && grille[i][j].statutVisible != newStatutVide && grille[i][j].statut != newStatutArbre)
+        
+      end
+    end
+    return tabCasesErr.empty? ? 0 : tabCasesErr
+  end
  
   # indique la ligne où il ne reste plus que des tentes à mettre, sinon renvoie 0
   def resteQueTentesLigne
     resteQueLigne(TENTE)
   end
  
-  # indique la ligne où il ne reste plus que de l'herbe à mettre, sinon renvoie 0
-  def resteQueHerbeLigne
+  # indique la ligne où il ne reste plus que du gazon à mettre, sinon renvoie 0
+  def resteQueGazonLigne
+
     resteQueLigne(GAZON)
   end
- 
  
   # indique la colonne où il ne reste plus que des tentes à mettre, sinon renvoie 0
   def resteQueTentesColonne
     resteQueColonne(TENTE)
   end
  
-  # indique la colonne où il ne reste plus que de l'herbe à mettre, sinon renvoie 0
-  def resteQueHerbeColonne
+  # indique la colonne où il ne reste plus que du gazon à mettre, sinon renvoie 0
+  def resteQueGazonColonne
     resteQueColonne(GAZON)
   end
  
@@ -81,12 +99,11 @@ class Aide
   def resteQueColonne(gazonOuTente)
   resteQue(gazonOuTente, true)
   end
- 
- 
-  # Metaméthode O(N²) : parcourt la grille en ligne ou en colonne selon col?
+
+  # Metaméthode O(N²) : parcourt la grille en ligne ou en colonne selon col
   # et renvoie une valeur dépendant de gazonOuTente :
   # * TENTE - cf. resteQueTentesColonne et resteQueTentesLigne
-  # * GAZON - cf. resteQueHerbeColonne et resteQueHerbeLigne
+  # * GAZON - cf. resteQueGazonColonne et resteQueGazonLigne
   # * autres - 0
   def resteQue(gazonOuTente, col)
  
@@ -142,14 +159,14 @@ class Aide
       for j in 0..grille.length-1
         ok = true
         if (grille[i][j].statutVisible == newStatutVide)
-          # print "Valeur de ligne = " + ligne.class.to_s + "\n\n"
          
           if (i-1 >= 0 && grille[i-1][j].statut == newStatutArbre) || (j-1 >= 0 && grille[i][j-1].statut == newStatutArbre) || (i+1 <= grille.length-1 && grille[i+1][j].statut == newStatutArbre) || (j+1 <= grille.length-1 && grille[i][j+1].statut == newStatutArbre)
             ok = false
           end            
-          # print "\n\nValeur de i et j = " + i.to_s + " " + j.to_s + "\n" if ok
- 
-          return grille[i][j] if ok
+
+          caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
+          return caseCoord if ok
+
         end
       end
     end
@@ -188,10 +205,10 @@ class Aide
             nbCasesVide += 1 if (grille[i][j+1].statutVisible == newStatutVide)
             nbCasesTente += 1 if (grille[i][j+1].statutVisible == newStatutTente)
           end
-           
-          # print "\n\nValeur de i et j = " + i.to_s + " " + j.to_s + "\n" if (nbCasesVide == 1 && nbCasesTente == 0)
- 
-          return grille[i][j] if (nbCasesVide == 1 && nbCasesTente == 0)
+         
+          caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
+          return caseCoord if (nbCasesVide == 1 && nbCasesTente == 0)
+
         end
       end
     end
@@ -199,17 +216,22 @@ class Aide
     return 0
   end
  
-  # renvoie la premiere case où tous les arbres autour de la case possèdent leur tente, donc la case contient de l'herbe
+  # renvoie la premiere case où tous les arbres autour de la case possèdent leur tente, donc la case contient du gazon
   def arbreAutourCasePossedeTente
-    arbreAssocieTente("vide")
+    arbreAssocieTente(VIDE)
+
   end
 
   # renvoie la première caseArbre qui n'a pas placer sa tente et qui ne possède qu'une case seule caseVide à côté d'elle
   def caseArbreAssocieTente
-    arbreAssocieTente("arbre")
+    arbreAssocieTente(ARBRE)
   end
 
-
+  # Metaméthode O(??) :
+  # renvoie une valeur dépendant de arbreOuVide :
+  # * 'arbre' - cf. caseArbreAssocieTente
+  # * 'vide' - cf. arbreAutourCasePossedeTente
+  # * autres - 0
   def arbreAssocieTente(arbreOuVide)
 
     newStatutVide = StatutVide.new(VIDE)
@@ -288,8 +310,7 @@ class Aide
     end
 
 
-    if arbreOuVide == "arbre"
-
+    if arbreOuVide == ARBRE
       for i in 0..grille.length-1
         for j in 0..grille.length-1
 
@@ -310,13 +331,13 @@ class Aide
               if j+1 <= grille.length-1
                 nbCasesVide += 1 if grille[i][j+1].statutVisible == newStatutVide
               end
-              return grille[i][j] if nbCasesVide == 1
+              caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
+              return caseCoord if nbCasesVide == 1
           end
         end
       end
-
-    elsif arbreOuVide == "vide"
-
+      
+    elsif arbreOuVide == VIDE
       for i in 0..grille.length-1
         for j in 0..grille.length-1
 
@@ -345,7 +366,8 @@ class Aide
                   isOk = 0 if hashArbreTente.fetch(grille[i][j+1]).statutVisible != newStatutTente
                 end
               end
-              return grille[i][j] if isOk == 1
+              caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
+              return caseCoord if isOk == 1
           end
         end
       end # FinForI
@@ -355,17 +377,17 @@ class Aide
   end
 
  
-  # renvoie la premiere case où les dispositions possibles de la ligne obligeront la case à etre de l'herbe
+  # renvoie la premiere case où les dispositions possibles de la ligne obligeront la case à etre du gazon
   def dispositionPossibleLigne
     dispositionPossible(false)
   end
  
-  # renvoie la premiere case où les dispositions possibles de la colonne obligeront la case à etre de l'herbe
+  # renvoie la premiere case où les dispositions possibles de la colonne obligeront la case à etre du gazon
   def dispositionPossibleColonne
     dispositionPossible(true)
   end
 
-
+  # Metaméthode O(??) : parcourt la grille en ligne ou en colonne selon col
   def dispositionPossible(col)
 
     newStatutVide = StatutVide.new(VIDE)
@@ -421,15 +443,15 @@ class Aide
           k = 1
           # on met dans la table une case sur 2 qui deviendront potentiellement une tente
           while k <= value
-            tabCaseEnTente.unshift(grille[i][j+k-1])
+            tabCaseEnTente.unshift(CaseCoordonnees.new(grille[i][j+k-1], i, j+k-1))
             k += 2
           end
         # sinon si c'est pair
         else
           # on met dans la table les cases au dessus et en dessous dans la table des cases qui deviendront potentiellement du gazon
           for k in 0..value-1
-            tabCaseEnGazon1.unshift(grille[i+1][j+k]) if grille[i+1][j+k].statutVisible == newStatutVide && i+1 <= grille.length-1
-            tabCaseEnGazon1.unshift(grille[i-1][j+k]) if grille[i-1][j+k].statutVisible == newStatutVide && i-1 >= 0
+            tabCaseEnGazon1.unshift(CaseCoordonnees.new(grille[i+1][j+k], i+1, j+k)) if grille[i+1][j+k].statutVisible == newStatutVide && i+1 <= grille.length-1
+            tabCaseEnGazon1.unshift(CaseCoordonnees.new(grille[i-1][j+k], i-1, j+k)) if grille[i-1][j+k].statutVisible == newStatutVide && i-1 >= 0
           end
         end
 
@@ -438,10 +460,10 @@ class Aide
           k = 1
           while k < value
             if i+1 <= grille.length-1 && j+1 <= grille.length-1
-              tabCaseEnGazon2.unshift(grille[i+1][j+k]) if grille[i+1][j+k].statutVisible == newStatutVide
+              tabCaseEnGazon2.unshift(CaseCoordonnees.new(grille[i+1][j+k], i+1, j+k)) if grille[i+1][j+k].statutVisible == newStatutVide
             end
             if i-1 >= 0 && j+1 <= grille.length-1
-              tabCaseEnGazon2.unshift(grille[i-1][j+k]) if grille[i-1][j+k].statutVisible == newStatutVide
+              tabCaseEnGazon2.unshift(CaseCoordonnees.new(grille[i-1][j+k], i-1, j+k)) if grille[i-1][j+k].statutVisible == newStatutVide
             end
             k += 2
           end
@@ -459,10 +481,10 @@ class Aide
                 sontEgaux = true if key == key2
               }
               if i+1 <= grille.length-1
-                tabCaseEnGazon2.unshift(grille[i+1][j+1]) if grille[i+1][j+1].statutVisible == newStatutVide && nbCaseVideSuivante%2 != 0
+                tabCaseEnGazon2.unshift(CaseCoordonnees.new(grille[i+1][j+1], i+1, j+k)) if grille[i+1][j+1].statutVisible == newStatutVide && nbCaseVideSuivante%2 != 0
               end
               if i-1 >= 0
-                tabCaseEnGazon2.unshift(grille[i-1][j+1]) if grille[i-1][j+1].statutVisible == newStatutVide && nbCaseVideSuivante%2 != 0
+                tabCaseEnGazon2.unshift(CaseCoordonnees.new(grille[i-1][j+1], i-1, j+k)) if grille[i-1][j+1].statutVisible == newStatutVide && nbCaseVideSuivante%2 != 0
               end
             end
           end
@@ -507,33 +529,49 @@ class Aide
   end
 
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
-  def cycle
+  def cycle(tutoOuRapide)
  
-    if (funcReturn=self.casesIncorrect) != 0
-      return "Il y a " + funcReturn.to_s + " erreur(s)"
+    tableau = Array.new
+
+    if (funcReturn=self.nbCasesIncorrect) != 0 && tutoOuRapide == "rapide"
+      tableau.push(nil, "Il y a " + funcReturn.to_s + " erreur(s)")
+      return tableau
+    elsif (funcReturn=self.casesIncorrect) != 0 && tutoOuRapide == "tuto"
+      tableau.push(funcReturn, "Les cases en surbrillance sont fausses")
+      return tableau
     elsif (funcReturn=self.resteQueTentesLigne) != 0
-      return "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s
+      tableau.push(nil, "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s)
+      return tableau
     elsif (funcReturn=self.resteQueTentesColonne) != 0
-      return "Il ne reste que des tentes à placer sur la colonne "+ funcReturn.to_s
-    elsif (funcReturn=self.resteQueHerbeLigne) != 0
-      return "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s
-    elsif (funcReturn=self.resteQueHerbeColonne) != 0
-      return "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s
+      tableau.push(nil, "Il ne reste que des tentes à placer sur la colonne " + funcReturn.to_s)
+      return tableau
+    elsif (funcReturn=self.resteQueGazonLigne) != 0
+      tableau.push(nil, "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s)
+      return tableau
+    elsif (funcReturn=self.resteQueGazonColonne) != 0
+      tableau.push(nil, "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s)
+      return tableau
     elsif (funcReturn=self.casePasACoteArbre) != 0
-      return "La case " + funcReturn.class.to_s + " est forcement du gazon\n"
+      tableau.push(funcReturn, "La case en surbrillance est forcement du gazon")
+      return tableau
     elsif (funcReturn=self.uniquePossibiliteArbre) != 0
-      return "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre " + funcReturn.class.to_s
+      tableau.push(funcReturn, "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance")
+      return tableau
     elsif (funcReturn=self.dispositionPossibleLigne) != 0
-      return "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s
+      tableau.push(funcReturn, "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case en surbrillance")
+      return tableau
     elsif (funcReturn=self.dispositionPossibleColonne) != 0
-      return "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case " + funcReturn.class.to_s
+      tableau.push(funcReturn, "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case en surbrillance")
+      return tableau
     elsif (funcReturn=self.arbreAutourCasePossedeTente) != 0
-      return "La case " + funcReturn.class.to_s + " est forcement du gazon puisque tous les arbres autours ont leurs tentes"
+      tableau.push(funcReturn, "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes")
+      return tableau
     elsif (funcReturn=self.caseArbreAssocieTente) != 0
-      return "La case " + funcReturn.class.to_s + " n'a pas encore placé sa tente"
+      tableau.push(funcReturn, "La case en surbrillance n'a pas encore placé sa tente")
+      return tableau
     else
-      return "Aucune aide disponible ..."
+      tableau.push(nil, "Aucune aide disponible ...")
+      return tableau
     end
-     
   end
 end
