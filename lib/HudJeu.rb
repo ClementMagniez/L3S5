@@ -12,7 +12,7 @@ class HudJeu < Hud
 	def initialize(window,grille)
 		super(window)
 		@aide = Aide.new(grille)
-		@gridJeu = Gtk::Grid.new#(@grille.length+1,@grille.length+1,true)
+		@gridJeu = Gtk::Grid.new
 		@grille = grille
 		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
 
@@ -20,10 +20,19 @@ class HudJeu < Hud
 		initBoutonReset
 		initBoutonRetour
 
+<<<<<<< HEAD
 		self.attach(@gridJeu,2,4,1,1)
 		self.attach(@btnReset,5,2,1,1)
 		self.attach(@btnRetour,16,25,2,2)
 		self.attach(@lblAide, 16, 8, 7,7)
+=======
+			tailleGrille = @grille.length+1
+		self.attach(@gridJeu,1,1,tailleGrille, tailleGrille)
+		self.attach(@btnReset,tailleGrille,0,1,1)
+		self.attach(@btnAide,tailleGrille-1,0,1,1)
+		self.attach(@btnRetour,tailleGrille,tailleGrille+1,1,1)
+		self.attach(@lblAide, 1, tailleGrille+1, tailleGrille, tailleGrille)
+>>>>>>> f8c910d8a3a788d6beb32a0a6333e62511f1f265
 
 		chargementGrille
 	end
@@ -32,8 +41,6 @@ class HudJeu < Hud
 
 	def chargementGrille
 		taille = @grille.length
-		puts(taille)
-
 		# positionne les indices autour de la table @gridJeu
 		0.upto(taille-1) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
@@ -75,20 +82,37 @@ class HudJeu < Hud
 			0.upto(taille-1){ |j|
 				button = Gtk::Button.new()
 				button.set_relief(Gtk::ReliefStyle::NONE)
-				button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
+				button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
+<<<<<<< HEAD
 					button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
 					if @caseSurbrillance != nil
 						@gridJeu.get_child_at(@caseSurbrillance.getJ+1,@caseSurbrillance.getI+1).set_image(Gtk::Image.new :file => @grille[@caseSurbrillance.getI][@caseSurbrillance.getJ].affichage)
 						@caseSurbrillance = nil
 					end
+=======
+					button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
+>>>>>>> f8c910d8a3a788d6beb32a0a6333e62511f1f265
 				}
 				
 				@gridJeu.attach(button,j+1,i+1,1,1)
 			}
 		}
 		return self
+	end
+
+	# Redimensionne l'image donnée aux dimmensions de la fenetre
+	# Retourne l'image redimensionnée
+	def scaleImage(image)
+		winX = @fenetre.size.fetch(0)
+		winY = @fenetre.size.fetch(1)
+		taille = @grille.length
+		imgSize = (winY-200) / (taille+1)
+
+		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
+
+		return image
 	end
 
 	# Créé et initialise le bouton d'aide
