@@ -16,16 +16,15 @@ class HudJeu < Hud
 		@grille = grille
 		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
 
-		initBoutonAide
+		
 		initBoutonReset
 		initBoutonRetour
 
-			tailleGrille = @grille.length+1
-		self.attach(@gridJeu,1,1,tailleGrille, tailleGrille)
-		self.attach(@btnReset,tailleGrille,0,1,1)
-		self.attach(@btnAide,tailleGrille-1,0,1,1)
-		self.attach(@btnRetour,tailleGrille,tailleGrille+1,1,1)
-		self.attach(@lblAide, 1, tailleGrille+1, tailleGrille, tailleGrille)
+		@tailleGrille = @grille.length+1
+		self.attach(@gridJeu,1,1,@tailleGrille, @tailleGrille)
+		self.attach(@btnReset,@tailleGrille,0,1,1)
+		self.attach(@btnRetour,@tailleGrille,@tailleGrille+1,1,1)
+		self.attach(@lblAide, 1, @tailleGrille+1, @tailleGrille, @tailleGrille)
 
 		chargementGrille
 	end
@@ -42,10 +41,7 @@ class HudJeu < Hud
 			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
 			btnIndiceCol.signal_connect("clicked") {
 				0.upto(taille-1) { |k|
-					puts (@grille[k][i].statutVisible.isVide?)
-					puts ("i :"+i.to_s+"j:"+k.to_s)
 					if @grille[k][i].statutVisible.isVide?
-						puts ("t nul")
 						@grille[k][i].cycle(k,i, @grille.tentesLigne, @grille.tentesCol)
 						@gridJeu.get_child_at(i+1,k+1).set_image(Gtk::Image.new(:file => @grille[k][i].affichage))
 					end
@@ -61,7 +57,6 @@ class HudJeu < Hud
 				0.upto(taille-1) { |k|
 
 					if @grille[i][k].statutVisible.isVide?
-						puts ("t nul")
 						@grille[i][k].cycle(i,k, @grille.tentesLigne, @grille.tentesCol)
 						@gridJeu.get_child_at(k+1,i+1).set_image(Gtk::Image.new(:file => @grille[i][k].affichage))
 					end
@@ -79,9 +74,9 @@ class HudJeu < Hud
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
 					button.set_image(Gtk::Image.new(:file => @grille[i][j].affichage))
-					if @caseSurbrillance != nil
-						@gridJeu.get_child_at(@caseSurbrillance.getJ+1,@caseSurbrillance.getI+1).set_image(Gtk::Image.new :file => @grille[@caseSurbrillance.getI][@caseSurbrillance.getJ].affichage)
-						@caseSurbrillance = nil
+					while not @caseSurbrillanceList.empty?
+							caseSubr = @caseSurbrillanceList.shift
+							@gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(Gtk::Image.new :file => @grille[caseSubr.getI][caseSubr.getJ].affichage)
 					end
 				}
 
@@ -104,30 +99,7 @@ class HudJeu < Hud
 		return image
 	end
 
-	# Créé et initialise le bouton d'aide
-	def initBoutonAide
-		taille = @grille.length
-		@btnAide = Gtk::Button.new :label => " Aide "
-		self.attach(@btnAide,taille+4,taille,1,1)
-		@btnAide.signal_connect("clicked") {
-			tableau = @aide.cycle
-			caseAide = tableau.at(0)
-			if caseAide != nil then
-				# puts ("pouetpouetpouet")
-				if caseAide.class == CaseCoordonnees
-
-					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
-					# puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
-
-					@caseSurbrillance =caseAide
-				end
-
-			end
-
-			@lblAide.set_label(tableau.at(1))
-
-		}
-	end
+	
 
 	# Créé un attribut @btnReset qui est le bouton de remise à zéro
 	# initialise le bouton

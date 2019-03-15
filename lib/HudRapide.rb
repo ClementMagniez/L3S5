@@ -16,6 +16,9 @@ class HudRapide < HudJeu
 
 		self.initBoutonOptions
 		initBoutonPause
+
+		initBoutonAide
+		self.attach(@btnAide,@tailleGrille-1,0,1,1)
 		
 
 		self.attach(@btnPause,5,0,2,1)
@@ -61,6 +64,29 @@ class HudRapide < HudJeu
 		}
 	
 	end
+	# Créé et initialise le bouton d'aide
+	def initBoutonAide
+		taille = @grille.length
+		@btnAide = Gtk::Button.new :label => " Aide "
+		self.attach(@btnAide,taille+4,taille,1,1)
+		@btnAide.signal_connect("clicked") {
+			tableau = @aide.cycle("rapide")
+			caseAide = tableau.at(0)
+			if caseAide != nil then
+				# puts ("pouetpouetpouet")
+				if caseAide.class == CaseCoordonnees
 
+					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+					# puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
+
+					@caseSurbrillance =caseAide
+				end
+
+			end
+
+			@lblAide.set_label(tableau.at(1))
+
+		}
+	end
 
 end

@@ -7,4 +7,6 @@ class HudAventure < HudJeu
 
 		self.initBoutonOptions
 	end
+
+	
 end
