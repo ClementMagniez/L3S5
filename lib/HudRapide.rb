@@ -66,7 +66,6 @@ class HudRapide < HudJeu
 	def initBoutonAide
 		taille = @grille.length
 		@btnAide = Gtk::Button.new :label => " Aide "
-		self.attach(@btnAide,taille+4,taille,1,1)
 		@btnAide.signal_connect("clicked") {
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)

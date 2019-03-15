@@ -3,7 +3,7 @@ class HudTutoriel < HudJeu
 		super(window,grille)
 
 		self.setTitre("Tutoriel")
-		self.setDesc("Ici la desc du mode tuto")
+		# self.setDesc("Ici la desc du mode tuto")
 
 		self.initBoutonOptions
 		initBoutonAide
@@ -17,7 +17,6 @@ class HudTutoriel < HudJeu
 		@caseSurbrillanceList = Array.new
 
 		@btnAide = Gtk::Button.new :label => " Aide "
-		self.attach(@btnAide,taille+4,taille,1,1)
 		@btnAide.signal_connect("clicked") {
 			tableau = @aide.cycle("tuto")
 			premAide = tableau.at(0)
