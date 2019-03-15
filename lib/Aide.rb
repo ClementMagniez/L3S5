@@ -3,6 +3,7 @@ class Aide
  
   include StatutConstantes
  
+
   #####################################################################################################
   # Class CaseCoordonnees permettant de lier une case avec ces coordonnées en abscisse et en ordonnée
   Object.const_set("CaseCoordonnees", Class.new)
@@ -35,7 +36,6 @@ class Aide
  
   # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
   def nbCasesIncorrect
- 
     nbErr = 0
     newStatutVide = StatutVide.new(VIDE)
     newStatutArbre = StatutArbre.new(ARBRE)
@@ -76,9 +76,9 @@ class Aide
  
   # indique la ligne où il ne reste plus que du gazon à mettre, sinon renvoie 0
   def resteQueGazonLigne
+
     resteQueLigne(GAZON)
   end
- 
  
   # indique la colonne où il ne reste plus que des tentes à mettre, sinon renvoie 0
   def resteQueTentesColonne
@@ -99,8 +99,7 @@ class Aide
   def resteQueColonne(gazonOuTente)
   resteQue(gazonOuTente, true)
   end
- 
- 
+
   # Metaméthode O(N²) : parcourt la grille en ligne ou en colonne selon col
   # et renvoie une valeur dépendant de gazonOuTente :
   # * TENTE - cf. resteQueTentesColonne et resteQueTentesLigne
@@ -167,6 +166,7 @@ class Aide
 
           caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
           return caseCoord if ok
+
         end
       end
     end
@@ -205,9 +205,10 @@ class Aide
             nbCasesVide += 1 if (grille[i][j+1].statutVisible == newStatutVide)
             nbCasesTente += 1 if (grille[i][j+1].statutVisible == newStatutTente)
           end
-           
+         
           caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
           return caseCoord if (nbCasesVide == 1 && nbCasesTente == 0)
+
         end
       end
     end
@@ -218,6 +219,7 @@ class Aide
   # renvoie la premiere case où tous les arbres autour de la case possèdent leur tente, donc la case contient du gazon
   def arbreAutourCasePossedeTente
     arbreAssocieTente(VIDE)
+
   end
 
   # renvoie la première caseArbre qui n'a pas placer sa tente et qui ne possède qu'une case seule caseVide à côté d'elle
@@ -309,7 +311,6 @@ class Aide
 
 
     if arbreOuVide == ARBRE
-
       for i in 0..grille.length-1
         for j in 0..grille.length-1
 
@@ -335,9 +336,8 @@ class Aide
           end
         end
       end
-
+      
     elsif arbreOuVide == VIDE
-
       for i in 0..grille.length-1
         for j in 0..grille.length-1
 
@@ -573,6 +573,5 @@ class Aide
       tableau.push(nil, "Aucune aide disponible ...")
       return tableau
     end
-     
   end
 end
