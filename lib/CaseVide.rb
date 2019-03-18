@@ -24,18 +24,23 @@ class CaseVide < Case
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
 	# TODO - vérifier que les i,j sont bien cohérents
-	def cycle(i,j,arrayLignes, arrayColonnes)
+	def cycle(i,j,grille)
 		self.statutVisible.cycle
 
-		# if self.statutVisible.isTente? # le statut vient de devenir "tente"
-		# 	arrayLignes[i]-=1
-		# 	arrayColonnes[j]-=1
-		# elsif self.statutVisible.isVide? # le statut était "tente"
-		# 	arrayLignes[i]+=1
-		# 	arrayColonnes[j]+=1
-		# end
+		if self.statutVisible.isTente? # le statut vient de devenir "tente"
+			grille.varTentesLigne[i]-=1
+			grille.varTentesCol[j]-=1
+		elsif self.statutVisible.isVide? # le statut était "tente"
+			grille.varTentesLigne[i]+=1
+			grille.varTentesCol[j]+=1
+		end
 
-		# Ajouter un envoi des points vers l'objet ScorePartie
+		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
+			puts "test partie finie"
+			if grille.estComplete?
+						puts "partie finie"
+			end
+		end
 
 		self
 	end

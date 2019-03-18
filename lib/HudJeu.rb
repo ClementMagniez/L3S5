@@ -1,3 +1,4 @@
+require_relative 'Hud'
 
 # class abstraite permettant de créer un ecran de jeu
 class HudJeu < Hud
@@ -41,10 +42,8 @@ class HudJeu < Hud
 
 				button.set_image(Gtk::Image.new :file => @grille[i][j].affichage)
 				button.signal_connect("clicked") {
-					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
-					# Ajouter une méthode d'envoi de points pour les cases (paramètre : l'instance score de la grille)
+					@grille[i][j].cycle(i,j, @grille)
 					button.set_image(Gtk::Image.new :file => @grille[i][j].affichage)
-					#puts grille.estComplete?
 				}
 
 				self.attach(button,j+1,i+1,1,1)

@@ -9,7 +9,7 @@ require_relative 'ScorePartie'
 # comme grille de jeu
 class Grille
 
-	attr_reader :tentesCol, :tentesLigne, :grille, :score
+	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille, :score
 
 	# Obtient et génère la grille à partir du fichier filePath, ligne n
 	# L'indexation se fait à partir de 1
@@ -30,6 +30,8 @@ class Grille
 		@tentesLigne=Array.new(matSize)
 		@score = ScorePartie.new()
 		parseText(result)
+		@varTentesCol=@tentesCol.dup
+		@varTentesLigne=@tentesLigne.dup
 		# Ajout d'une méthode d'insertion dans la BDD ici
 	end
 
