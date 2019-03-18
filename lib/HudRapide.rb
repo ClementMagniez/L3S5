@@ -1,3 +1,5 @@
+require_relative "HudJeu"
+
 class HudRapide < HudJeu
 	# @btnPause
 	# @timer
@@ -19,11 +21,11 @@ class HudRapide < HudJeu
 		initBoutonPause
 		initBoutonAide
 
-		self.attach(@btnAide,@tailleGrille-1,0,1,1)
-		self.attach(@btnPause,@tailleGrille-2,0,1,1)
-		self.attach(@lblTime,@tailleGrille-3,0,1,1)
+		self.attach(@btnAide,@tailleGrille,0,1,1)
+		self.attach(@btnPause,@tailleGrille-1,0,1,1)
+		self.attach(@lblTime,@tailleGrille-2,0,1,1)
 
-		self.attach(@lblAide, 1, @tailleGrille+1, @tailleGrille, 1)
+		self.attach(@lblAide, 1, @tailleGrille+2, @tailleGrille+1, 1)
 
 		@t=Thread.new{timer}
 	end

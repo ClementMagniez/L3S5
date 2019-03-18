@@ -1,5 +1,5 @@
 require_relative 'Grille'
-
+require 'gtk3'
 class Hud < Gtk::Grid
 	# @fenetre
 	# @btnOptions

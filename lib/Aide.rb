@@ -1,28 +1,28 @@
 # Classe Aide contenant toutes les méthodes permettant d'aider le joueur
 class Aide
- 
+
   include StatutConstantes
- 
+
 
   #####################################################################################################
   # Class CaseCoordonnees permettant de lier une case avec ces coordonnées en abscisse et en ordonnée
   Object.const_set("CaseCoordonnees", Class.new)
   laClasse = Object.const_get("CaseCoordonnees")
-  
-  laClasse::module_eval{ 
+
+  laClasse::module_eval{
     define_method(:initialize) do |cases, i, j|
       @cases, @i, @j = cases, i, j
     end
 
-    define_method(:getCase){ 
+    define_method(:getCase){
       return @cases
     }
 
-    define_method(:getI){ 
+    define_method(:getI){
       return @i
     }
 
-    define_method(:getJ){ 
+    define_method(:getJ){
       return @j
     }
 
@@ -33,7 +33,7 @@ class Aide
   def initialize(grille)
     @grille=grille
   end
- 
+
   # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
   def nbCasesIncorrect
     nbErr = 0
@@ -54,28 +54,28 @@ class Aide
 
   # renvoie un tableau de cases contenant les erreurs qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
   def casesIncorrect
- 
+
     newStatutVide = StatutVide.new(VIDE)
     newStatutArbre = StatutArbre.new(ARBRE)
     tabCasesErr = Array.new
     grille=@grille.grille
     for i in 0..grille.length-1
       for j in 0..grille.length-1
-        
+
         tabCasesErr.unshift(CaseCoordonnees.new(grille[i][j], i, j)) if (grille[i][j].statutVisible != grille[i][j].statut && grille[i][j].statutVisible != newStatutVide && grille[i][j].statut != newStatutArbre)
-        
+
       end
     end
     return tabCasesErr.empty? ? 0 : tabCasesErr
   end
- 
+
   # renvoie la premiere case vide adjacente à une tente, il s'agit donc de gazon
   def impossibleTenteAdjacente
- 
+
     newStatutVide = StatutVide.new(VIDE)
     newStatutTente = StatutVide.new(TENTE)
     grille=@grille.grille
- 
+
     for i in 0..grille.length-1
       for j in 0..grille.length-1
 
@@ -111,7 +111,7 @@ class Aide
             if j+1 <= grille.length-1
               return caseCoord if grille[i][j+1].statutVisible == newStatutTente
             end
-            
+
         end
       end
     end # FinForI
@@ -123,23 +123,23 @@ class Aide
   def resteQueTentesLigne
     resteQueLigne(TENTE)
   end
- 
+
   # indique la ligne où il ne reste plus que du gazon à mettre, sinon renvoie 0
   def resteQueGazonLigne
 
     resteQueLigne(GAZON)
   end
- 
+
   # indique la colonne où il ne reste plus que des tentes à mettre, sinon renvoie 0
   def resteQueTentesColonne
     resteQueColonne(TENTE)
   end
- 
+
   # indique la colonne où il ne reste plus que du gazon à mettre, sinon renvoie 0
   def resteQueGazonColonne
     resteQueColonne(GAZON)
   end
- 
+
   # cf resteQue, col?==false
   def resteQueLigne(gazonOuTente)
       resteQue(gazonOuTente, false)
@@ -156,24 +156,24 @@ class Aide
   # * GAZON - cf. resteQueGazonColonne et resteQueGazonLigne
   # * autres - 0
   def resteQue(gazonOuTente, col)
- 
+
     num = 0
 
     newStatutVide = StatutVide.new(VIDE)
     newStatutTente = StatutVide.new(TENTE)
-   
+
     grille=@grille.grille
     grille=grille.transpose if col
-     
+
     grille.each_with_index do | array,i |
       nbCasesVide = 0
       nbCasesTente = 0
       array.each do | cases |
-       
+
 
         nbCasesVide += 1 if cases.statutVisible == newStatutVide
         nbCasesTente += 1 if cases.statutVisible == newStatutTente
-       
+
       end
       # print "Valeur de grille " + @grille.tentesCol[i].to_s + "\n"
       # print "Nombre cases vide = " + nbCasesVide.to_s + " Nombre cases tentes = " + nbCasesTente.to_s + "\n\n"
@@ -192,27 +192,27 @@ class Aide
         end
       end
 
-      
+
     end
     return num
   end
- 
- 
+
+
   # renvoie la premiere case qui n'est pas a cote d'un arbre, il s'agit donc de gazon
   def casePasACoteArbre
- 
+
     newStatutVide = StatutVide.new(VIDE)
     newStatutArbre = StatutArbre.new(ARBRE)
     grille=@grille.grille
- 
+
     for i in 0..grille.length-1
       for j in 0..grille.length-1
         ok = true
         if (grille[i][j].statutVisible == newStatutVide)
-         
+
           if (i-1 >= 0 && grille[i-1][j].statut == newStatutArbre) || (j-1 >= 0 && grille[i][j-1].statut == newStatutArbre) || (i+1 <= grille.length-1 && grille[i+1][j].statut == newStatutArbre) || (j+1 <= grille.length-1 && grille[i][j+1].statut == newStatutArbre)
             ok = false
-          end            
+          end
 
           caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
           return caseCoord if ok
@@ -223,22 +223,22 @@ class Aide
 
     return 0
   end
- 
+
   # renvoie la premiere case où il n'existe qu'une seule possibilité pour un arbre
   def uniquePossibiliteArbre
- 
+
     newStatutVide = StatutVide.new(VIDE)
     newStatutArbre = StatutArbre.new(ARBRE)
     newStatutTente = StatutVide.new(TENTE)
-   
+
     grille=@grille.grille
-   
+
     for i in 0..grille.length-1
       for j in 0..grille.length-1
         nbCasesVide = 0
         nbCasesTente = 0
         if (grille[i][j].statut == newStatutArbre)
-         
+
           if (i-1 >= 0)
             nbCasesVide += 1 if (grille[i-1][j].statutVisible == newStatutVide)
             nbCasesTente += 1 if (grille[i-1][j].statutVisible == newStatutTente)
@@ -255,7 +255,7 @@ class Aide
             nbCasesVide += 1 if (grille[i][j+1].statutVisible == newStatutVide)
             nbCasesTente += 1 if (grille[i][j+1].statutVisible == newStatutTente)
           end
-         
+
           caseCoord = CaseCoordonnees.new(grille[i][j], i, j)
           return caseCoord if (nbCasesVide == 1 && nbCasesTente == 0)
 
@@ -265,7 +265,7 @@ class Aide
 
     return 0
   end
- 
+
   # renvoie la premiere case où tous les arbres autour de la case possèdent leur tente, donc la case contient du gazon
   def arbreAutourCasePossedeTente
     arbreAssocieTente(VIDE)
@@ -287,7 +287,7 @@ class Aide
     newStatutVide = StatutVide.new(VIDE)
     newStatutArbre = StatutArbre.new(ARBRE)
     newStatutTente = StatutVide.new(TENTE)
-   
+
     grille=@grille.grille
     hashArbreTente = Hash.new
     compt = 0
@@ -295,7 +295,7 @@ class Aide
     # Tant que la taille de la table de hashage est différente du nombre de tentes de la grille, on boucle ...
     while hashArbreTente.size != @grille.tentesCol.sum
       compt += 1
-      # On parcourt toutes les cases de la grille  
+      # On parcourt toutes les cases de la grille
       for i in 0..grille.length-1
         for j in 0..grille.length-1
 
@@ -386,7 +386,7 @@ class Aide
           end
         end
       end
-      
+
     elsif arbreOuVide == VIDE
       for i in 0..grille.length-1
         for j in 0..grille.length-1
@@ -426,12 +426,12 @@ class Aide
     return 0
   end
 
- 
+
   # renvoie la premiere case où les dispositions possibles de la ligne obligeront la case à etre du gazon
   def dispositionPossibleLigne
     dispositionPossible(false)
   end
- 
+
   # renvoie la premiere case où les dispositions possibles de la colonne obligeront la case à etre du gazon
   def dispositionPossibleColonne
     dispositionPossible(true)
@@ -452,7 +452,7 @@ class Aide
       nbTentePoss = 0
       hashGroupeCase = Hash.new # => la table de hashage contient comme clé la première case vide et en valeur le nombre de case(s) vide(s) qui suive(nt) la première case (inclus)
       for j in 0..grille.length-1
-        
+
           nbCasesTente += 1 if grille[i][j].statutVisible == newStatutTente
           if grille[i][j].statutVisible == newStatutVide
             nbTentePoss += 1 if nbCaseVideSucc%2 == 0
@@ -460,7 +460,7 @@ class Aide
           else
             nbCaseVideSucc = 0
           end
-          
+
           if grille[i][j].statutVisible == newStatutVide && casePrecedente == false
             premiereCase = CaseCoordonnees.new(grille[i][j], i, j)
             hashGroupeCase[premiereCase] = 1
@@ -483,7 +483,7 @@ class Aide
       tabCaseEnGazon2 = Array.new(20)
 
       # pour chaque groupe de case(s) vide(s)
-      hashGroupeCase.each {|key, value| 
+      hashGroupeCase.each {|key, value|
         # correspond aux coordonnées de la case "clé"
         i = key.getI
         j = key.getJ
@@ -523,7 +523,7 @@ class Aide
             if grille[i][j+2].statutVisible == newStatutVide
               sontEgaux = false
               nbCaseVideSuivante = 1
-              hashGroupeCase.each { |key2, value2| 
+              hashGroupeCase.each { |key2, value2|
                 if sontEgaux
                   nbCaseVideSuivante = value2
                   sontEgaux = false
@@ -580,7 +580,7 @@ class Aide
 
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
   def cycle(tutoOuRapide)
- 
+
     tableau = Array.new
 
     if (funcReturn=self.nbCasesIncorrect) != 0 && tutoOuRapide == "rapide"

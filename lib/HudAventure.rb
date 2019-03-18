@@ -11,6 +11,6 @@ class HudAventure < HudJeu
 	# Comportement a la fin du jeu
 	# Lance une nouvelle grille
 	def jeuTermine
-		self.lancementAventure(@grille.length+1)
+		self.lancementAventure(@tailleGrille+1)
 	end
 end
