@@ -82,8 +82,8 @@ class HudJeu < Hud
 					if @caseSurbrillanceList != nil
 						while not @caseSurbrillanceList.empty?
 								caseSubr = @caseSurbrillanceList.shift
-								@gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(scaleImage(Gtk::Image.new :file => @grille[caseSubr.getI][caseSubr.getJ].affichage))
-								# @gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(scaleImage(caseSubr.getI,caseSubr.getJ))
+								@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(Gtk::Image.new :file => @grille[caseSubr.x][caseSubr.y].affichage))
+								# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
 						end
 					end
 

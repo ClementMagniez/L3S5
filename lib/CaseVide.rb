@@ -9,7 +9,8 @@ require_relative 'StatutVide'
 # statut interne, ce qui permet de laisser au joueur la possibilité de se tromper.
 class CaseVide < Case
 
-	def initialize(etat)
+	def initialize(etat,i,j)
+		super(i,j)
 		@statut=StatutVide.new(etat)
 		@statutVisible=StatutVide.new(VIDE)
 	end
@@ -31,7 +32,7 @@ class CaseVide < Case
 		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
 			grille.estComplete?
 		end
-		grille.push(self)
+		super(grille)
 		self
 	end
 

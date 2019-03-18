@@ -1,7 +1,7 @@
 require_relative 'CaseVide'
 
 class CaseGazon < CaseVide
-	def initialize
-		super(GAZON)
+	def initialize(i,j)
+		super(GAZON,i,j)
 	end
 end

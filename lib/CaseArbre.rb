@@ -3,7 +3,8 @@ require_relative 'StatutArbre'
 
 class CaseArbre < Case
 
-	def initialize
+	def initialize(i,j)
+		super(i,j)
 		@statut=StatutArbre.new(ARBRE)
 		@statutVisible=StatutArbre.new(ARBREDECOCHE)
 	end
@@ -21,6 +22,7 @@ class CaseArbre < Case
 	# TODO - vérifier que les i,j sont bien cohérents
 	def cycle(i,j,grille)
 		self.statutVisible.cycle
+		super(grille)
 	end
 
 	def affichageSubr
