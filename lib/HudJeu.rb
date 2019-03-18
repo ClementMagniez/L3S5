@@ -69,6 +69,7 @@ class HudJeu < Hud
 					# compteur = compteur +1
 				}
 			}
+			@grille.score.reset()
 		}
 	end
 
@@ -77,6 +78,7 @@ class HudJeu < Hud
 		@btnAide = Gtk::Button.new :label => " Aide "
 		self.attach(@btnAide,taille+4,taille,1,1)
 		@btnAide.signal_connect("clicked") {
+			@grille.score.appelerAssistant()
 			@lblAide.set_label(@aide.cycle)
 		}
 	end

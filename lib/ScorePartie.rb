@@ -33,8 +33,8 @@ class ScorePartie
 	# * +valeur+ - L'entier déterminant le score d'une partie
 	#
   def initialize
-    @bonus = nil
-    @malus = nil
+    @bonus = 0
+    @malus = 0
     @nbAidesUsees = 0
     @valeur = 0
   end
@@ -72,7 +72,8 @@ class ScorePartie
   ##
   # == appelerAssistant(0)
   #
-  # Cette méthode permet d'incrémenter d'une unité le compteur lié aux aides.
+  # Cette méthode permet d'incrémenter d'une unité le compteur lié aux aides. L'annulation de coups
+  # par le joueur ne permet pas de diminuer ce compteur (le cas échéant, il s'agirait d'une triche).
   #
   def appelerAssistant
     ++@nbAidesUsees
@@ -84,11 +85,33 @@ class ScorePartie
   # Cette méthode retourne le résultat de la partie, calculé avec toutes les variables d'instance
   # initialisées et modifiées depuis la création de l'objet.
   #
-  # ===
+  # === Paramètre
+  #
+  # * +tempsRestant+ - L'entier qui indique le nombres de secondes restantes (pour le mode chrono)
   #
   def calculerScoreFinal(tempsRestant)
-    if(tempsRestant == nil)
-      scoreFinal = (@score - @score * @malus) * @bonus
+    scoreFinal = (@score - @score * @malus) * @bonus
+    return (tempsRestant == nil) ? scoreFinal : scoreFinal * (tempsRestant / 100)
+  end
+
+  ##
+  # == reset(0)
+  #
+  # Cette méthode remet à zéro toutes les variables de l'objet appelant. Elle s'active lors
+  # du reset d'une partie jouée.
+  #
+  # === Attributs
+  #
+  # * +bonus+ - L'entier indiquant le pourcentage positif appliqué selon la difficulté
+  # * +malus+ - L'entier indiquant le pourcentage négatif appliqué selon la difficulté
+  # * +nbAidesUsees+ - L'entier indiquant le nombre de fois où l'assistant a été activé par le joueur
+  # * +valeur+ - L'entier déterminant le score d'une partie
+  #
+  def reset
+    @bonus = 0
+    @malus = 0
+    @nbAidesUsees = 0
+    @valeur = 0
   end
 
 	##
