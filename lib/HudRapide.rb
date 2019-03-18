@@ -28,6 +28,9 @@ class HudRapide < HudJeu
 		self.attach(@lblAide, @varX+1, @varY+@tailleGrille+2, @tailleGrille+1, 1)
 
 		@t=Thread.new{timer}
+
+		fond = scaleFond
+		self.attach(fond,0,0,@tailleGrille+4,@tailleGrille+4)
 	end
 
 	def timer

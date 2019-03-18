@@ -8,10 +8,13 @@ class Hud < Gtk::Grid
 	def initialize(window)
 		super()
 		@fenetre = window
+
+		
 		@lblDescription = Gtk::Label.new
 
 		initBoutonOptions
-		#fond = Gtk::Image.new( :file => "../img/fond2.png")
+		
+
 
 		# self.attach(@btnOptions, 2, 16, 2, 2)
 		# self.attach(@lblDescription, 0, 0, 6, 1)
@@ -19,6 +22,8 @@ class Hud < Gtk::Grid
 
 		self.halign = Gtk::Align::CENTER
 		self.valign = Gtk::Align::CENTER
+
+
 	end
 
 
@@ -95,7 +100,18 @@ class Hud < Gtk::Grid
 	end
 
 
+	def scaleFond
+		
+		winX = @fenetre.size.fetch(0)
+		winY = @fenetre.size.fetch(1)
 
+		puts (winX.to_s + winY.to_s)
+		
+		fond = Gtk::Image.new( :file => "../img/fond2.png")	
+		fond.pixbuf = fond.pixbuf.scale(winX,winY)	if fond.pixbuf != nil
+
+		return fond
+	end
 
 
 end

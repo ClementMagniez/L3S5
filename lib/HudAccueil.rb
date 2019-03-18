@@ -17,7 +17,7 @@ class HudAccueil < Hud
 
 
 
-		fond = Gtk::Image.new( :file => "../img/fond.png")
+		#fond = Gtk::Image.new( :file => "../img/fond.png")
 		#fond.pixbuf = fond.pixbuf.scale(@fenetre.size.fetch(0),@fenetre.size.fetch(1))
 
 
@@ -35,6 +35,9 @@ class HudAccueil < Hud
 		self.attach(@btnOptions, varX, varY+4, 1, 1)
 		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
 		# self.attach(fond,0,0,30,20)
+
+		fond = scaleFond
+		self.attach(fond,0,0,5,5)
 	end
 
 
