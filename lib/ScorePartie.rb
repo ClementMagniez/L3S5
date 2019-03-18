@@ -50,8 +50,8 @@ class ScorePartie
 	#
 	# === Attributs
 	#
-	# * +bonus+ - L'entier indiquant le pourcentage positif appliqué selon la difficulté
-	# * +malus+ - L'entier indiquant le pourcentage négatif appliqué selon la difficulté
+	# * +bonus+ - L'entier indiquant le montant de la multiplication appliquée à la fin de la partie
+	# * +malus+ - L'entier indiquant le pourcentage négatif appliqué à la fin de la partie
 	#
   def definirPourcentages(taille)
     # FACILE
@@ -72,7 +72,7 @@ class ScorePartie
   ##
   # == appelerAssistant(0)
   #
-  # Cette méthode permet d'attribuer d'incrémenter .
+  # Cette méthode permet d'incrémenter d'une unité le compteur lié aux aides.
   #
   def appelerAssistant
     ++@nbAidesUsees
@@ -81,13 +81,14 @@ class ScorePartie
   ##
   # == calculerScoreFinal(1)
   #
-  # Cette méthode retourne le résultat de la partie, calculé avec tous les paramètres reçus depuis
-  # la création de l'objet.
+  # Cette méthode retourne le résultat de la partie, calculé avec toutes les variables d'instance
+  # initialisées et modifiées depuis la création de l'objet.
   #
   # ===
   #
   def calculerScoreFinal(tempsRestant)
-
+    if(tempsRestant == nil)
+      scoreFinal = (@score - @score * @malus) * @bonus
   end
 
 	##
@@ -97,6 +98,6 @@ class ScorePartie
 	# l'objet appelé.
 	#
 	def to_s
-		return "Score actuel : #{@valeur}"
+		return "Score actuel : #{@valeur} (bonus de #{@bonus}% ; #{@nbAidesUsees} aide(s) utilisée(s) => malus de #{@malus}%)"
 	end
 end
