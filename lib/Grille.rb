@@ -9,7 +9,8 @@ require_relative 'CaseGazon'
 class Grille
 
 	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille,
-						  :estValide
+						  :estValide, :stack
+
 
 	# Obtient et génère la grille à partir du fichier filePath, ligne n
 	# L'indexation se fait à partir de 1
@@ -31,7 +32,21 @@ class Grille
 		parseText(result)
 		@varTentesCol=@tentesCol.dup
 		@varTentesLigne=@tentesLigne.dup
+		@stack=Pile.new()
 		@estValide=false
+	end
+		
+		
+	end
+
+	# Renvoie la taille n de la matrice n*n composant la grille de jeu
+	def length
+		return @grille.length
+	end
+
+	# Annule le dernier coup de l'utilisateur sur la grille 
+	def cancel
+			self.stack.pop.cancel
 	end
 
 	# Renvoie true si la grille est complète et valide, false sinon
