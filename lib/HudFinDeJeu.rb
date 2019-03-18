@@ -9,7 +9,7 @@ class HudFinDeJeu < Hud
 		initBoutonChangerModeDeJeu
 		self.attach(@btnRecommencer,8,12,2,2)
 
-
+		scaleFond
 	end
 
 	def initBoutonRecommencer

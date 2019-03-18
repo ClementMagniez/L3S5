@@ -18,6 +18,8 @@ class HudOption < Hud
 		self.attach(@btnFenetre,6,4,2,2)
 		self.attach(@btnRetour,14,14,4,2)
 		self.attach(Gtk::Label.new("Mode : "),2,4,2,2)
+
+		scaleFond
 	end
 
 	def initBoutonFenetre

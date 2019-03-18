@@ -16,7 +16,7 @@ class HudAccueil < Hud
 
 
 
-		fond = Gtk::Image.new( :file => "../img/fond.png")
+		#fond = Gtk::Image.new( :file => "../img/fond.png")
 		#fond.pixbuf = fond.pixbuf.scale(@fenetre.size.fetch(0),@fenetre.size.fetch(1))
 
 
@@ -27,7 +27,9 @@ class HudAccueil < Hud
 		self.attach(@entryMotDePasse,22,8,4,2)
 		self.attach(Gtk::Label.new("Identifiant : "),18,6,4,2)
 		self.attach(Gtk::Label.new("Mot de passe : "),18,8,4,2)
-		self.attach(fond,0,0,30,20)
+		#self.attach(fond,0,0,30,20)
+
+		scaleFond
 	end
 
 
