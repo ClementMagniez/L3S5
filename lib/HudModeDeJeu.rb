@@ -17,15 +17,20 @@ class HudModeDeJeu < Hud
 		initBoutonsRapide
 		initBoutonTuto
 
-		self.attach(@btnAvFacile,7,6,2,2)
-		self.attach(@btnAvMoyen,7,8,2,2)
-		self.attach(@btnAvDifficile,7,10,2,2)
-		self.attach(@btnTutoriel,5,2,2,2)
-		self.attach(@btnRapideFacile,7,14,2,2)
-		self.attach(@btnRapideMoyen,7,16,2,2)
-		self.attach(@btnRapideDifficile,7,18,2,2)
-		self.attach(Gtk::Label.new("Mode Aventure"),5,4,2,2)
-		self.attach(Gtk::Label.new("Partie rapide"),5,12,2,2)
+
+		self.attach(@btnTutoriel,0, 0, 2, 1)
+
+		self.attach(Gtk::Label.new("Mode Aventure"),0, 1, 2, 1)
+			self.attach(@btnAvFacile,1, 2, 1, 1)
+			self.attach(@btnAvMoyen,1, 3, 1, 1)
+			self.attach(@btnAvDifficile,1, 4, 1, 1)
+
+		self.attach(Gtk::Label.new("Partie rapide"),0, 5, 2, 1)
+			self.attach(@btnRapideFacile,1, 6, 1, 1)
+			self.attach(@btnRapideMoyen,1, 7, 1, 1)
+			self.attach(@btnRapideDifficile,1, 8, 1, 1)
+
+		self.attach(@btnOptions, 0, 9, 1, 1)
 	end
 
 

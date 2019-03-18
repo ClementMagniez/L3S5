@@ -5,7 +5,7 @@ class HudAventure < HudJeu
 		self.setTitre("Aventure")
 		# self.setDesc("Ici la desc du mode aventure")
 
-		self.initBoutonOptions
+		# self.initBoutonOptions
 	end
 
 	# Comportement a la fin du jeu

@@ -9,15 +9,15 @@ class HudOption < Hud
 		@fenetrePrecedente = fenetrePrecedente
 
 		self.setTitre("Options")
-		@btnOptions.destroy
 
 		initBoutonFenetre
 		initBoutonRetour
 
 
-		self.attach(@btnFenetre,6,4,2,2)
-		self.attach(@btnRetour,14,14,4,2)
-		self.attach(Gtk::Label.new("Mode : "),2,4,2,2)
+		self.attach(Gtk::Label.new("Mode : "),0, 0, 1, 1)
+		self.attach(@btnFenetre,1, 0, 1, 1)
+
+		self.attach(@btnRetour,2, 1, 1, 1)
 	end
 
 	def initBoutonFenetre
