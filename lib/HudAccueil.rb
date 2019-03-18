@@ -1,62 +1,60 @@
 class HudAccueil < Hud
+	# @btnConnecter
+	# @btnInscrire
+	# @btnQuitter
+	# @entryIdentifiant
+	# @entryMotDePasse
+
 	def initialize(window)
 		super(window)
+		@entryIdentifiant = Gtk::Entry.new
+		@entryMotDePasse = Gtk::Entry.new
 
-		#Boutons : S'inscrire et Se connecter
-		@btnInscrire = Gtk::Button.new
-		@btnInscrire.set_label("S'inscrire")
-		@btnConnecter = Gtk::Button.new
-		@btnConnecter.set_label("Se connecter")
+		initBoutonConnecter
+		initBoutonInscription
+		initBoutonQuitter
 
-		#Label : Identifiant et mot de passe
-		@lblId = Gtk::Label.new("Identifiant : ")
-		@lbMdp = Gtk::Label.new("Mot de passe : ")
 
-		self.attach(@lblId,8,6,2,2)
-		self.attach(@lbMdp,8,8,2,2)
 
-		#Mise des boutons dans la grille
-		self.attach(@btnInscrire,8,10,2,2)
-		self.attach(@btnConnecter,10,10,2,2)
+		fond = Gtk::Image.new( :file => "../img/fond.png")
+		#fond.pixbuf = fond.pixbuf.scale(@fenetre.size.fetch(0),@fenetre.size.fetch(1))
 
-		#Entrée de texte : Identifiant et Mot de passe
-		@entIdentifiant = Gtk::Entry.new
-		@entMotDePasse = Gtk::Entry.new
 
-		#Mise des entrées dans la grille
-		self.attach(@entIdentifiant,10,6,2,2)
-		self.attach(@entMotDePasse,10,8,2,2)
 
-		#Bouton option
-		@btnOption = Gtk::Button.new :label => "Options"
-		@btnQuitter = Gtk::Button.new :label => "Quitter"
+		self.attach(Gtk::Label.new("Identifiant : "),1, 1, 1, 1)
+		self.attach(@entryIdentifiant,2, 1, 1, 1)
 
-		self.attach(@btnOption,4,14,4,2)
-		self.attach(@btnQuitter,14,14,4,2)
+		self.attach(Gtk::Label.new("Mot de passe : "),1, 2, 1, 1)
+		self.attach(@entryMotDePasse,2, 2, 1, 1)
 
-		self.initBoutonConnecter
-		self.initBoutonQuitter
-		self.initBoutonOptions
+
+		self.attach(@btnInscrire,1, 3, 1, 1)
+		self.attach(@btnConnecter,2, 3, 1, 1)
+
+		self.attach(@btnOptions, 0, 4, 1, 1)
+		self.attach(@btnQuitter,3, 4, 1, 1)
+		# self.attach(fond,0,0,30,20)
 	end
 
-	# Intégrer la connexion à la BDD
-	def initBoutonConnecter
-		# @entIdentifiant et @entMotDePasse à prendre en compte
-		# Requête SQL pour trouver ces identifiants (le mot de passe sera crypté avant l'envoi)
-		# Gestion des cas de succès et d'échecs
-		@btnConnecter.signal_connect("clicked") {
-				login = Profil.find(:all, :conditions => "pseudonyme=#{@entIdentifiant}")
 
-				@fenetre.changerWidget(self,HudModeDeJeu.new(@fenetre))
+	def initBoutonConnecter
+		@btnConnecter = Gtk::Button.new :label => "Se connecter"
+		@btnConnecter.signal_connect("clicked") {
+				self.lancementModeJeu
+		}
+	end
+
+	def initBoutonInscription
+		puts "Inscription => Traitement manquant"
+		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
+		@btnInscrire.signal_connect('clicked'){
+			self.lancementInscription
 		}
 	end
 
 	def initBoutonQuitter
-
-		@btnQuitter.signal_connect('clicked') {
-			puts "Fermeture de l'application !"
-			Gtk.main_quit
-		}
+		@btnQuitter = Gtk::Button.new :label => "Quitter"
+		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
 	end
 
 end

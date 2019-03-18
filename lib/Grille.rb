@@ -9,7 +9,8 @@ require_relative 'ScorePartie'
 # comme grille de jeu
 class Grille
 
-	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille, :score
+	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille,
+						  :estValide, :score
 
 	# Obtient et génère la grille à partir du fichier filePath, ligne n
 	# L'indexation se fait à partir de 1
@@ -32,28 +33,23 @@ class Grille
 		parseText(result)
 		@varTentesCol=@tentesCol.dup
 		@varTentesLigne=@tentesLigne.dup
-		# Ajout d'une méthode d'insertion dans la BDD ici
+		@estValide=false
 	end
-
-
-	def length
-		return @grille.length
-	end
-
 
 	# Renvoie true si la grille est complète et valide, false sinon
 	def estComplete?
 		res=true
-
 		self.grille.each do |ligne|
 			ligne.each do |cell|
 				res=res && cell.estValide?
 				break if !res
 			end
 		end
+		self.estValide=res
+	end
 
-		res
-
+	def length
+		return @grille.length
 	end
 
 	# Affiche la grille complète - pourra être supprimé quand on aura la GUI
@@ -73,7 +69,7 @@ class Grille
 	end
 
 	private
-	attr_writer :grille, :tentesCol, :tentesLigne
+	attr_writer :grille, :tentesCol, :tentesLigne, :estValide
 
 
 
