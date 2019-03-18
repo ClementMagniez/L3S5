@@ -6,16 +6,17 @@ require_relative 'HudJeu'
 require_relative 'HudModeDeJeu'
 require_relative 'HudAventure'
 require_relative 'HudRapide'
+require_relative "HudInscription"
+require_relative 'HudTutoriel'
+require_relative 'HudFinDeJeu'
 
 class Fenetre < Gtk::Window
 	def initialize
 		super()
+		@fullscreen = false
         self.set_resizable(true)
+		self.maximize
         self.signal_connect('destroy') { Gtk.main_quit }
-        self.initAccueil
-	end
-
-	def initAccueil
 		self.add(HudAccueil.new(self))
 		self.show_all
 		Gtk.main
@@ -27,4 +28,19 @@ class Fenetre < Gtk::Window
 		return self
 	end
 
+	def isFullscreen?
+		return @fullscreen
+	end
+
+	def fullscreen
+		super
+		@fullscreen = true
+		return self
+	end
+
+	def unfullscreen
+		super
+		@fullscreen = false
+		return self
+	end
 end

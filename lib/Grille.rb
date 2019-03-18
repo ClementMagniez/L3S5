@@ -31,14 +31,8 @@ class Grille
 		parseText(result)
 		@varTentesCol=@tentesCol.dup
 		@varTentesLigne=@tentesLigne.dup
-		@estValide?=false
+		@estValide=false
 	end
-
-
-	def length
-		return @grille.length
-	end
-
 
 	# Renvoie true si la grille est complète et valide, false sinon
 	def estComplete?
@@ -50,6 +44,10 @@ class Grille
 			end
 		end
 		self.estValide=res
+	end
+
+	def length
+		return @grille.length
 	end
 
 	# Affiche la grille complète - pourra être supprimé quand on aura la GUI
@@ -69,7 +67,7 @@ class Grille
 	end
 
 	private
-	attr_writer :grille, :tentesCol, :tentesLigne
+	attr_writer :grille, :tentesCol, :tentesLigne, :estValide
 
 
 
