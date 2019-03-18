@@ -26,6 +26,8 @@ class CaseVide < Case
 	# TODO - vérifier que les i,j sont bien cohérents
 	def cycle(i,j,grille)
 		self.statutVisible.cycle
+		# À tester
+		grille.recupererPoints(this.points)
 
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[i]-=1

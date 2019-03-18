@@ -4,7 +4,6 @@
 # @version 0.1
 #
 
-
 ##
 # = Classe *ScorePartie*
 #
@@ -40,13 +39,24 @@ class ScorePartie
   end
 
   ##
+  # == appelerAssistant(0)
+  #
+  # Cette méthode permet d'incrémenter d'une unité le compteur lié aux aides. L'annulation de coups
+  # par le joueur ne permet pas de diminuer ce compteur (le cas échéant, il s'agirait d'une triche).
+  #
+  def appelerAssistant
+    ++@nbAidesUsees
+  end
+
+  ##
 	# == definirPourcentages(1)
 	#
 	# Cette méthode permet d'attribuer des valeurs non-nulles aux pourcentages du bonus et du malus.
 	#
 	# === Paramètre
 	#
-	# * +taille+ - Un entier indiquant la taille de la grille (et donc, la difficulté de la partie)
+	# * +taille+ - Un entier strictement positif indiquant la taille de la grille (et donc, la
+  #              difficulté de la partie)
 	#
 	# === Attributs
 	#
@@ -70,16 +80,6 @@ class ScorePartie
   end
 
   ##
-  # == appelerAssistant(0)
-  #
-  # Cette méthode permet d'incrémenter d'une unité le compteur lié aux aides. L'annulation de coups
-  # par le joueur ne permet pas de diminuer ce compteur (le cas échéant, il s'agirait d'une triche).
-  #
-  def appelerAssistant
-    ++@nbAidesUsees
-  end
-
-  ##
   # == calculerScoreFinal(1)
   #
   # Cette méthode retourne le résultat de la partie, calculé avec toutes les variables d'instance
@@ -87,11 +87,24 @@ class ScorePartie
   #
   # === Paramètre
   #
-  # * +tempsRestant+ - L'entier qui indique le nombres de secondes restantes (pour le mode chrono)
+  # * +tempsRestant+ - Un entier strictement positif (ne concerne que le mode chrono), nul sinon
   #
   def calculerScoreFinal(tempsRestant)
     scoreFinal = (@score - @score * @malus) * @bonus
     return (tempsRestant == nil) ? scoreFinal : scoreFinal * (tempsRestant / 100)
+  end
+
+  ##
+  # == recupererPoints(1)
+  #
+  # Cette méthode permet d'additionner les points d'une case au montant du score d'une grille.
+  #
+  # === Paramètre
+  #
+  # * +pointsCase+ - Un entier positif ou négatif
+  #
+  def recupererPoints(pointsCase)
+    @valeur += pointsCase
   end
 
   ##

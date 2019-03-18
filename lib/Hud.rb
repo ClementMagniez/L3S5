@@ -31,6 +31,7 @@ class Hud < Gtk::Grid
 	def lancementAventure(taille)
 		# grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"grilles.txt");
 		grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"grilles.txt")
+		grille.score.definirPourcentages(taille)
 		# aide = Aide.new(grille)
 		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
 	end
@@ -65,6 +66,7 @@ class Hud < Gtk::Grid
 
 	def lancementRapide(taille)
 		grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"grilles.txt");
+		grille.score.definirPourcentages(taille)
 		# aide = Aide.new(grille)
 		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
 	end
