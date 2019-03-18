@@ -31,7 +31,9 @@ ____
 Mise en place du système de calcul :
 
 	=> Ajout d'une variable score et d'un compteur d'aides utilisées sur l'interface (fait)
-		-> À réinitialiser à chaque lancement de partie (une instance score est créée à chaque nouvelle partie, donc ce n'est pas un souci)
 	=> Modifier les fichiers "Case" pour intégrer les gains (fait)
-	=> Trouver un moyen efficace d'envoyer les gains d'une case au score général (souci de représentation entre les différentes classes...)
+	=> Trouver un moyen efficace d'envoyer les gains d'une case au score général (fait)
+	
+	=> Implémenter les conditions nécessaires au gain des malus dans les modes de jeu (à faire)
+	=> Régler le souci de la conversion du temps restant (mode chrono) en entier (à faire)
 	

@@ -72,6 +72,7 @@ class HudRapide < HudJeu
 		taille = @grille.length
 		@btnAide = Gtk::Button.new :label => " Aide "
 		@btnAide.signal_connect("clicked") {
+			@grille.score.appelerAssistant()
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then

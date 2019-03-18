@@ -27,7 +27,7 @@ class CaseVide < Case
 	def cycle(i,j,grille)
 		self.statutVisible.cycle
 		# À tester
-		grille.recupererPoints(this.points)
+		grille.score.recupererPoints(this.points)
 
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[i]-=1

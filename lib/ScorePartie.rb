@@ -39,13 +39,13 @@ class ScorePartie
   end
 
   ##
-  # == appelerAssistant(0)
+  # == appelerAssistant(1)
   #
   # Cette méthode permet d'incrémenter d'une unité le compteur lié aux aides. L'annulation de coups
   # par le joueur ne permet pas de diminuer ce compteur (le cas échéant, il s'agirait d'une triche).
   #
   def appelerAssistant
-    ++@nbAidesUsees
+    @nbAidesUsees += 1
   end
 
   ##
@@ -64,18 +64,18 @@ class ScorePartie
 	# * +malus+ - L'entier indiquant le pourcentage négatif appliqué à la fin de la partie
 	#
   def definirPourcentages(taille)
-    # FACILE
+    # FACILE - Bonus x1, 3% de malus
     if(taille < 9)
       @bonus = 1
-      @malus = -0,03
-    # DIFFICILE
+      @malus = 0,03
+    # DIFFICILE - Bonus x3, 10% de malus
     elsif(taille > 12)
       @bonus = 3
-      @malus = -0,1
-    # MOYEN
+      @malus = 0,1
+    # MOYEN - Bonus x1.5, 5% de malus
     else
       @bonus = 1,5
-      @malus = -0,05
+      @malus = 0,05
     end
   end
 
@@ -85,12 +85,26 @@ class ScorePartie
   # Cette méthode retourne le résultat de la partie, calculé avec toutes les variables d'instance
   # initialisées et modifiées depuis la création de l'objet.
   #
-  # === Paramètre
+  # === Paramètres
   #
   # * +tempsRestant+ - Un entier strictement positif (ne concerne que le mode chrono), nul sinon
+	# * +taille+ - Un entier strictement positif indiquant la taille de la grille (et donc, la
+  #              difficulté de la partie)
   #
-  def calculerScoreFinal(tempsRestant)
-    scoreFinal = (@score - @score * @malus) * @bonus
+  def calculerScoreFinal(taille,tempsRestant)
+    nbMalus = 0
+    # FACILE
+    if(taille < 9 && @nbAidesUsees > 1)
+      nbMalus = @nbAidesUsees - 1
+    # MOYEN
+    elsif(taille >= 9 && taille <= 12 && @nbAidesUsees > 2)
+      nbMalus = @nbAidesUsees - 2
+    # DIFFICILE
+    elsif(taille > 12 && @nbAidesUsees > 3)
+      nbMalus = @nbAidesUsees - 3
+    end
+
+    scoreFinal = (@score - @score * (@malus * nbMalus)) * @bonus
     return (tempsRestant == nil) ? scoreFinal : scoreFinal * (tempsRestant / 100)
   end
 
