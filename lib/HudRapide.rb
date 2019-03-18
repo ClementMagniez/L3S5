@@ -1,3 +1,5 @@
+require_relative "HudJeu"
+
 class HudRapide < HudJeu
 	# @btnPause
 	# @timer
@@ -6,6 +8,7 @@ class HudRapide < HudJeu
 		super(window,grille)
 		@btnPause = Gtk::Button.new :label => "Pause"
 		@lblTime = Gtk::Label.new(" 0:0 ")
+		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
 		@timer = Time.now
 		@pause = false
 		@horloge = 0
@@ -14,13 +17,15 @@ class HudRapide < HudJeu
 		# self.setDesc("Ici la desc du mode rapide")
 
 
-		self.initBoutonOptions
+		# self.initBoutonOptions
 		initBoutonPause
 		initBoutonAide
 
-		self.attach(@btnAide,@tailleGrille-1,0,1,1)
-		self.attach(@btnPause,@tailleGrille-2,0,1,1)
-		self.attach(@lblTime,@tailleGrille-3,0,1,1)
+		self.attach(@btnAide,@tailleGrille,0,1,1)
+		self.attach(@btnPause,@tailleGrille-1,0,1,1)
+		self.attach(@lblTime,@tailleGrille-2,0,1,1)
+
+		self.attach(@lblAide, 1, @tailleGrille+2, @tailleGrille+1, 1)
 
 		@t=Thread.new{timer}
 

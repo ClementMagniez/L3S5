@@ -1,15 +1,16 @@
 class HudTutoriel < HudJeu
 	def initialize (window,grille)
 		super(window,grille)
+		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
 
 		self.setTitre("Tutoriel")
 		# self.setDesc("Ici la desc du mode tuto")
 
-		self.initBoutonOptions
+		# self.initBoutonOptions
 		initBoutonAide
 
-		self.attach(@btnAide,@tailleGrille-1,0,1,1)
-
+		self.attach(@btnAide,@tailleGrille,0,1,1)
+		self.attach(@lblAide, 1, @tailleGrille+2, @tailleGrille+1, 1)
 		scaleFond
 	end
 

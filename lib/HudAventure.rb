@@ -5,7 +5,7 @@ class HudAventure < HudJeu
 		self.setTitre("Aventure")
 		# self.setDesc("Ici la desc du mode aventure")
 
-		self.initBoutonOptions
+		#self.initBoutonOptions
 
 		scaleFond
 	end
@@ -13,6 +13,6 @@ class HudAventure < HudJeu
 	# Comportement a la fin du jeu
 	# Lance une nouvelle grille
 	def jeuTermine
-		self.lancementAventure(@grille.length+1)
+		self.lancementAventure(@tailleGrille+1)
 	end
 end
