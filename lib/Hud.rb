@@ -107,9 +107,7 @@ class Hud < Gtk::Grid
 
 		puts (winX.to_s + winY.to_s)
 		
-		fond = Gtk::Image.new( :file => "../img/fond2.png")
-		self.attach(fond,0,0,30,20)
-		
+		fond = Gtk::Image.new( :file => "../img/fond2.png")	
 		fond.pixbuf = fond.pixbuf.scale(winX,winY)	if fond.pixbuf != nil
 
 		return fond

@@ -34,6 +34,9 @@ class HudAccueil < Hud
 		self.attach(@btnOptions, 0, 4, 1, 1)
 		self.attach(@btnQuitter,3, 4, 1, 1)
 		# self.attach(fond,0,0,30,20)
+
+		fond = scaleFond
+		self.attach(fond,0,0,5,5)
 	end
 
 

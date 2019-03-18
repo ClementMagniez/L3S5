@@ -18,7 +18,8 @@ class HudOption < Hud
 		self.attach(@btnFenetre,1, 0, 1, 1)
 
 		self.attach(@btnRetour,2, 1, 1, 1)
-		scaleFond
+		fond = scaleFond
+		self.attach(fond,0,0,3,2)
 	end
 
 	def initBoutonFenetre

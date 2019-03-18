@@ -24,6 +24,8 @@ class HudModeDeJeu < Hud
 		initBoutonsRapide
 		initBoutonTuto
 
+		varX = 5;
+		varY = 5
 
 		self.attach(@btnTutoriel,0, 0, 2, 1)
 
@@ -38,6 +40,9 @@ class HudModeDeJeu < Hud
 			self.attach(@btnRapideDifficile,1, 8, 1, 1)
 
 		self.attach(@btnOptions, 0, 9, 1, 1)
+
+		fond = scaleFond
+		self.attach(fond,0,0,5,10)
 	end
 
 
