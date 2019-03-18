@@ -6,6 +6,7 @@ class HudOption < Hud
 
 	def initialize(window,fenetrePrecedente)
 		super(window)
+		varX, varY = 0, 0
 		@fenetrePrecedente = fenetrePrecedente
 
 		self.setTitre("Options")
@@ -14,10 +15,10 @@ class HudOption < Hud
 		initBoutonRetour
 
 
-		self.attach(Gtk::Label.new("Mode : "),0, 0, 1, 1)
-		self.attach(@btnFenetre,1, 0, 1, 1)
+		self.attach(Gtk::Label.new("Mode : "),varX, varY, 1, 1)
+		self.attach(@btnFenetre,varX+1, varY, 1, 1)
 
-		self.attach(@btnRetour,2, 1, 1, 1)
+		self.attach(@btnRetour,varX+2, varY+1, 1, 1)
 	end
 
 	def initBoutonFenetre

@@ -21,11 +21,11 @@ class HudRapide < HudJeu
 		initBoutonPause
 		initBoutonAide
 
-		self.attach(@btnAide,@tailleGrille,0,1,1)
-		self.attach(@btnPause,@tailleGrille-1,0,1,1)
-		self.attach(@lblTime,@tailleGrille-2,0,1,1)
+		self.attach(@btnAide,@varX+@tailleGrille,@varY,1,1)
+		self.attach(@btnPause,@varX+@tailleGrille-1,@varY,1,1)
+		self.attach(@lblTime,@varX+@tailleGrille-2,@varY,1,1)
 
-		self.attach(@lblAide, 1, @tailleGrille+2, @tailleGrille+1, 1)
+		self.attach(@lblAide, @varX+1, @varY+@tailleGrille+2, @tailleGrille+1, 1)
 
 		@t=Thread.new{timer}
 	end

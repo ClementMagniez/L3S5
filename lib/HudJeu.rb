@@ -16,18 +16,19 @@ class HudJeu < Hud
 			@gridJeu.set_row_homogeneous(true)
 		@grille = grille
 		@tailleGrille = @grille.length
+		@varX, @varY = 0, 0		# placement relatif des elements de la grille
 
 
 		initBoutonReset
 		initBoutonRetour
 
 
-		self.attach(@gridJeu,1,1,@tailleGrille+1, @tailleGrille+1)
+		self.attach(@gridJeu,@varX+1, @varY+1,@tailleGrille+1, @tailleGrille+1)
 
-		self.attach(@btnReset,@tailleGrille+1,0,1,1)
+		self.attach(@btnReset,@varX+@tailleGrille+1,@varY,1,1)
 
-		self.attach(@btnRetour,@tailleGrille+1,@tailleGrille+3,1,1)
-		self.attach(@btnOptions, 1, @tailleGrille+3, 1, 1)
+		self.attach(@btnRetour,@varX+@tailleGrille+1,@varY+@tailleGrille+3,1,1)
+		self.attach(@btnOptions, @varX+1, @varY+@tailleGrille+3, 1, 1)
 		# self.attach(@lblAide, 1, @tailleGrille+1, @tailleGrille-1, 1)
 
 		chargementGrille

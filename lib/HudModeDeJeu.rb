@@ -13,6 +13,7 @@ class HudModeDeJeu < Hud
 
 	def initialize (window)
 		super(window)
+		varX, varY = 0, 0
 		@@tailleFacile = 6
 		@@tailleMoyen = 9
 		@@tailleDifficile = 12
@@ -25,19 +26,19 @@ class HudModeDeJeu < Hud
 		initBoutonTuto
 
 
-		self.attach(@btnTutoriel,0, 0, 2, 1)
+		self.attach(@btnTutoriel,varX, varY, 2, 1)
 
-		self.attach(Gtk::Label.new("Mode Aventure"),0, 1, 2, 1)
-			self.attach(@btnAvFacile,1, 2, 1, 1)
-			self.attach(@btnAvMoyen,1, 3, 1, 1)
-			self.attach(@btnAvDifficile,1, 4, 1, 1)
+		self.attach(Gtk::Label.new("Mode Aventure"),varX, varY+1, 2, 1)
+			self.attach(@btnAvFacile,varX+1, varY+2, 1, 1)
+			self.attach(@btnAvMoyen,varX+1, varY+3, 1, 1)
+			self.attach(@btnAvDifficile,varX+1, varY+4, 1, 1)
 
-		self.attach(Gtk::Label.new("Partie rapide"),0, 5, 2, 1)
-			self.attach(@btnRapideFacile,1, 6, 1, 1)
-			self.attach(@btnRapideMoyen,1, 7, 1, 1)
-			self.attach(@btnRapideDifficile,1, 8, 1, 1)
+		self.attach(Gtk::Label.new("Partie rapide"),varX, varY+5, 2, 1)
+			self.attach(@btnRapideFacile,varX+1, varY+6, 1, 1)
+			self.attach(@btnRapideMoyen,varX+1, varY+7, 1, 1)
+			self.attach(@btnRapideDifficile,varX+1, varY+8, 1, 1)
 
-		self.attach(@btnOptions, 0, 9, 1, 1)
+		self.attach(@btnOptions, varX, varY+9, 1, 1)
 	end
 
 

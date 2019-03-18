@@ -9,8 +9,8 @@ class HudTutoriel < HudJeu
 		# self.initBoutonOptions
 		initBoutonAide
 
-		self.attach(@btnAide,@tailleGrille,0,1,1)
-		self.attach(@lblAide, 1, @tailleGrille+2, @tailleGrille+1, 1)
+		self.attach(@btnAide,@varX+@tailleGrille,@varY,1,1)
+		self.attach(@lblAide, @varX+1, @varY+@tailleGrille+2, @tailleGrille+1, 1)
 	end
 
 	# Créé et initialise le bouton d'aide
