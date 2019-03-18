@@ -8,7 +8,8 @@ require_relative 'CaseGazon'
 # comme grille de jeu
 class Grille
 
-	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille
+	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille,
+						  :estValide
 
 	# Obtient et génère la grille à partir du fichier filePath, ligne n
 	# L'indexation se fait à partir de 1
@@ -30,7 +31,7 @@ class Grille
 		parseText(result)
 		@varTentesCol=@tentesCol.dup
 		@varTentesLigne=@tentesLigne.dup
-
+		@estValide?=false
 	end
 
 
@@ -42,16 +43,13 @@ class Grille
 	# Renvoie true si la grille est complète et valide, false sinon
 	def estComplete?
 		res=true
-
 		self.grille.each do |ligne|
 			ligne.each do |cell|
 				res=res && cell.estValide?
 				break if !res
 			end
 		end
-
-		res
-
+		self.estValide=res
 	end
 
 	# Affiche la grille complète - pourra être supprimé quand on aura la GUI
