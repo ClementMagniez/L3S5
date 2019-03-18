@@ -50,7 +50,7 @@ class Hud < Gtk::Grid
 
 	def lancementFinDeJeu
 		puts "Fin de jeu"
-		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre))
+		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self))
 	end
 
 	def lancementInscription
@@ -74,7 +74,7 @@ class Hud < Gtk::Grid
 		@btnOptions.add(lblOption)
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 		@btnOptions.signal_connect("enter-notify-event"){
-			
+
 
 			@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 			puts ("pouet")
