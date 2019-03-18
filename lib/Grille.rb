@@ -2,14 +2,15 @@ require_relative 'Case'
 require_relative 'CaseArbre'
 require_relative 'CaseTente'
 require_relative 'CaseGazon'
-
+require_relative 'Pile'
 
 # Parse le fichier de génération des grilles et l'implémente
 # comme grille de jeu
 class Grille
 
 	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille,
-						  :estValide
+						  :estValide, :stack
+
 
 	# Obtient et génère la grille à partir du fichier filePath, ligne n
 	# L'indexation se fait à partir de 1
@@ -31,7 +32,21 @@ class Grille
 		parseText(result)
 		@varTentesCol=@tentesCol.dup
 		@varTentesLigne=@tentesLigne.dup
+		@stack=Pile.new()
 		@estValide=false
+	end
+		
+	
+	# Renvoie la taille n de la matrice n*n composant la grille de jeu
+	def length
+		return @grille.length
+	end
+
+	# Annule le dernier coup de l'utilisateur sur la grille 
+	def cancel
+		cell=self.stack.pop
+		cell.cancel(cell.x, cell.y, self)
+		self
 	end
 
 	# Renvoie true si la grille est complète et valide, false sinon
@@ -106,7 +121,7 @@ class Grille
 	# Prend un unique caractère de la ligne passée à parseLigne et génère une case
 	# dans la matrice selon ce caractère
 	def parseChar(chr, i,j)
-		self.grille[i][j]=createCase(chr)
+		self.grille[i][j]=createCase(chr,i,j)
 	end
 
 	# Complète la liste des nombres de tentes par ligne
@@ -126,11 +141,11 @@ class Grille
 	# Initialise une Case de la grille selon la valeur du caractère fourni
 	# Associations : "A" > Arbre, "T" -> Tente, "_" -> Gazon
 	# return la Case créée
-	def createCase(chr)
+	def createCase(chr,i,j)
 		case chr
-			when 'A' then return CaseArbre.new
-			when 'T' then return CaseTente.new
-			when '_' then return CaseGazon.new
+			when 'A' then return CaseArbre.new(i,j)
+			when 'T' then return CaseTente.new(i,j)
+			when '_' then return CaseGazon.new(i,j)
 			else abort("Erreur de parsing : #{chr}")
 		end
 	end

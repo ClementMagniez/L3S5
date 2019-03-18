@@ -9,7 +9,8 @@ require_relative 'StatutVide'
 # statut interne, ce qui permet de laisser au joueur la possibilité de se tromper.
 class CaseVide < Case
 
-	def initialize(etat)
+	def initialize(etat,i,j)
+		super(i,j)
 		@statut=StatutVide.new(etat)
 		@statutVisible=StatutVide.new(VIDE)
 	end
@@ -31,9 +32,16 @@ class CaseVide < Case
 		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
 			grille.estComplete?
 		end
-
+		super(grille)
 		self
 	end
+
+	# Effectue un cycle opposé à CaseVide#cycle
+	# TODO - utilise deux cycles : vérifier cohérence avec calcul du score	
+	def cancel(i,j,grille)
+		self.cycle(i,j,grille).cycle(i,j,grille)	
+	end
+	
 
 	def affichageSubr
 		if self.statutVisible.isGazon?
