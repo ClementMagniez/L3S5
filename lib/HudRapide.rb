@@ -1,3 +1,5 @@
+require_relative "HudJeu"
+
 class HudRapide < HudJeu
 	def initialize(window,grille,aide)
 		super(window,grille,aide)

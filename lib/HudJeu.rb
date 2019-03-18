@@ -1,3 +1,4 @@
+require_relative 'Hud'
 
 # class abstraite permettant de créer un ecran de jeu
 class HudJeu < Hud
