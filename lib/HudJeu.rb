@@ -101,7 +101,7 @@ class HudJeu < Hud
 		winX = @fenetre.size.fetch(0)
 		winY = @fenetre.size.fetch(1)
 		taille = @grille.length
-		imgSize = winY / (taille+4)
+		imgSize = winY / (taille*2)
 
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
@@ -109,6 +109,7 @@ class HudJeu < Hud
 		return image
 	end
 
+<<<<<<< HEAD
 	# Créé et initialise le bouton d'aide
 	# def initBoutonAide
 	# 	taille = @grille.length
@@ -132,6 +133,8 @@ class HudJeu < Hud
 	#
 	# 	}
 	# end
+=======
+>>>>>>> b7ae716648abd7c4fc03a9c7cd647a092ab019b0
 
 	# Créé un attribut @btnReset qui est le bouton de remise à zéro
 	# initialise le bouton
