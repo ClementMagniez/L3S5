@@ -98,7 +98,7 @@ class HudJeu < Hud
 		winX = @fenetre.size.fetch(0)
 		winY = @fenetre.size.fetch(1)
 		taille = @grille.length
-		imgSize = winY / (taille+4)
+		imgSize = winY / (taille*2)
 
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
@@ -106,29 +106,6 @@ class HudJeu < Hud
 		return image
 	end
 
-	# Créé et initialise le bouton d'aide
-	def initBoutonAide
-		taille = @grille.length
-		@btnAide = Gtk::Button.new :label => " Aide "
-		@btnAide.signal_connect("clicked") {
-			tableau = @aide.cycle
-			caseAide = tableau.at(0)
-			if caseAide != nil then
-				# puts ("pouetpouetpouet")
-				if caseAide.class == CaseCoordonnees
-
-					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
-					# puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
-
-					@caseSurbrillance =caseAide
-				end
-
-			end
-
-			@lblAide.set_label(tableau.at(1))
-
-		}
-	end
 
 	# Créé un attribut @btnReset qui est le bouton de remise à zéro
 	# initialise le bouton
