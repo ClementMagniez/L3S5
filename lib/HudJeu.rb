@@ -42,6 +42,7 @@ class HudJeu < Hud
 				button.set_image(Gtk::Image.new :file => @grille[i][j].affichage)
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(i,j, @grille.tentesLigne, @grille.tentesCol)
+					# Ajouter une méthode d'envoi de points pour les cases (paramètre : l'instance score de la grille)
 					button.set_image(Gtk::Image.new :file => @grille[i][j].affichage)
 					#puts grille.estComplete?
 				}

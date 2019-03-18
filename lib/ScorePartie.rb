@@ -69,8 +69,13 @@ class ScorePartie
     end
   end
 
+  ##
+  # == appelerAssistant(0)
+  #
+  # Cette méthode permet d'attribuer d'incrémenter .
+  #
   def appelerAssistant
-
+    ++@nbAidesUsees
   end
 
   ##
@@ -79,7 +84,7 @@ class ScorePartie
   # Cette méthode retourne le résultat de la partie, calculé avec tous les paramètres reçus depuis
   # la création de l'objet.
   #
-  # === 
+  # ===
   #
   def calculerScoreFinal(tempsRestant)
 
