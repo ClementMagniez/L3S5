@@ -19,11 +19,11 @@ class TestCase < Test::Unit::TestCase
 		assert(cell.statut.isTente?, "isTente ou construction erronée")
 		assert(cell.statutVisible.isVide?, "isVide? ou construction erronée")
 	
-		cell.cycle(0,0,Grille.new(40, "./grilles.txt"))
+		cell.cycle(Grille.new(40, "../grilles.txt"))
 		assert(cell.statutVisible.isGazon?, "CaseVide#cycle erroné (mauvais cycle)")
 		assert(cell.statut.isTente?, "CaseVide#cycle erroné (change statut réel)")
 	
-		cell.reset # à changer un jour ou l'autre
+		cell.reset
 		assert(cell.statutVisible.isVide?, "CaseVide#reset erroné")
 		assert(cell.statut.isTente?, "CaseVide#reset erroné (change statut réel)")
 	
@@ -32,7 +32,7 @@ class TestCase < Test::Unit::TestCase
 	def test_casesVides
 		cellg=CaseGazon.new
 		
-		cellg.cycle(0,0,Grille.new(40, "./grilles.txt"))
+		cellg.cycle(Grille.new(40, "../grilles.txt"))
 		assert(cellg.estValide?, "CaseVide#estValide? ne reconnaît pas pour CaseGazon")
 	end
 

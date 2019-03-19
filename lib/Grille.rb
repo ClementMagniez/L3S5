@@ -15,7 +15,7 @@ class Grille
 	# Obtient et génère la grille à partir du fichier filePath, ligne n
 	# L'indexation se fait à partir de 1
 	# n - ligne du fichier où se trouve la source de la grille
-	# filePath - path du fichier de génération, typiquement "./grilles.txt"
+	# filePath - path du fichier de génération, typiquement "../grilles.txt"
 	def initialize(n,filePath)
 		raise("Indexer à 1") if 0==n
 
