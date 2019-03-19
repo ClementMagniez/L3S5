@@ -17,9 +17,11 @@ class CaseVide < Case
 
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
-	# TODO - vérifier que les i,j sont bien cohérents
-	def cycle(i,j,grille)
+	def cycle(grille)
 		self.statutVisible.cycle
+		i=self.x
+		j=self.y
+
 
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[i]-=1
@@ -38,8 +40,8 @@ class CaseVide < Case
 
 	# Effectue un cycle opposé à CaseVide#cycle
 	# TODO - utilise deux cycles : vérifier cohérence avec calcul du score	
-	def cancel(i,j,grille)
-		self.cycle(i,j,grille).cycle(i,j,grille)	
+	def cancel(grille)
+		self.cycle(grille).cycle(grille)	
 	end
 	
 
