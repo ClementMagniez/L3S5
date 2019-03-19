@@ -20,7 +20,7 @@ class CaseArbre < Case
 	# Fait cycler la case sur "coché->décoché" et met à jour les indicateurs
 	# de tente restante
 	# TODO - vérifier que les i,j sont bien cohérents
-	def cycle(i,j,grille)
+	def cycle(grille)
 		self.statutVisible.cycle
 		super(grille)
 	end

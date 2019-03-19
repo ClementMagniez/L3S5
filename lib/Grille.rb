@@ -61,9 +61,6 @@ class Grille
 		self.estValide=res
 	end
 
-	def length
-		return @grille.length
-	end
 
 	# Affiche la grille complète - pourra être supprimé quand on aura la GUI
 	def to_s

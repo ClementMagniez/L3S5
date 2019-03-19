@@ -1,25 +1,25 @@
 require "test/unit"
 
 
-Dir[File.join(__dir__, './lib', '*.rb')].each { |file|
-	 require file if (!file.match('main*') && (!file.match('HUD*')))  }
+Dir[File.join(__dir__, '../lib', '*.rb')].each { |file|
+	 require_relative file if (!file.match('main*') && (!file.match('Hud*')))  }
 
 
 
 class TestCase < Test::Unit::TestCase
 
 	def test_casesArbre	
-		cell=CaseArbre.new
+		cell=CaseArbre.new(1,1)
 		assert(cell.estValide?, "CaseArbre#estValide? échoue")
 	
 	end
 	
 	def test_reset
-		cell=CaseTente.new
+		cell=CaseTente.new(1,1)
 		assert(cell.statut.isTente?, "isTente ou construction erronée")
 		assert(cell.statutVisible.isVide?, "isVide? ou construction erronée")
 	
-		cell.cycle(Grille.new(40, "../grilles.txt"))
+		cell.cycle(Grille.new(40, "./grilles.txt"))
 		assert(cell.statutVisible.isGazon?, "CaseVide#cycle erroné (mauvais cycle)")
 		assert(cell.statut.isTente?, "CaseVide#cycle erroné (change statut réel)")
 	
@@ -30,9 +30,9 @@ class TestCase < Test::Unit::TestCase
 	end	
 	
 	def test_casesVides
-		cellg=CaseGazon.new
+		cellg=CaseGazon.new(1,1)
 		
-		cellg.cycle(Grille.new(40, "../grilles.txt"))
+		cellg.cycle(Grille.new(40, "./grilles.txt"))
 		assert(cellg.estValide?, "CaseVide#estValide? ne reconnaît pas pour CaseGazon")
 	end
 
