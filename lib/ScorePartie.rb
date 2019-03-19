@@ -3,6 +3,7 @@
 # @author KAJAK Rémi
 # @version 0.1
 #
+require_relative "TempsChrono.rb"
 
 ##
 # = Classe *ScorePartie*
@@ -11,6 +12,7 @@
 # diverses informations depuis l'interface et mettre à jour ses données en fonction des paramètres envoyés.
 #
 class ScorePartie
+  include TempsChrono
 
   # @bonus, @malus, @nbAidesUsees, @valeur - Le pourcentage appliqué selon la difficulté sélectionnée, le
   # pourcentage appliqué pour pénaliser une utilisation trop répétitive des aides, le nombre d'aides utilisées
@@ -39,7 +41,7 @@ class ScorePartie
   end
 
   ##
-  # == appelerAssistant(1)
+  # == appelerAssistant(0)
   #
   # Cette méthode permet d'incrémenter d'une unité le compteur lié aux aides. L'annulation de coups
   # par le joueur ne permet pas de diminuer ce compteur (le cas échéant, il s'agirait d'une triche).
@@ -80,7 +82,7 @@ class ScorePartie
   end
 
   ##
-  # == calculerScoreFinal(1)
+  # == calculerScoreFinal(2)
   #
   # Cette méthode retourne le résultat de la partie, calculé avec toutes les variables d'instance
   # initialisées et modifiées depuis la création de l'objet.
@@ -105,7 +107,7 @@ class ScorePartie
     end
 
     scoreFinal = (@score - @score * (@malus * nbMalus)) * @bonus
-    return (tempsRestant == nil) ? scoreFinal : scoreFinal * (tempsRestant / 100)
+    return (tempsRestant == nil) ? scoreFinal : scoreFinal * (tempsRestant.convertirTempsEnEntier() / 100)
   end
 
   ##
