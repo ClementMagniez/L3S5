@@ -83,7 +83,7 @@ class HudRapide < HudJeu
 				
 				if caseAide.class == CaseCoordonnees
 
-					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(scaleImage(Gtk::Image.new :file => caseAide.getCase.affichageSubr))
 					#puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
 
 					@caseSurbrillance =caseAide

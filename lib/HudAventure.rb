@@ -12,9 +12,5 @@ class HudAventure < HudJeu
 		self.attach(fond,0,0,@varPlaceGrid+2,5)
 	end
 
-	# Comportement a la fin du jeu
-	# Lance une nouvelle grille
-	def jeuTermine
-		self.lancementAventure(@tailleGrille+1)
-	end
+
 end

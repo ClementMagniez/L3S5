@@ -63,6 +63,7 @@ class HudJeu < Hud
 						@grille[k][i].cycle(k,i, @grille)
 						@gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[k][i].affichage)))
 						# @gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(k,i))
+
 					end
 				}
 				# puts "Clique sur le bouton de la colonne " + i.to_s
@@ -115,7 +116,7 @@ class HudJeu < Hud
 		winX = @fenetre.size.fetch(0)
 		winY = @fenetre.size.fetch(1)
 		# @tailleGrille = @grille.length
-		imgSize = winY / (@tailleGrille*3)
+		imgSize = winY / (@tailleGrille*2)
 
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
@@ -131,6 +132,7 @@ class HudJeu < Hud
 		@btnReset = Gtk::Button.new :label => "Reset"
 		@btnReset.signal_connect("clicked") {
 			reset
+			@lblAide.set_markup ("<span foreground='white' > Alors comme ça, on recommence? :O !</span>");
 		}
 	end
 

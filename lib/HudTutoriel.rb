@@ -32,14 +32,14 @@ class HudTutoriel < HudJeu
 			if premAide != nil then
 
 				if premAide.class == CaseCoordonnees
-					@gridJeu.get_child_at(premAide.getJ+1,premAide.getI+1).set_image(Gtk::Image.new :file => premAide.getCase.affichageSubr)
+					@gridJeu.get_child_at(premAide.getJ+1,premAide.getI+1).set_image(scaleImage(Gtk::Image.new :file => premAide.getCase.affichageSubr))
 					# puts(" X :" + premAide.getI.to_s + " Y :" +premAide.getJ.to_s )
 
 					@caseSurbrillanceList.push(premAide)
 				else
 					while not premAide.empty?
 						caseAide = premAide.shift
-						@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+						@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(scaleImage(Gtk::Image.new :file => caseAide.getCase.affichageSubr))
 						@caseSurbrillanceList.push(caseAide)
 					end
 				end
