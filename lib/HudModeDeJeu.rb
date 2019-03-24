@@ -44,7 +44,7 @@ class HudModeDeJeu < Hud
 #
 		self.attach(@btnOptions, varX, varY+9, 1, 1)
 
-		fond = scaleFond
+		fond = self.ajoutFondEcran
 		self.attach(fond,0,0,varX+6,varY+14)
 	end
 

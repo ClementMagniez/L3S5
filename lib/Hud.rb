@@ -14,6 +14,10 @@ class Hud < Gtk::Grid
 
 		initBoutonOptions
 		
+		@winX = @fenetre.size.fetch(0)
+		@winY = @fenetre.size.fetch(1)
+
+		@varPlaceGrid = 6
 
 
 		# self.attach(@btnOptions, 2, 16, 2, 2)
@@ -93,6 +97,7 @@ class Hud < Gtk::Grid
 	def setDesc(str)
 		@lblDescription.set_text(str)
 	end
+	
 
 	# Modifie le titre de la fenetre
 	def setTitre(str)
@@ -100,15 +105,12 @@ class Hud < Gtk::Grid
 	end
 
 
-	def scaleFond
-		
-		winX = @fenetre.size.fetch(0)
-		winY = @fenetre.size.fetch(1)
+	def ajoutFondEcran
 
-		puts (winX.to_s + winY.to_s)
+		puts (@winX.to_s + @winY.to_s)
 		
 		fond = Gtk::Image.new( :file => "../img/fond2.png")	
-		fond.pixbuf = fond.pixbuf.scale(winX,winY)	if fond.pixbuf != nil
+		fond.pixbuf = fond.pixbuf.scale(@winX,@winY)	if fond.pixbuf != nil
 
 		return fond
 	end

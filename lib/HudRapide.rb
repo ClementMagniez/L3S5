@@ -8,7 +8,9 @@ class HudRapide < HudJeu
 		super(window,grille)
 		@btnPause = Gtk::Button.new :label => "Pause"
 		@lblTime = Gtk::Label.new(" 0:0 ")
-		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
+		@lblAide = Gtk::Label.new()
+		@lblAide.use_markup = true
+		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
 		@timer = Time.now
 		@pause = false
 		@horloge = 0
@@ -21,16 +23,16 @@ class HudRapide < HudJeu
 		initBoutonPause
 		initBoutonAide
 
-		self.attach(@btnAide,@varX+@tailleGrille,@varY,1,1)
-		self.attach(@btnPause,@varX+@tailleGrille-1,@varY,1,1)
-		self.attach(@lblTime,@varX+@tailleGrille-2,@varY,1,1)
-
-		self.attach(@lblAide, @varX+1, @varY+@tailleGrille+2, @tailleGrille+1, 1)
+	
+		self.attach(@btnPause,@varPlaceGrid-2,0,1,1)
+		self.attach(@lblTime,@varPlaceGrid-3,0,1,1)
+		self.attach(@btnAide,@varPlaceGrid-1,0,1,1)
+		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
 
 		@t=Thread.new{timer}
 
-		fond = scaleFond
-		self.attach(fond,0,0,@tailleGrille+4,@tailleGrille+4)
+		fond = ajoutFondEcran
+		self.attach(fond,0,0,@varPlaceGrid+2,5)
 	end
 
 	def timer
@@ -78,18 +80,21 @@ class HudRapide < HudJeu
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
-				puts ("pouetpouetpouet")
+				
 				if caseAide.class == CaseCoordonnees
 
 					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
-					puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
+					#puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
 
 					@caseSurbrillance =caseAide
 				end
 
 			end
+			@lblAide.use_markup = true
+			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
+		
 
-			@lblAide.set_label(tableau.at(1))
+			#@lblAide.set_label(tableau.at(1))
 
 		}
 	end

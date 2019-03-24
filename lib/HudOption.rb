@@ -21,7 +21,7 @@ class HudOption < Hud
 		# self.attach(@btnRetour,varX+2, varY+1, 1, 1)
 
 		self.attach(@btnRetour,varX+2, varY+1, 1, 1)
-		fond = scaleFond
+		fond = ajoutFondEcran
 		self.attach(fond,0,0,varX+4,varY+3)
 	end
 

@@ -7,8 +7,9 @@ class HudAventure < HudJeu
 
 		#self.initBoutonOptions
 
-		fond = scaleFond
-		self.attach(fond,0,0,@tailleGrille+4,@tailleGrille+4)
+		fond = ajoutFondEcran
+
+		self.attach(fond,0,0,@varPlaceGrid+2,5)
 	end
 
 	# Comportement a la fin du jeu

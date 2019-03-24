@@ -18,20 +18,33 @@ class HudJeu < Hud
 		@tailleGrille = @grille.length
 		@varX, @varY = 0, 0		# placement relatif des elements de la grille
 
+		@fondGrille = Gtk::Image.new(:file => '../img/gris.png')
+		if @tailleGrille < 9
+			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*1.5,@winY-(@winY/@tailleGrille)*1.5)
+		elsif @tailleGrille < 12
+			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*2,@winY-(@winY/@tailleGrille)*2)
+		else
+			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*2.75,@winY-(@winY/@tailleGrille)*2.75)
+		end
+		
 
 		initBoutonReset
 		initBoutonRetour
 
 
-		self.attach(@gridJeu,@varX+1, @varY+1,@tailleGrille+1, @tailleGrille+1)
 
-		self.attach(@btnReset,@varX+@tailleGrille+1,@varY,1,1)
 
-		self.attach(@btnRetour,@varX+@tailleGrille+1,@varY+@tailleGrille+3,1,1)
-		self.attach(@btnOptions, @varX+1, @varY+@tailleGrille+3, 1, 1)
+		self.attach(@gridJeu,1, 1,@varPlaceGrid,1)
+
+		self.attach(@btnReset,@varPlaceGrid,0,1,1)
+
+		self.attach(@btnRetour,@varPlaceGrid,3,1,1)
+		self.attach(@btnOptions, 1, 3, 1, 1)
 		# self.attach(@lblAide, 1, @tailleGrille+1, @tailleGrille-1, 1)
+		
 
 		chargementGrille
+		self.attach(@fondGrille,1,1, @varPlaceGrid, 1)
 	end
 
 
@@ -102,7 +115,7 @@ class HudJeu < Hud
 		winX = @fenetre.size.fetch(0)
 		winY = @fenetre.size.fetch(1)
 		# @tailleGrille = @grille.length
-		imgSize = winY / (@tailleGrille*2)
+		imgSize = winY / (@tailleGrille*3)
 
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
