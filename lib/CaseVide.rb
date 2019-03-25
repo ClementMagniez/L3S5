@@ -9,16 +9,19 @@ require_relative 'StatutVide'
 # statut interne, ce qui permet de laisser au joueur la possibilité de se tromper.
 class CaseVide < Case
 
-	def initialize(etat)
+	def initialize(etat,i,j)
+		super(i,j)
 		@statut=StatutVide.new(etat)
 		@statutVisible=StatutVide.new(VIDE)
 	end
 
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
-	# TODO - vérifier que les i,j sont bien cohérents
-	def cycle(i,j,grille)
+	def cycle(grille)
 		self.statutVisible.cycle
+		i=self.x
+		j=self.y
+
 
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[i]-=1
@@ -31,9 +34,17 @@ class CaseVide < Case
 		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
 			grille.estComplete?
 		end
-
+		super(grille)
 		self
 	end
+
+	# Effectue un cycle opposé à CaseVide#cycle
+	# TODO - utilise deux cycles : vérifier cohérence avec calcul du score	
+	def cancel(grille)
+		self.cycle(grille).cycle(grille)	
+
+	end
+	
 
 	def affichageSubr
 		if self.statutVisible.isGazon?

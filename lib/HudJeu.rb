@@ -30,8 +30,7 @@ class HudJeu < Hud
 
 		initBoutonReset
 		initBoutonRetour
-
-
+		initBoutonCancel
 
 
 		self.attach(@gridJeu,1, 1,@varPlaceGrid,1)
@@ -47,6 +46,8 @@ class HudJeu < Hud
 		self.attach(@fondGrille,1,1, @varPlaceGrid, 1)
 	end
 
+	
+
 
 
 	def chargementGrille
@@ -54,28 +55,34 @@ class HudJeu < Hud
 		# positionne les indices autour de la table @gridJeu
 		0.upto(@tailleGrille-1) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
-			btnIndiceCol = Gtk::Button.new(:label=>@grille.tentesCol.fetch(i).to_s)
+			lblIndiceCol = labelIndice(i)
+			btnIndiceCol = Gtk::Button.new
+			btnIndiceCol.add(lblIndiceCol)
 			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
+			#Quand on clique dessus, met toutes les cases vides à gazon
 			btnIndiceCol.signal_connect("clicked") {
 				0.upto(@tailleGrille-1) { |k|
 					if @grille[k][i].statutVisible.isVide?
-						@grille[k][i].cycle(k,i, @grille)
+						@grille[k][i].cycle(@grille)
 						@gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[k][i].affichage)))
 						# @gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(k,i))
-
 					end
 				}
+
 				# puts "Clique sur le bouton de la colonne " + i.to_s
 			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
-			btnIndicesLig = Gtk::Button.new(:label=> @grille.tentesLigne.fetch(i).to_s)
-			btnIndicesLig.set_relief(Gtk::ReliefStyle::NONE)
-			@gridJeu.attach(btnIndicesLig,0,i+1,1,1)
-			btnIndicesLig.signal_connect("clicked") {
+			lblIndiceLig = labelIndice(i)
+			btnIndiceLig = Gtk::Button.new
+			btnIndiceLig.add(lblIndiceLig)
+			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
+			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
+			#Quand on clique dessus, met toutes les cases vides à gazon
+			btnIndiceLig.signal_connect("clicked") {
 				0.upto(@tailleGrille-1) { |k|
 					if @grille[i][k].statutVisible.isVide?
-						@grille[i][k].cycle(i,k, @grille)
+						@grille[i][k].cycle(@grille)
 						@gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[i][k].affichage)))
 						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 					end
@@ -91,7 +98,7 @@ class HudJeu < Hud
 				button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
 				# button.set_image(scaleImage(i,j))
 				button.signal_connect("clicked") {
-					@grille[i][j].cycle(i,j, @grille)
+					@grille[i][j].cycle(@grille)
 					button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
 					# button.set_image(i,j)
 					if @caseSurbrillanceList != nil
@@ -108,6 +115,14 @@ class HudJeu < Hud
 			}
 		}
 		return self
+	end
+
+	def labelIndice(i)
+		lblIndice = Gtk::Label.new
+		lblIndice.use_markup = true
+		lblIndice.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@grille.tentesCol.fetch(i).to_s+"</span>")
+
+		return lblIndice
 	end
 
 	# Retourne l'image à poser sur la position x, y de la grille de jeu
@@ -132,8 +147,22 @@ class HudJeu < Hud
 		@btnReset = Gtk::Button.new :label => "Reset"
 		@btnReset.signal_connect("clicked") {
 			reset
-			@lblAide.set_markup ("<span foreground='white' > Alors comme ça, on recommence? :O !</span>");
+			if @lblAide != nil
+			@lblAide.set_markup ("<span foreground='white' > Alors comme ça, on recommence? :O !</span>")
+			end
 		}
+	end
+
+	def initBoutonCancel
+		btnCancel = Gtk::Button.new :label => "Cancel"
+		self.attach(btnCancel,@varPlaceGrid-1,0,1,1)
+		btnCancel.signal_connect('clicked'){
+			cell = @grille.cancel
+			if cell != nil	
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[cell.x][cell.y].affichage)))
+			end
+		}
+
 	end
 
 	# Réinitialise la grille
@@ -142,8 +171,8 @@ class HudJeu < Hud
 			0.upto(@tailleGrille-1){ |j|
 				@grille[i][j].reset
 				#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
+				
 				@gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[i][j].affichage)))
-				# @gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(i,j))
 			}
 		}
 	end

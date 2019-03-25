@@ -1,8 +1,8 @@
 require_relative 'CaseVide'
 
 class CaseTente < CaseVide
-	def initialize
-		super(TENTE)
+	def initialize(i,j)
+		super(TENTE,i,j)
 	end
 
 end
