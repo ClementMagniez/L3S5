@@ -55,7 +55,7 @@ class HudJeu < Hud
 		# positionne les indices autour de la table @gridJeu
 		0.upto(@tailleGrille-1) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
-			lblIndiceCol = labelIndice(i)
+			lblIndiceCol = labelIndice(i,"colonne")
 			btnIndiceCol = Gtk::Button.new
 			btnIndiceCol.add(lblIndiceCol)
 			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
@@ -73,7 +73,7 @@ class HudJeu < Hud
 				# puts "Clique sur le bouton de la colonne " + i.to_s
 			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
-			lblIndiceLig = labelIndice(i)
+			lblIndiceLig = labelIndice(i,"ligne")
 			btnIndiceLig = Gtk::Button.new
 			btnIndiceLig.add(lblIndiceLig)
 			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
@@ -117,10 +117,15 @@ class HudJeu < Hud
 		return self
 	end
 
-	def labelIndice(i)
+	def labelIndice(i,ligneOuColonne)
 		lblIndice = Gtk::Label.new
 		lblIndice.use_markup = true
-		lblIndice.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@grille.tentesCol.fetch(i).to_s+"</span>")
+		if ligneOuColonne == "ligne"
+			lblIndice.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@grille.tentesLigne.fetch(i).to_s+"</span>")
+		else
+			lblIndice.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@grille.tentesCol.fetch(i).to_s+"</span>")
+		end
+		
 
 		return lblIndice
 	end
