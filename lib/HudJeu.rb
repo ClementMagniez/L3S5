@@ -36,7 +36,7 @@ class HudJeu < Hud
 		self.attach(@gridJeu,1, 1,@varPlaceGrid,1)
 
 		self.attach(@btnReset,@varPlaceGrid,0,1,1)
-
+		self.attach(@btnCancel,@varPlaceGrid-1,0,1,1)
 		self.attach(@btnRetour,@varPlaceGrid,3,1,1)
 		self.attach(@btnOptions, 1, 3, 1, 1)
 		# self.attach(@lblAide, 1, @tailleGrille+1, @tailleGrille-1, 1)
@@ -57,6 +57,7 @@ class HudJeu < Hud
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
 			lblIndiceCol = labelIndice(i,"colonne")
 			btnIndiceCol = Gtk::Button.new
+			
 			btnIndiceCol.add(lblIndiceCol)
 			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
@@ -96,7 +97,7 @@ class HudJeu < Hud
 				button = Gtk::Button.new()
 				button.set_relief(Gtk::ReliefStyle::NONE)
 				button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
-				# button.set_image(scaleImage(i,j))
+			# button.set_image(scaleImage(i,j))
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(@grille)
 					button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
@@ -159,9 +160,8 @@ class HudJeu < Hud
 	end
 
 	def initBoutonCancel
-		btnCancel = Gtk::Button.new :label => "Cancel"
-		self.attach(btnCancel,@varPlaceGrid-1,0,1,1)
-		btnCancel.signal_connect('clicked'){
+		@btnCancel = Gtk::Button.new :label => "Cancel"
+		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil	
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[cell.x][cell.y].affichage)))

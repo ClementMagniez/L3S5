@@ -14,7 +14,7 @@ class HudTutoriel < HudJeu
 		# self.attach(@btnAide,@varX+@tailleGrille,@varY,1,1)
 		# self.attach(@lblAide, @varX+1, @varY+@tailleGrille+2, @tailleGrille+1, 1)
 
-		self.attach(@btnAide,@varPlaceGrid-1,0,1,1)
+		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
 		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
 		fond = ajoutFondEcran
 		self.attach(fond,0,0,@varPlaceGrid+2,5)

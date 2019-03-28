@@ -24,9 +24,9 @@ class HudRapide < HudJeu
 		initBoutonAide
 
 	
-		self.attach(@btnPause,@varPlaceGrid-2,0,1,1)
-		self.attach(@lblTime,@varPlaceGrid-3,0,1,1)
-		self.attach(@btnAide,@varPlaceGrid-1,0,1,1)
+		self.attach(@btnPause,@varPlaceGrid-3,0,1,1)
+		self.attach(@lblTime,@varPlaceGrid-4,0,1,1)
+		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
 		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
 
 		@t=Thread.new{timer}
