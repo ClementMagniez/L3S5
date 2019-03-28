@@ -34,15 +34,15 @@ class HudJeu < Hud
 		initBoutonReset
 		initBoutonRetour
 		initBoutonCancel
+		chargementGrille
 
 
 
-		self.attach(@gridJeu,2, 1,@varPlaceGrid,1)
+		self.attach(@gridJeu,2, 1, @varPlaceGrid,1)
 		self.attach(@btnReset,@varPlaceGrid,0,1,1)
 		self.attach(@btnCancel,@varPlaceGrid-1,0,1,1)
 		self.attach(@btnRetour,@varPlaceGrid,3,1,1)
 		self.attach(@btnOptions, 1, 3, 1, 1)
-			chargementGrille
 		self.attach(@fondGrille,1,1, @varPlaceGrid, 1)
 	end
 

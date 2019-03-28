@@ -13,7 +13,7 @@ class HudModeDeJeu < Hud
 
 	def initialize (window)
 		super(window)
-		varX, varY = 5, 5
+		varX, varY = 4,4
 		@@tailleFacile = 6
 		@@tailleMoyen = 9
 		@@tailleDifficile = 12
@@ -24,6 +24,7 @@ class HudModeDeJeu < Hud
 		initBoutonsAventure
 		initBoutonsRapide
 		initBoutonTuto
+		initBoutonQuitter
 
 
 
@@ -39,7 +40,9 @@ class HudModeDeJeu < Hud
 			self.attach(@btnRapideMoyen,varX+1, varY+7, 1, 1)
 			self.attach(@btnRapideDifficile,varX+1, varY+8, 1, 1)
 
-		self.attach(@btnOptions, varX, varY+9, 1, 1)
+		self.attach(@btnOptions, varX, varY+10, 1, 1)
+
+		self.attach(@btnQuitter, varX+1, varY+10, 1, 1)
 
 			fond = self.ajoutFondEcran
 		self.attach(fond,0,0,varX+6,varY+14)
@@ -97,5 +100,10 @@ class HudModeDeJeu < Hud
 			#Niveau le plus facile : 6
 			lancementTutoriel(@@tailleFacile)
 		}
+	end
+
+	def initBoutonQuitter
+		@btnQuitter = Gtk::Button.new label: "Quitter"
+		@btnQuitter.signal_connect("clicked") { Gtk.main_quit }
 	end
 end
