@@ -19,7 +19,6 @@ class HudJeu < Hud
 			@gridJeu.set_valign(@align)
 		@grille = grille
 		@tailleGrille = @grille.length
-		@varX, @varY = 0, 0		# placement relatif des elements de la grille
 
 		@fondGrille = Gtk::Image.new(:file => '../img/gris.png')
 		if @tailleGrille < 9
@@ -29,27 +28,25 @@ class HudJeu < Hud
 		else
 			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*5.5,@winY-(@winY/@tailleGrille)*2.75)
 		end
-		
+
+
 
 		initBoutonReset
 		initBoutonRetour
 		initBoutonCancel
 
 
-		self.attach(@gridJeu,2, 1,@varPlaceGrid,1)
 
+		self.attach(@gridJeu,2, 1,@varPlaceGrid,1)
 		self.attach(@btnReset,@varPlaceGrid,0,1,1)
 		self.attach(@btnCancel,@varPlaceGrid-1,0,1,1)
 		self.attach(@btnRetour,@varPlaceGrid,3,1,1)
 		self.attach(@btnOptions, 1, 3, 1, 1)
-		# self.attach(@lblAide, 1, @tailleGrille+1, @tailleGrille-1, 1)
-		
-
-		chargementGrille
+			chargementGrille
 		self.attach(@fondGrille,1,1, @varPlaceGrid, 1)
 	end
 
-	
+
 
 
 
@@ -60,8 +57,6 @@ class HudJeu < Hud
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
 			lblIndiceCol = labelIndice(i,"colonne")
 			btnIndiceCol = Gtk::Button.new
-			#btnIndiceCol.set_valign(@align)
-			#btnIndiceCol.set_halign(@align)
 			btnIndiceCol.add(lblIndiceCol)
 			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
@@ -71,19 +66,14 @@ class HudJeu < Hud
 					if @grille[k][i].statutVisible.isVide?
 						@grille[k][i].cycle(@grille)
 						@gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[k][i].affichage)))
-						# @gridJeu.get_child_at(i+1,k+1).set_image(scaleImage(k,i))
 					end
 				}
-
-				# puts "Clique sur le bouton de la colonne " + i.to_s
 			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
 			lblIndiceLig = labelIndice(i,"ligne")
 			btnIndiceLig = Gtk::Button.new
 			btnIndiceLig.add(lblIndiceLig)
 			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
-			#btnIndiceLig.set_valign(@align)
-			#btnIndiceLig.set_halign(@align)
 			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
 			#Quand on clique dessus, met toutes les cases vides à gazon
 			btnIndiceLig.signal_connect("clicked") {
@@ -91,7 +81,6 @@ class HudJeu < Hud
 					if @grille[i][k].statutVisible.isVide?
 						@grille[i][k].cycle(@grille)
 						@gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(Gtk::Image.new(:file => @grille[i][k].affichage)))
-						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 					end
 				}
 			}
@@ -107,16 +96,13 @@ class HudJeu < Hud
 					button.set_valign(@align)
 					button.set_halign(@align)
 				end
-			# button.set_image(scaleImage(i,j))
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(@grille)
 					button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
-					# button.set_image(i,j)
 					if @caseSurbrillanceList != nil
 						while not @caseSurbrillanceList.empty?
 								caseSubr = @caseSurbrillanceList.shift
 								@gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(scaleImage(Gtk::Image.new :file => @grille[caseSubr.getI][caseSubr.getJ].affichage))
-								# @gridJeu.get_child_at(caseSubr.getJ+1,caseSubr.getI+1).set_image(scaleImage(caseSubr.getI,caseSubr.getJ))
 						end
 					end
 
@@ -136,7 +122,6 @@ class HudJeu < Hud
 		else
 			lblIndice.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@grille.tentesCol.fetch(i).to_s+"</span>")
 		end
-		
 
 		return lblIndice
 	end
@@ -146,7 +131,6 @@ class HudJeu < Hud
 	def scaleImage(image)
 		winX = @fenetre.size.fetch(0)
 		winY = @fenetre.size.fetch(1)
-		# @tailleGrille = @grille.length
 		imgSize = winY / (@tailleGrille*2)
 
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
@@ -159,7 +143,6 @@ class HudJeu < Hud
 	# Créé un attribut @btnReset qui est le bouton de remise à zéro
 	# initialise le bouton
 	def initBoutonReset
-		# @tailleGrille = @grille.length
 		@btnReset = Gtk::Button.new :label => "Reset"
 		@btnReset.signal_connect("clicked") {
 			reset
@@ -173,7 +156,7 @@ class HudJeu < Hud
 		@btnCancel = Gtk::Button.new :label => "Cancel"
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
-			if cell != nil	
+			if cell != nil
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[cell.x][cell.y].affichage)))
 			end
 		}
@@ -185,8 +168,6 @@ class HudJeu < Hud
 		0.upto(@tailleGrille-1) { |i|
 			0.upto(@tailleGrille-1){ |j|
 				@grille[i][j].reset
-				#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
-				
 				@gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[i][j].affichage)))
 			}
 		}

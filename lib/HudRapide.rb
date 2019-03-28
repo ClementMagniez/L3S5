@@ -15,23 +15,21 @@ class HudRapide < HudJeu
 		@pause = false
 		@horloge = 0
 		@stockHorloge = 0
+		@t=Thread.new{timer}
 		self.setTitre("Partie rapide")
-		# self.setDesc("Ici la desc du mode rapide")
 
 
-		# self.initBoutonOptions
+
 		initBoutonPause
 		initBoutonAide
 
-	
+
+
 		self.attach(@btnPause,@varPlaceGrid-3,0,1,1)
 		self.attach(@lblTime,@varPlaceGrid-4,0,1,1)
 		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
 		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
-
-		@t=Thread.new{timer}
-
-		fond = ajoutFondEcran
+			fond = ajoutFondEcran
 		self.attach(fond,0,0,@varPlaceGrid+2,5)
 	end
 
@@ -80,22 +78,15 @@ class HudRapide < HudJeu
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
-				
+
 				if caseAide.class == CaseCoordonnees
-
 					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(scaleImage(Gtk::Image.new :file => caseAide.getCase.affichageSubr))
-					#puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
-
 					@caseSurbrillance =caseAide
 				end
 
 			end
 			@lblAide.use_markup = true
 			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
-		
-
-			#@lblAide.set_label(tableau.at(1))
-
 		}
 	end
 end

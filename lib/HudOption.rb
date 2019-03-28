@@ -8,7 +8,6 @@ class HudOption < Hud
 		super(window)
 		varX, varY = 2, 2
 		@fenetrePrecedente = fenetrePrecedente
-
 		self.setTitre("Options")
 
 		initBoutonFenetre
@@ -17,11 +16,8 @@ class HudOption < Hud
 
 		self.attach(Gtk::Label.new("Mode : "),varX, varY, 1, 1)
 		self.attach(@btnFenetre,varX+1, varY, 1, 1)
-		#
-		# self.attach(@btnRetour,varX+2, varY+1, 1, 1)
-
 		self.attach(@btnRetour,varX+2, varY+1, 1, 1)
-		fond = ajoutFondEcran
+			fond = ajoutFondEcran
 		self.attach(fond,0,0,varX+4,varY+3)
 	end
 

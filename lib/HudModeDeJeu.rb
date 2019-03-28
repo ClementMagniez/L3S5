@@ -13,20 +13,19 @@ class HudModeDeJeu < Hud
 
 	def initialize (window)
 		super(window)
-		varX, varY = 0, 0
+		varX, varY = 5, 5
 		@@tailleFacile = 6
 		@@tailleMoyen = 9
 		@@tailleDifficile = 12
-
-		self.setDesc("Ici la description des modes de jeu")
 		self.setTitre("MODE DE JEU")
+
+
 
 		initBoutonsAventure
 		initBoutonsRapide
 		initBoutonTuto
 
-		varX = 5;
-		varY = 5
+
 
 		self.attach(@btnTutoriel,varX, varY, 2, 1)
 
@@ -39,12 +38,10 @@ class HudModeDeJeu < Hud
 			self.attach(@btnRapideFacile,varX+1, varY+6, 1, 1)
 			self.attach(@btnRapideMoyen,varX+1, varY+7, 1, 1)
 			self.attach(@btnRapideDifficile,varX+1, varY+8, 1, 1)
-#
-#		self.attach(@btnOptions, varX, varY+9, 1, 1)
-#
+
 		self.attach(@btnOptions, varX, varY+9, 1, 1)
 
-		fond = self.ajoutFondEcran
+			fond = self.ajoutFondEcran
 		self.attach(fond,0,0,varX+6,varY+14)
 	end
 
@@ -57,19 +54,16 @@ class HudModeDeJeu < Hud
 		@btnAvFacile.signal_connect('clicked') {
 			puts "Lancement du mode facile d'Aventure"
 			#Niveau entre 6 et 9
-			# taille = 6 + Random.rand(3)
 			lancementAventure(@@tailleFacile)
 		}
 		@btnAvMoyen.signal_connect('clicked') {
 			puts "Lancement du mode moyen d'Aventure"
 			#Niveau entre 9 et 12
-			# taille = 9 + Random.rand(3)
 			lancementAventure(@@tailleMoyen)
 		}
 		@btnAvDifficile.signal_connect('clicked') {
 			puts "Lancement du mode difficile d'Aventure"
 			#Niveau entre 12 et 16
-			# taille = 12 + Random.rand(4)
 			lancementAventure(@@tailleDifficile)
 		}
 	end
@@ -82,19 +76,16 @@ class HudModeDeJeu < Hud
 		@btnRapideFacile.signal_connect('clicked') {
 			puts "Lancement du mode facile de rapide"
 			#Niveau entre 6 et 9
-			# taille = 6 + Random.rand(3)
 			lancementRapide(@@tailleFacile)
 		}
 		@btnRapideMoyen.signal_connect('clicked') {
 			puts "Lancement du mode moyen de rapide"
 			#Niveau entre 9 et 12
-			# taille = 9 + Random.rand(3)
 			lancementRapide(@@tailleMoyen)
 		}
 		@btnRapideDifficile.signal_connect('clicked') {
 			puts "Lancement du mode difficile de rapide"
 			#Niveau entre 12 et 16
-			# taille = 12 + Random.rand(4)
 			lancementRapide(@@tailleDifficile)
 		}
 	end
@@ -104,7 +95,6 @@ class HudModeDeJeu < Hud
 		@btnTutoriel.signal_connect('clicked') {
 			puts "Lancement du mode tutoriel"
 			#Niveau le plus facile : 6
-			# taille = 6
 			lancementTutoriel(@@tailleFacile)
 		}
 	end
