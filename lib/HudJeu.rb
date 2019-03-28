@@ -10,21 +10,24 @@ class HudJeu < Hud
 
 	def initialize(window,grille)
 		super(window)
+		@align = Gtk::Align.new(1)
 		@aide = Aide.new(grille)
 		@gridJeu = Gtk::Grid.new
 			@gridJeu.set_column_homogeneous(true)
 			@gridJeu.set_row_homogeneous(true)
+			@gridJeu.set_halign(@align)
+			@gridJeu.set_valign(@align)
 		@grille = grille
 		@tailleGrille = @grille.length
 		@varX, @varY = 0, 0		# placement relatif des elements de la grille
 
 		@fondGrille = Gtk::Image.new(:file => '../img/gris.png')
 		if @tailleGrille < 9
-			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*1.5,@winY-(@winY/@tailleGrille)*1.5)
+			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*3,@winY-(@winY/@tailleGrille)*1.5)
 		elsif @tailleGrille < 12
-			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*2,@winY-(@winY/@tailleGrille)*2)
+			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*4,@winY-(@winY/@tailleGrille)*2)
 		else
-			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*2.75,@winY-(@winY/@tailleGrille)*2.75)
+			@fondGrille.pixbuf = @fondGrille.pixbuf.scale(@winX-(@winX/@tailleGrille)*5.5,@winY-(@winY/@tailleGrille)*2.75)
 		end
 		
 
@@ -33,7 +36,7 @@ class HudJeu < Hud
 		initBoutonCancel
 
 
-		self.attach(@gridJeu,1, 1,@varPlaceGrid,1)
+		self.attach(@gridJeu,2, 1,@varPlaceGrid,1)
 
 		self.attach(@btnReset,@varPlaceGrid,0,1,1)
 		self.attach(@btnCancel,@varPlaceGrid-1,0,1,1)
@@ -57,7 +60,8 @@ class HudJeu < Hud
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
 			lblIndiceCol = labelIndice(i,"colonne")
 			btnIndiceCol = Gtk::Button.new
-			
+			#btnIndiceCol.set_valign(@align)
+			#btnIndiceCol.set_halign(@align)
 			btnIndiceCol.add(lblIndiceCol)
 			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
@@ -78,6 +82,8 @@ class HudJeu < Hud
 			btnIndiceLig = Gtk::Button.new
 			btnIndiceLig.add(lblIndiceLig)
 			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
+			#btnIndiceLig.set_valign(@align)
+			#btnIndiceLig.set_halign(@align)
 			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
 			#Quand on clique dessus, met toutes les cases vides à gazon
 			btnIndiceLig.signal_connect("clicked") {
@@ -97,6 +103,10 @@ class HudJeu < Hud
 				button = Gtk::Button.new()
 				button.set_relief(Gtk::ReliefStyle::NONE)
 				button.set_image(scaleImage(Gtk::Image.new(:file => @grille[i][j].affichage)))
+				if not @grille[i][j].statutVisible.isVide?
+					button.set_valign(@align)
+					button.set_halign(@align)
+				end
 			# button.set_image(scaleImage(i,j))
 				button.signal_connect("clicked") {
 					@grille[i][j].cycle(@grille)
