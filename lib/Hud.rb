@@ -24,6 +24,7 @@ class Hud < Gtk::Grid
 
 
 	def lancementAventure(taille)
+		taille %= 16
 		grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"grilles.txt")	# Choisi une grille de taille <taille> aléatoirement dans le fichier
 		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
 	end
