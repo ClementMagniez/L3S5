@@ -28,9 +28,9 @@ class Case
 	# Effectue un cycle opposé à CaseVide#cycle
 	# TODO - utilise deux cycles : vérifier cohérence avec calcul du score	
 	def cancel(grille)
-		self.statutVisible.cancel(grille)
+		self.statutVisible.cancel
 	end
-	
+
 	
 	
 	def reset

@@ -1,3 +1,4 @@
+
 require_relative 'Case'
 require_relative 'StatutArbre'
 
@@ -16,6 +17,8 @@ class CaseArbre < Case
 	def isVide?
 		return false
 	end
+
+
 	
 	# Fait cycler la case sur "coché->décoché" et met à jour les indicateurs
 	# de tente restante
@@ -24,6 +27,7 @@ class CaseArbre < Case
 		self.statutVisible.cycle
 		super(grille)
 	end
+
 
 	def affichageSubr
 		if self.statutVisible.isArbreCoche?

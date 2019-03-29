@@ -42,6 +42,7 @@ class StatutVide < Statut
 		else
 			self.statut=VIDE
 		end
+		puts self
 		self
 	
 	end

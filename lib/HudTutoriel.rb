@@ -1,16 +1,20 @@
 class HudTutoriel < HudJeu
 	def initialize (window,grille)
 		super(window,grille)
-		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
-
+		@lblAide = Gtk::Label.new()
+		@lblAide.use_markup = true
+		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
 		self.setTitre("Tutoriel")
-		# self.setDesc("Ici la desc du mode tuto")
 
-		# self.initBoutonOptions
+
+
 		initBoutonAide
 
-		self.attach(@btnAide,@tailleGrille,0,1,1)
-		self.attach(@lblAide, 1, @tailleGrille+2, @tailleGrille+1, 1)
+
+		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
+		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
+			fond = ajoutFondEcran
+		self.attach(fond,0,0,@varPlaceGrid+2,5)
 	end
 
 	# Créé et initialise le bouton d'aide
@@ -24,23 +28,23 @@ class HudTutoriel < HudJeu
 			premAide = tableau.at(0)
 			if premAide != nil then
 
-				if premAide.class == Case # TODO WTF
-					@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(Gtk::Image.new :file => premAide.getCase.affichageSubr)
-					# puts(" X :" + premAide.x.to_s + " Y :" +premAide.y.to_s )
 
+				if premAide.class == Case # TODO WTF
+					@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(scaleImage(premAide.getCase.affichageSubr))
+					# puts(" X :" + premAide.x.to_s + " Y :" +premAide.y.to_s )
 					@caseSurbrillanceList.push(premAide)
 				else
 					while not premAide.empty?
 						caseAide = premAide.shift
-						@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+
+						@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage( caseAide.getCase.affichageSubr))
 						@caseSurbrillanceList.push(caseAide)
 					end
 				end
 
 			end
-
-			@lblAide.set_label(tableau.at(1))
-
+			@lblAide.use_markup = true
+			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
 		}
 	end
 

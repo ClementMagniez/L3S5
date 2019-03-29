@@ -38,7 +38,7 @@ class CaseVide < Case
 		self
 	end
 	
-	def cancel
+	def cancel(grille)
 	
 		self.statutVisible.cancel
 		i=self.x
@@ -56,7 +56,6 @@ class CaseVide < Case
 		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
 			grille.estComplete?
 		end
-		super(grille)
 		self
 	end
 	
