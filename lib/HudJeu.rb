@@ -93,7 +93,7 @@ class HudJeu < Hud
 				}
 			}
 		}
-		
+
 		# positionne les cases de la grille
 		@grille.grille.each do |line|
 			line.each do |cell|
@@ -139,8 +139,8 @@ class HudJeu < Hud
 	end
 
 
-	# A partir du fichier en path _string_, crée une Gtk::Image 
-	# et la redimensionne pour s'adapter à la taille de la fenêtre 
+	# A partir du fichier en path _string_, crée une Gtk::Image
+	# et la redimensionne pour s'adapter à la taille de la fenêtre
 	# Return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
