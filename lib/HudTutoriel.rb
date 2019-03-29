@@ -1,38 +1,47 @@
 class HudTutoriel < HudJeu
-	def initialize (window,grille,aide)
-		super(window,grille,aide)
+	def initialize (window,grille)
+		super(window,grille)
+		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
 
-		#Label titre : MODE AVENTURE
-		@lblTitreAv = Gtk::Label.new(" MODE TUTORIEL ")
-		self.attach(@lblTitreAv,6,2,4,2)
-		#Bouton des aides et du reset de la grille
-		# @btnAide = Gtk::Button.new :label => " Aide "
-		# @btnReset = Gtk::Button.new :label => " Reset "
-		# self.attach(@btnAide,taille+4,taille,2,1)
-		# self.attach(@btnReset,taille+4,taille+1,2,1)
+		self.setTitre("Tutoriel")
+		# self.setDesc("Ici la desc du mode tuto")
 
-		#Grille de jeu
-		@gridJeu = Gtk::Table.new(taille+1,taille+1,true)
-		self.attach(@gridJeu,2,4,taille+1,taille+1)
+		# self.initBoutonOptions
+		initBoutonAide
 
-		#Bouton option
-		@btnOption = Gtk::Button.new :label => "Options"
-		self.attach(@btnOption,2,25,2,2)
-
-		#Bouton retour aux choix de mode de jeu
-		# => besoin de confirmation de choix "Etes vous sur de vouloir quitter votre grille?"
-		# @btnRetour = Gtk::Button.new :label => "Retour"
-		# self.attach(@btnRetour,16,25,2,2)
-
-		#Chargement de la grille et mise en place de la liste de bouton que contient la grille
-		# @listBouton = chargementGrille(grille,taille)
-		self.chargementGrille
-		#Label d'aide
-		@lblAide = Gtk::Label.new("Bonjour et bienvenue sur notre super jeu !")
-		self.attach(@lblAide,taille+15,taille/2+3,5,5)
-
-		self.initBoutonOptions
-		# self.initBoutonReset(taille,grille,@listBouton)
-		# self.initBoutonAide(aide)
+		self.attach(@btnAide,@tailleGrille,0,1,1)
+		self.attach(@lblAide, 1, @tailleGrille+2, @tailleGrille+1, 1)
 	end
+
+	# Créé et initialise le bouton d'aide
+	def initBoutonAide
+		taille = @grille.length
+		@caseSurbrillanceList = Array.new
+
+		@btnAide = Gtk::Button.new :label => " Aide "
+		@btnAide.signal_connect("clicked") {
+			tableau = @aide.cycle("tuto")
+			premAide = tableau.at(0)
+			if premAide != nil then
+
+				if premAide.class == Case # TODO WTF
+					@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(Gtk::Image.new :file => premAide.getCase.affichageSubr)
+					# puts(" X :" + premAide.x.to_s + " Y :" +premAide.y.to_s )
+
+					@caseSurbrillanceList.push(premAide)
+				else
+					while not premAide.empty?
+						caseAide = premAide.shift
+						@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+						@caseSurbrillanceList.push(caseAide)
+					end
+				end
+
+			end
+
+			@lblAide.set_label(tableau.at(1))
+
+		}
+	end
+
 end

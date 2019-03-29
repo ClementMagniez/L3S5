@@ -7,6 +7,10 @@ require_relative 'StatutConstantes'
 class Case 
 	include StatutConstantes
 	
+	def initialize(i,j)
+		@x=i
+		@y=j
+	end
 	
 	def to_s
 		"#{self.statutVisible}"
@@ -17,11 +21,16 @@ class Case
 		self.statut==self.statutVisible
 	end
 	
+	def cycle(grille)
+		grille.stack.push(self)
+	end
+	
 	def reset
 		self.statutVisible.reset
 		self
 	end
+
 	
-	attr_reader :statut, :statutVisible
+	attr_reader :statut, :statutVisible, :x, :y
 	
 end

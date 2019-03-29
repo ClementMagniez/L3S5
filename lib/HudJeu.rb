@@ -1,3 +1,4 @@
+require_relative 'Hud'
 
 # class abstraite permettant de créer un ecran de jeu
 class HudJeu < Hud
@@ -5,86 +6,146 @@ class HudJeu < Hud
 	# @btnAide
 	# @btnRetour
 	# @lblAide
+	# @gridJeu
 	# @aide
 	# @grille
 
-	def initialize(window,grille,aide)
+	def initialize(window,grille)
 		super(window)
+		@aide = Aide.new(grille)
+		@gridJeu = Gtk::Grid.new
+			@gridJeu.set_column_homogeneous(true)
+			@gridJeu.set_row_homogeneous(true)
 		@grille = grille
-		@aide = aide
-		initBoutonAide
+		@tailleGrille = @grille.length
+
+
 		initBoutonReset
 		initBoutonRetour
+
+
+		self.attach(@gridJeu,1,1,@tailleGrille+1, @tailleGrille+1)
+
+		self.attach(@btnReset,@tailleGrille+1,0,1,1)
+
+		self.attach(@btnRetour,@tailleGrille+1,@tailleGrille+3,1,1)
+		self.attach(@btnOptions, 1, @tailleGrille+3, 1, 1)
+		# self.attach(@lblAide, 1, @tailleGrille+1, @tailleGrille-1, 1)
+
+		chargementGrille
 	end
 
 	def chargementGrille
-		taille = @grille.length
-		#liste de boutons
-		#listButton = Array.new()
+		# taille = @grille.length
+		# positionne les indices autour de la table @gridJeu
 
-		# positionne les indices autour de la grid
-		1.upto(taille) { |i|
+
+		# TODO - Ruby-fier ce loop
+
+		0.upto(@tailleGrille-1) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
-			self.attach(Gtk::Label.new(@grille.tentesCol.fetch(i-1).to_s),i,0,1,1)
-			# ici les indices des lignes (nb tentes sur chaque ligne)
-			self.attach(Gtk::Label.new(@grille.tentesLigne.fetch(i-1).to_s),0,i,1,1)
-		}
-
-		# positionne les boutons qui servent de case sur la grid
-		0.upto(taille-1) { |i|
-			0.upto(taille-1){ |j|
-
-				button = Gtk::Button.new()
-				button.set_relief(Gtk::ReliefStyle::NONE)
-
-				#listButton.push(button)
-
-				button.set_image(Gtk::Image.new :file => @grille[i][j].affichage)
-				button.signal_connect("clicked") {
-					@grille[i][j].cycle(i,j, @grille)
-					button.set_image(Gtk::Image.new :file => @grille[i][j].affichage)
+			btnIndiceCol = Gtk::Button.new(:label=>@grille.tentesCol.fetch(i).to_s)
+			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
+			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
+			btnIndiceCol.signal_connect("clicked") {
+				0.upto(@tailleGrille-1) { |k|
+					if @grille[k][i].statutVisible.isVide?
+						@grille[k][i].cycle(@grille)
+						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
+					end
 				}
-
-				self.attach(button,j+1,i+1,1,1)
+				# puts "Clique sur le bouton de la colonne " + i.to_s
+			}
+			# ici les indices des lignes (nb tentes sur chaque ligne)
+			btnIndicesLig = Gtk::Button.new(:label=> @grille.tentesLigne.fetch(i).to_s)
+			btnIndicesLig.set_relief(Gtk::ReliefStyle::NONE)
+			@gridJeu.attach(btnIndicesLig,0,i+1,1,1)
+			btnIndicesLig.signal_connect("clicked") {
+				0.upto(@tailleGrille-1) { |k|
+					if @grille[i][k].statutVisible.isVide?
+						@grille[i][k].cycle(@grille)
+						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
+						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
+					end
+				}
 			}
 		}
+		
+		# positionne les cases de la grille
+		@grille.grille.each do |line|
+			line.each do |cell|
+				button = Gtk::Button.new()
+				button.set_relief(Gtk::ReliefStyle::NONE)
+				button.set_image(scaleImage(cell.affichage))
+				# button.set_image(scaleImage(i,j))
+				button.signal_connect("clicked") do
+					cell.cycle(@grille)
+					button.set_image(scaleImage(cell.affichage))
+					# button.set_image(i,j)
+					if @caseSurbrillanceList != nil
+						while not @caseSurbrillanceList.empty? # TODO chercher autre chose
+								caseSubr = @caseSurbrillanceList.shift
+								@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
+													scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
+								# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
+						end
+					end
+
+					self.jeuTermine		if @grille.estValide
+				end
+				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
+			end
+		end
 		return self
 	end
 
-	# initialise le bouton de remise à zéro de la grille
-	#
+	# A partir du fichier en path _string_, crée une Gtk::Image 
+	# et la redimensionne pour s'adapter à la taille de la fenêtre 
+	# Return cette Gtk::Image redimensionnée
+	def scaleImage(string)
+		image=Gtk::Image.new(:file => string)
+		winX = @fenetre.size.fetch(0)
+		winY = @fenetre.size.fetch(1)
+		# @tailleGrille = @grille.length
+		imgSize = winY / (@tailleGrille*2)
+
+		# image = Gtk::Image.new :file => @grille[x][y].affichage
+		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
+
+		return image
+	end
+
+
+	# Créé un attribut @btnReset qui est le bouton de remise à zéro
+	# initialise le bouton
 	def initBoutonReset
-		taille = @grille.length
-		@btnReset = Gtk::Button.new :label => " Reset "
-		self.attach(@btnReset,taille+4,taille+1,1,1)
+		# @tailleGrille = @grille.length
+		@btnReset = Gtk::Button.new :label => "Reset"
 		@btnReset.signal_connect("clicked") {
-			# compteur = 0
-			1.upto(taille) { |i|
-				1.upto(taille){ |j|
-					puts "I=" + i.to_s + " j=" + j.to_s
-					@grille[i-1][j-1].reset
-					self.get_child_at(j,i).set_image(Gtk::Image.new(:file=>@grille[i-1][j-1].affichage))
-					# listButton.at(compteur).set_image(Gtk::Image.new :file => grille[i][j].affichage)
-					# compteur = compteur +1
-				}
-			}
+			reset
 		}
 	end
 
-	def initBoutonAide
-		taille = @grille.length
-		@btnAide = Gtk::Button.new :label => " Aide "
-		self.attach(@btnAide,taille+4,taille,1,1)
-		@btnAide.signal_connect("clicked") {
-			@lblAide.set_label(@aide.cycle)
-		}
+	# Réinitialise la grille
+	def reset
+		@grille.grille.each do |line|
+			line.each do |cell|
+				cell.reset
+				#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=scaleImage(cell.affichage)
+				# @gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(i,j))
+			end
+		end
 	end
 
+	# Créé et initialise le bouton de retour
 	def initBoutonRetour
 		@btnRetour = Gtk::Button.new :label => "Retour"
-		self.attach(@btnRetour,16,25,2,2)
-		@btnRetour.signal_connect("clicked") {
-			self.lancementModeJeu
-		}
+		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
+	end
+
+	# Comportement a la fin du jeu
+	def jeuTermine
+		self.lancementFinDeJeu
 	end
 end
