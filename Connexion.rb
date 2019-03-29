@@ -7,9 +7,9 @@
 require "active_record"
 require_relative "connectSqlite3.rb"
 
-#load "Utilisateur.rb"
-#load "Cryptage.rb"
-load "Profil.rb"
+#require_relative "Utilisateur.rb"
+#require_relative "Cryptage.rb"
+require_relative "Profil.rb"
 
 class Connexion < ActiveRecord::Base
 	#@utilisateurConnecte contient l'ID de l'utilisateur connecté
