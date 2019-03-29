@@ -12,7 +12,6 @@ require_relative "TempsChrono.rb"
 # diverses informations depuis l'interface et mettre à jour ses données en fonction des paramètres envoyés.
 #
 class ScorePartie
-  include TempsChrono
 
   # @bonus, @malus, @nbAidesUsees, @valeur - Le pourcentage appliqué selon la difficulté sélectionnée, le
   # pourcentage appliqué pour pénaliser une utilisation trop répétitive des aides, le nombre d'aides utilisées
@@ -69,15 +68,15 @@ class ScorePartie
     # FACILE - Bonus x1, 3% de malus
     if(taille < 9)
       @bonus = 1
-      @malus = 0,03
+      @malus = 0.03
     # DIFFICILE - Bonus x3, 10% de malus
     elsif(taille > 12)
       @bonus = 3
-      @malus = 0,1
+      @malus = 0.1
     # MOYEN - Bonus x1.5, 5% de malus
     else
-      @bonus = 1,5
-      @malus = 0,05
+      @bonus = 1.5
+      @malus = 0.05
     end
   end
 
@@ -94,9 +93,9 @@ class ScorePartie
   #              difficulté de la partie)
   #
   def calculerScoreFinal(taille,tempsRestant)
-    nbMalus = 0
     # FACILE
     if(taille < 9 && @nbAidesUsees > 1)
+      puts "FACILE"
       nbMalus = @nbAidesUsees - 1
     # MOYEN
     elsif(taille >= 9 && taille <= 12 && @nbAidesUsees > 2)
@@ -104,10 +103,13 @@ class ScorePartie
     # DIFFICILE
     elsif(taille > 12 && @nbAidesUsees > 3)
       nbMalus = @nbAidesUsees - 3
+    # PAR DÉFAUT
+    else
+      nbMalus = 0
     end
 
-    scoreFinal = (@score - @score * (@malus * nbMalus)) * @bonus
-    return (tempsRestant == nil) ? scoreFinal : scoreFinal * (tempsRestant.convertirTempsEnEntier() / 100)
+    scoreFinal = (@valeur - @valeur * (@malus * nbMalus)) * @bonus
+    return (tempsRestant == nil) ? scoreFinal.to_i : scoreFinal.to_i * (tempsRestant.convertirTempsEnEntier() / 100)
   end
 
   ##
@@ -153,3 +155,14 @@ class ScorePartie
 		return "Score actuel : #{@valeur} (bonus de #{@bonus}% ; #{@nbAidesUsees} aide(s) utilisée(s) => malus de #{@malus}%)"
 	end
 end
+
+taille = 10
+test = ScorePartie.new()
+test.definirPourcentages(taille)
+test.recupererPoints(500)
+puts test
+
+temps = Time.now()
+puts temps.afficherTempsChrono().convertirTempsEnEntier()
+
+puts test.calculerScoreFinal(taille,nil)

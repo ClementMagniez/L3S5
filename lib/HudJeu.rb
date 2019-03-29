@@ -116,6 +116,7 @@ class HudJeu < Hud
 		# @tailleGrille = @grille.length
 		@btnReset = Gtk::Button.new :label => "Reset"
 		@btnReset.signal_connect("clicked") {
+			# Réinitialisation du score courant
 			@grille.score.reset()
 		}
 	end

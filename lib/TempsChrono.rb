@@ -5,12 +5,28 @@
 #
 
 ##
-# = Module *TempsChrono*
+# = Classe *Time*
 #
-# Le module *TempsChrono* comporte des méthodes pour les classes concernées par le mode
-# "Contre-la-montre" de l'application.
+# Pour simplifier la compréhension du code, on ajoute une méthode utile dans la classe *Time*.
 #
-module TempsChrono
+class Time
+  ##
+  # == afficherTempsChrono(0)
+  #
+  # Cette méthode permet d'afficher un objet de la classe *Time* sous le format "minutes:secondes".
+  #
+  def afficherTempsChrono()
+    return strftime("%M:%S")
+  end
+end
+
+##
+# = Classe *String*
+#
+# Pour pouvoir calculer un nombre à partir d'un temps donné, il est nécessaire d'ajouter une
+# méthode à la classe *String*.
+#
+class String
   ##
   # == convertirTempsEnEntier(0)
   #
@@ -21,14 +37,11 @@ module TempsChrono
     minutes = true
     nbSecondes = 0
 
-    if(this.strftime("%M:%S").split(":").size == 2)
-      this.strftime("%M:%S").split(":").each { |t|
-         nbSecondes += (minutes == true) ? t.to_i * 60 : t.to_i
-         minutes = false
-      }
-      return nbSecondes
-    else
-      puts "Format de temps incorrect : temps composé de minutes et de secondes attendu !"
-    end
+    split(":").each { |t|
+      nbSecondes += (minutes == true) ? t.to_i * 60 : t.to_i
+      minutes = false
+    }
+
+    return nbSecondes
   end
 end

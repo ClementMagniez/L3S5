@@ -33,6 +33,11 @@ Mise en place du système de calcul :
 	=> Ajout d'une variable score et d'un compteur d'aides utilisées sur l'interface (fait)
 	=> Modifier les fichiers "Case" pour intégrer les gains (fait)
 	=> Trouver un moyen efficace d'envoyer les gains d'une case au score général (fait)
-
 	=> Implémenter les conditions nécessaires au gain des malus (fait)
-	=> Régler le souci de la conversion du temps restant (mode chrono) en entier (à faire)
+	=> Régler le souci de la conversion du temps restant (mode chrono) en entier (fait)
+____
+Fichiers concernés par l'intégration du score :
+
+	=> CaseVide.rb
+	=> Hud.rb
+	=> HudJeu.rb
