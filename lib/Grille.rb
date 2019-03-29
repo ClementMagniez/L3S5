@@ -66,6 +66,13 @@ class Grille
 		self.estValide=res
 	end
 
+	def raz
+		self.estValide = false
+		@varTentesCol=@tentesCol.dup
+		@varTentesLigne=@tentesLigne.dup
+		
+	end
+
 
 	# Affiche la grille complète - pourra être supprimé quand on aura la GUI
 	def to_s

@@ -189,7 +189,8 @@ class HudJeu < Hud
 				# @gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(i,j))
 			end
 		end
-
+		@grille.raz
+		puts(@grille.estComplete?)
 	end
 
 	# Créé et initialise le bouton de retour

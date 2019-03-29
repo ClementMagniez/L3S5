@@ -8,7 +8,7 @@ class HudFinDeJeu < Hud
 		@fenetrePrecedente = fenetrePrecedente
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
-		@lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez finit ! !</span>");
+		@lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
 
 
 		initBoutonRecommencer
@@ -25,6 +25,7 @@ class HudFinDeJeu < Hud
 		@btnRecommencer = Gtk::Button.new :label => "Recommencer"
 		@btnRecommencer.signal_connect('clicked') {
 			@fenetrePrecedente.reset
+			#@fenetrePrecedente.raz
 			@fenetre.changerWidget(self,@fenetrePrecedente)
 		}
 

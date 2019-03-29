@@ -17,6 +17,12 @@ class CaseArbre < Case
 	def isVide?
 		return false
 	end
+
+
+	def cancel(grille)
+		self.cycle(grille)
+
+	end
 	
 	# Fait cycler la case sur "coché->décoché" et met à jour les indicateurs
 	# de tente restante
@@ -25,6 +31,7 @@ class CaseArbre < Case
 		self.statutVisible.cycle
 		super(grille)
 	end
+
 
 	def affichageSubr
 		if self.statutVisible.isArbreCoche?
