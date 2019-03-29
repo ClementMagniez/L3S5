@@ -31,6 +31,6 @@ class Case
 	end
 
 
-	attr_reader :statut, :statutVisible, :points, :x, :y
+	attr_reader :statut, :statutVisible, :x, :y
 
 end

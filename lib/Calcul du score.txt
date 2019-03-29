@@ -24,7 +24,7 @@ Calcul dépendant du mode de jeu :
 			--> Moyen : -5%
 			--> Difficile : -10%
 
-	=> Contre-la-montre : calcul du mode exploration multiplié par le temps de jeu restant (total en secondes divisé par 100).
+	=> Contre-la-montre : calcul du mode exploration divisé par le temps de jeu (total en secondes divisé par 100).
 
 	=> Tutoriel : fenêtre d'explications, pas de score à afficher
 ____

@@ -109,7 +109,7 @@ class ScorePartie
     end
 
     scoreFinal = (@valeur - @valeur * (@malus * nbMalus)) * @bonus
-    return (tempsRestant == nil) ? scoreFinal.to_i : scoreFinal.to_i * (tempsRestant.convertirTempsEnEntier() / 100)
+    return (tempsRestant == nil) ? scoreFinal.to_i : scoreFinal.to_i / (tempsRestant.convertirTempsEnEntier() / 100)
   end
 
   ##
@@ -128,19 +128,15 @@ class ScorePartie
   ##
   # == reset(0)
   #
-  # Cette méthode remet à zéro toutes les variables de l'objet appelant. Elle s'active lors
-  # du reset d'une partie jouée.
+  # Cette méthode remet le score et le nombre d'aides utilisées de l'objet appelant à zéro. Elle s'active
+  # lors du reset d'une partie jouée.
   #
   # === Attributs
   #
-  # * +bonus+ - L'entier indiquant le pourcentage positif appliqué selon la difficulté
-  # * +malus+ - L'entier indiquant le pourcentage négatif appliqué selon la difficulté
   # * +nbAidesUsees+ - L'entier indiquant le nombre de fois où l'assistant a été activé par le joueur
   # * +valeur+ - L'entier déterminant le score d'une partie
   #
   def reset
-    @bonus = 0
-    @malus = 0
     @nbAidesUsees = 0
     @valeur = 0
   end

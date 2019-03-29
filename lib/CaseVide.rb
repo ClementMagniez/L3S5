@@ -13,21 +13,14 @@ class CaseVide < Case
 		super(i,j)
 		@statut=StatutVide.new(etat)
 		@statutVisible=StatutVide.new(VIDE)
-		if(etat == GAZON)
-			@points = 1
-		elsif(etat == TENTE)
-			@points = 5
-		else
-			@points = -10
-		end
 	end
 
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
 	def cycle(grille)
-		self.statutVisible.cycle
-		# Intégration du score
-		grille.score.recupererPoints(this.points)
+		#self.statut.cycle(grille)
+		self.statutVisible.cycle(nil)
+		puts grille.score
 		i=self.x
 		j=self.y
 
