@@ -482,10 +482,10 @@ class Aide
         if value%2 != 0 && value > 1
           k = 1
           while k < value
-            if i+1 <= grille.length-1 && j+1 <= grille.length-1
+            if i+1 <= grille.length-1 && j+k <= grille.length-1
               tabCaseEnGazon2.unshift(grille[i+1][j+k]) if grille[i+1][j+k].statutVisible == newStatutVide
             end
-            if i-1 >= 0 && j+1 <= grille.length-1
+            if i-1 >= 0 && j+k <= grille.length-1
               tabCaseEnGazon2.unshift(grille[i-1][j+k]) if grille[i-1][j+k].statutVisible == newStatutVide
             end
             k += 2

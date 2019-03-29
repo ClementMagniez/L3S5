@@ -79,7 +79,7 @@ class HudRapide < HudJeu
 			caseAide = tableau.at(0)
 			if caseAide != nil then
 				
-					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
 					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
 
 			end
