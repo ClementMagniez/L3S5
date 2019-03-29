@@ -31,7 +31,10 @@ class StatutArbre < Statut
 		return super(statut);
 	end
 	
-
+	def cancel(grille)
+		this.cycle
+	end
+	
 	def reset
 		self.statut=ARBREDECOCHE
 		self

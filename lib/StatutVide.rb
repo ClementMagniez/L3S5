@@ -32,6 +32,19 @@ class StatutVide < Statut
 		end
 		self
 	end
+	
+	# TODO fuck this
+	def cancel 
+		if self.isTente?
+			self.statut=GAZON
+		elsif self.isVide?
+			self.statut=TENTE
+		else
+			self.statut=VIDE
+		end
+		self
+	
+	end
 
 	def to_s
 		case self.statut

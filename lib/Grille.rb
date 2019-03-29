@@ -45,7 +45,7 @@ class Grille
 	# Annule le dernier coup de l'utilisateur sur la grille 
 	def cancel
 		cell=self.stack.pop
-		cell.cancel(cell.x, cell.y, self)
+		cell.cancel(self)
 		self
 	end
 
