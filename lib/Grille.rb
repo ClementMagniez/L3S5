@@ -51,6 +51,7 @@ class Grille
 			self.stack.pop
 			return cell
 		end
+
 	end
 
 	# Renvoie true si la grille est complète et valide, false sinon

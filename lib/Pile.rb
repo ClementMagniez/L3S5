@@ -15,13 +15,11 @@ class Pile
 
 	def isEmpty?
 		return @array.empty?
+		self.array.pop(elt)
+
 	end
 	
 	
 	protected
 		attr_accessor :array
 end
-
-
-
-

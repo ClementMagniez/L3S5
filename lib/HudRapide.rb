@@ -78,11 +78,9 @@ class HudRapide < HudJeu
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
-
-				if caseAide.class == CaseCoordonnees
-					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(scaleImage(Gtk::Image.new :file => caseAide.getCase.affichageSubr))
-					@caseSurbrillance =caseAide
-				end
+				
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
 
 			end
 			@lblAide.use_markup = true

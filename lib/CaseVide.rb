@@ -42,7 +42,6 @@ class CaseVide < Case
 	# TODO - utilise deux cycles : vérifier cohérence avec calcul du score	
 	def cancel(grille)
 		self.cycle(grille).cycle(grille)	
-
 	end
 	
 
