@@ -7,8 +7,10 @@ class HudAccueil < Hud
 
 	def initialize(window)
 		super(window)
+		varX, varY = 0, 0
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
+
 
 		initBoutonConnecter
 		initBoutonInscription
@@ -16,24 +18,20 @@ class HudAccueil < Hud
 
 
 
-		fond = Gtk::Image.new( :file => "../img/fond.png")
-		#fond.pixbuf = fond.pixbuf.scale(@fenetre.size.fetch(0),@fenetre.size.fetch(1))
+		self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
+		self.attach(@entryIdentifiant,varX+2, varY+1, 1, 1)
 
+		self.attach(Gtk::Label.new("Mot de passe : "),varX+1, varY+2, 1, 1)
+		self.attach(@entryMotDePasse,varX+2, varY+2, 1, 1)
 
+		self.attach(@btnInscrire,varX+1, varY+3, 1, 1)
+		self.attach(@btnConnecter,varX+2, varY+3, 1, 1)
 
-		self.attach(Gtk::Label.new("Identifiant : "),1, 1, 1, 1)
-		self.attach(@entryIdentifiant,2, 1, 1, 1)
+		self.attach(@btnOptions, varX, varY+4, 1, 1)
+		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
 
-		self.attach(Gtk::Label.new("Mot de passe : "),1, 2, 1, 1)
-		self.attach(@entryMotDePasse,2, 2, 1, 1)
-
-
-		self.attach(@btnInscrire,1, 3, 1, 1)
-		self.attach(@btnConnecter,2, 3, 1, 1)
-
-		self.attach(@btnOptions, 0, 4, 1, 1)
-		self.attach(@btnQuitter,3, 4, 1, 1)
-		# self.attach(fond,0,0,30,20)
+			fond = ajoutFondEcran
+		self.attach(fond,0,0,5,5)
 	end
 
 

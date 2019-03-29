@@ -9,7 +9,14 @@ class Pile
 	end
 	
 	def pop
+		elt= self.array.pop()
+		return elt
+	end
+
+	def isEmpty?
+		return @array.empty?
 		self.array.pop(elt)
+
 	end
 	
 	

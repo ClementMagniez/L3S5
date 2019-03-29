@@ -44,9 +44,14 @@ class Grille
 
 	# Annule le dernier coup de l'utilisateur sur la grille 
 	def cancel
-		cell=self.stack.pop
-		cell.cancel(cell.x, cell.y, self)
-		self
+		if not @stack.isEmpty?
+			cell=self.stack.pop
+			cell.cancel(self)
+			self.stack.pop
+			self.stack.pop
+			return cell
+		end
+
 	end
 
 	# Renvoie true si la grille est complète et valide, false sinon
@@ -59,6 +64,13 @@ class Grille
 			end
 		end
 		self.estValide=res
+	end
+
+	def raz
+		self.estValide = false
+		@varTentesCol=@tentesCol.dup
+		@varTentesLigne=@tentesLigne.dup
+		
 	end
 
 
