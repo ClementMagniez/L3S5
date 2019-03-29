@@ -24,7 +24,7 @@ class HudModeDeJeu < Hud
 		initBoutonsAventure
 		initBoutonsRapide
 		initBoutonTuto
-		initBoutonQuitter	
+		initBoutonQuitter
 		initBoutonChargerSauvegarde
 
 		#Bouton sauvegarde !
@@ -88,17 +88,17 @@ class HudModeDeJeu < Hud
 		@btnRapideFacile.signal_connect('clicked') {
 			puts "Lancement du mode facile de rapide"
 			#Niveau entre 6 et 9
-			lancementRapide(@@tailleFacile)
+			lancementRapide(Random.rand(Range.new(@@tailleFacile, @@tailleFacile+3)))
 		}
 		@btnRapideMoyen.signal_connect('clicked') {
 			puts "Lancement du mode moyen de rapide"
 			#Niveau entre 9 et 12
-			lancementRapide(@@tailleMoyen)
+			lancementRapide(Random.rand(Range.new(@@tailleMoyen, @@tailleMoyen+3)))
 		}
 		@btnRapideDifficile.signal_connect('clicked') {
 			puts "Lancement du mode difficile de rapide"
 			#Niveau entre 12 et 16
-			lancementRapide(@@tailleDifficile)
+			lancementRapide(Random.rand(Range.new(@@tailleDifficile, @@tailleDifficile+4)))
 		}
 	end
 

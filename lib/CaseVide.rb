@@ -37,13 +37,29 @@ class CaseVide < Case
 		super(grille)
 		self
 	end
-
-	# Effectue un cycle opposé à CaseVide#cycle
-	# TODO - utilise deux cycles : vérifier cohérence avec calcul du score	
+	
 	def cancel(grille)
-		self.cycle(grille).cycle(grille)	
+	
+		self.statutVisible.cancel
+		i=self.x
+		j=self.y
+
+
+		if self.statutVisible.isTente? # le statut vient de devenir "tente"
+			grille.varTentesLigne[i]-=1
+			grille.varTentesCol[j]-=1
+		elsif self.statutVisible.isVide? # le statut était "tente"
+			grille.varTentesLigne[i]+=1
+			grille.varTentesCol[j]+=1
+		end
+
+		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
+			grille.estComplete?
+		end
+		self
 	end
 	
+
 
 	def affichageSubr
 		if self.statutVisible.isGazon?

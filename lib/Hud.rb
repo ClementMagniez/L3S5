@@ -24,12 +24,12 @@ class Hud < Gtk::Grid
 
 
 	def lancementAventure(taille)
-		taille %= 16
-
-		# grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
-		grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
-		# aide = Aide.new(grille)
-		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
+		# taille %= 16
+		# # grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
+		# grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
+		# # aide = Aide.new(grille)
+		# @fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
+		@fenetre.changerWidget(self,HudAventure.new(@fenetre,Grille.new(taille)))
 	end
 
 	def lancementAccueil
@@ -39,9 +39,11 @@ class Hud < Gtk::Grid
 
 
 	def lancementTutoriel(taille)
-		grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
+		# grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
+		# puts "Retour à l'accueil"
+		# @fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
 		puts "Retour à l'accueil"
-		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
+		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,Grille.new(taille)))
 	end
 
 
@@ -61,10 +63,10 @@ class Hud < Gtk::Grid
 	end
 
 	def lancementRapide(taille)
-		grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
-
-		# aide = Aide.new(grille)
-		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
+		# grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
+		# # aide = Aide.new(grille)
+		# @fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
+		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille)))
 	end
 
 	# Créé et initialise le bouton des options

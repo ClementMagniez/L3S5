@@ -31,7 +31,15 @@ class StatutArbre < Statut
 		return super(statut);
 	end
 	
-
+	def cancel
+		if self.isArbreCoche?
+			self.statut=ARBREDECOCHE
+		else
+			self.statut=ARBRECOCHE
+		end
+		self
+	end
+	
 	def reset
 		self.statut=ARBREDECOCHE
 		self

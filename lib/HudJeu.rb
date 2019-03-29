@@ -93,7 +93,7 @@ class HudJeu < Hud
 				}
 			}
 		}
-		
+
 		# positionne les cases de la grille
 		@grille.grille.each do |line|
 			line.each do |cell|
@@ -139,8 +139,8 @@ class HudJeu < Hud
 	end
 
 
-	# A partir du fichier en path _string_, crée une Gtk::Image 
-	# et la redimensionne pour s'adapter à la taille de la fenêtre 
+	# A partir du fichier en path _string_, crée une Gtk::Image
+	# et la redimensionne pour s'adapter à la taille de la fenêtre
 	# Return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
@@ -172,7 +172,8 @@ class HudJeu < Hud
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil
-				@gridJeu.get_child_at(cell.y+1,cell.x+1).set_image(scaleImage(@grille[cell.x][cell.y].affichage))
+				@gridJeu.get_child_at(cell.y+1,cell.x+1)\
+				.set_image(scaleImage(cell.affichage))
 			end
 		}
 
@@ -180,7 +181,6 @@ class HudJeu < Hud
 
 	# Réinitialise la grille
 	def reset
-
 		@grille.grille.each do |line|
 			line.each do |cell|
 				cell.reset
