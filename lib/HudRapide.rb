@@ -76,11 +76,10 @@ class HudRapide < HudJeu
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
-				puts ("pouetpouetpouet")
-				if caseAide.class == CaseCoordonnees
+				if caseAide.class == Case # TODO WTF
 
-					@gridJeu.get_child_at(caseAide.getJ+1,caseAide.getI+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
-					puts(" X :" + caseAide.getI.to_s + " Y :" +caseAide.getJ.to_s )
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
+					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
 
 					@caseSurbrillance =caseAide
 				end
