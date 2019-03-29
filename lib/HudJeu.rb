@@ -37,9 +37,10 @@ class HudJeu < Hud
 		initBoutonRetour
 		initBoutonCancel
 		chargementGrille
+		initBoutonSauvegarde
 
 
-
+		self.attach(@btnSauvegard,@varPlaceGrid/2,3,2,1)
 		self.attach(@gridJeu,2, 1, @varPlaceGrid,1)
 		self.attach(@btnReset,@varPlaceGrid,0,1,1)
 		self.attach(@btnCancel,@varPlaceGrid-1,0,1,1)
@@ -171,7 +172,7 @@ class HudJeu < Hud
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil
-				@gridJeu.get_child_at(cell.y+1,cell.x+1).set_image(scaleImage(Gtk::Image.new(:file=>@grille[cell.x][cell.y].affichage)))
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).set_image(scaleImage(@grille[cell.x][cell.y].affichage))
 			end
 		}
 
@@ -200,5 +201,12 @@ class HudJeu < Hud
 	# Comportement a la fin du jeu
 	def jeuTermine
 		self.lancementFinDeJeu
+	end
+
+	def initBoutonSauvegarde
+		@btnSauvegard = Gtk::Button.new :label => "Sauvegarder"
+		@btnSauvegard.signal_connect('clicked') {
+			puts(" Je ne fais actuellement rien, mais j'aimerai charger une sauvegarder et j'aime aussi les Pommes.")
+		}
 	end
 end

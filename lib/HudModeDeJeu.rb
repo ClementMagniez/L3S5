@@ -24,8 +24,8 @@ class HudModeDeJeu < Hud
 		initBoutonsAventure
 		initBoutonsRapide
 		initBoutonTuto
-		initBoutonQuitter
-		initBoutonSauvegarde
+		initBoutonQuitter	
+		initBoutonChargerSauvegarde
 
 		#Bouton sauvegarde !
 		self.attach(@btnSauvegarde,varX,varY-2,2,1)
@@ -50,7 +50,7 @@ class HudModeDeJeu < Hud
 		self.attach(fond,0,0,varX+6,varY+14)
 	end
 
-	def initBoutonSauvegarde
+	def initBoutonChargerSauvegarde
 		@btnSauvegarde = Gtk::Button.new :label => "Charger une sauvegarde"
 		@btnSauvegarde.signal_connect('clicked') {
 			puts(" Je ne fais actuellement rien, mais j'aimerai charger une sauvegarder et j'aime aussi les Pommes.")
