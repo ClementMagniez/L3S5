@@ -155,14 +155,3 @@ class ScorePartie
 		return "Score actuel : #{@valeur} (bonus de #{@bonus}% ; #{@nbAidesUsees} aide(s) utilisée(s) => malus de #{@malus}%)"
 	end
 end
-
-taille = 10
-test = ScorePartie.new()
-test.definirPourcentages(taille)
-test.recupererPoints(500)
-puts test
-
-temps = Time.now()
-puts temps.afficherTempsChrono().convertirTempsEnEntier()
-
-puts test.calculerScoreFinal(taille,nil)
