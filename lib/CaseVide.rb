@@ -15,6 +15,8 @@ class CaseVide < Case
 		@statutVisible=StatutVide.new(VIDE)
 	end
 
+	# TODO refactoriser cycle/cancel
+
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
 	def cycle(grille)
