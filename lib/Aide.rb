@@ -520,29 +520,51 @@ class Aide
       tabCaseEnGazon1.compact!
       tabCaseEnGazon2.compact!
 
+      compt = 0
+      while(compt < tabCaseEnTente.count)
+        cases = tabCaseEnTente.at(compt)
+        puts("CaseEnTente : x = " + cases.x.to_s + " y = " + cases.y.to_s)
+        compt+=1
+      end
+
+      compt = 0
+      while(compt < tabCaseEnGazon1.count)
+        cases = tabCaseEnGazon1.shift
+        puts("CaseEnGazon1 : x = " + cases.x.to_s + " y = " + cases.y.to_s)
+        compt+=1
+      end
+
+      compt = 0
+      while(compt < tabCaseEnGazon2.count)
+        cases = tabCaseEnGazon2.shift
+        puts("CaseEnGazon2 : x = " + cases.x.to_s + " y = " + cases.y.to_s)
+        compt+=1
+      end
+
+      tabReturn = Array.new(2)
 
       if col
         if nbTentePoss == @grille.tentesCol[i]-nbCasesTente
           if ! tabCaseEnTente.empty?
-            return tabCaseEnTente.shift
+            return tabReturn.unshift(i, tabCaseEnTente.shift)
           elsif ! tabCaseEnGazon1.empty?
-            return tabCaseEnGazon1.shift
+            return tabReturn.unshift(i, tabCaseEnGazon1.shift) 
           end
         elsif nbTentePoss == @grille.tentesCol[i]-nbCasesTente+1
           if ! tabCaseEnGazon2.empty?
-            return tabCaseEnGazon2.shift
+            return tabReturn.unshift(i, tabCaseEnGazon2.shift) 
           end
         end
       else
         if nbTentePoss == @grille.tentesLigne[i]-nbCasesTente
           if ! tabCaseEnTente.empty?
-            return tabCaseEnTente.shift
+            return tabReturn.unshift(i, tabCaseEnTente.shift) 
           elsif ! tabCaseEnGazon1.empty?
-            return tabCaseEnGazon1.shift
+            return tabReturn.unshift(i, tabCaseEnGazon1.shift) 
           end
         elsif nbTentePoss == @grille.tentesLigne[i]-nbCasesTente+1
           if ! tabCaseEnGazon2.empty?
-            return tabCaseEnGazon2.shift
+            return tabReturn.unshift(i, tabCaseEnGazon2.shift) 
           end
         end
       end
@@ -557,46 +579,46 @@ class Aide
     tableau = Array.new
 
     if (funcReturn=self.nbCasesIncorrect) != 0 && tutoOuRapide == "rapide"
-      tableau.push(nil, "Il y a " + funcReturn.to_s + " erreur(s)")
+      tableau.push(nil, "Il y a " + funcReturn.to_s + " erreur(s)", nil, nil)
       return tableau
     elsif (funcReturn=self.casesIncorrect) != 0 && tutoOuRapide == "tuto"
-      tableau.push(funcReturn, "Les cases en surbrillance sont fausses")
+      tableau.push(funcReturn, "Les cases en surbrillance sont fausses", nil, nil)
       return tableau
     elsif (funcReturn=self.impossibleTenteAdjacente) != 0
-      tableau.push(funcReturn, "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon")
+      tableau.push(funcReturn, "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon", nil, nil)
       return tableau
     elsif (funcReturn=self.resteQueTentesLigne) != 0
-      tableau.push(nil, "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s)
+      tableau.push(nil, "Il ne reste que des tentes à placer sur la ligne en surbrillance", false, funcReturn)
       return tableau
     elsif (funcReturn=self.resteQueTentesColonne) != 0
-      tableau.push(nil, "Il ne reste que des tentes à placer sur la colonne " + funcReturn.to_s)
+      tableau.push(nil, "Il ne reste que des tentes à placer sur la colonne en surbrillance", true, funcReturn)
       return tableau
     elsif (funcReturn=self.resteQueGazonLigne) != 0
-      tableau.push(nil, "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s)
+      tableau.push(nil, "Il ne reste que du gazon à placer sur la ligne en surbrillance", false, funcReturn)
       return tableau
     elsif (funcReturn=self.resteQueGazonColonne) != 0
-      tableau.push(nil, "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s)
+      tableau.push(nil, "Il ne reste que du gazon à placer sur la colonne en surbrillance", true, funcReturn)
       return tableau
     elsif (funcReturn=self.casePasACoteArbre) != 0
-      tableau.push(funcReturn, "La case en surbrillance est forcement du gazon")
+      tableau.push(funcReturn, "La case en surbrillance est forcement du gazon", nil, nil)
       return tableau
     elsif (funcReturn=self.uniquePossibiliteArbre) != 0
-      tableau.push(funcReturn, "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance")
+      tableau.push(funcReturn, "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance", nil, nil)
       return tableau
     elsif (funcReturn=self.dispositionPossibleLigne) != 0
-      tableau.push(funcReturn, "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case en surbrillance")
+      tableau.push(funcReturn.at(1), "D'après les dispositions de la ligne en surbrillance, il n'y a qu'une seule possibilité pour la case en surbrillance", false, funcReturn.at(0)+1)
       return tableau
     elsif (funcReturn=self.dispositionPossibleColonne) != 0
-      tableau.push(funcReturn, "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case en surbrillance")
+      tableau.push(funcReturn.at(1), "D'après les dispositions de la colonne en surbrillance, il n'y a qu'une seule possibilité pour la case en surbrillance", true, funcReturn.at(0)+1)
       return tableau
     elsif (funcReturn=self.arbreAutourCasePossedeTente) != 0
-      tableau.push(funcReturn, "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes")
+      tableau.push(funcReturn, "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes", nil, nil)
       return tableau
     elsif (funcReturn=self.caseArbreAssocieTente) != 0
-      tableau.push(funcReturn, "La case en surbrillance n'a pas encore placé sa tente")
+      tableau.push(funcReturn, "L'arbre en surbrillance n'a pas encore placé sa tente", nil, nil)
       return tableau
     else
-      tableau.push(nil, "Aucune aide disponible ...")
+      tableau.push(nil, "Aucune aide disponible ...", nil, nil)
       return tableau
     end
   end

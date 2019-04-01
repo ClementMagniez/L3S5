@@ -73,6 +73,7 @@ class HudJeu < Hud
 						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
 					end
 				}
+				desurbrillanceIndice
 			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
 			lblIndiceLig = labelIndice(i,"ligne")
@@ -91,6 +92,7 @@ class HudJeu < Hud
 
 					end
 				}
+				desurbrillanceIndice
 			}
 		}
 
@@ -116,13 +118,20 @@ class HudJeu < Hud
 
 						end
 					end
-
+					desurbrillanceIndice
 					self.jeuTermine		if @grille.estValide
 				end
 				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
 			end
 		end
 		return self
+	end
+
+	def desurbrillanceIndice
+		if @lblIndiceSubr != nil
+			@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
+			@lblIndiceSubr = nil 
+		end
 	end
 
 

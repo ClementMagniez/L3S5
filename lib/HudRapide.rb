@@ -85,6 +85,23 @@ class HudRapide < HudJeu
 			end
 			@lblAide.use_markup = true
 			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
+
+			indice = tableau.at(3) 
+			
+			if tableau.at(2) != nil
+				if tableau.at(2) == false
+					lblIndice = @gridJeu.get_child_at(0,indice).child
+					puts(indice)
+					lblIndice.set_markup ("<span foreground='red' weight='ultrabold' size='x-large'>" + lblIndice.text + "</span>" )
+
+
+				else
+					lblIndice = @gridJeu.get_child_at(indice,0).child
+					puts(indice)
+					lblIndice.set_markup ("<span foreground='red' weight='ultrabold' size='x-large'>" +lblIndice.text + "</span>")
+				end
+				@lblIndiceSubr = lblIndice
+			end
 		}
 	end
 end
