@@ -73,6 +73,10 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille)))
 	end
 
+	def lancementExplo(taille)
+		@fenetre.changerWidget(self,HudExploration.new(@fenetre,Grille.new(taille)))
+	end
+
 	# Créé et initialise le bouton des options
 	# Le bouton affiche le menu des options
 	def initBoutonOptions
