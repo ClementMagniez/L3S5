@@ -132,5 +132,8 @@ class Hud < Gtk::Grid
 		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
 	end
 
+	def styleLabel(label,couleur,style,size,contenu)
+		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
+	end
 
 end

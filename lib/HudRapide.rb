@@ -7,6 +7,7 @@ class HudRapide < HudJeu
 	def initialize(window,grille,temps)
 		super(window,grille)
 		@temps = temps*60
+		@@malus = 15
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
 		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
@@ -21,7 +22,7 @@ class HudRapide < HudJeu
 		initBoutonTimer
 		initBoutonPause
 		initBoutonAide
-		initBoutonResetRapide
+		initBoutonReset
 
 		self.attach(@btnPause,@varPlaceGrid-3,0,1,1)
 		self.attach(@lblTime,@varPlaceGrid-4,0,1,1)
@@ -29,6 +30,8 @@ class HudRapide < HudJeu
 		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
 		fond = ajoutFondEcran
 		self.attach(fond,0,0,@varPlaceGrid+2,5)
+
+
 	end
 
 	def initBoutonTimer
@@ -63,6 +66,7 @@ class HudRapide < HudJeu
 	def initBoutonAide
 		aide
 		@btnAide.signal_connect("clicked") {
+<<<<<<< HEAD
 			@grille.score.appelerAssistant()
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
@@ -75,6 +79,9 @@ class HudRapide < HudJeu
 			@lblAide.use_markup = true
 			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
 			@stockHorloge = @stockHorloge-5
+=======
+			@stockHorloge = @stockHorloge + @@malus
+>>>>>>> origin/GTK
 		}
 	end
 end

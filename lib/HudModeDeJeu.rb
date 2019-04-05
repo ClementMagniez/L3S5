@@ -53,9 +53,9 @@ class HudModeDeJeu < Hud
 			self.attach(@btnExploMoyen,varX+1, varY+11, 1, 1)
 			self.attach(@btnExploDifficile,varX+1, varY+12, 1, 1)
 
-		self.attach(@btnOptions, varX, varY+14, 1, 1)
+		self.attach(@btnOptions, 1, varY+14, 1, 1)
 
-		self.attach(@btnQuitter, varX+1, varY+14, 1, 1)
+		self.attach(@btnQuitter, varX+4, varY+14, 1, 1)
 
 		self.attach(@btnProfil, varX+2, varY, 1, 1)
 
