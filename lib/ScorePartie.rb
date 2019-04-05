@@ -96,7 +96,7 @@ class ScorePartie
   ##
   # == estModeChrono(0)
   #
-  # Cette méthode permet de passer le booléen du mode contre-la-montre à +true+
+  # Cette méthode permet de passer le booléen du mode "contre-la-montre" à +true+.
   #
   # === Attribut
   #
