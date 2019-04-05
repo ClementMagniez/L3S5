@@ -7,7 +7,7 @@ class HudRapide < HudJeu
 	def initialize(window,grille)
 		super(window,grille)
 		@btnPause = Gtk::Button.new :label => "Pause"
-		@lblTime = Gtk::Label.new(" 0:0 ")
+		@lblTime = Gtk::Label.new(" 00:00 ")
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
 		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
@@ -36,7 +36,11 @@ class HudRapide < HudJeu
 	def timer
 		while true do
 			@horloge = (Time.now - @timer) + @stockHorloge
-			@lblTime.set_label((@horloge/60).to_i.to_s + ":" + (@horloge%60).to_i.to_s)
+				minutes = (@horloge/60).to_i
+					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
+				secondes = (@horloge%60).to_i
+					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
+			@lblTime.set_label(strMinutes + ":" + strSecondes)
 			sleep 1
 		end
 	end
@@ -78,7 +82,7 @@ class HudRapide < HudJeu
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
-				
+
 					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
 					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
 
@@ -86,8 +90,8 @@ class HudRapide < HudJeu
 			@lblAide.use_markup = true
 			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
 
-			indice = tableau.at(3) 
-			
+			indice = tableau.at(3)
+
 			if tableau.at(2) != nil
 				if tableau.at(2) == false
 					lblIndice = @gridJeu.get_child_at(0,indice).child
