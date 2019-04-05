@@ -72,36 +72,9 @@ class HudRapide < HudJeu
 	end
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide
-		taille = @grille.length
-		@btnAide = Gtk::Button.new :label => " Aide "
+		aide
 		@btnAide.signal_connect("clicked") {
-			tableau = @aide.cycle("rapide")
-			caseAide = tableau.at(0)
-			if caseAide != nil then
-				
-					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
-					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
-
-			end
-			@lblAide.use_markup = true
-			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
-
-			indice = tableau.at(3) 
-			
-			if tableau.at(2) != nil
-				if tableau.at(2) == false
-					lblIndice = @gridJeu.get_child_at(0,indice).child
-					puts(indice)
-					lblIndice.set_markup ("<span foreground='red' weight='ultrabold' size='x-large'>" + lblIndice.text + "</span>" )
-
-
-				else
-					lblIndice = @gridJeu.get_child_at(indice,0).child
-					puts(indice)
-					lblIndice.set_markup ("<span foreground='red' weight='ultrabold' size='x-large'>" +lblIndice.text + "</span>")
-				end
-				@lblIndiceSubr = lblIndice
-			end
+			@stockHorloge = @stockHorloge-5
 		}
 	end
 end

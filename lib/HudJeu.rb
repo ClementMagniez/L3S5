@@ -219,4 +219,39 @@ class HudJeu < Hud
 			puts(" Je ne fais actuellement rien, mais j'aimerai charger une sauvegarder et j'aime aussi les Pommes.")
 		}
 	end
+
+	#Fonction d'aide pour l'HUD exploration et rapide
+	def aide
+		taille = @grille.length
+		@btnAide = Gtk::Button.new :label => " Aide "
+		@btnAide.signal_connect("clicked") {
+			tableau = @aide.cycle("rapide")
+			caseAide = tableau.at(0)
+			if caseAide != nil then
+				
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
+					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
+
+			end
+			@lblAide.use_markup = true
+			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
+
+			indice = tableau.at(3) 
+			
+			if tableau.at(2) != nil
+				if tableau.at(2) == false
+					lblIndice = @gridJeu.get_child_at(0,indice).child
+					puts(indice)
+					lblIndice.set_markup ("<span foreground='red' weight='ultrabold' size='x-large'>" + lblIndice.text + "</span>" )
+
+
+				else
+					lblIndice = @gridJeu.get_child_at(indice,0).child
+					puts(indice)
+					lblIndice.set_markup ("<span foreground='red' weight='ultrabold' size='x-large'>" +lblIndice.text + "</span>")
+				end
+				@lblIndiceSubr = lblIndice
+			end
+		}
+	end
 end
