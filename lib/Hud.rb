@@ -52,8 +52,13 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
 	end
 
+	# Lance le menu de fin de jeu
 	def lancementFinDeJeu
 		puts "Fin de jeu"
+		score = 0
+		if(grille != nil)
+			score = 10
+		end
 		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self))
 	end
 
@@ -62,20 +67,29 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudInscription.new(@fenetre))
 	end
 
-	def lancementRapide(taille)
+	def lancementProfil
+		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
+	end
+
+	def lancementRapide(taille,temps)
 		# grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
 		# # aide = Aide.new(grille)
 		# @fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
-		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille)))
+		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille),temps))
+	end
+
+	def lancementExplo(taille)
+		@fenetre.changerWidget(self,HudExploration.new(@fenetre,Grille.new(taille)))
 	end
 
 	# Créé et initialise le bouton des options
 	# Le bouton affiche le menu des options
 	def initBoutonOptions
-		lblOption = Gtk::Label.new
-			lblOption.set_text("Options")
 		@btnOptions = Gtk::Button.new
-		@btnOptions.add(lblOption)
+		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
+		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
+		engrenage.pixbuf = engrenage.pixbuf.scale(@winX/20,@winX/20)	if engrenage.pixbuf != nil
+		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
 				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
 		}
@@ -102,5 +116,17 @@ class Hud < Gtk::Grid
 		return fond
 	end
 
+	def initBoutonQuitter
+		@btnQuitter = Gtk::Button.new
+		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
+		quitter = Gtk::Image.new(:file => '../img/quitter.png')
+		quitter.pixbuf = quitter.pixbuf.scale(@winX/20,@winX/20)	if quitter.pixbuf != nil
+		@btnQuitter.set_image(quitter)
+		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
+	end
+
+	def styleLabel(label,couleur,style,size,contenu)
+		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
+	end
 
 end
