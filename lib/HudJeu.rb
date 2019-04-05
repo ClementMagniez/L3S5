@@ -130,7 +130,8 @@ class HudJeu < Hud
 
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
-			@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
+			self.styleLabel(@lblIndiceSubr,"white","ultrabold","x-large",@lblIndiceSubr.text)
+			#@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
 			@lblIndiceSubr = nil
 		end
 	end
@@ -140,9 +141,9 @@ class HudJeu < Hud
 		lblIndice = Gtk::Label.new
 		lblIndice.use_markup = true
 		if ligneOuColonne == "ligne"
-			lblIndice.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@grille.tentesLigne.fetch(i).to_s+"</span>")
+			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesLigne.fetch(i).to_s)
 		else
-			lblIndice.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@grille.tentesCol.fetch(i).to_s+"</span>")
+			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesCol.fetch(i).to_s)
 		end
 
 		return lblIndice
