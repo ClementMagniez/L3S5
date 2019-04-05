@@ -15,21 +15,26 @@ class Grille
 	# Obtient et génère la grille de taille size
 	# 	La taille de la grille doit etre compris dans : [6;16]
 	# 	size < 6 retournera une grille de taille 6,
-	# 	de meme pour size > 16 : retourne une grille de taille 16
+	# 	de même pour size > 16 : retourne une grille de taille 16
 	# size - taille de la grille
-	def initialize(size)
-		# raise("Indexer à 1") if 0==n
+	def initialize(size, test=false, testLine=0)
 
-		n = Random.rand(Range.new((size-6)*100+1, (size-5)*100-1))	# ligne dans le fichier tirée aléatoirement
-		result=nil # TODO - hideux, à remplacer
-		matSize=n/100+6
-		filePath = "../grilles.txt"
 		if size < 6
 			size = 6
 		elsif size > 16
 			size = 16
 		end
 
+		# ligne dans le fichier tirée aléatoirement
+		n = Random.rand(Range.new((size-6)*100+1, (size-5)*100-1))	
+		result=nil # TODO - hideux, à remplacer
+		filePath = "../grilles.txt"
+
+		# Utilisé par les tests unitaires afin de pouvoir étudier une grille donnée
+		n=testLine if test
+		filePath="./grilles.txt" if test
+		######
+		matSize=n/100+6
 
 		File.open(filePath,"r") do |file|
 			n.times { result=file.gets }
@@ -38,11 +43,11 @@ class Grille
 		@grille=Array.new(matSize) { Array.new(matSize) {0} }
 		@tentesCol=Array.new(matSize)
 		@tentesLigne=Array.new(matSize)
-		parseText(result)
-		@varTentesCol=@tentesCol.dup
-		@varTentesLigne=@tentesLigne.dup
 		@stack=Pile.new()
-		@estValide=false
+
+		parseText(result)
+
+		self.raz
 	end
 
 
@@ -53,14 +58,11 @@ class Grille
 
 	# Annule le dernier coup de l'utilisateur sur la grille
 	def cancel
-		if not @stack.isEmpty?
+		if not self.stack.isEmpty?
 			cell=self.stack.pop
 			cell.cancel(self)
-			self.stack.pop
-			self.stack.pop
-			return cell
 		end
-
+		cell
 	end
 
 	# Renvoie true si la grille est complète et valide, false sinon
@@ -79,7 +81,7 @@ class Grille
 		self.estValide = false
 		@varTentesCol=@tentesCol.dup
 		@varTentesLigne=@tentesLigne.dup
-
+		self.stack.clear
 	end
 
 

@@ -14,9 +14,11 @@ class Pile
 	end
 
 	def isEmpty?
-		return @array.empty?
-		self.array.pop(elt)
-
+		return self.array.empty?
+	end
+	
+	def clear
+		self.array.clear
 	end
 	
 	
