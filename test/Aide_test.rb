@@ -8,7 +8,7 @@ class TestAide < Test::Unit::TestCase
 
 	# test de nbCasesIncorrect
 	def test_nbCasesIncorrect
-    	grille=Grille.new(1097,"../grilles.txt");
+    	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 
 		# On met la case en gazon alors qu'il s'agit d'une tente (1 erreur)
@@ -22,7 +22,7 @@ class TestAide < Test::Unit::TestCase
 
     # test de casesIncorrect
 	def test_casesIncorrect
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 
 		# On met la case en gazon alors qu'il s'agit d'une tente (1 erreur)
@@ -36,7 +36,7 @@ class TestAide < Test::Unit::TestCase
 
   # test de resteQueTentesLigne
   def test_resteQueTentesLigne
-		grille=Grille.new(1097,"../grilles.txt");
+		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 
 		# Il reste des cases gazons sur la ligne 16
@@ -51,7 +51,7 @@ class TestAide < Test::Unit::TestCase
 
     # test de resteQueTentesColonne
   def test_resteQueTentesColonne
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 
 		# Il reste des cases gazons sur la colonne 13
@@ -69,7 +69,7 @@ class TestAide < Test::Unit::TestCase
     # test de resteQueGazonLigne
   def test_resteQueGazonLigne
     	# Dans cette grille, il n'y a qu'une seule ligne qui est à 0 tente
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(VIDE)
 
@@ -86,7 +86,7 @@ class TestAide < Test::Unit::TestCase
     # test de resteQueGazonColonne
 	def test_resteQueGazonColonne
     	# Dans cette grille, il n'y a qu'une seule colonne qui est à 0 tente
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(VIDE)
 
@@ -102,7 +102,7 @@ class TestAide < Test::Unit::TestCase
 
     # test de casePasACoteArbre
 	def test_casePasACoteArbre
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(VIDE)
 
@@ -121,7 +121,7 @@ class TestAide < Test::Unit::TestCase
     # test de uniquePossibiliteArbre
 	def test_uniquePossibiliteArbre
     	# Dans la grille, il y a au début de la partie une seule case arbre qui ne contient qu'une seule possibilité de placer une tente
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 
 		assert(aide.uniquePossibiliteArbre != 0, "Il n'y a plus aucune case arbre qui contient qu'une seule possibilité de placer une tente")
@@ -136,7 +136,7 @@ class TestAide < Test::Unit::TestCase
     # test de dispositionPossibleLigne
 	def test_dispositionPossibleLigne
     	# Dans la grille, il y a au début de la partie plusieurs disposition favorable
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(VIDE)
 
@@ -155,7 +155,7 @@ class TestAide < Test::Unit::TestCase
     # test de dispositionPossibleColonne
 	def test_dispositionPossibleColonne
     	# Dans la grille, il y a au début de la partie plusieurs disposition favorable
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(VIDE)
 
@@ -173,7 +173,7 @@ class TestAide < Test::Unit::TestCase
 
     # test de arbreAutourCasePossedeTente
 	def test_arbreAutourCasePossedeTente
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(VIDE)
 
@@ -191,7 +191,7 @@ class TestAide < Test::Unit::TestCase
 
     # test de caseArbreAssocieTente
 	def test_caseArbreAssocieTente
-  	grille=Grille.new(1097,"../grilles.txt");
+  	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(VIDE)
 

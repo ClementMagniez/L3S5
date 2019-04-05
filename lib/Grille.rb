@@ -13,29 +13,43 @@ class Grille
 						  :estValide, :score, :stack
 
 
-	# Obtient et génère la grille à partir du fichier filePath, ligne n
-	# L'indexation se fait à partir de 1
-	# n - ligne du fichier où se trouve la source de la grille
-	# filePath - path du fichier de génération, typiquement "../grilles.txt"
-	def initialize(n,filePath)
-		raise("Indexer à 1") if 0==n
+	# Obtient et génère la grille de taille size
+	# 	La taille de la grille doit etre compris dans : [6;16]
+	# 	size < 6 retournera une grille de taille 6,
+	# 	de même pour size > 16 : retourne une grille de taille 16
+	# size - taille de la grille
+	def initialize(size, test=false, testLine=0)
 
+		if size < 6
+			size = 6
+		elsif size > 16
+			size = 16
+		end
+
+		# ligne dans le fichier tirée aléatoirement
+		n = Random.rand(Range.new((size-6)*100+1, (size-5)*100-1))
 		result=nil # TODO - hideux, à remplacer
+		filePath = "../grilles.txt"
+
+		# Utilisé par les tests unitaires afin de pouvoir étudier une grille donnée
+		n=testLine if test
+		filePath="./grilles.txt" if test
+		######
 		matSize=n/100+6
 
 		File.open(filePath,"r") do |file|
 			n.times { result=file.gets }
-
 		end
+
 		@grille=Array.new(matSize) { Array.new(matSize) {0} }
 		@tentesCol=Array.new(matSize)
 		@tentesLigne=Array.new(matSize)
 		@score = ScorePartie.new()
-		parseText(result)
-		@varTentesCol=@tentesCol.dup
-		@varTentesLigne=@tentesLigne.dup
 		@stack=Pile.new()
-		@estValide=false
+
+		parseText(result)
+
+		self.raz
 	end
 
 
@@ -46,9 +60,11 @@ class Grille
 
 	# Annule le dernier coup de l'utilisateur sur la grille
 	def cancel
-		cell=self.stack.pop
-		cell.cancel(cell.x, cell.y, self)
-		self
+		if not self.stack.isEmpty?
+			cell=self.stack.pop
+			cell.cancel(self)
+		end
+		cell
 	end
 
 	# Renvoie true si la grille est complète et valide, false sinon
@@ -61,6 +77,13 @@ class Grille
 			end
 		end
 		self.estValide=res
+	end
+
+	def raz
+		self.estValide = false
+		@varTentesCol=@tentesCol.dup
+		@varTentesLigne=@tentesLigne.dup
+		self.stack.clear
 	end
 
 
