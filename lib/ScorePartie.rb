@@ -13,11 +13,12 @@ require_relative "TempsChrono.rb"
 #
 class ScorePartie
 
-  # @bonus, @malus, @nbAidesUsees, @valeur - Le pourcentage appliqué selon la difficulté sélectionnée, le
-  # pourcentage appliqué pour pénaliser une utilisation trop répétitive des aides, le nombre d'aides utilisées
-  # lors d'une partie, le montant numérique du score
+  # @bonus, @malus, @modeChrono, @nbAidesUsees, @taille, @tempsDeJeu, @valeur - Le pourcentage appliqué selon la difficulté
+  # sélectionnée, le pourcentage appliqué pour pénaliser une utilisation trop répétitive des aides, le nombre d'aides
+  # utilisées lors d'une partie, le booléen déterminant le type de chronomètre, la taille de la grille liée, le temps de jeu
+  # selon le mode, le montant numérique du score
 
-  attr_reader :bonus, :malus, :nbAidesUsees, :valeur
+  attr_reader :bonus, :malus, :modeChrono, :nbAidesUsees, :tempsDeJeu, :taille, :valeur
 
   ##
 	# == initialize(0)
@@ -25,18 +26,35 @@ class ScorePartie
 	# Comme nous n'avons pas besoin de privatiser la méthode *new*, nous pouvons directement redéfinir cette
   # méthode.
 	#
+	# === Paramètre
+	#
+	# * +tailleMatrice+ - Un entier strictement positif
+	#
 	# === Attributs
 	#
 	# * +bonus+ - L'entier indiquant le pourcentage positif appliqué selon la difficulté
 	# * +malus+ - L'entier indiquant le pourcentage négatif appliqué selon la difficulté
+	# * +modeChrono+ - Le booléen indiquant si le score final doit être calculé selon la règle du "contre-la-montre"
 	# * +nbAidesUsees+ - L'entier indiquant le nombre de fois où l'assistant a été activé par le joueur
+	# * +taille+ - L'entier indiquant la taille de la matrice liée
+	# * +tempsDeJeu+ - La chaîne de caractères indiquant le temps de jeu total (varie selon le mode)
 	# * +valeur+ - L'entier déterminant le score d'une partie
 	#
-  def initialize
-    @bonus = 0
-    @malus = 0
-    @nbAidesUsees = 0
-    @valeur = 0
+  def initialize(tailleMatrice)
+    @modeChrono, @nbAidesUsees, @taille, @tempsDeJeu, @valeur = false, 0, tailleMatrice, "0:0", 0
+    # FACILE - Bonus x1, 3% de malus
+    if(@taille < 9)
+      @bonus = 1
+      @malus = 0.03
+    # DIFFICILE - Bonus x3, 10% de malus
+    elsif(@taille >= 12)
+      @bonus = 3
+      @malus = 0.1
+    # MOYEN - Bonus x1.5, 5% de malus
+    else
+      @bonus = 1.5
+      @malus = 0.05
+    end
   end
 
   ##
@@ -50,58 +68,20 @@ class ScorePartie
   end
 
   ##
-	# == definirPourcentages(1)
-	#
-	# Cette méthode permet d'attribuer des valeurs non-nulles aux pourcentages du bonus et du malus.
-	#
-	# === Paramètre
-	#
-	# * +taille+ - Un entier strictement positif indiquant la taille de la grille (et donc, la
-  #              difficulté de la partie)
-	#
-	# === Attributs
-	#
-	# * +bonus+ - L'entier indiquant le montant de la multiplication appliquée à la fin de la partie
-	# * +malus+ - L'entier indiquant le pourcentage négatif appliqué à la fin de la partie
-	#
-  def definirPourcentages(taille)
-    # FACILE - Bonus x1, 3% de malus
-    if(taille < 9)
-      @bonus = 1
-      @malus = 0.03
-    # DIFFICILE - Bonus x3, 10% de malus
-    elsif(taille >= 12)
-      @bonus = 3
-      @malus = 0.1
-    # MOYEN - Bonus x1.5, 5% de malus
-    else
-      @bonus = 1.5
-      @malus = 0.05
-    end
-  end
-
-  ##
-  # == calculerScoreFinal(2)
+  # == calculerScoreFinal(0)
   #
   # Cette méthode retourne le résultat de la partie, calculé avec toutes les variables d'instance
   # initialisées et modifiées depuis la création de l'objet.
   #
-  # === Paramètres
-  #
-  # * +tempsDeJeu+ - Un entier strictement positif (ne concerne que le mode chrono), nul sinon
-	# * +taille+ - Un entier strictement positif indiquant la taille de la grille (et donc, la
-  #              difficulté de la partie)
-  #
-  def calculerScoreFinal(taille,tempsDeJeu,modeChrono)
+  def calculerScoreFinal()
     # FACILE
-    if(taille < 9 && @nbAidesUsees > 1)
-      puts "FACILE"
+    if(@taille < 9 && @nbAidesUsees > 1)
       nbMalus = @nbAidesUsees - 1
     # MOYEN
-    elsif(taille >= 9 && taille <= 12 && @nbAidesUsees > 2)
+    elsif(@taille >= 9 && taille < 12 && @nbAidesUsees > 2)
       nbMalus = @nbAidesUsees - 2
     # DIFFICILE
-    elsif(taille > 12 && @nbAidesUsees > 3)
+    elsif(@taille >= 12 && @nbAidesUsees > 3)
       nbMalus = @nbAidesUsees - 3
     # PAR DÉFAUT
     else
@@ -109,8 +89,21 @@ class ScorePartie
     end
 
     scoreFinal = (@valeur - @valeur * (@malus * nbMalus)) * @bonus
-    coefTemps = tempsDeJeu.convertirTempsEnEntier() / 100
-    return (modeChrono == true) ? scoreFinal.to_i * coefTemps : scoreFinal.to_i / coefTemps
+    coefTemps = @tempsDeJeu.convertirTempsEnEntier() / 100
+    return (@modeChrono == true) ? scoreFinal.to_i * coefTemps : scoreFinal.to_i / coefTemps
+  end
+
+  ##
+  # == estModeChrono(0)
+  #
+  # Cette méthode permet de passer le booléen du mode contre-la-montre à +true+
+  #
+  # === Attribut
+  #
+  # * +modeChrono+ - Le booléen indiquant si le score final doit être calculé selon la règle du "contre-la-montre"
+  #
+  def estModeChrono()
+    @modeChrono = true
   end
 
   ##
@@ -124,6 +117,20 @@ class ScorePartie
   #
   def recupererPoints(pointsCase)
     @valeur += pointsCase
+  end
+
+  ##
+  # == recupererTemps(1)
+  #
+  # Cette méthode permet de récupérer un temps donné et de l'enregistrer en tant que chaîne de
+  # caractères.
+  #
+  # === Paramètre
+  #
+  # * +tempsGrille+ - Une instance de la classe *Time*
+  #
+  def recupererTemps(tempsGrille)
+    @tempsDeJeu = tempsGrille.afficherTempsChrono()
   end
 
   ##

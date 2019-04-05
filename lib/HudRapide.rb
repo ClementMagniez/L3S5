@@ -11,6 +11,7 @@ class HudRapide < HudJeu
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
 		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
+		@grille.score.estModeChrono()
 		@timer = Time.now
 		@pause = false
 		@horloge = 0
@@ -79,7 +80,7 @@ class HudRapide < HudJeu
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
-				
+
 					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
 					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
 

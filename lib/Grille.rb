@@ -44,8 +44,7 @@ class Grille
 		@grille=Array.new(matSize) { Array.new(matSize) {0} }
 		@tentesCol=Array.new(matSize)
 		@tentesLigne=Array.new(matSize)
-		@score = ScorePartie.new()
-		@score.definirPourcentages(matSize)
+		@score = ScorePartie.new(matSize)
 		@stack=Pile.new()
 
 		parseText(result)
