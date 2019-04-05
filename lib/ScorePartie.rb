@@ -17,7 +17,7 @@ class ScorePartie
   # utilisées lors d'une partie, le booléen déterminant le type de chronomètre, la taille de la grille liée, le temps de jeu
   # selon le mode, le montant numérique du score
 
-  attr_accessor :bonus, :malus, :modeChrono, :nbAidesUsees, :tempsDeJeu, :taille, :valeur
+  attr_accessor :bonus, :malus, :modeChrono, :nbAidesUsees, :taille, :tempsDeJeu, :valeur
 
   ##
 	# == initialize(0)
@@ -81,7 +81,7 @@ class ScorePartie
   # Cette méthode retourne le résultat de la partie, calculé avec toutes les variables d'instance
   # initialisées et modifiées depuis la création de l'objet.
   #
-  def calculerScoreFinal()
+  def calculerScoreFinal
     # FACILE
     if(@taille < 9 && @nbAidesUsees > 1)
       nbMalus = @nbAidesUsees - 1
@@ -111,7 +111,7 @@ class ScorePartie
   #
   # * +modeChrono+ - Le booléen indiquant si le score final doit être calculé selon la règle du "contre-la-montre"
   #
-  def estModeChrono()
+  def estModeChrono
     @modeChrono = true
   end
 
@@ -123,6 +123,10 @@ class ScorePartie
   # === Paramètre
   #
   # * +pointsCase+ - Un entier positif ou négatif
+  #
+  # === Attribut
+  #
+  # * +valeur+ - L'entier déterminant le score d'une partie
   #
   def recupererPoints(pointsCase)
     @valeur += pointsCase
@@ -136,7 +140,11 @@ class ScorePartie
   #
   # === Paramètre
   #
-  # * +tempsGrille+ - Une instance de la classe *Time*
+  # * +tempsGrille+ - Un nombre réel strictement positif
+  #
+  # === Attribut
+  #
+  # * +tempsDeJeu+ - Le nombre de secondes indiquant le temps de jeu total (varie selon le mode)
   #
   def recupererTemps(tempsGrille)
     @tempsDeJeu = tempsGrille
