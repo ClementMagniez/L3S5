@@ -21,7 +21,7 @@ class HudRapide < HudJeu
 		self.attach(@btnPause,@varPlaceGrid-3,0,1,1)
 		self.attach(@lblTime,@varPlaceGrid-4,0,1,1)
 		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
-		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
+		self.attach(@lblAide,1,3, @varPlaceGrid, 1)
 		fond = ajoutFondEcran
 		self.attach(fond,0,0,@varPlaceGrid+2,5)
 

@@ -6,15 +6,30 @@ class HudTutoriel < HudJeu
 		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
 		self.setTitre("Tutoriel")
 
-
-
 		initBoutonAide
+		initBoutonRemplissage
 
-
+		self.attach(@btnRemplissage,@varPlaceGrid,1,1,1)
 		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
 		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
 			fond = ajoutFondEcran
 		self.attach(fond,0,0,@varPlaceGrid+2,5)
+	end
+
+	def initBoutonRemplissage
+		@btnRemplissage = Gtk::Button.new :label => "Remplir"
+		@btnRemplissage.signal_connect('clicked') {
+			liste = @aide.listeCasesGazon
+			while not liste.empty?
+				caseRemp = liste.pop
+				if caseRemp.statutVisible.isVide?
+					caseRemp.cycle(@grille)
+					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
+
+				end
+			end
+		}
+		
 	end
 
 	# Créé et initialise le bouton d'aide

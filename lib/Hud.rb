@@ -129,4 +129,10 @@ class Hud < Gtk::Grid
 		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
 	end
 
+	def styleBouton(bouton,label,couleur,style,size)
+		self.styleLabel(label,'white','ultrabold','x-large',label.text)
+		bouton.add(label)
+		bouton.set_relief(Gtk::ReliefStyle::NONE)
+	end
+
 end

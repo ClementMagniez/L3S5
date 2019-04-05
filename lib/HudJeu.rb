@@ -41,12 +41,12 @@ class HudJeu < Hud
 		initBoutonSauvegarde
 
 
-		self.attach(@btnSauvegard,@varPlaceGrid/2,3,2,1)
+		self.attach(@btnSauvegard,@varPlaceGrid/2,4,2,1)
 		self.attach(@gridJeu,2, 1, @varPlaceGrid,1)
 		self.attach(@btnReset,@varPlaceGrid,0,1,1)
 		self.attach(@btnCancel,@varPlaceGrid-1,0,1,1)
-		self.attach(@btnRetour,@varPlaceGrid,3,1,1)
-		self.attach(@btnOptions, 1, 3, 1, 1)
+		self.attach(@btnRetour,@varPlaceGrid,4,1,1)
+		self.attach(@btnOptions, 1, 4, 1, 1)
 		self.attach(@fondGrille,1,1, @varPlaceGrid, 1)
 	end
 
@@ -251,7 +251,6 @@ class HudJeu < Hud
 
 	# Réinitialise la grille
 	def reset
-
 		@grille.grille.each do |line|
 			line.each do |cell|
 				cell.reset
@@ -261,7 +260,15 @@ class HudJeu < Hud
 			end
 		end
 		@grille.raz
-		puts(@grille.estComplete?)
+		if @t != nil
+				@t.kill
+				@stockHorloge =0
+				@timer = Time.now
+				@t = Thread.new{timer}
+				if @pause
+					@btnPause.set_label("Pause")
+				end
+		end
 	end
 
 	# Créé et initialise le bouton de retour
@@ -276,7 +283,10 @@ class HudJeu < Hud
 	end
 
 	def initBoutonSauvegarde
-		@btnSauvegard = Gtk::Button.new :label => "Sauvegarder"
+		 @btnSauvegard = Gtk::Button.new 
+	
+		styleBouton(@btnSauvegard,Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
+
 		@btnSauvegard.signal_connect('clicked') {
 			puts(" Je ne fais actuellement rien, mais j'aimerai charger une sauvegarder et j'aime aussi les Pommes.")
 		}
@@ -296,22 +306,17 @@ class HudJeu < Hud
 
 			end
 			@lblAide.use_markup = true
-			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
+			styleLabel(@lblAide,'red','ultrabold','x-large',tableau.at(1))
 
 			indice = tableau.at(3)
 
 			if tableau.at(2) != nil
 				if tableau.at(2) == false
-					lblIndice = @gridJeu.get_child_at(0,indice).child
-					puts(indice)
-					lblIndice.set_markup ("<span foreground='red' weight='ultrabold' size='x-large'>" + lblIndice.text + "</span>" )
-
-
+					lblIndice = @gridJeu.get_child_at(0,indice).child				
 				else
-					lblIndice = @gridJeu.get_child_at(indice,0).child
-					puts(indice)
-					lblIndice.set_markup ("<span foreground='red' weight='ultrabold' size='x-large'>" +lblIndice.text + "</span>")
+					lblIndice = @gridJeu.get_child_at(indice,0).child				
 				end
+				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
 				@lblIndiceSubr = lblIndice
 			end
 		}
