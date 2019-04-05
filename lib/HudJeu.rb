@@ -176,6 +176,59 @@ class HudJeu < Hud
 		}
 	end
 
+	def initBoutonResetRapide
+		@btnReset.signal_connect("clicked") {
+			@t.kill
+			@stockHorloge =0
+			@timer = Time.now
+			@t = Thread.new{timer}
+			if @pause
+				@btnPause.set_label("Pause")
+			end
+		}
+
+	end
+
+	def initBoutonTimer
+		@btnPause = Gtk::Button.new :label => "Pause"
+		@lblTime = Gtk::Label.new(" 00:00 ")
+		@timer = Time.now
+		@pause = false
+		@horloge = 0
+		@stockHorloge = 0
+		@t=Thread.new{timer}
+
+	end
+
+	def initBoutonPause
+		@btnPause.signal_connect('clicked'){
+			if @pause
+				@timer = Time.now
+				@t = Thread.new{timer}
+				@btnPause.set_label("Pause")
+				@pause = false
+			else
+				@stockHorloge = @stockHorloge + (Time.now - @timer)
+				@t.kill
+				@btnPause.set_label("Play")
+				@pause = true
+			end
+		}
+
+	end
+
+	def timer
+		while true do
+			@horloge = (Time.now - @timer) + @stockHorloge
+				minutes = (@horloge/60).to_i
+					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
+				secondes = (@horloge%60).to_i
+					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
+			@lblTime.set_label(strMinutes + ":" + strSecondes)
+			sleep 1
+		end
+	end
+
 	def initBoutonCancel
 		@btnCancel = Gtk::Button.new :label => "Cancel"
 		@btnCancel.signal_connect('clicked'){

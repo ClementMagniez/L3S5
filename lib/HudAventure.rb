@@ -3,8 +3,14 @@ class HudAventure < HudJeu
 		super(window,grille)
 
 		self.setTitre("Aventure")
+		initBoutonTimer
+		initBoutonPause
+		initBoutonResetRapide
 
-			fond = ajoutFondEcran
+
+		self.attach(@btnPause,@varPlaceGrid-2,0,1,1)
+		self.attach(@lblTime,@varPlaceGrid-3,0,1,1)
+		fond = ajoutFondEcran
 		self.attach(fond,0,0,@varPlaceGrid+2,5)
 	end
 

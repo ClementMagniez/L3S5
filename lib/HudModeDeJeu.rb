@@ -139,9 +139,4 @@ class HudModeDeJeu < Hud
 			lancementTutoriel(@@tailleFacile)
 		}
 	end
-
-	def initBoutonQuitter
-		@btnQuitter = Gtk::Button.new label: "Quitter"
-		@btnQuitter.signal_connect("clicked") { Gtk.main_quit }
-	end
 end

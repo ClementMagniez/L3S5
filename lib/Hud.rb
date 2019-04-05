@@ -76,10 +76,11 @@ class Hud < Gtk::Grid
 	# Créé et initialise le bouton des options
 	# Le bouton affiche le menu des options
 	def initBoutonOptions
-		lblOption = Gtk::Label.new
-			lblOption.set_text("Options")
 		@btnOptions = Gtk::Button.new
-		@btnOptions.add(lblOption)
+		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
+		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
+		engrenage.pixbuf = engrenage.pixbuf.scale(@winX/20,@winX/20)	if engrenage.pixbuf != nil
+		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
 				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
 		}
@@ -104,6 +105,15 @@ class Hud < Gtk::Grid
 		fond.pixbuf = fond.pixbuf.scale(@winX,@winY)	if fond.pixbuf != nil
 
 		return fond
+	end
+
+	def initBoutonQuitter
+		@btnQuitter = Gtk::Button.new 
+		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
+		quitter = Gtk::Image.new(:file => '../img/quitter.png')
+		quitter.pixbuf = quitter.pixbuf.scale(@winX/20,@winX/20)	if quitter.pixbuf != nil
+		@btnQuitter.set_image(quitter)
+		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
 	end
 
 
