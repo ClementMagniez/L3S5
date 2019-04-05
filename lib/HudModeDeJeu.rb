@@ -17,6 +17,10 @@ class HudModeDeJeu < Hud
 		@@tailleFacile = 6
 		@@tailleMoyen = 9
 		@@tailleDifficile = 12
+
+		@@tempsFacile = 15
+		@@tempsMoyen = 10
+		@@tempsDifficile = 5
 		self.setTitre("MODE DE JEU")
 
 
@@ -26,6 +30,8 @@ class HudModeDeJeu < Hud
 		initBoutonTuto
 		initBoutonQuitter
 		initBoutonChargerSauvegarde
+		initBoutonProfil
+		initBoutonsExplo
 
 		#Bouton sauvegarde !
 		self.attach(@btnSauvegarde,varX,varY-2,2,1)
@@ -37,17 +43,24 @@ class HudModeDeJeu < Hud
 			self.attach(@btnAvMoyen,varX+1, varY+3, 1, 1)
 			self.attach(@btnAvDifficile,varX+1, varY+4, 1, 1)
 
-		self.attach(Gtk::Label.new("Partie rapide"),varX, varY+5, 2, 1)
+		self.attach(Gtk::Label.new("Mode rapide"),varX, varY+5, 2, 1)
 			self.attach(@btnRapideFacile,varX+1, varY+6, 1, 1)
 			self.attach(@btnRapideMoyen,varX+1, varY+7, 1, 1)
 			self.attach(@btnRapideDifficile,varX+1, varY+8, 1, 1)
 
-		self.attach(@btnOptions, varX, varY+10, 1, 1)
+		self.attach(Gtk::Label.new("Mode exploration"),varX, varY+9, 2, 1)
+			self.attach(@btnExloFacile,varX+1, varY+10, 1, 1)
+			self.attach(@btnExploMoyen,varX+1, varY+11, 1, 1)
+			self.attach(@btnExploDifficile,varX+1, varY+12, 1, 1)
 
-		self.attach(@btnQuitter, varX+1, varY+10, 1, 1)
+		self.attach(@btnOptions, varX, varY+14, 1, 1)
+
+		self.attach(@btnQuitter, varX+1, varY+14, 1, 1)
+
+		self.attach(@btnProfil, varX+2, varY, 1, 1)
 
 			fond = self.ajoutFondEcran
-		self.attach(fond,0,0,varX+6,varY+14)
+		self.attach(fond,0,0,varX+6,varY+15)
 	end
 
 	def initBoutonChargerSauvegarde
@@ -57,6 +70,12 @@ class HudModeDeJeu < Hud
 		}
 	end
 
+	def initBoutonProfil
+		@btnProfil = Gtk::Button.new label: "Profil"
+		@btnProfil.signal_connect("clicked") {
+			lancementProfil
+		}
+	end
 
 	def initBoutonsAventure
 		@btnAvFacile = Gtk::Button.new :label => "Facile"
@@ -88,19 +107,42 @@ class HudModeDeJeu < Hud
 		@btnRapideFacile.signal_connect('clicked') {
 			puts "Lancement du mode facile de rapide"
 			#Niveau entre 6 et 9
-			lancementRapide(Random.rand(Range.new(@@tailleFacile, @@tailleFacile+3)))
+			lancementRapide(Random.rand(Range.new(@@tailleFacile, @@tailleFacile+3)),@@tempsFacile)
 		}
 		@btnRapideMoyen.signal_connect('clicked') {
 			puts "Lancement du mode moyen de rapide"
 			#Niveau entre 9 et 12
-			lancementRapide(Random.rand(Range.new(@@tailleMoyen, @@tailleMoyen+3)))
+			lancementRapide(Random.rand(Range.new(@@tailleMoyen, @@tailleMoyen+3)),@@tempsMoyen)
 		}
 		@btnRapideDifficile.signal_connect('clicked') {
 			puts "Lancement du mode difficile de rapide"
 			#Niveau entre 12 et 16
-			lancementRapide(Random.rand(Range.new(@@tailleDifficile, @@tailleDifficile+4)))
+			lancementRapide(Random.rand(Range.new(@@tailleDifficile, @@tailleDifficile+4)),@@tempsDifficile)
 		}
 	end
+
+	def initBoutonsExplo
+		@btnExloFacile = Gtk::Button.new :label => "Facile"
+		@btnExploMoyen = Gtk::Button.new :label => "Moyen"
+		@btnExploDifficile = Gtk::Button.new :label => "Difficile"
+
+		@btnExloFacile.signal_connect('clicked') {
+			puts "Lancement du mode facile de explo"
+			#Niveau entre 6 et 9
+			lancementExplo(Random.rand(Range.new(@@tailleFacile, @@tailleFacile+3)))
+		}
+		@btnExploMoyen.signal_connect('clicked') {
+			puts "Lancement du mode moyen de explo"
+			#Niveau entre 9 et 12
+			lancementExplo(Random.rand(Range.new(@@tailleMoyen, @@tailleMoyen+3)))
+		}
+		@btnExploDifficile.signal_connect('clicked') {
+			puts "Lancement du mode difficile de explo"
+			#Niveau entre 12 et 16
+			lancementExplo(Random.rand(Range.new(@@tailleDifficile, @@tailleDifficile+4)))
+		}
+	end
+
 
 	def initBoutonTuto
 		@btnTutoriel = Gtk::Button.new :label => " Tutoriel"
@@ -109,10 +151,5 @@ class HudModeDeJeu < Hud
 			#Niveau le plus facile : 6
 			lancementTutoriel(@@tailleFacile)
 		}
-	end
-
-	def initBoutonQuitter
-		@btnQuitter = Gtk::Button.new label: "Quitter"
-		@btnQuitter.signal_connect("clicked") { Gtk.main_quit }
 	end
 end
