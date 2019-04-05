@@ -3,7 +3,6 @@ require_relative "HudJeu"
 class HudRapide < HudJeu
 	# @btnPause
 	# @timer
-
 	def initialize(window,grille,temps)
 		super(window,grille)
 		@temps = temps*60
@@ -16,8 +15,8 @@ class HudRapide < HudJeu
 		initBoutonTimer
 		initBoutonPause
 		initBoutonAide
-		initBoutonReset
 
+		initBoutonReset
 		self.attach(@btnPause,@varPlaceGrid-3,0,1,1)
 		self.attach(@lblTime,@varPlaceGrid-4,0,1,1)
 		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
@@ -50,11 +49,8 @@ class HudRapide < HudJeu
 				jeuTermine
 				return 0
 			end
-			sleep 1
 		end
 	end
-
-
 
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide

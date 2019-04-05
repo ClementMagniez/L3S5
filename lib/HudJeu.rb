@@ -243,7 +243,8 @@ class HudJeu < Hud
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil
-				@gridJeu.get_child_at(cell.y+1,cell.x+1).set_image(scaleImage(@grille[cell.x][cell.y].affichage))
+				@gridJeu.get_child_at(cell.y+1,cell.x+1)\
+				.set_image(scaleImage(cell.affichage))
 			end
 		}
 
@@ -278,6 +279,7 @@ class HudJeu < Hud
 	end
 
 	# Méthode invoquée a la fin du jeu
+
 	def jeuTermine
 		self.lancementFinDeJeu
 	end
