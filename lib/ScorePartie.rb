@@ -36,11 +36,11 @@ class ScorePartie
 	# * +modeChrono+ - Le booléen indiquant si le score final doit être calculé selon la règle du "contre-la-montre"
 	# * +nbAidesUsees+ - L'entier indiquant le nombre de fois où l'assistant a été activé par le joueur
 	# * +taille+ - L'entier indiquant la taille de la matrice liée
-	# * +tempsDeJeu+ - La chaîne de caractères indiquant le temps de jeu total (varie selon le mode)
+	# * +tempsDeJeu+ - Le nombre de secondes indiquant le temps de jeu total (varie selon le mode)
 	# * +valeur+ - L'entier déterminant le score d'une partie
 	#
   def initialize(tailleMatrice)
-    @modeChrono, @nbAidesUsees, @taille, @tempsDeJeu, @valeur = false, 0, tailleMatrice, "1:0", 0
+    @modeChrono, @nbAidesUsees, @taille, @tempsDeJeu, @valeur = false, 0, tailleMatrice, 100, 0
     # FACILE - Bonus x1, 3% de malus
     if(@taille < 9)
       @bonus = 1
@@ -140,7 +140,6 @@ class ScorePartie
   #
   def recupererTemps(tempsGrille)
     @tempsDeJeu = tempsGrille
-    puts "temps jeu = " + tempsGrille.to_s
   end
 
   ##
