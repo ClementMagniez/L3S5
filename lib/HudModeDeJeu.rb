@@ -17,6 +17,10 @@ class HudModeDeJeu < Hud
 		@@tailleFacile = 6
 		@@tailleMoyen = 9
 		@@tailleDifficile = 12
+
+		@@tempsFacile = 15
+		@@tempsMoyen = 10
+		@@tempsDifficile = 5
 		self.setTitre("MODE DE JEU")
 
 
@@ -103,17 +107,17 @@ class HudModeDeJeu < Hud
 		@btnRapideFacile.signal_connect('clicked') {
 			puts "Lancement du mode facile de rapide"
 			#Niveau entre 6 et 9
-			lancementRapide(Random.rand(Range.new(@@tailleFacile, @@tailleFacile+3)))
+			lancementRapide(Random.rand(Range.new(@@tailleFacile, @@tailleFacile+3)),@@tempsFacile)
 		}
 		@btnRapideMoyen.signal_connect('clicked') {
 			puts "Lancement du mode moyen de rapide"
 			#Niveau entre 9 et 12
-			lancementRapide(Random.rand(Range.new(@@tailleMoyen, @@tailleMoyen+3)))
+			lancementRapide(Random.rand(Range.new(@@tailleMoyen, @@tailleMoyen+3)),@@tempsMoyen)
 		}
 		@btnRapideDifficile.signal_connect('clicked') {
 			puts "Lancement du mode difficile de rapide"
 			#Niveau entre 12 et 16
-			lancementRapide(Random.rand(Range.new(@@tailleDifficile, @@tailleDifficile+4)))
+			lancementRapide(Random.rand(Range.new(@@tailleDifficile, @@tailleDifficile+4)),@@tempsDifficile)
 		}
 	end
 

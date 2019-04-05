@@ -55,6 +55,10 @@ class Hud < Gtk::Grid
 	# Lance le menu de fin de jeu
 	def lancementFinDeJeu
 		puts "Fin de jeu"
+		score = 0
+		if(grille != nil)
+			score = 10
+		end
 		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self))
 	end
 
@@ -67,11 +71,11 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
 	end
 
-	def lancementRapide(taille)
+	def lancementRapide(taille,temps)
 		# grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
 		# # aide = Aide.new(grille)
 		# @fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
-		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille)))
+		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille),temps))
 	end
 
 	def lancementExplo(taille)
