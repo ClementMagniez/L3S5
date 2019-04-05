@@ -66,11 +66,11 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
 	end
 
-	def lancementRapide(taille)
+	def lancementRapide(taille,temps)
 		# grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
 		# # aide = Aide.new(grille)
 		# @fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
-		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille)))
+		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille),temps))
 	end
 
 	def lancementExplo(taille)
