@@ -70,7 +70,7 @@ class ScorePartie
       @bonus = 1
       @malus = 0.03
     # DIFFICILE - Bonus x3, 10% de malus
-    elsif(taille > 12)
+    elsif(taille >= 12)
       @bonus = 3
       @malus = 0.1
     # MOYEN - Bonus x1.5, 5% de malus
@@ -88,11 +88,11 @@ class ScorePartie
   #
   # === Paramètres
   #
-  # * +tempsRestant+ - Un entier strictement positif (ne concerne que le mode chrono), nul sinon
+  # * +tempsDeJeu+ - Un entier strictement positif (ne concerne que le mode chrono), nul sinon
 	# * +taille+ - Un entier strictement positif indiquant la taille de la grille (et donc, la
   #              difficulté de la partie)
   #
-  def calculerScoreFinal(taille,tempsRestant)
+  def calculerScoreFinal(taille,tempsDeJeu,modeChrono)
     # FACILE
     if(taille < 9 && @nbAidesUsees > 1)
       puts "FACILE"
@@ -109,7 +109,8 @@ class ScorePartie
     end
 
     scoreFinal = (@valeur - @valeur * (@malus * nbMalus)) * @bonus
-    return (tempsRestant == nil) ? scoreFinal.to_i : scoreFinal.to_i / (tempsRestant.convertirTempsEnEntier() / 100)
+    coefTemps = tempsDeJeu.convertirTempsEnEntier() / 100
+    return (modeChrono == true) ? scoreFinal.to_i * coefTemps : scoreFinal.to_i / coefTemps
   end
 
   ##
