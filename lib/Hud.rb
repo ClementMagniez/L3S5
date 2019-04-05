@@ -52,8 +52,14 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
 	end
 
-	def lancementFinDeJeu
+	# Lance le menu de fin de jeu
+	# 	grille : permet de calculer le score, nil par défaut
+	def lancementFinDeJeu(grille=nil)
 		puts "Fin de jeu"
+		score = 0
+		if(grille != nil)
+			score = 10
+		end
 		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self))
 	end
 
@@ -112,7 +118,7 @@ class Hud < Gtk::Grid
 	end
 
 	def initBoutonQuitter
-		@btnQuitter = Gtk::Button.new 
+		@btnQuitter = Gtk::Button.new
 		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
 		quitter = Gtk::Image.new(:file => '../img/quitter.png')
 		quitter.pixbuf = quitter.pixbuf.scale(@winX/20,@winX/20)	if quitter.pixbuf != nil

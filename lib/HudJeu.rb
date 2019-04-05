@@ -2,6 +2,7 @@ require_relative 'Hud'
 
 # class abstraite permettant de créer un ecran de jeu
 class HudJeu < Hud
+	attr_reader :grille, :timer
 	# @btnReset
 	# @btnAide
 	# @btnRetour
@@ -130,7 +131,7 @@ class HudJeu < Hud
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
 			@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
-			@lblIndiceSubr = nil 
+			@lblIndiceSubr = nil
 		end
 	end
 
@@ -261,7 +262,7 @@ class HudJeu < Hud
 		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
 	end
 
-	# Comportement a la fin du jeu
+	# Méthode invoquée a la fin du jeu
 	def jeuTermine
 		self.lancementFinDeJeu
 	end
@@ -281,7 +282,7 @@ class HudJeu < Hud
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
-				
+
 					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
 					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
 
@@ -289,8 +290,8 @@ class HudJeu < Hud
 			@lblAide.use_markup = true
 			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
 
-			indice = tableau.at(3) 
-			
+			indice = tableau.at(3)
+
 			if tableau.at(2) != nil
 				if tableau.at(2) == false
 					lblIndice = @gridJeu.get_child_at(0,indice).child
