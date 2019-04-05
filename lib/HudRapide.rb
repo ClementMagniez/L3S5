@@ -6,7 +6,7 @@ class HudRapide < HudJeu
 
 	def initialize(window,grille,temps)
 		super(window,grille)
-		@temps = temps
+		@temps = temps*60
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
 		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
