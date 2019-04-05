@@ -5,7 +5,7 @@ class HudAventure < HudJeu
 		self.setTitre("Aventure")
 		initBoutonTimer
 		initBoutonPause
-		initBoutonResetRapide
+		initBoutonReset
 
 
 		self.attach(@btnPause,@varPlaceGrid-2,0,1,1)

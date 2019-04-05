@@ -109,16 +109,7 @@ class HudJeu < Hud
 					cell.cycle(@grille)
 					button.set_image(scaleImage(cell.affichage))
 					# button.set_image(i,j)
-
-					if @caseSurbrillanceList != nil
-						while not @caseSurbrillanceList.empty? # TODO chercher autre chose
-								caseSubr = @caseSurbrillanceList.shift
-								@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
-													scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
-								# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
-
-						end
-					end
+					desurbrillanceCase
 					desurbrillanceIndice
 					self.jeuTermine		if @grille.estValide
 				end
@@ -133,6 +124,18 @@ class HudJeu < Hud
 			self.styleLabel(@lblIndiceSubr,"white","ultrabold","x-large",@lblIndiceSubr.text)
 			#@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
 			@lblIndiceSubr = nil
+		end
+	end
+
+	def desurbrillanceCase
+		if @caseSurbrillanceList != nil
+			while not @caseSurbrillanceList.empty? # TODO chercher autre chose
+				caseSubr = @caseSurbrillanceList.shift
+				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
+									scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
+				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
+
+			end
 		end
 	end
 
@@ -175,20 +178,24 @@ class HudJeu < Hud
 			if @lblAide != nil
 			@lblAide.set_markup ("<span foreground='white' > Alors comme ça, on recommence? :O !</span>")
 			end
+			if @t != nil
+				@t.kill
+				@stockHorloge =0
+				@timer = Time.now
+				@t = Thread.new{timer}
+				if @pause
+					@btnPause.set_label("Pause")
+				end
+			end
+			desurbrillanceIndice
 		}
+		
 	end
 
-	def initBoutonResetRapide
-		@btnReset.signal_connect("clicked") {
-			@t.kill
-			@stockHorloge =0
-			@timer = Time.now
-			@t = Thread.new{timer}
-			if @pause
-				@btnPause.set_label("Pause")
-			end
-		}
-
+	def getTime
+		if @horloge != nil
+			return @horloge
+		end
 	end
 
 	def initBoutonTimer
