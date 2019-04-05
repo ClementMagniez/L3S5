@@ -18,7 +18,7 @@ class ScorePartie
   # utilisées lors d'une partie, le booléen déterminant le type de chronomètre, la taille de la grille liée, le temps de jeu
   # selon le mode, le montant numérique du score
 
-  attr_reader :bonus, :malus, :modeChrono, :nbAidesUsees, :tempsDeJeu, :taille, :valeur
+  attr_accessor :bonus, :malus, :modeChrono, :nbAidesUsees, :tempsDeJeu, :taille, :valeur
 
   ##
 	# == initialize(0)
@@ -41,7 +41,7 @@ class ScorePartie
 	# * +valeur+ - L'entier déterminant le score d'une partie
 	#
   def initialize(tailleMatrice)
-    @modeChrono, @nbAidesUsees, @taille, @tempsDeJeu, @valeur = false, 0, tailleMatrice, "0:0", 0
+    @modeChrono, @nbAidesUsees, @taille, @tempsDeJeu, @valeur = false, 0, tailleMatrice, "1:0", 0
     # FACILE - Bonus x1, 3% de malus
     if(@taille < 9)
       @bonus = 1
@@ -55,6 +55,15 @@ class ScorePartie
       @bonus = 1.5
       @malus = 0.05
     end
+  end
+
+  ##
+  # == getValeur(0)
+  #
+  # Getter de la variable d'instance +valeur+.
+  #
+  def getValeur
+    return @valeur
   end
 
   ##
@@ -88,9 +97,10 @@ class ScorePartie
       nbMalus = 0
     end
 
+    coefTemps = @tempsDeJeu.convertirTempsEnEntier() / 100.0
     scoreFinal = (@valeur - @valeur * (@malus * nbMalus)) * @bonus
-    coefTemps = @tempsDeJeu.convertirTempsEnEntier() / 100
-    return (@modeChrono == true) ? scoreFinal.to_i * coefTemps : scoreFinal.to_i / coefTemps
+    scoreFinal = (@modeChrono == true) ? scoreFinal * coefTemps : scoreFinal / coefTemps
+    return scoreFinal.to_i
   end
 
   ##
@@ -156,6 +166,6 @@ class ScorePartie
 	# l'objet appelé.
 	#
 	def to_s
-		return "Score actuel : #{@valeur} (bonus de #{@bonus}% ; #{@nbAidesUsees} aide(s) utilisée(s) => malus de #{@malus}%)"
+		return "Score actuel : #{@valeur} (bonus de #{@bonus}x ; #{@nbAidesUsees} aide(s) utilisée(s) => malus de #{@malus}%)"
 	end
 end
