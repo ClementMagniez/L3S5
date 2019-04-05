@@ -26,6 +26,7 @@ class HudModeDeJeu < Hud
 		initBoutonTuto
 		initBoutonQuitter
 		initBoutonChargerSauvegarde
+		initBoutonProfil
 
 		#Bouton sauvegarde !
 		self.attach(@btnSauvegarde,varX,varY-2,2,1)
@@ -46,6 +47,8 @@ class HudModeDeJeu < Hud
 
 		self.attach(@btnQuitter, varX+1, varY+10, 1, 1)
 
+		self.attach(@btnProfil, varX+2, varY, 1, 1)
+
 			fond = self.ajoutFondEcran
 		self.attach(fond,0,0,varX+6,varY+14)
 	end
@@ -57,6 +60,12 @@ class HudModeDeJeu < Hud
 		}
 	end
 
+	def initBoutonProfil
+		@btnProfil = Gtk::Button.new label: "Profil"
+		@btnProfil.signal_connect("clicked") {
+			lancementProfil
+		}
+	end
 
 	def initBoutonsAventure
 		@btnAvFacile = Gtk::Button.new :label => "Facile"
