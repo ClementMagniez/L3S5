@@ -1,9 +1,4 @@
 require 'gtk3'
-require_relative 'Grille'
-require_relative '../connectSqlite3.rb'
-require_relative '../Profil.rb'
-require_relative '../Map.rb'
-require_relative '../Score.rb'
 
 class Hud < Gtk::Grid
 	# @fenetre

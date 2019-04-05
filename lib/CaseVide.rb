@@ -36,7 +36,7 @@ class CaseVide < Case
 			grille.varTentesCol[j]+=1
 			grille.score.recupererPoints(-10)
 		end
-		puts grille.score
+		# puts grille.score
 
 		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
 			grille.estComplete?
@@ -62,7 +62,7 @@ class CaseVide < Case
 			grille.varTentesCol[j]+=1
 			grille.score.recupererPoints(-1)
 		end
-		puts grille.score
+		# puts grille.score
 
 		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
 			grille.estComplete?
