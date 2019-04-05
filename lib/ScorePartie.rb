@@ -3,7 +3,6 @@
 # @author KAJAK Rémi
 # @version 0.1
 #
-require_relative "TempsChrono.rb"
 
 ##
 # = Classe *ScorePartie*
