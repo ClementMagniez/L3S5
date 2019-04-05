@@ -126,6 +126,8 @@ class Aide
         nbCasesTente += 1 if cases.statutVisible == newStatutTente
 
       end
+      # print "Valeur de grille " + @grille.tentesCol[i].to_s + "\n"
+      # print "Nombre cases vide = " + nbCasesVide.to_s + " Nombre cases tentes = " + nbCasesTente.to_s + "\n\n"
 
       if col
         if gazonOuTente==GAZON
@@ -163,11 +165,9 @@ class Aide
           end
           @foncReturn.unshift(cases).delete_at(1) if ok
           return @foncReturn if ok
-
         end
       end
     end
-
     return @foncReturn
   end
 
