@@ -1,4 +1,3 @@
-
 class HudInscription < Hud
 	def initialize(fenetre)
 		super(fenetre)
@@ -26,7 +25,7 @@ class HudInscription < Hud
 		self.attach(@btnEnr,2,5,1,1)
 	end
 
-	
+
 	# Créé et initialise le bouton de retour
 	def initBoutonRetour
 		@btnRetour = Gtk::Button.new :label => "Retour"
