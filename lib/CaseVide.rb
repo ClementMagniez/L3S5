@@ -20,20 +20,23 @@ class CaseVide < Case
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
 	def cycle(grille)
-		#self.statut.cycle(grille)
-		self.statutVisible.cycle(nil)
-		puts grille.score
+		self.statutVisible.cycle()
 		i=self.x
 		j=self.y
 
 
-		if self.statutVisible.isTente? # le statut vient de devenir "tente"
+		if self.statutVisible.isGazon? # le statut vient de devenir "gazon"
+			grille.score.recupererPoints(1)
+		elsif self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[i]-=1
 			grille.varTentesCol[j]-=1
-		elsif self.statutVisible.isVide? # le statut était "tente"
+			grille.score.recupererPoints(5)
+		elsif self.statutVisible.isVide? # le statut vient de devenir "vide"
 			grille.varTentesLigne[i]+=1
 			grille.varTentesCol[j]+=1
+			grille.score.recupererPoints(-10)
 		end
+		puts grille.score
 
 		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
 			grille.estComplete?
@@ -48,14 +51,18 @@ class CaseVide < Case
 		i=self.x
 		j=self.y
 
-
-		if self.statutVisible.isTente? # le statut vient de devenir "tente"
+		if self.statutVisible.isGazon? # le statut vient de repasser à "gazon"
+			grille.score.recupererPoints(-5)
+		elsif self.statutVisible.isTente? # le statut vient de repasser à "tente"
 			grille.varTentesLigne[i]-=1
 			grille.varTentesCol[j]-=1
-		elsif self.statutVisible.isVide? # le statut était "tente"
+			grille.score.recupererPoints(10)
+		elsif self.statutVisible.isVide? # le statut vient de repasser à "vide"
 			grille.varTentesLigne[i]+=1
 			grille.varTentesCol[j]+=1
+			grille.score.recupererPoints(-1)
 		end
+		puts grille.score
 
 		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
 			grille.estComplete?

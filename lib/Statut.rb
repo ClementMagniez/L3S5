@@ -11,13 +11,6 @@ class Statut
 	# Constructeur appelé par Case#initialize
 	def initialize(statut)
 		@statut=statut
-		if(statut == GAZON)
-			@points = 1
-		elsif(statut == TENTE)
-			@points = 5
-		else
-			@points = -10
-		end
 	end
 
 	# Return true si this.statut et _statut.statut_ sont égaux
@@ -52,5 +45,5 @@ class Statut
 		self.statut=array[(array.index(self.statut)+offset)%array.length]
 		self
 	end
-	attr_accessor :statut, :statutVisible, :points
+	attr_accessor :statut, :statutVisible
 end
