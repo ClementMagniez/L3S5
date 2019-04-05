@@ -7,7 +7,7 @@ class HudRapide < HudJeu
 	def initialize(window,grille)
 		super(window,grille)
 		@btnPause = Gtk::Button.new :label => "Pause"
-		@lblTime = Gtk::Label.new(" 0:0 ")
+		@lblTime = Gtk::Label.new(" 00:00 ")
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
 		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
@@ -36,7 +36,11 @@ class HudRapide < HudJeu
 	def timer
 		while true do
 			@horloge = (Time.now - @timer) + @stockHorloge
-			@lblTime.set_label((@horloge/60).to_i.to_s + ":" + (@horloge%60).to_i.to_s)
+				minutes = (@horloge/60).to_i
+					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
+				secondes = (@horloge%60).to_i
+					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
+			@lblTime.set_label(strMinutes + ":" + strSecondes)
 			sleep 1
 		end
 	end
