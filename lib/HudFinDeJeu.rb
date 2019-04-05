@@ -13,6 +13,7 @@ class HudFinDeJeu < Hud
 		@lblAide.use_markup = true
 		@lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
 		# lblScore = Gtk::Label.new("Score = 0")
+		fenetrePrecedente.grille.score.recupererTemps(fenetrePrecedente.getTime)
 		lblScore = Gtk::Label.new("Score = " + fenetrePrecedente.grille.score.calculerScoreFinal.to_s)
 
 		initBoutonRecommencer

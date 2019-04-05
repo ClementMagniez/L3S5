@@ -97,7 +97,7 @@ class ScorePartie
       nbMalus = 0
     end
 
-    coefTemps = @tempsDeJeu.convertirTempsEnEntier() / 100.0
+    coefTemps = @tempsDeJeu / 100.0
     scoreFinal = (@valeur - @valeur * (@malus * nbMalus)) * @bonus
     scoreFinal = (@modeChrono == true) ? scoreFinal * coefTemps : scoreFinal / coefTemps
     return scoreFinal.to_i
@@ -140,7 +140,8 @@ class ScorePartie
   # * +tempsGrille+ - Une instance de la classe *Time*
   #
   def recupererTemps(tempsGrille)
-    @tempsDeJeu = tempsGrille.afficherTempsChrono()
+    @tempsDeJeu = tempsGrille
+    puts "temps jeu = " + tempsGrille.to_s
   end
 
   ##

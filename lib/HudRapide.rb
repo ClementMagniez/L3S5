@@ -66,7 +66,6 @@ class HudRapide < HudJeu
 	def initBoutonAide
 		aide
 		@btnAide.signal_connect("clicked") {
-<<<<<<< HEAD
 			@grille.score.appelerAssistant()
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
@@ -79,9 +78,11 @@ class HudRapide < HudJeu
 			@lblAide.use_markup = true
 			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
 			@stockHorloge = @stockHorloge-5
-=======
 			@stockHorloge = @stockHorloge + @@malus
->>>>>>> origin/GTK
 		}
+	end
+
+	def getTime
+		return @temps-@horloge
 	end
 end
