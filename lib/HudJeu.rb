@@ -264,6 +264,7 @@ class HudJeu < Hud
 	end
 
 	# Méthode invoquée a la fin du jeu
+
 	def jeuTermine
 		self.lancementFinDeJeu
 	end
