@@ -59,8 +59,8 @@ class HudModeDeJeu < Hud
 
 		self.attach(@btnProfil, varX+2, varY, 1, 1)
 
-			fond = self.ajoutFondEcran
-		self.attach(fond,0,0,varX+6,varY+15)
+		ajoutFondEcran
+	
 	end
 
 	def initBoutonChargerSauvegarde

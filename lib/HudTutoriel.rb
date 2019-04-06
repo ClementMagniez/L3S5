@@ -3,63 +3,69 @@ class HudTutoriel < HudJeu
 		super(window,grille)
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
-		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
+		self.styleLabel(@lblAide,'white','normal','large','Bienvenue sur notre super jeu !')
 		self.setTitre("Tutoriel")
 
 		initBoutonAide
-		initBoutonRemplissage
 
-		self.attach(@btnRemplissage,@varPlaceGrid,1,1,1)
-		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
-		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
-			fond = ajoutFondEcran
-		self.attach(fond,0,0,@varPlaceGrid+2,5)
-	end
+		@varBoutonEnPlus=1
+		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-3,@sizeGridJeu,@sizeGridJeu+4)
 
-	def initBoutonRemplissage
-		@btnRemplissage = Gtk::Button.new :label => "Remplir"
-		@btnRemplissage.signal_connect('clicked') {
-			liste = @aide.listeCasesGazon
-			while not liste.empty?
-				caseRemp = liste.pop
-				if caseRemp.statutVisible.isVide?
-					caseRemp.cycle(@grille)
-					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
-
-				end
-			end
-		}
+		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
+		self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
 		
+		image = Gtk::Image.new( :file => "../img/gris.png")
+		image.pixbuf = image.pixbuf.scale((@winX/2.5),(@winY/@sizeGridWin)*2)
+		self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
+
+		ajoutFondEcran
 	end
+
+	
 
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide
 		taille = @grille.length
 		@caseSurbrillanceList = Array.new
 
-		@btnAide = Gtk::Button.new :label => " Aide "
+		@btnAide = Gtk::Button.new 
+		styleBouton(@btnAide,Gtk::Label.new("Aide"),"white","ultrabold","x-large")
 		@btnAide.signal_connect("clicked") {
 			tableau = @aide.cycle("tuto")
+			puts(tableau)
 			premAide = tableau.at(0)
+			puts("pouet")
+			puts(tableau.at(0))
+			puts(premAide)
+
 			if premAide != nil then
-
-
-				if premAide.class == Case # TODO WTF
-					@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(scaleImage(premAide.getCase.affichageSubr))
+					@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(scaleImage(premAide.affichageSubr))
 					# puts(" X :" + premAide.x.to_s + " Y :" +premAide.y.to_s )
 					@caseSurbrillanceList.push(premAide)
-				else
-					while not premAide.empty?
-						caseAide = premAide.shift
+			
+		#		while not premAide.empty?
+				#	caseAide = premAide
 
-						@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage( caseAide.getCase.affichageSubr))
-						@caseSurbrillanceList.push(caseAide)
-					end
-				end
-
+			#		@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage( caseAide.getCase.affichageSubr))
+				#	@caseSurbrillanceList.push(caseAide)
+			#	end
 			end
+
 			@lblAide.use_markup = true
-			@lblAide.set_markup ("<span foreground='white' >"+tableau.at(1)+"</span>");
+			styleLabel(@lblAide,'white','ultrabold','x-large',tableau.at(1))
+
+			indice = tableau.at(3)
+
+			if tableau.at(2) != nil
+				if tableau.at(2) == false
+					lblIndice = @gridJeu.get_child_at(0,indice).child				
+				else
+					lblIndice = @gridJeu.get_child_at(indice,0).child				
+				end
+				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
+				@lblIndiceSubr = lblIndice
+			end
+
 		}
 	end
 

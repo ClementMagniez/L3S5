@@ -11,11 +11,11 @@ class Hud < Gtk::Grid
 		@lblDescription = Gtk::Label.new
 		@winX = @fenetre.size.fetch(0)
 		@winY = @fenetre.size.fetch(1)
-		@varPlaceGrid = 6
 
-
+		#nombre de cellule horizontale et verticale de la fenetre
+		@sizeGridWin = 20
+		
 		initBoutonOptions
-
 
 		self.halign = Gtk::Align::CENTER
 		self.valign = Gtk::Align::CENTER
@@ -113,7 +113,7 @@ class Hud < Gtk::Grid
 		fond = Gtk::Image.new( :file => "../img/fond2.png")
 		fond.pixbuf = fond.pixbuf.scale(@winX,@winY)	if fond.pixbuf != nil
 
-		return fond
+		self.attach(fond,0,0,@sizeGridWin,@sizeGridWin)
 	end
 
 	def initBoutonQuitter
@@ -130,7 +130,7 @@ class Hud < Gtk::Grid
 	end
 
 	def styleBouton(bouton,label,couleur,style,size)
-		self.styleLabel(label,'white','ultrabold','x-large',label.text)
+		self.styleLabel(label,couleur,style,size,label.text)
 		bouton.add(label)
 		bouton.set_relief(Gtk::ReliefStyle::NONE)
 	end

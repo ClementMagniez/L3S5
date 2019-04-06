@@ -450,9 +450,6 @@ class Aide
       tabCaseEnGazon2 = Array.new
 
       nbImpair = 0
-      puts " - LIGNE " + i.to_s + " DEBUT"
-      puts hashGroupeCase.inspect
-      puts "FIN"
       # pour chaque groupe de case(s) vide(s)
       hashGroupeCase.each {|key, value|
         # correspond aux coordonnées de la case "clé"
@@ -550,18 +547,18 @@ class Aide
     # :nomMethode => [Case, "Message adapté", boolean (Ligne == false / Colonne == true), indice ligne/colonne]
     listeDesAides = { :nbCasesIncorrect => [nil, "Il y a " + self.nbCasesIncorrect.at(0).to_s + " erreur(s)", nil, nil], 
         :listeCasesIncorrect => [self.listeCasesIncorrect.at(0), "Les cases en surbrillance sont fausses", nil, nil], 
-        :impossibleTenteAdjacente => [self.impossibleTenteAdjacente.at(0), "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon", nil, nil], 
+         :impossibleTenteAdjacente => [self.impossibleTenteAdjacente.at(0), "Les tentes ne peuvent pas se toucher,\n donc la case en surbrillance est du gazon", nil, nil], 
         :resteQueTentesLigne => [nil, "Il ne reste que des tentes à placer sur la ligne en surbrillance", false, self.resteQueTentesLigne.at(0)], 
         :resteQueTentesColonne => [nil, "Il ne reste que des tentes à placer sur la colonne en surbrillance", true, self.resteQueTentesColonne.at(0)], 
         :resteQueGazonLigne => [nil, "Il ne reste que du gazon à placer sur la ligne en surbrillance", false, self.resteQueGazonLigne.at(0)], 
         :resteQueGazonColonne => [nil, "Il ne reste que du gazon à placer sur la colonne en surbrillance", true, self.resteQueGazonColonne.at(0)], 
         :casePasACoteArbre => [self.casePasACoteArbre.at(0), "La case en surbrillance est forcement du gazon", nil, nil], 
-        :uniquePossibiliteArbre => [self.uniquePossibiliteArbre.at(0), "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance", nil, nil], 
-        :dispositionPossibleLigne => [self.dispositionPossibleLigne.at(0), "D'après les dispositions de la ligne en surbrillance, il n'y a qu'une seule possibilité pour la case en surbrillance", false, self.dispositionPossibleLigne.at(1)+1], 
-        :dispositionPossibleColonne => [self.dispositionPossibleColonne.at(0), "D'après les dispositions de la colonne en surbrillance, il n'y a qu'une seule possibilité pour la case en surbrillance", true, self.dispositionPossibleColonne.at(1)+1], 
+        :uniquePossibiliteArbre => [self.uniquePossibiliteArbre.at(0), "Il n'y a qu'une seule possibilité de placer une tente\n pour l'arbre en surbrillance", nil, nil], 
+        :dispositionPossibleLigne => [self.dispositionPossibleLigne.at(0), "D'après les dispositions de la ligne en surbrillance,\n il n'y a qu'une seule possibilité pour la case en surbrillance", false, self.dispositionPossibleLigne.at(1)+1], 
+        :dispositionPossibleColonne => [self.dispositionPossibleColonne.at(0), "D'après les dispositions de la colonne en surbrillance,\n il n'y a qu'une seule possibilité pour la case en surbrillance", true, self.dispositionPossibleColonne.at(1)+1], 
         :caseArbreAssocieTente => [self.caseArbreAssocieTente.at(0), "L'arbre en surbrillance n'a pas encore placé sa tente", nil, nil], 
-        :arbreAutourCasePossedeTente => [self.arbreAutourCasePossedeTente.at(0), "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes", nil, nil], 
-        :aucuneAide => [nil, "Aucune aide disponible. Il faut jouer au hasard (demander à Jacoboni).", nil, nil] }
+        :arbreAutourCasePossedeTente => [self.arbreAutourCasePossedeTente.at(0), "La case en surbrillance est forcement du gazon\n puisque tous les arbres autours ont leurs tentes", nil, nil], 
+        :aucuneAide => [nil, "Aucune aide disponible.\n Il faut jouer au hasard (demander à Jacoboni).", nil, nil] }
 
     listeDesAides.each { | key, value |
     

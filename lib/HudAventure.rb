@@ -7,11 +7,14 @@ class HudAventure < HudJeu
 		initBoutonPause
 		initBoutonReset
 
+		@varBoutonEnPlus=1
+		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-1,@sizeGridJeu,@sizeGridJeu+4)
 
-		self.attach(@btnPause,@varPlaceGrid-2,0,1,1)
-		self.attach(@lblTime,@varPlaceGrid-3,0,1,1)
-		fond = ajoutFondEcran
-		self.attach(fond,0,0,@varPlaceGrid+2,5)
+		self.attach(@lblTime,@varDebutPlaceGrid,@varDebutPlaceGrid-2,@sizeGridJeu,1)
+
+		self.attach(@btnPause,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
+		
+		ajoutFondEcran
 	end
 
 

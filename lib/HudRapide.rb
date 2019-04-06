@@ -7,24 +7,21 @@ class HudRapide < HudJeu
 		super(window,grille)
 		@temps = temps*60
 		@@malus = 15
-		@lblAide = Gtk::Label.new()
-		@lblAide.use_markup = true
-		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
+		
 		self.setTitre("Partie rapide")
 
 		initBoutonTimer
 		initBoutonPause
 		initBoutonAide
-
 		initBoutonReset
-		self.attach(@btnPause,@varPlaceGrid-3,0,1,1)
-		self.attach(@lblTime,@varPlaceGrid-4,0,1,1)
-		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
-		self.attach(@lblAide,1,3, @varPlaceGrid, 1)
-		fond = ajoutFondEcran
-		self.attach(fond,0,0,@varPlaceGrid+2,5)
+		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-1,@sizeGridJeu,@sizeGridJeu+4)
 
+		self.attach(@lblTime,@varDebutPlaceGrid,@varDebutPlaceGrid-2,@sizeGridJeu,1)
 
+		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-6,1,1)
+		self.attach(@btnPause,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
+
+		ajoutFondEcran
 	end
 
 	def initBoutonTimer
@@ -44,11 +41,12 @@ class HudRapide < HudJeu
 					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
 				secondes = (@horloge%60).to_i
 					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			@lblTime.set_label(strMinutes + ":" + strSecondes)
+			styleLabel(@lblTime,"white","ultrabold","xx-large",strMinutes + ":" + strSecondes)
 			if @horloge<=0
 				jeuTermine
 				return 0
 			end
+			sleep 1
 		end
 	end
 
