@@ -23,7 +23,7 @@ class HudAccueil < Hud
 		@entryIdentifiant.text="test"
 		@entryMotDePasse.text="test"
 		####################################
-	puts @@name
+
 		initBoutonConnecter
 		initBoutonInscription
 		initBoutonQuitter
@@ -56,9 +56,7 @@ class HudAccueil < Hud
 				puts "Veuillez renseigner tous les champs."
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
 				@@name=@entryIdentifiant.text
-				puts @entryIdentifiant.text
 				self.lancementModeJeu
-				puts "Connexion en tant que #{@@name}"
 			else
 				# Ici, il faudrait afficher un message d'erreur sur la fenêtre
 				puts "Echec : connexion impossible"
