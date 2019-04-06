@@ -227,29 +227,19 @@ class HudJeu < Hud
 
 	end
 
-	def timer
-		while true do
-			@horloge = (Time.now - @timer) + @stockHorloge
-				minutes = (@horloge/60).to_i
-					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
-				secondes = (@horloge%60).to_i
-					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			@lblTime.set_label(strMinutes + ":" + strSecondes)
-			sleep 1
-		end
-	end
 
 	def initBoutonCancel
+
 		@btnCancel = Gtk::Button.new
 		styleBouton(@btnCancel,Gtk::Label.new("Cancel"),"white","ultrabold","x-large")
 		@btnCancel.signal_connect('clicked'){
+
 			cell = @grille.cancel
 			if cell != nil
 				@gridJeu.get_child_at(cell.y+1,cell.x+1)\
 				.set_image(scaleImage(cell.affichage))
 			end
 		}
-
 	end
 
 	# Réinitialise la grille
@@ -288,14 +278,17 @@ class HudJeu < Hud
 	end
 
 	def initBoutonSauvegarde
-		 @btnSauvegard = Gtk::Button.new 
-	
+		@btnSauvegard = Gtk::Button.new 
 		styleBouton(@btnSauvegard,Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
-
 		@btnSauvegard.signal_connect('clicked') {
-			puts(" Je ne fais actuellement rien, mais j'aimerai charger une sauvegarder et j'aime aussi les Pommes.")
+			File.open("saves/"+@@name+".txt", 'w+') do |f|
+				f.write([Marshal.dump(@grille), Marshal.dump(@@mode), Marshal.dump(@@difficulte)])
+			end
 		}
+
+
 	end
+
 
 	#Fonction d'aide pour l'HUD exploration et rapide
 	def aide
@@ -311,9 +304,11 @@ class HudJeu < Hud
 		self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
 
 		taille = @grille.length
+
 		@btnAide = Gtk::Button.new
 		styleBouton(@btnAide,Gtk::Label.new("Aide"),"white","ultrabold","x-large")
 		@btnAide.signal_connect("clicked") {
+
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
@@ -338,6 +333,18 @@ class HudJeu < Hud
 			end
 		}
 	end
+	def timer
+		while true do
+			@horloge = (Time.now - @timer) + @stockHorloge
+				minutes = (@horloge/60).to_i
+					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
+				secondes = (@horloge%60).to_i
+					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
+			@lblTime.set_label(strMinutes + ":" + strSecondes)
+			sleep 1
+		end
+	end
+
 
 	def initBoutonRemplissage
 		@btnRemplissage = Gtk::Button.new
@@ -355,4 +362,5 @@ class HudJeu < Hud
 		}
 		
 	end
+
 end

@@ -1,7 +1,6 @@
 # Classe Aide contenant toutes les méthodes permettant d'aider le joueur
 class Aide
 
-  include StatutConstantes
  #####################################################################################################
 
   # initialise @grille avec la grille passé en argument
@@ -10,19 +9,19 @@ class Aide
     @foncReturn = [0, 0]
   end
 
-  # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
+  # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est :VIDE, ce n'est pas une erreur)
   def nbCasesIncorrect
     casesIncorrect("Nombre")
   end
 
-  # renvoie un tableau de cases contenant les erreurs qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
+  # renvoie un tableau de cases contenant les erreurs qu'il y a dans la grille (lorsque la case est :VIDE, ce n'est pas une erreur)
   def listeCasesIncorrect
     casesIncorrect("Liste")
   end
 
   def casesIncorrect(nombreOuListe)
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
+    newStatutVide = StatutVide.new(:VIDE)
+    newStatutArbre = StatutArbre.new(:ARBRE)
     tabCasesErr = Array.new
     @grille.grille.each do | ligne |
       ligne.each do | cases |
@@ -47,8 +46,8 @@ class Aide
 
   # renvoie la premiere case vide adjacente à une tente, il s'agit donc de gazon
   def impossibleTenteAdjacente
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutTente = StatutVide.new(TENTE)
+    newStatutVide = StatutVide.new(:VIDE)
+    newStatutTente = StatutVide.new(:TENTE)
     grille=@grille.grille
 
     grille.each_with_index do | ligne, i |
@@ -73,23 +72,23 @@ class Aide
 
   # indique la ligne où il ne reste plus que des tentes à mettre, sinon renvoie 0
   def resteQueTentesLigne
-    resteQueLigne(TENTE)
+    resteQueLigne(:TENTE)
   end
 
   # indique la ligne où il ne reste plus que du gazon à mettre, sinon renvoie 0
   def resteQueGazonLigne
 
-    resteQueLigne(GAZON)
+    resteQueLigne(:GAZON)
   end
 
   # indique la colonne où il ne reste plus que des tentes à mettre, sinon renvoie 0
   def resteQueTentesColonne
-    resteQueColonne(TENTE)
+    resteQueColonne(:TENTE)
   end
 
   # indique la colonne où il ne reste plus que du gazon à mettre, sinon renvoie 0
   def resteQueGazonColonne
-    resteQueColonne(GAZON)
+    resteQueColonne(:GAZON)
   end
 
   # cf resteQue, col?==false
@@ -104,14 +103,14 @@ class Aide
 
   # Metaméthode O(N²) : parcourt la grille en ligne ou en colonne selon col
   # et renvoie une valeur dépendant de gazonOuTente :
-  # * TENTE - cf. resteQueTentesColonne et resteQueTentesLigne
-  # * GAZON - cf. resteQueGazonColonne et resteQueGazonLigne
+  # * :TENTE - cf. resteQueTentesColonne et resteQueTentesLigne
+  # * :GAZON - cf. resteQueGazonColonne et resteQueGazonLigne
   # * autres - 0
   def resteQue(gazonOuTente, col)
     num = 0
 
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutTente = StatutVide.new(TENTE)
+    newStatutVide = StatutVide.new(:VIDE)
+    newStatutTente = StatutVide.new(:TENTE)
 
     grille=@grille.grille
     grille=grille.transpose if col
@@ -129,15 +128,15 @@ class Aide
       # print "Nombre cases vide = " + nbCasesVide.to_s + " Nombre cases tentes = " + nbCasesTente.to_s + "\n\n"
 
       if col
-        if gazonOuTente==GAZON
+        if gazonOuTente==:GAZON
           num = i+1 if nbCasesTente == @grille.tentesCol[i] && nbCasesVide != 0
-        elsif gazonOuTente==TENTE
+        elsif gazonOuTente==:TENTE
           num = i+1 if nbCasesVide == @grille.tentesCol[i]-nbCasesTente && nbCasesVide != 0
         end
       else
-        if gazonOuTente==GAZON
+        if gazonOuTente==:GAZON
           num=i+1 if nbCasesTente == @grille.tentesLigne[i] && nbCasesVide!=0
-        elsif gazonOuTente==TENTE
+        elsif gazonOuTente==:TENTE
           num=i+1 if nbCasesVide == @grille.tentesLigne[i]-nbCasesTente && nbCasesVide!=0
         end
       end
@@ -150,8 +149,8 @@ class Aide
 
   # renvoie la premiere case qui n'est pas a cote d'un arbre, il s'agit donc de gazon
   def casePasACoteArbre
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
+    newStatutVide = StatutVide.new(:VIDE)
+    newStatutArbre = StatutArbre.new(:ARBRE)
     grille=@grille.grille
 
     grille.each_with_index do | ligne, i |
@@ -172,8 +171,8 @@ class Aide
 
   # renvoie la liste de cases vides adjacente à une tente, il s'agit donc de gazon
   def listeCasesGazon
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
+    newStatutVide = StatutVide.new(:VIDE)
+    newStatutArbre = StatutArbre.new(:ARBRE)
     grille=@grille.grille
 
     listeCaseGazon = Array.new
@@ -202,9 +201,9 @@ class Aide
 
   # renvoie la premiere case où il n'existe qu'une seule possibilité pour un arbre
   def uniquePossibiliteArbre
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
-    newStatutTente = StatutVide.new(TENTE)
+    newStatutVide = StatutVide.new(:VIDE)
+    newStatutArbre = StatutArbre.new(:ARBRE)
+    newStatutTente = StatutVide.new(:TENTE)
 
     grille=@grille.grille
 
@@ -235,13 +234,13 @@ class Aide
 
   # renvoie la premiere case où tous les arbres autour de la case possèdent leur tente, donc la case contient du gazon
   def arbreAutourCasePossedeTente
-    arbreAssocieTente(VIDE)
+    arbreAssocieTente(:VIDE)
 
   end
 
   # renvoie la première caseArbre qui n'a pas placer sa tente et qui ne possède qu'une case seule caseVide à côté d'elle
   def caseArbreAssocieTente
-    arbreAssocieTente(ARBRE)
+    arbreAssocieTente(:ARBRE)
   end
 
   # Metaméthode O(??) :
@@ -250,10 +249,11 @@ class Aide
   # * 'vide' - cf. arbreAutourCasePossedeTente
   # * autres - 0
   def arbreAssocieTente(arbreOuVide)
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
-    newStatutTente = StatutVide.new(TENTE)
-    newStatutGazon = StatutVide.new(GAZON)
+
+    newStatutVide = StatutVide.new(:VIDE)
+    newStatutArbre = StatutArbre.new(:ARBRE)
+    newStatutTente = StatutVide.new(:TENTE)
+
 
     grille=@grille.grille
     hashArbreTente = Hash.new
@@ -311,7 +311,16 @@ class Aide
       end
     end # Fin while
 
-    if arbreOuVide == ARBRE
+
+    # RAJOUTER
+    # boucler sur la tente de l'arbre trouvé,
+    # regarder les 4 cases autour de cette tente,
+    # si tout est en gazon sauf son propre arbre
+      # alors c'est ok, on renvoi la case
+    # sinon si il y a un ou plus d'un arbre autour de la case autre que son propre arbre
+      # alors on reboucle avec la nouvelle tente
+
+    if arbreOuVide == :A
       grille.each_with_index do | ligne, i |
         ligne.each_with_index do | cases, j |
 
@@ -347,7 +356,7 @@ class Aide
         end
       end
 
-    elsif arbreOuVide == VIDE
+    elsif arbreOuVide == :VIDE
       grille.each_with_index do | ligne, i |
         ligne.each_with_index do | cases, j |
 
@@ -415,8 +424,8 @@ class Aide
 
   # Metaméthode O(??) : parcourt la grille en ligne ou en colonne selon col
   def dispositionPossible(col)
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutTente = StatutVide.new(TENTE)
+    newStatutVide = StatutVide.new(:VIDE)
+    newStatutTente = StatutVide.new(:TENTE)
     grille=@grille.grille
     grille=grille.transpose if col
 

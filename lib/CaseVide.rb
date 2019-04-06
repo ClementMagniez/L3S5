@@ -12,7 +12,7 @@ class CaseVide < Case
 	def initialize(etat,i,j)
 		super(i,j)
 		@statut=StatutVide.new(etat)
-		@statutVisible=StatutVide.new(VIDE)
+		@statutVisible=StatutVide.new(:VIDE)
 	end
 
 	# TODO refactoriser cycle/cancel
