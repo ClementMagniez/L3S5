@@ -65,9 +65,12 @@ class HudModeDeJeu < Hud
 
 	def initBoutonChargerSauvegarde
 		@btnSauvegarde = Gtk::Button.new :label => "Charger une sauvegarde"
-		@btnSauvegarde.signal_connect('clicked') {
-			puts(" Je ne fais actuellement rien, mais j'aimerai charger une sauvegarder et j'aime aussi les Pommes.")
-		}
+		@btnSauvegarde.signal_connect('clicked') do
+			File.open("saves/"+@@name+".txt", 'r') do |f|
+				grille=Marshal.load(f)
+				# load le mode de jeu
+			end
+		end
 	end
 
 	def initBoutonProfil

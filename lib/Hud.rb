@@ -21,15 +21,19 @@ class Hud < Gtk::Grid
 		self.valign = Gtk::Align::CENTER
 	end
 
+	# TODO factoriser les lancementX
 
-
-	def lancementAventure(taille)
+	def lancementAventure(taille, grille=nil)
 		# taille %= 16
 		# # grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
 		# grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
 		# # aide = Aide.new(grille)
 		# @fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
-		@fenetre.changerWidget(self,HudAventure.new(@fenetre,Grille.new(taille)))
+		if grille==nil
+			@fenetre.changerWidget(self,HudAventure.new(@fenetre,Grille.new(taille)))
+		else
+			@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
+		end
 	end
 
 	def lancementAccueil
@@ -38,12 +42,15 @@ class Hud < Gtk::Grid
 	end
 
 
-	def lancementTutoriel(taille)
+	def lancementTutoriel(taille, grille=nil)
 		# grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
 		# puts "Retour à l'accueil"
 		# @fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
-		puts "Retour à l'accueil"
-		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,Grille.new(taille)))
+		if grille==nil
+			@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,Grille.new(taille)))
+		else
+			@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
+		end	
 	end
 
 

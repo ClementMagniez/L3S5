@@ -45,6 +45,7 @@ class HudRapide < HudJeu
 				jeuTermine
 				return 0
 			end
+			sleep(1)
 		end
 	end
 

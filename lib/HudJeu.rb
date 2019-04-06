@@ -219,28 +219,16 @@ class HudJeu < Hud
 
 	end
 
-	def timer
-		while true do
-			@horloge = (Time.now - @timer) + @stockHorloge
-				minutes = (@horloge/60).to_i
-					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
-				secondes = (@horloge%60).to_i
-					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			@lblTime.set_label(strMinutes + ":" + strSecondes)
-			sleep 1
-		end
-	end
 
 	def initBoutonCancel
 		@btnCancel = Gtk::Button.new :label => "Cancel"
-		@btnCancel.signal_connect('clicked'){
+		@btnCancel.signal_connect('clicked') do
 			cell = @grille.cancel
 			if cell != nil
 				@gridJeu.get_child_at(cell.y+1,cell.x+1)\
 				.set_image(scaleImage(cell.affichage))
 			end
-		}
-
+		end
 	end
 
 	# Réinitialise la grille
@@ -271,16 +259,19 @@ class HudJeu < Hud
 
 	def initBoutonSauvegarde
 		@btnSauvegard = Gtk::Button.new :label => "Sauvegarder"
-		@btnSauvegard.signal_connect('clicked') {
-			puts(" Je ne fais actuellement rien, mais j'aimerai charger une sauvegarder et j'aime aussi les Pommes.")
-		}
+		@btnSauvegard.signal_connect('clicked') do
+			File.open("saves/"+@@name+".txt", 'wb') do |f|
+				f.write(Marshal.dump(@grille))
+			end
+		end
 	end
+
 
 	#Fonction d'aide pour l'HUD exploration et rapide
 	def aide
 		taille = @grille.length
 		@btnAide = Gtk::Button.new :label => " Aide "
-		@btnAide.signal_connect("clicked") {
+		@btnAide.signal_connect("clicked") do
 			tableau = @aide.cycle("rapide")
 			caseAide = tableau.at(0)
 			if caseAide != nil then
@@ -308,6 +299,18 @@ class HudJeu < Hud
 				end
 				@lblIndiceSubr = lblIndice
 			end
-		}
+		end
 	end
+	def timer
+		while true do
+			@horloge = (Time.now - @timer) + @stockHorloge
+				minutes = (@horloge/60).to_i
+					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
+				secondes = (@horloge%60).to_i
+					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
+			@lblTime.set_label(strMinutes + ":" + strSecondes)
+			sleep 1
+		end
+	end
+
 end
