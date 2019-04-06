@@ -264,12 +264,6 @@ class HudJeu < Hud
 		end
 	end
 
-	# Créé et initialise le bouton de retour
-	def initBoutonRetour
-		@btnRetour = Gtk::Button.new 
-		styleBouton(@btnRetour,Gtk::Label.new("Retour"),"white","ultrabold","x-large")
-		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
-	end
 
 	# Méthode invoquée a la fin du jeu
 
@@ -340,7 +334,7 @@ class HudJeu < Hud
 					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
 				secondes = (@horloge%60).to_i
 					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			@lblTime.set_label(strMinutes + ":" + strSecondes)
+			styleLabel(@lblTime,"white","ultrabold","xx-large",strMinutes + ":" + strSecondes)
 			sleep 1
 		end
 	end

@@ -94,6 +94,14 @@ class Hud < Gtk::Grid
 		}
 	end
 
+	
+	# Créé et initialise le bouton de retour
+	def initBoutonRetour
+		@btnRetour = Gtk::Button.new 
+		styleBouton(@btnRetour,Gtk::Label.new("Retour"),"white","ultrabold","x-large")
+		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
+	end
+
 	# Modifie la description : le texte en haut de la page
 	def setDesc(str)
 		@lblDescription.set_text(str)
@@ -133,11 +141,14 @@ class Hud < Gtk::Grid
 		self.styleLabel(label,couleur,style,size,label.text)
 		bouton.add(label)
 		bouton.set_relief(Gtk::ReliefStyle::NONE)
+	#	bouton.signal_connect('enter'){
+		#	styleLabel(label,"black",style,size,label.text)
+	#	}
 	end
 
 	
 	def initBoutonProfil
-		@btnProfil = Gtk::Button.new label: "Profil"
+		@btnProfil = Gtk::Button.new
 		styleBouton(@btnProfil,Gtk::Label.new("Profil"),"white","ultrabold","x-large")
 		@btnProfil.signal_connect("clicked") do
 			lancementProfil
