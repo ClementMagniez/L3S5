@@ -1,9 +1,17 @@
 require_relative 'Grille'
 require 'gtk3'
+
+# Superclasse abstraite de tous les menus de l'application : enregistre le nom du joueur
+# à la connexion, instancie les éléments communs aux menus et permet le passage
+# de l'un à l'autre
 class Hud < Gtk::Grid
 	# @fenetre
 	# @btnOptions
 	# @lblDescription
+
+	# Nom du joueur connecté, nécessaire à tous les menus de l'application
+	@@name=""
+
 
 	def initialize(window)
 		super()
@@ -12,7 +20,6 @@ class Hud < Gtk::Grid
 		@winX = @fenetre.size.fetch(0)
 		@winY = @fenetre.size.fetch(1)
 		@varPlaceGrid = 6
-
 
 		initBoutonOptions
 
@@ -23,45 +30,39 @@ class Hud < Gtk::Grid
 
 	# TODO factoriser les lancementX
 
-	def lancementAventure(taille, grille=nil)
-		# taille %= 16
-		# # grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
-		# grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
-		# # aide = Aide.new(grille)
-		# @fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
-		if grille==nil
-			@fenetre.changerWidget(self,HudAventure.new(@fenetre,Grille.new(taille)))
-		else
-			@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
-		end
-	end
-
 	def lancementAccueil
-		puts "Retour à l'accueil"
 		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
 	end
+	
+	
+	def lancementAventure(grille)
+		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
+	end
 
+	def lancementTutoriel(grille)
+		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
+	end
+	
 
-	def lancementTutoriel(taille, grille=nil)
-		# grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
-		# puts "Retour à l'accueil"
-		# @fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
-		if grille==nil
-			@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,Grille.new(taille)))
-		else
-			@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
-		end	
+	def lancementRapide(grille)
+		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
 	end
 
 
+	def lancementExplo(grille)
+		@fenetre.changerWidget(self,HudExploration.new(@fenetre,grille))
+	end
+
 	def lancementModeJeu
-		puts "Retour au menu"
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
+	end
+	
+	def lancementChoixDifficulte(mode)
+		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode))
 	end
 
 	# Lance le menu de fin de jeu
 	def lancementFinDeJeu
-		puts "Fin de jeu"
 		score = 0
 		if(grille != nil)
 			score = 10
@@ -76,17 +77,6 @@ class Hud < Gtk::Grid
 
 	def lancementProfil
 		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
-	end
-
-	def lancementRapide(taille,temps)
-		# grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
-		# # aide = Aide.new(grille)
-		# @fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
-		@fenetre.changerWidget(self,HudRapide.new(@fenetre,Grille.new(taille),temps))
-	end
-
-	def lancementExplo(taille)
-		@fenetre.changerWidget(self,HudExploration.new(@fenetre,Grille.new(taille)))
 	end
 
 	# Créé et initialise le bouton des options
@@ -134,6 +124,13 @@ class Hud < Gtk::Grid
 
 	def styleLabel(label,couleur,style,size,contenu)
 		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
+	end
+
+	def initBoutonProfil
+		@btnProfil = Gtk::Button.new label: "Profil"
+		@btnProfil.signal_connect("clicked") do
+			lancementProfil
+		end
 	end
 
 end

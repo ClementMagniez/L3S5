@@ -10,6 +10,8 @@ class HudAccueil < Hud
 	# @btnQuitter
 	# @entryIdentifiant
 	# @entryMotDePasse
+	
+	
 
 	def initialize(window)
 		super(window)
@@ -17,7 +19,11 @@ class HudAccueil < Hud
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 
-
+		# TODO TEMPORAIRE - confort de tests
+		@entryIdentifiant.text="test"
+		@entryMotDePasse.text="test"
+		####################################
+	puts @@name
 		initBoutonConnecter
 		initBoutonInscription
 		initBoutonQuitter
@@ -49,8 +55,10 @@ class HudAccueil < Hud
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
 				puts "Veuillez renseigner tous les champs."
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
-				@@name=@entryIdentifiant.text()
+				@@name=@entryIdentifiant.text
+				puts @entryIdentifiant.text
 				self.lancementModeJeu
+				puts "Connexion en tant que #{@@name}"
 			else
 				# Ici, il faudrait afficher un message d'erreur sur la fenêtre
 				puts "Echec : connexion impossible"

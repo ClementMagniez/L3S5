@@ -1,11 +1,19 @@
 require_relative "HudJeu"
 
 class HudRapide < HudJeu
-	# @btnPause
-	# @timer
-	def initialize(window,grille,temps)
+
+	TEMPS_FACILE=60*15
+	TEMPS_MOYEN=TEMPS_FACILE*2/3
+	TEMPS_DIFFICILE=TEMPS_MOYEN/2
+
+	def initialize(window,grille)
 		super(window,grille)
-		@temps = temps*60
+		
+		case grille.length
+			when 6..8 then @temps=TEMPS_FACILE
+			when 9..12 then @temps=TEMPS_MOYEN
+			when 13..16 then @temps=TEMPS_DIFFICILE
+		end
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
 		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
@@ -34,8 +42,8 @@ class HudRapide < HudJeu
 
 	def timer
 		while true do
-			@horloge = (Time.now - @timer) + @stockHorloge
-			@horloge = @temps - @horloge
+			@horloge = 
+			@horloge = @temps - ((Time.now - @timer) - @stockHorloge)
 				minutes = (@horloge/60).to_i
 					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
 				secondes = (@horloge%60).to_i
@@ -53,7 +61,7 @@ class HudRapide < HudJeu
 	def initBoutonAide
 		aide
 		@btnAide.signal_connect("clicked") {
-			@stockHorloge = @stockHorloge-5
+			@stockHorloge-=5
 		}
 	end
 end

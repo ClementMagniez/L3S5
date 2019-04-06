@@ -260,8 +260,8 @@ class HudJeu < Hud
 	def initBoutonSauvegarde
 		@btnSauvegard = Gtk::Button.new :label => "Sauvegarder"
 		@btnSauvegard.signal_connect('clicked') do
-			File.open("saves/"+@@name+".txt", 'wb') do |f|
-				f.write(Marshal.dump(@grille))
+			File.open("saves/"+@@name+".txt", 'w+') do |f|
+				f.write([Marshal.dump(@grille), Marshal.dump(@@mode), Marshal.dump(@@difficulte)])
 			end
 		end
 	end
