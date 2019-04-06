@@ -7,14 +7,13 @@ Dir[File.join(__dir__, '../lib', '*.rb')].each { |file|
 
 
 class TestStatut < Test::Unit::TestCase
-	include StatutConstantes
 
 	def test_arbres	
 
-		statutArbre1=StatutArbre.new(ARBREDECOCHE)
-		statutArbre2=StatutArbre.new(ARBRE)
-		statutArbre3=StatutArbre.new(ARBRE)
-		statutTemoin=StatutVide.new(GAZON)
+		statutArbre1=StatutArbre.new(:ARBREDECOCHE)
+		statutArbre2=StatutArbre.new(:ARBRE)
+		statutArbre3=StatutArbre.new(:ARBRE)
+		statutTemoin=StatutVide.new(:GAZON)
 
 
 		assert(!statutArbre2.isArbreCoche?, "Instanciation des arbres incorrecte")
@@ -32,8 +31,8 @@ class TestStatut < Test::Unit::TestCase
 	end
 	
 	def test_vide
-		statutVide1=StatutVide.new(VIDE)
-		statutVide2=StatutVide.new(VIDE)
+		statutVide1=StatutVide.new(:VIDE)
+		statutVide2=StatutVide.new(:VIDE)
 		assert(statutVide1==statutVide2, "Equivalence entre deux vides échouée")
 		statutVide1.cycle
 		assert(statutVide1.isGazon?, "Echec du cycle vide->gazon"+statutVide1.to_s)
@@ -48,8 +47,8 @@ class TestStatut < Test::Unit::TestCase
 	
 	
 	def test_reset
-		statArbre=StatutArbre.new(ARBRECOCHE)
-		statGazon=StatutVide.new(GAZON)
+		statArbre=StatutArbre.new(:ARBRECOCHE)
+		statGazon=StatutVide.new(:GAZON)
 
 		statArbre.reset
 		assert(!statArbre.isArbreCoche?, "Reset dysfonctionnel pour StatutArbre")

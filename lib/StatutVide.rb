@@ -5,22 +5,22 @@ require_relative 'Statut'
 class StatutVide < Statut
 	# Constante de classe, permet de déplacer le statut sur le cycle
 	# VIDE -> GAZON -> TENTE à chaque interaction
-	CYCLE=[VIDE, GAZON, TENTE]
+	CYCLE=[:VIDE, :GAZON, :TENTE].freeze
 
 	
 	# Return true si le statut est "vide", false sinon
 	def isVide?
-		self.statut==VIDE
+		self.statut==:VIDE
 	end
 	
 	# Return true si le statut est "gazon", false sinon
 	def isGazon?
-		self.statut==GAZON
+		self.statut==:GAZON
 	end
 	
 	# Return true si le statut est "tente", false sinon
 	def isTente?
-		self.statut==TENTE
+		self.statut==:TENTE
 	end
 	
 	# Cf. Statut#cycle ; utilise la constante StatutVide#CYCLE
@@ -39,7 +39,7 @@ class StatutVide < Statut
 	# Réinitialise le statut à VIDE
 	# return self
 	def reset
-		self.statut=VIDE
+		self.statut=:VIDE
 		self
 	end
 
@@ -47,9 +47,9 @@ class StatutVide < Statut
 	# Affiche le statut - utilisé à des fins de logging
 	def to_s
 		case self.statut
-			when VIDE then '-'
-			when GAZON then '#'
-			when TENTE then 'T'
+			when :VIDE then '-'
+			when :GAZON then '#'
+			when :TENTE then 'T'
 		end
 	end
 	

@@ -1,7 +1,7 @@
 require "test/unit"
 require_relative '../lib/Grille'
 require_relative '../lib/Aide'
-include StatutConstantes
+
 
 # Classe TestAide qui teste toutes les aides du fichier Aide.rb
 class TestAide < Test::Unit::TestCase
@@ -71,7 +71,7 @@ class TestAide < Test::Unit::TestCase
     	# Dans cette grille, il n'y a qu'une seule ligne qui est à 0 tente
   	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(VIDE)
+		newStatutVide = StatutVide.new(:VIDE)
 
         assert(aide.resteQueGazonLigne != 0, "Il n'y a plus de ligne ou il ne reste que du gazon a placer")
         
@@ -88,7 +88,7 @@ class TestAide < Test::Unit::TestCase
     	# Dans cette grille, il n'y a qu'une seule colonne qui est à 0 tente
   	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(VIDE)
+		newStatutVide = StatutVide.new(:VIDE)
 	
         assert(aide.resteQueGazonColonne != 0, "Il n'y a plus de colonne ou il ne reste que du gazon a placer")
         
@@ -104,7 +104,7 @@ class TestAide < Test::Unit::TestCase
 	def test_casePasACoteArbre
   	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(VIDE)
+		newStatutVide = StatutVide.new(:VIDE)
 	
 		assert(aide.casePasACoteArbre != 0, "Il n'y a plus de cases ou il reste du gazon a placer sans qu'il ne touche d'arbre")
 		
@@ -138,7 +138,7 @@ class TestAide < Test::Unit::TestCase
     	# Dans la grille, il y a au début de la partie plusieurs disposition favorable
   	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(VIDE)
+		newStatutVide = StatutVide.new(:VIDE)
 		
 		assert(aide.dispositionPossibleLigne != 0, "Il n'y a aucune disposition favorable afin de modifier une case")
 		
@@ -157,7 +157,7 @@ class TestAide < Test::Unit::TestCase
     	# Dans la grille, il y a au début de la partie plusieurs disposition favorable
   	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(VIDE)
+		newStatutVide = StatutVide.new(:VIDE)
 		
 		assert(aide.dispositionPossibleColonne != 0, "Il n'y a aucune disposition favorable afin de modifier une case")
 		
@@ -175,7 +175,7 @@ class TestAide < Test::Unit::TestCase
 	def test_arbreAutourCasePossedeTente
   	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(VIDE)
+		newStatutVide = StatutVide.new(:VIDE)
 		
 		assert(aide.arbreAutourCasePossedeTente != 0, "Il n'y a aucune cases vides ou d'arbres autour qui possèdent leurs tentes")
 		
@@ -193,7 +193,7 @@ class TestAide < Test::Unit::TestCase
 	def test_caseArbreAssocieTente
   	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(VIDE)
+		newStatutVide = StatutVide.new(:VIDE)
 		
 		assert(aide.caseArbreAssocieTente != 0, "Il n'y a aucune cases arbres à laquelle on peut associer sa tente")
 		
