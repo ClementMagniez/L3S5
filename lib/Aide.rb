@@ -252,7 +252,8 @@ class Aide
 
     newStatutVide = StatutVide.new(:VIDE)
     newStatutArbre = StatutArbre.new(:ARBRE)
-    newStatutTente = StatutVide.new(:TENTE)
+    newStatutTente = StatutVide.new(:TENTE) 
+    newStatutGazon = StatutVide.new(:GAZON)
 
 
     grille=@grille.grille
