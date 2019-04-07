@@ -41,8 +41,8 @@ class HudAccueil < Hud
 		self.attach(@btnOptions, varX, varY+4, 1, 1)
 		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
 
-			fond = ajoutFondEcran
-		self.attach(fond,0,0,5,5)
+	#		fond = ajoutFondEcran
+		self.attach(@fond,0,0,5,5)
 	end
 
 

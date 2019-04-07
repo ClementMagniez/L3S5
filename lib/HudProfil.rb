@@ -1,4 +1,6 @@
 # Cette classe fait a peut pres les memes choses que HudInscription
+require 'inifile'
+
 class HudProfil < Hud
 	def initialize(window)
 		super(window)
@@ -6,24 +8,27 @@ class HudProfil < Hud
 		@entNom = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
 
-
-
 		initChampScore
-		initBoutonSauvegarder
+		initBoutonSauvegarderLogin
 		initBoutonRetourMenu
+		initMenuResolution
+		initBoutonSauvegarderResolution
 
+		self.attach(Gtk::Label.new("Compte"), 4, 0, 2, 1)
+		self.attach(@lblDescription, 4, 1, 2, 1)
+		self.attach(Gtk::Label.new("Nouveau nom"), 4, 2, 1, 1)
+		self.attach(@entNom, 5, 2, 1, 1)
+		self.attach(Gtk::Label.new("Nouveau mot de passe"), 4, 3, 1, 1)
+		self.attach(@entMdp, 5, 3, 1, 1)
+		self.attach(@btnSauvegardeLogin, 4, 4, 2, 1)
 
+#		self.attach(@champScores, 0, 4, 2, 4)
+		self.attach(Gtk::Label.new("Résolution"), 4, 5, 2, 1)
+		self.attach(@menuResolution, 4, 6, 2, 1)
+		self.attach(@btnSauvegardeResolution, 4, 7, 2, 1)
 
-		self.attach(@lblDescription, 0, 0, 2, 1)
-		self.attach(Gtk::Label.new("Nouveau nom"), 0, 1, 1, 1)
-		self.attach(@entNom, 1, 1, 1, 1)
-		self.attach(Gtk::Label.new("Nouveau mot de passe"), 0, 2, 1, 1)
-		self.attach(@entMdp, 1, 2, 1, 1)
-
-		self.attach(@champScores, 0, 4, 2, 4)
-
-		self.attach(@btnSauvegarde, 0, 10, 2, 1)
-		self.attach(@btnRetour, 0, 11, 2, 1)
+		self.attach(@btnRetour, 1, 11, 2, 1)
+		self.attach(@fond,0,0,12,12)
 	end
 
 	def initChampScore
@@ -37,9 +42,9 @@ class HudProfil < Hud
 		@champScores.set_visible(true)
 	end
 
-	def initBoutonSauvegarder
-		@btnSauvegarde = Gtk::Button.new label: "Sauvegarder"
-		@btnSauvegarde.signal_connect("clicked") {
+	def initBoutonSauvegarderLogin
+		@btnSauvegardeLogin = Gtk::Button.new(label: "Sauvegarder les modifications")
+		@btnSauvegardeLogin.signal_connect("clicked") {
 			strNom = @entNom.text
 			strMdp = @entMdp.text
 			if(strNom.empty?)
@@ -58,8 +63,39 @@ class HudProfil < Hud
 	def initBoutonRetourMenu
 		@btnRetour = Gtk::Button.new label: "Retour"
 		@btnRetour.signal_connect("clicked") {
-			puts "Retour au menu"
 			lancementModeJeu
 		}
 	end
+	
+	#				width=@menuResolution.split(*)[0].to_i
+	#			height=@menuResolution.split(*)[1].to_i
+
+	
+	def initMenuResolution
+
+		@menuResolution = Gtk::ComboBoxText	.new
+		@menuResolution.append_text("1920*1080")
+		@menuResolution.append_text("1080*720")
+		@menuResolution.append_text("800*480")
+		@menuResolution.append_text("640*270")
+		@menuResolution.active=0;
+		@menuResolution.set_visible(true)
+		
+		@menuResolution.signal_connect('changed') do
+				@resolution=@menuResolution.active_text			
+		end
+	end
+	
+	def initBoutonSauvegarderResolution
+		@btnSauvegardeResolution=Gtk::Button.new(label: "Appliquer")
+		@btnSauvegardeResolution.signal_connect('clicked') do
+			f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+			f['resolution']={'width' => @resolution.split('*')[0].to_i,
+											 'height'=> @resolution.split('*')[1].to_i}
+			f.write
+			self.resizeWindow(@resolution.split('*')[0].to_i, 
+												@resolution.split('*')[1].to_i)
+		end
+	end
+	
 end

@@ -51,16 +51,14 @@ class HudInscription < Hud
 				@lblErreur.set_label("Veuillez renseigner toutes les informations.")
 			else
 				#@lblErreur.set_label("Enregistrement base de donnée à faire.")
-				session = Connexion.new()
+				session = Connexion.new
 				
 				id = @entId.text
 				mdp = @entMdp.text
 				mdp = session.crypterMdp(mdp)
 				#mdp = mdp.crypt(mdp)
 			
-				if id == "drop table" || mdp == "drop table"
-					@lblErreur.set_label("Entrez un identifiant et un mot de passe valides.")
-				elsif Profil.find_by(pseudonyme: id) != nil
+				if Profil.find_by(pseudonyme: id) != nil
 					@lblErreur.set_label("Cet identifiant existe déjà.")
 				else
 					user = Profil.new(
@@ -69,7 +67,10 @@ class HudInscription < Hud
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-			
+					
+					# TODO : créer le fichier de config non-vide (fullscreen / résolution)
+					
+#					File.open("../config/#{id}.ini", "w+") # Création du fichier de config (vide)
 					self.lancementModeJeu
 				end
 			end

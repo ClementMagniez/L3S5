@@ -13,6 +13,7 @@ class HudModeDeJeu < Hud
 	# Paramètre : window - la Fenetre de l'application
 	def initialize(window)
 		super(window)
+		self.resizeWindow(960, 540)
 		varX, varY = 4,4
  		self.setTitre("Choix du mode de jeu")
 
@@ -40,7 +41,7 @@ class HudModeDeJeu < Hud
 		self.attach(@btnQuitter, varX+4, varY+14, 1, 1)
 		self.attach(@btnProfil, varX+4, varY-4, 1, 1)
 
-		self.attach(self.ajoutFondEcran,0,0,varX+6,varY+15)
+		self.attach(@fond,0,0,varX+6,varY+15)
 	end
 
 	# Crée et connecte le bouton de chargement d'une sauvegarde

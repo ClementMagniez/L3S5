@@ -16,9 +16,25 @@ class Hud < Gtk::Grid
 	def initialize(window)
 		super()
 		@fenetre = window
-		@lblDescription = Gtk::Label.new
 		@winX = @fenetre.size.fetch(0)
 		@winY = @fenetre.size.fetch(1)
+		@fond=ajoutFondEcran	
+		
+		# TODO - faire que ça ne s'exécute qu'une fois
+		@fenetre.signal_connect('check-resize') do |window|
+			@bufferX=@winX
+			@bufferY=@winY
+			@winX=window.size[0]
+			@winY=window.size[1]
+
+				print "Pendant : ", @winX," ", @winY, "\n"
+			if @bufferY!=@winY || @bufferX!=@winX
+#				ajoutFondEcran
+				@fond.pixbuf=updateFondEcran(@winX,@winY)
+			end
+		end
+
+		@lblDescription = Gtk::Label.new
 		@varPlaceGrid = 6
 
 		initBoutonOptions
@@ -107,12 +123,18 @@ class Hud < Gtk::Grid
 	def ajoutFondEcran
 		# puts ("Resolution : " + @winX.to_s + ";" + @winY.to_s)
 
-		fond = Gtk::Image.new( :file => "../img/fond2.png")
+		fond = Gtk::Image.new( pixbuf: updateFondEcran(@winX, @winY))
 		fond.pixbuf = fond.pixbuf.scale(@winX,@winY)	if fond.pixbuf != nil
 
 		return fond
 	end
-
+	
+	def updateFondEcran(width, height)
+#		self.remove(@fond) if @fond!=nil
+			return GdkPixbuf::Pixbuf.new( :file => "../img/fond2.png",\
+																		:width=>width,:height=>height)
+	end	
+	
 	def initBoutonQuitter
 		@btnQuitter = Gtk::Button.new
 		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
@@ -122,9 +144,6 @@ class Hud < Gtk::Grid
 		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
 	end
 
-	def styleLabel(label,couleur,style,size,contenu)
-		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
-	end
 
 	def initBoutonProfil
 		@btnProfil = Gtk::Button.new label: "Profil"
@@ -132,5 +151,17 @@ class Hud < Gtk::Grid
 			lancementProfil
 		end
 	end
+
+
+	def styleLabel(label,couleur,style,size,contenu)
+		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
+	end
+
+	def resizeWindow(width, height)
+		@fenetre.set_resizable(true)
+		@fenetre.resize(width,height)
+		@fenetre.set_resizable(false)
+	end
+
 
 end
