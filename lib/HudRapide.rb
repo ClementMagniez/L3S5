@@ -20,9 +20,9 @@ class HudRapide < HudJeu
 		self.setTitre("Partie rapide")
 
 		initBoutonTimer
-		initBoutonPause
 		initBoutonAide
-		initBoutonReset
+		initBoutonPause
+
 		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-1,@sizeGridJeu,@sizeGridJeu+4)
 
 		self.attach(@lblTime,@varDebutPlaceGrid,@varDebutPlaceGrid-2,@sizeGridJeu,1)
@@ -65,6 +65,17 @@ class HudRapide < HudJeu
 		aide
 		@btnAide.signal_connect("clicked") {
 			@stockHorloge = @stockHorloge - @@malus
+		}
+	end
+
+	def initBoutonPause
+		super
+		@btnPause.signal_connect("clicked") {
+			@gridJeu.set_visible(!@pause)
+			@btnAide.set_sensitive(!@pause)
+			@btnReset.set_sensitive(!@pause)
+			@btnCancel.set_sensitive(!@pause)
+			@btnRemplissage.set_sensitive(!@pause)
 		}
 	end
 end
