@@ -5,7 +5,8 @@
 ##
 
 require "active_record"
-require "openssl"
+#require "openssl"
+require 'digest/sha1'
 require_relative "connectSqlite3.rb"
 require_relative "Profil.rb"
 
@@ -60,7 +61,8 @@ class Connexion
 		#encrypted << encrypter.final	
 		
 		#return encrypted
-		return mdp.crypt(mdp)
+		#return mdp.crypt(mdp)
+		Digest::SHA1.hexdigest(mdp)
 	end
 	
 	# Méthode permettant à un utilisateur de se déconnecter.
