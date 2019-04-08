@@ -17,8 +17,6 @@ class ScorePartie
   # utilisées lors d'une partie, le booléen déterminant le type de chronomètre, la taille de la grille liée, le temps de jeu
   # selon le mode, le montant numérique du score
 
-  attr_accessor :bonus, :malus, :modeChrono, :nbAidesUsees, :taille, :tempsDeJeu, :valeur
-
   ##
 	# == initialize(0)
 	#
@@ -86,7 +84,7 @@ class ScorePartie
     if(@taille < 9 && @nbAidesUsees > 1)
       nbMalus = @nbAidesUsees - 1
     # MOYEN
-    elsif(@taille >= 9 && taille < 12 && @nbAidesUsees > 2)
+    elsif(@taille >= 9 && @taille < 12 && @nbAidesUsees > 2)
       nbMalus = @nbAidesUsees - 2
     # DIFFICILE
     elsif(@taille >= 12 && @nbAidesUsees > 3)
