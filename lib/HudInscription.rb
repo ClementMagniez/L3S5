@@ -58,9 +58,7 @@ class HudInscription < Hud
 				mdp = session.crypterMdp(mdp)
 				#mdp = mdp.crypt(mdp)
 			
-				if id == "drop table" || mdp == "drop table"
-					@lblErreur.set_label("Entrez un identifiant et un mot de passe valides.")
-				elsif Profil.find_by(pseudonyme: id) != nil
+				if Profil.find_by(pseudonyme: id) != nil
 					@lblErreur.set_label("Cet identifiant existe déjà.")
 				else
 					user = Profil.new(
