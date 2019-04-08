@@ -65,7 +65,7 @@ class HudAccueil < Hud
 		}
 	end
 	def initBoutonInscription
-		puts "Inscription => Traitement manquant"
+		#puts "Inscription => Traitement manquant"
 		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
 		@btnInscrire.signal_connect('clicked'){
 			self.lancementInscription
