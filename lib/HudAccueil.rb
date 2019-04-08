@@ -10,6 +10,7 @@ class HudAccueil < Hud
 	# @btnQuitter
 	# @entryIdentifiant
 	# @entryMotDePasse
+	# @lblErreur
 
 	def initialize(window)
 		super(window)
