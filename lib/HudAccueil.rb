@@ -59,7 +59,6 @@ class HudAccueil < Hud
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
 				self.lancementModeJeu
 			else
-				# Ici, il faudrait afficher un message d'erreur sur la fenêtre
 				#puts "Echec : connexion impossible"
 				@lblErreur.set_label("Identifiant ou mot de passe incorrect.")
 			end
