@@ -73,7 +73,7 @@ class HudRapide < HudJeu
 		@btnPause.signal_connect("clicked") {
 			@gridJeu.set_visible(!@pause)
 			@btnAide.set_sensitive(!@pause)
-			@btnReset.set_sensitive(false)
+			@btnReset.set_sensitive(!@pause)
 			@btnCancel.set_sensitive(!@pause)
 			@btnRemplissage.set_sensitive(!@pause)
 		}
