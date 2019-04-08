@@ -24,6 +24,8 @@ class HudProfil < Hud
 
 		self.attach(@btnSauvegarde, 0, 10, 2, 1)
 		self.attach(@btnRetour, 0, 11, 2, 1)
+
+		ajoutFondEcran
 	end
 
 	def initChampScore

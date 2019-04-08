@@ -32,6 +32,7 @@ class HudJeu < Hud
 		chargementGrille
 		initBoutonSauvegarde
 		initBoutonRemplissage
+		initBoutonRegle
 	
 		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
 		@varDebutPlaceGrid = @sizeGridWin/4 
@@ -45,6 +46,12 @@ class HudJeu < Hud
 		self.attach(@btnOptions, 2, @sizeGridWin-2, 1,1)
 
 		
+	end
+
+
+	def initBoutonRegle
+		@btnRegle = creerBouton(Gtk::Label.new("?"),"pink","ultrabold","xx-large")
+		self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
 	end
 
 
@@ -169,8 +176,7 @@ class HudJeu < Hud
 	# Créé un attribut @btnReset qui est le bouton de remise à zéro
 	# initialise le bouton
 	def initBoutonReset
-		@btnReset = Gtk::Button.new 
-		styleBouton(@btnReset,Gtk::Label.new("Reset"),"white","ultrabold","x-large")
+		@btnReset = creerBouton(Gtk::Label.new("Reset"),"white","ultrabold","x-large")
 		@btnReset.signal_connect("clicked") {
 			reset
 			if @lblAide != nil
@@ -198,8 +204,7 @@ class HudJeu < Hud
 	end
 
 	def initBoutonTimer
-		@btnPause = Gtk::Button.new
-		styleBouton(@btnPause,Gtk::Label.new("Pause"),"white","ultrabold","x-large")
+		@btnPause = creerBouton(Gtk::Label.new("Pause"),"white","ultrabold","x-large")
 		@lblTime = Gtk::Label.new(" 00:00 ")
 		@timer = Time.now
 		@pause = false
@@ -230,8 +235,7 @@ class HudJeu < Hud
 
 	def initBoutonCancel
 
-		@btnCancel = Gtk::Button.new
-		styleBouton(@btnCancel,Gtk::Label.new("Cancel"),"white","ultrabold","x-large")
+		@btnCancel = creerBouton(Gtk::Label.new("Cancel"),"white","ultrabold","x-large")
 		@btnCancel.signal_connect('clicked'){
 
 			cell = @grille.cancel
@@ -272,8 +276,7 @@ class HudJeu < Hud
 	end
 
 	def initBoutonSauvegarde
-		@btnSauvegard = Gtk::Button.new 
-		styleBouton(@btnSauvegard,Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
+		@btnSauvegard = creerBouton(Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
 		@btnSauvegard.signal_connect('clicked') {
 			File.open("saves/"+@@name+".txt", 'w+') do |f|
 				f.write([Marshal.dump(@grille), Marshal.dump(@@mode), Marshal.dump(@@difficulte)])
@@ -299,8 +302,7 @@ class HudJeu < Hud
 
 		taille = @grille.length
 
-		@btnAide = Gtk::Button.new
-		styleBouton(@btnAide,Gtk::Label.new("Aide"),"white","ultrabold","x-large")
+		@btnAide = creerBouton(Gtk::Label.new("Aide"),"white","ultrabold","x-large")
 		@btnAide.signal_connect("clicked") {
 
 			tableau = @aide.cycle("rapide")
@@ -341,8 +343,7 @@ class HudJeu < Hud
 
 
 	def initBoutonRemplissage
-		@btnRemplissage = Gtk::Button.new
-		styleBouton(@btnRemplissage,Gtk::Label.new("Remplir"),"white","ultrabold","x-large")
+		@btnRemplissage = creerBouton(Gtk::Label.new("Remplir"),"white","ultrabold","x-large")
 		@btnRemplissage.signal_connect('clicked') {
 			liste = @aide.listeCasesGazon
 			while not liste.empty?

@@ -15,6 +15,8 @@ require_relative 'HudFinDeJeu'
 require_relative 'HudProfil'
 require_relative 'HudExploration'	
 require_relative 'HudChoixDifficulte'
+require_relative 'HudPresentationTutoriel'
+require_relative 'HudRegle'
 
 class Fenetre < Gtk::Window
 	def initialize

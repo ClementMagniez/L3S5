@@ -26,8 +26,7 @@ class HudFinDeJeu < Hud
 	end
 
 	def initBoutonRecommencer
-		@btnRecommencer = Gtk::Button.new 
-		styleBouton(@btnRecommencer,Gtk::Label.new("Recommencer"),"white","ultrabold","x-large")
+		@btnRecommencer = creerBouton(Gtk::Label.new("Recommencer"),"white","ultrabold","x-large")
 		@btnRecommencer.signal_connect('clicked') {
 			@fenetrePrecedente.reset
 			#@fenetrePrecedente.raz
@@ -37,8 +36,7 @@ class HudFinDeJeu < Hud
 	end
 
 	def initBoutonChangerModeDeJeu
-		@btnModeDeJeu = Gtk::Button.new 
-		styleBouton(@btnModeDeJeu,Gtk::Label.new("Changer de grille"),"white","ultrabold","x-large")
+		@btnModeDeJeu = creerBouton(Gtk::Label.new("Changer de grille"),"white","ultrabold","x-large")
 		@btnModeDeJeu.signal_connect('clicked'){
 			self.lancementModeJeu
 		}

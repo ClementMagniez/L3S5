@@ -44,7 +44,6 @@ class HudRapide < HudJeu
 
 	def timer
 		while true do
-			@horloge = 
 			@horloge = @temps - ((Time.now - @timer) - @stockHorloge)
 				minutes = (@horloge/60).to_i
 					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s

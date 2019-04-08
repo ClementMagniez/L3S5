@@ -48,12 +48,9 @@ class HudChoixDifficulte < Hud
 	# Crée et instancie les boutons de choix de la difficulté
 	# Return self
 	def initBoutonsDifficulte
-		@btnFacile = Gtk::Button.new 
-		styleBouton(@btnFacile,Gtk::Label.new("Facile"),"white","ultrabold","x-large")
-		@btnMoyen = Gtk::Button.new
-		styleBouton(@btnMoyen,Gtk::Label.new("Moyen"),"white","ultrabold","x-large")
-		@btnDifficile = Gtk::Button.new
-		styleBouton(@btnDifficile,Gtk::Label.new("Difficile"),"white","ultrabold","x-large")
+		@btnFacile = creerBouton(Gtk::Label.new("Facile"),"white","ultrabold","x-large")
+		@btnMoyen = creerBouton(Gtk::Label.new("Moyen"),"white","ultrabold","x-large")
+		@btnDifficile = creerBouton(Gtk::Label.new("Difficile"),"white","ultrabold","x-large")
 
 		@btnFacile.signal_connect('clicked') do
 			self.send(@mode, Grille.new(TAILLE_FACILE))

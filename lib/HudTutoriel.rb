@@ -7,6 +7,7 @@ class HudTutoriel < HudJeu
 		self.setTitre("Tutoriel")
 
 		initBoutonAide
+		aideTutoriel
 
 		@varBoutonEnPlus=1
 		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-3,@sizeGridJeu,@sizeGridJeu+4)
@@ -21,16 +22,8 @@ class HudTutoriel < HudJeu
 		ajoutFondEcran
 	end
 
-	
 
-	# Créé et initialise le bouton d'aide
-	def initBoutonAide
-		taille = @grille.length
-		@caseSurbrillanceList = Array.new
-
-		@btnAide = Gtk::Button.new 
-		styleBouton(@btnAide,Gtk::Label.new("Aide"),"white","ultrabold","x-large")
-		@btnAide.signal_connect("clicked") {
+	def aideTutoriel
 			tableau = @aide.cycle("tuto")
 			puts(tableau)
 			premAide = tableau.at(0)
@@ -65,7 +58,18 @@ class HudTutoriel < HudJeu
 				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
 				@lblIndiceSubr = lblIndice
 			end
+	end
 
+	
+
+	# Créé et initialise le bouton d'aide
+	def initBoutonAide
+		taille = @grille.length
+		@caseSurbrillanceList = Array.new
+
+		@btnAide = creerBouton(Gtk::Label.new("Aide"),"white","ultrabold","x-large")
+		@btnAide.signal_connect("clicked") {
+			aideTutoriel
 		}
 	end
 

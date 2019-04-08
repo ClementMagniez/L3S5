@@ -21,7 +21,7 @@ class Hud < Gtk::Grid
 		@winY = @fenetre.size.fetch(1)
 
 
-		#nombre de cellule horizontale et verticale de la fenetre
+		#nombre de cellule horizontale et verticale de la  fenetre
 		@sizeGridWin = 20
 		
 		initBoutonOptions
@@ -77,6 +77,17 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudInscription.new(@fenetre))
 	end
 
+	def lancementHudRegle
+		puts " Page de regle "
+		@fenetre.changerWidget(self, HudRegle.new(@fenetre))
+	end
+
+	def lancementHudPresentationTutoriel(grille)
+		puts " Page de presentation tutoriel "
+		@fenetre.changerWidget(self, HudPresentationTutoriel.new(@fenetre,grille))
+
+	end
+
 	def lancementProfil
 		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
 	end
@@ -97,8 +108,7 @@ class Hud < Gtk::Grid
 	
 	# Créé et initialise le bouton de retour
 	def initBoutonRetour
-		@btnRetour = Gtk::Button.new 
-		styleBouton(@btnRetour,Gtk::Label.new("Retour"),"white","ultrabold","x-large")
+		@btnRetour = creerBouton(Gtk::Label.new("Retour"),"white","ultrabold","x-large")
 		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
 	end
 
@@ -137,19 +147,20 @@ class Hud < Gtk::Grid
 	end
 
 
-	def styleBouton(bouton,label,couleur,style,size)
+	def creerBouton(label,couleur,style,size)
+		bouton = Gtk::Button.new 
 		self.styleLabel(label,couleur,style,size,label.text)
 		bouton.add(label)
 		bouton.set_relief(Gtk::ReliefStyle::NONE)
 	#	bouton.signal_connect('enter'){
 		#	styleLabel(label,"black",style,size,label.text)
 	#	}
+		return bouton
 	end
 
 	
 	def initBoutonProfil
-		@btnProfil = Gtk::Button.new
-		styleBouton(@btnProfil,Gtk::Label.new("Profil"),"white","ultrabold","x-large")
+		@btnProfil = creerBouton(Gtk::Label.new("Profil"),"white","ultrabold","x-large")
 		@btnProfil.signal_connect("clicked") do
 			lancementProfil
 		end
