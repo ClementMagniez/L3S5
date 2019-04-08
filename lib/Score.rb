@@ -18,6 +18,10 @@ class Score < ActiveRecord::Base
 	# entier strictement positif, une chaine de caractères indiquant le mode de jeu où le score a été
 	# obtenu, la date où le score a été obtenu, l'identifiant d'un joueur, l'identifiant d'une map
 
+	def rechercherScore
+
+	end
+
 	##
 	# == to_s
 	#
