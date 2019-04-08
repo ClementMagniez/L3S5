@@ -17,6 +17,8 @@ class Connexion
 	# 	@id contient l'ID de l'utilisateur connecté
 	# 	@login contient le login de l'utilisateur connecté
 
+	attr_reader :id, :login
+
 	# Méthode permettant de modifier les informations liées à une session, lors de la
 	# connexion d'un nouvel utilisateur par exemple.
 	#
@@ -34,9 +36,9 @@ class Connexion
 		mdp = crypterMdp(password)									#Cryptage du mot de passe
 		#mdp = password.crypt(password)
 		#recherche du login dans la base de données
-		rechercheProfil = Profil.find_by(pseudonyme: login, mdpEncrypted: mdp)
+		reqProfil = Profil.find_by(pseudonyme: login, mdpEncrypted: mdp)
 
-		if(rechercheProfil == nil) #si le login n'est pas présent
+		if(reqProfil == nil) #si le login n'est pas présent
 			puts("ERREUR : Login ou mot de passe incorrect") 			#Affichage d'une erreur
 			return 1
 			#On propose à l'utilisateur de créer un compte ou de tenter une nouvelle identification
@@ -75,22 +77,59 @@ class Connexion
 	end
 
 	##
+	# == enregistrerScore(4)
 	#
-	# = rechercherScore(1)
+	# Cette méthode permet d'insérer un nouveau score dans la base de données à la fin
+	# d'une partie. Toutes les informations liées à cette partie sont enregistrées dans
+	# la table *Score*.
+	#
+	# === Paramètres
+	#
+	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
+	# * +nomMode+ - Le nom du mode de jeu
+	# * +nomMap+ - Le nom de la grille jouée
+	# * +score+ - Le montant du score obtenu à la fin de la partie
+	#
+	def enregistrerScore(idJoueur,nomMode,nomMap,score)
+		# Chercher si la grille courante possède déjà une entrée dans la BDD ou pas ; agir en conséquence
+		reqMap = Map.find_by(nomMap: nomMap)
+		if(reqMap == nil)
+			# Insertion d'un nouveau champ dans la table Map - voir si on importe un objet grille dans les paramètres
+			insertMap = Map.new(
+				hash_name: nomMap,
+				taille: taille,
+				difficulte: difficulte
+			);
+			insertMap.save
+			reqMap = Map.find_by(nomMap: nomMap)
+		end
+
+		reqScore = Score.new(
+			montantScore: score,
+			modeJeu: nomMode,
+			dateObtention: Time.now.split(" ").at(0)
+		);
+		reqScore.profil_id = idJoueur
+		reqScore.map_id = reqMap.id
+		reqScore.save
+	end
+
+	##
+	# == rechercherScore(1)
 	#
 	# Cette méthode permet de sortir tous les scores contenues dans la base de données.
 	#
-	# == Paramètre
+	# === Paramètre
 	#
 	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
 	#
 	def rechercherScore(idJoueur)
-		if(Score.find_by(id: idJoueur) != nil)
+		reqScore = Score.find_by(id: idJoueur)
+
+		if(reqScore != nil)
 			puts "Des scores ont été trouvés. Par contre, faudra allonger la monnaie pour les voir..."
 		else
 			puts "Aucun score n'existe encore pour ce joueur."
 		end
 	end
-
-	attr_reader :id, :login
 end

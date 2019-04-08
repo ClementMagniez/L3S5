@@ -1,6 +1,4 @@
 # Cette classe fait a peut pres les memes choses que HudInscription
-require_relative "Connexion.rb"
-
 class HudProfil < Hud
 	def initialize(window)
 		super(window)
@@ -34,9 +32,11 @@ class HudProfil < Hud
 			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 				# Liste des scores récupérés dans la BDD
 				session = Connexion.new()
-
 				session.rechercherScore(session.id)
 
+				0.upto(10) do |i|
+					boxChamp.add(Gtk::Label.new("choix " + i.to_s))
+				end
 			@champScores.add(boxChamp)
 		@champScores.set_visible(true)
 	end
