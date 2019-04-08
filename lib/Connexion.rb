@@ -38,9 +38,7 @@ class Connexion
 		#mdp = password.crypt(password)
 		#recherche du login dans la base de données
 		if(Profil.find_by(pseudonyme: login, mdpEncrypted: mdp) == nil) #si le login n'est pas présent
-			puts("ERREUR : Login ou mot de passe incorrect") 			#Affichage d'une erreur
 			return 0
-			#On propose à l'utilisateur de créer un compte ou de tenter une nouvelle identification
 		else 															#si le login est présent dans la base de données
 			puts "-----> CONNECTE <-----"								#l'utilisateur est connecté
 			@login = login
