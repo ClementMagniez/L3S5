@@ -51,7 +51,7 @@ class HudAccueil < Hud
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
 				puts "Veuillez renseigner tous les champs."
 			else
-				if(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) != -1)
+				if(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) != 1)
 					self.lancementModeJeu
 				else
 					# Ici, il faudrait afficher un message d'erreur sur la fenêtre

@@ -34,14 +34,17 @@ class Connexion
 		mdp = crypterMdp(password)									#Cryptage du mot de passe
 		#mdp = password.crypt(password)
 		#recherche du login dans la base de données
-		if(Profil.find_by(pseudonyme: login, mdpEncrypted: mdp) == nil) #si le login n'est pas présent
+		rechercheProfil = Profil.find_by(pseudonyme: login, mdpEncrypted: mdp)
+
+		if(rechercheProfil == nil) #si le login n'est pas présent
 			puts("ERREUR : Login ou mot de passe incorrect") 			#Affichage d'une erreur
-			return -1
+			return 1
 			#On propose à l'utilisateur de créer un compte ou de tenter une nouvelle identification
 		else 															#si le login est présent dans la base de données
 			puts "-----> CONNECTE <-----"								#l'utilisateur est connecté
+			@id = rechercheProfil.id
 			@login = login
-			return
+			return 0
 		end
 	end
 
@@ -82,12 +85,12 @@ class Connexion
 	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
 	#
 	def rechercherScore(idJoueur)
-		if(Score.find_all(id_profil: idJoueur) != nil)
+		if(Score.find_by(id: idJoueur) != nil)
 			puts "Des scores ont été trouvés. Par contre, faudra allonger la monnaie pour les voir..."
 		else
 			puts "Aucun score n'existe encore pour ce joueur."
 		end
 	end
 
-	attr_reader :login
+	attr_reader :id, :login
 end

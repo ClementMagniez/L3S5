@@ -35,7 +35,7 @@ class HudProfil < Hud
 				# Liste des scores récupérés dans la BDD
 				session = Connexion.new()
 
-				#session.rechercherScore()
+				session.rechercherScore(session.id)
 
 			@champScores.add(boxChamp)
 		@champScores.set_visible(true)
