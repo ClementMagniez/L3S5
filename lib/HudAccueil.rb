@@ -22,7 +22,12 @@ class HudAccueil < Hud
 		initBoutonInscription
 		initBoutonQuitter
 
-
+		# Rend le mot de passe entré invisible
+		@entryMotDePasse.set_visibility(FALSE)
+		
+		@lblErreur = Gtk::Label.new("Connectez-vous !")
+		
+		self.attach(@lblErreur, varX+2, varY-1, 1, 1)
 
 		self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
 		self.attach(@entryIdentifiant,varX+2, varY+1, 1, 1)
@@ -48,12 +53,14 @@ class HudAccueil < Hud
 			session = Connexion.new()
 				
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
-				puts "Veuillez renseigner tous les champs."
+				#puts "Veuillez renseigner tous les champs."
+				@lblErreur.set_label("Veuillez renseigner tous les champs.")
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
 				self.lancementModeJeu
 			else
 				# Ici, il faudrait afficher un message d'erreur sur la fenêtre
-				puts "Echec : connexion impossible"
+				#puts "Echec : connexion impossible"
+				@lblErreur.set_label("Identifiant ou mot de passe incorrect.")
 			end
 		}
 	end
