@@ -14,22 +14,24 @@ require_relative "connectSqlite3.rb"
 # Lorsque le fichier est exécuté, il crée les trois tables nécessaires au stockage des données du joueur actuel,
 # des grilles qu'il a complété et des scores qu'il a obtenu.
 #
-ActiveRecord::Schema.define do
-	create_table :profils do |c|
-		c.string :pseudonyme
-		c.string :mdpEncrypted
+if(!File.file?("lib/DAEDT.sqlite3"))
+	ActiveRecord::Schema.define do
+		create_table :profils do |c|
+			c.string :pseudonyme
+			c.string :mdpEncrypted
+		end
+
+	  create_table :maps do |c|
+	    c.string :taille
+	    c.string :difficulte
+	  end
+
+	  create_table :scores do |c|
+	  	c.integer :montantScore
+	  	c.string :modeJeu
+	  	c.date :dateObtention
+	    c.references :profil
+	    c.references :map
+	  end
 	end
-
-  create_table :maps do |c|
-    c.string :taille
-    c.string :difficulte
-  end
-
-  create_table :scores do |c|
-  	c.integer :montantScore
-  	c.string :modeJeu
-  	c.date :dateObtention
-    c.references :profil
-    c.references :map
-  end
 end
