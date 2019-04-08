@@ -54,18 +54,15 @@ class HudAccueil < Hud
 			session = Connexion.new()
 				
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
-				#puts "Veuillez renseigner tous les champs."
 				@lblErreur.set_label("Veuillez renseigner tous les champs.")
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
 				self.lancementModeJeu
 			else
-				#puts "Echec : connexion impossible"
 				@lblErreur.set_label("Identifiant ou mot de passe incorrect.")
 			end
 		}
 	end
 	def initBoutonInscription
-		#puts "Inscription => Traitement manquant"
 		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
 		@btnInscrire.signal_connect('clicked'){
 			self.lancementInscription
