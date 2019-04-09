@@ -51,5 +51,5 @@ class Connexion
 		return nil
 	end	
 	
-	attr_reader :login
+	attr_reader :loginUser
 end
