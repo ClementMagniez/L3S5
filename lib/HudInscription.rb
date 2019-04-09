@@ -1,6 +1,4 @@
 require "rubygems"
-#require_relative "connectSqlite3.rb"
-#require_relative "Profil.rb"
 require_relative "Connexion.rb"
 
 class HudInscription < Hud
@@ -50,17 +48,16 @@ class HudInscription < Hud
 			if @entMdp.text.empty? || @entId.text.empty?
 				@lblErreur.set_label("Veuillez renseigner toutes les informations.")
 			else
-				#@lblErreur.set_label("Enregistrement base de donnée à faire.")
 				session = Connexion.new()
 				
 				id = @entId.text
 				mdp = @entMdp.text
 				mdp = session.crypterMdp(mdp)
-				#mdp = mdp.crypt(mdp)
 			
 				if Profil.find_by(pseudonyme: id) != nil
 					@lblErreur.set_label("Cet identifiant existe déjà.")
 				else
+					$login = id
 					user = Profil.new(
 						pseudonyme: id,
 						mdpEncrypted: mdp
