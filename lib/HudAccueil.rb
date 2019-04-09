@@ -11,6 +11,7 @@ class HudAccueil < Hud
 	# @entryIdentifiant
 	# @entryMotDePasse
 	# @lblErreur
+	# @session
 
 	def initialize(window)
 		super(window)
@@ -51,17 +52,19 @@ class HudAccueil < Hud
 		@btnConnecter = Gtk::Button.new :label => "Se connecter"
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
-			session = Connexion.new()
+			@session = Connexion.new()
 				
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
 				@lblErreur.set_label("Veuillez renseigner tous les champs.")
-			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
-				self.lancementModeJeu
-			else
+			elsif(@session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == -1)
 				@lblErreur.set_label("Identifiant ou mot de passe incorrect.")
+			else
+				$login = @session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text())
+				self.lancementModeJeu
 			end
 		}
 	end
+	
 	def initBoutonInscription
 		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
 		@btnInscrire.signal_connect('clicked'){
@@ -69,6 +72,6 @@ class HudAccueil < Hud
 		}
 	end
 
-
+	attr_reader :session
 
 end
