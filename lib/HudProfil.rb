@@ -1,3 +1,10 @@
+require "rubygems"
+require 'digest/sha1'
+require_relative "connectSqlite3.rb"
+require_relative "Profil.rb"
+require_relative "Connexion.rb"
+require_relative "HudAccueil.rb"
+
 # Cette classe fait a peut pres les memes choses que HudInscription
 class HudProfil < Hud
 	def initialize(window)
@@ -12,18 +19,20 @@ class HudProfil < Hud
 		initBoutonSauvegarder
 		initBoutonRetourMenu
 
-
+		@lblLogin = Gtk::Label.new($login)
+		
+		self.attach(@lblLogin, 0, -1, 2, 1)
 
 		self.attach(@lblDescription, 0, 0, 2, 1)
-		self.attach(Gtk::Label.new("Nouveau nom"), 0, 1, 1, 1)
+		self.attach(Gtk::Label.new("Nouvel identifiant"), 0, 1, 1, 1)
 		self.attach(@entNom, 1, 1, 1, 1)
 		self.attach(Gtk::Label.new("Nouveau mot de passe"), 0, 2, 1, 1)
 		self.attach(@entMdp, 1, 2, 1, 1)
 
 		self.attach(@champScores, 0, 4, 2, 4)
 
-		self.attach(@btnSauvegarde, 0, 10, 2, 1)
-		self.attach(@btnRetour, 0, 11, 2, 1)
+		self.attach(@btnSauvegarde, 0, 11, 2, 1)
+		self.attach(@btnRetour, 0, 12, 2, 1)
 	end
 
 	def initChampScore
@@ -42,15 +51,24 @@ class HudProfil < Hud
 		@btnSauvegarde.signal_connect("clicked") {
 			strNom = @entNom.text
 			strMdp = @entMdp.text
+			
+			user = Profil.find_by(pseudonyme: $login)
+			
 			if(strNom.empty?)
-				puts "Le nom ne peut etre vide !"
-				self.setDesc("Le nom ne peut etre vide !")
+				self.setDesc("L'identifiant ne peut etre vide !")
 			elsif(strMdp.empty?)
-				puts "Le mot de passe ne peut etre vide !"
 				self.setDesc("Le mot de passe ne peut etre vide !")
 			else
-				puts "Sauvegarde dans la base !"
-				self.setDesc("Sauvegarde dans la base !")
+				if Profil.find_by(pseudonyme: strNom) != nil
+					self.setDesc("Cet identifiant existe déjà.")
+				else
+					user.pseudonyme = strNom
+					user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)
+					user.save
+					$login = strNom
+					self.setDesc("Modifications enregistrées !")
+					@lblLogin.set_label($login)
+				end			
 			end
 		}
 	end
