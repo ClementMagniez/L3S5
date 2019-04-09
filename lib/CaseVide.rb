@@ -78,6 +78,8 @@ class CaseVide < Case
 			'../img/gazon.png'
 		elsif self.statutVisible.isTente?
 			'../img/tente.png'
+		else
+			'../img/gris.png'
 		end
 	end
 end

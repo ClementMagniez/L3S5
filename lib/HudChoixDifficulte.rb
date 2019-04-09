@@ -19,36 +19,39 @@ class HudChoixDifficulte < Hud
 	# - mode : un symbole ∈ { :rapide, :explo, :aventure } - détermine quel mode de jeu est lancé 
 	def initialize(window, mode)
 		super(window)
-		varX, varY = 4,4
- 		self.setTitre("Choix de la difficulté - mode #{:mode.to_s}")
- 		
+ 		self.setTitre("Choix de la difficulté - mode #{mode.to_s}")
+ 		@@mode=mode
  		# Définit la fonction de lancement utilisée selon le symbole fourni
 		@mode="lancement"+mode.to_s.capitalize
-		
+
 		
 		self.initBoutonsDifficulte
-		self.initBoutonQuitter
+		self.initBoutonRetour
 		self.initBoutonProfil
-
+		
+		@sizeGridWin=20
 		# TODO - foutus nombres magiques
+		debutMilieu = (@sizeGridWin/2)-1
 
-		self.attach(@btnFacile,varX+1, varY+2, 1, 1)
-		self.attach(@btnMoyen,varX+1, varY+3, 1, 1)
-		self.attach(@btnDifficile,varX+1, varY+4, 1, 1)
-
-		self.attach(@btnOptions, 1, varY+14, 1, 1)
-		self.attach(@btnQuitter, varX+4, varY+14, 1, 1)
-		self.attach(@btnProfil, varX+2, varY, 1, 1)
-
-		self.attach(self.ajoutFondEcran,0,0,varX+6,varY+15)
+		self.attach(@btnFacile,debutMilieu, debutMilieu-1, 4, 1)
+		self.attach(@btnMoyen,debutMilieu, debutMilieu, 4, 1)
+		self.attach(@btnDifficile,debutMilieu, debutMilieu+1,4,1)
+		self.attach(@btnOptions, 1, @sizeGridWin-2, 1, 1)
+		self.attach(@btnRetour, @sizeGridWin-2, @sizeGridWin-2, 1, 1)
+		self.attach(@btnProfil, @sizeGridWin -2 , 1, 1, 1)
+		self.attach(test5,0, 0,@sizeGridWin, @sizeGridWin)
+		ajoutFondEcran
 	end
 	
 	# Crée et instancie les boutons de choix de la difficulté
 	# Return self
 	def initBoutonsDifficulte
-		@btnFacile = Gtk::Button.new :label => "Facile"
-		@btnMoyen = Gtk::Button.new :label => "Moyen"
-		@btnDifficile = Gtk::Button.new :label => "Difficile"
+		@btnFacile = Gtk::Button.new 
+		styleBouton(@btnFacile,Gtk::Label.new("Facile"),"white","ultrabold","x-large")
+		@btnMoyen = Gtk::Button.new
+		styleBouton(@btnMoyen,Gtk::Label.new("Moyen"),"white","ultrabold","x-large")
+		@btnDifficile = Gtk::Button.new
+		styleBouton(@btnDifficile,Gtk::Label.new("Difficile"),"white","ultrabold","x-large")
 
 		@btnFacile.signal_connect('clicked') do
 			self.send(@mode, Grille.new(TAILLE_FACILE))

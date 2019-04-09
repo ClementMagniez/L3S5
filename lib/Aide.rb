@@ -249,9 +249,12 @@ class Aide
   # * 'vide' - cf. arbreAutourCasePossedeTente
   # * autres - 0
   def arbreAssocieTente(arbreOuVide)
+
     newStatutVide = StatutVide.new(:VIDE)
     newStatutArbre = StatutArbre.new(:ARBRE)
-    newStatutTente = StatutVide.new(:TENTE)
+    newStatutTente = StatutVide.new(:TENTE) 
+    newStatutGazon = StatutVide.new(:GAZON)
+
 
     grille=@grille.grille
     hashArbreTente = Hash.new
@@ -318,7 +321,7 @@ class Aide
     # sinon si il y a un ou plus d'un arbre autour de la case autre que son propre arbre
       # alors on reboucle avec la nouvelle tente
 
-    if arbreOuVide == :ARBRE
+    if arbreOuVide == :A
       grille.each_with_index do | ligne, i |
         ligne.each_with_index do | cases, j |
 
@@ -358,22 +361,49 @@ class Aide
       grille.each_with_index do | ligne, i |
         ligne.each_with_index do | cases, j |
 
-          isOk = 1
-
           # Si la case est une caseVide
-          if cases.statutVisible == newStatutVide
+          if cases.statutVisible == newStatutVide && cases.statut == newStatutGazon
+            isOk = 1
+            pileCaseArbre = Array.new
+            pileCaseArbreUnique = Array.new
+            for k in (i-1)..(i+1)
+              for l in (j-1)..(j+1)
+                if ( (k == i && l != j) || (k != i && l == j) ) && k >= 0 && k <= grille.length-1 && l >= 0 && l <= grille.length-1 && grille[k][l].statut == newStatutArbre
+                  pileCaseArbre.push(grille[k][l])
+                  pileCaseArbreUnique.push(grille[k][l])
+                end
+              end
+            end
+
+            while !pileCaseArbre.empty?
+              caseArbre = pileCaseArbre.pop
+              x = caseArbre.x
+              y = caseArbre.y
+              nbCasesVide = 0
+
               # On prend connaissance pour les 4 cases adjacentes
-              for k in (i-1)..(i+1)
-                for l in (j-1)..(j+1)
-                  if ( (k == i && l != j) || (k != i && l == j) ) && k >= 0 && k <= grille.length-1 && l >= 0 && l <= grille.length-1
-                    if hashArbreTente.member?(grille[k][l])
-                      isOk = 0 if hashArbreTente.fetch(grille[k][l]).statutVisible != newStatutTente
+              for k in (x-1)..(x+1)
+                for l in (y-1)..(y+1)
+                  if ( (k == x && l != y) || (k != x && l == y) ) && k >= 0 && k <= grille.length-1 && l >= 0 && l <= grille.length-1
+                    nbCasesVide += 1 if grille[k][l].statutVisible == newStatutVide && grille[k][l] != cases
+                    # si case k/l == tente et que cette tente à un autre arbre a cote d'elle que celui de depart
+                    if grille[k][l].statut == newStatutTente
+                      for m in (k-1)..(k+1)
+                        for n in (l-1)..(l+1)
+                          if ( (m == k && n != l) || (m != k && n == l) ) && m >= 0 && m <= grille.length-1 && n >= 0 && n <= grille.length-1 && grille[m][n].statut == newStatutArbre && grille[m][n] != caseArbre && !pileCaseArbreUnique.include?(grille[m][n])
+                            pileCaseArbre.push(grille[m][n])
+                            pileCaseArbreUnique.push(grille[m][n])
+                          end
+                        end
+                      end
                     end
                   end
                 end
               end
-              @foncReturn.unshift(cases).delete_at(1) if isOk == 1
-              return @foncReturn if isOk == 1
+              isOk = 0 if nbCasesVide != 0
+            end
+            @foncReturn.unshift(cases).delete_at(1) if isOk == 1
+            return @foncReturn if isOk == 1
           end
         end
       end # FinForI
@@ -419,13 +449,17 @@ class Aide
             nbCaseVideSucc = 0
           end
       end
+      if nbCaseVideSucc != 0
+        for k in 1..nbCaseVideSucc
+          hashGroupeCase[listeCase.shift] = nbCaseVideSucc
+        end
+      end
 
       tabCaseEnTente = Array.new
       tabCaseEnGazon1 = Array.new
       tabCaseEnGazon2 = Array.new
 
       nbImpair = 0
-
       # pour chaque groupe de case(s) vide(s)
       hashGroupeCase.each {|key, value|
         # correspond aux coordonnées de la case "clé"
@@ -513,23 +547,28 @@ class Aide
     return @foncReturn
   end
 
+  def aucuneAide
+    return @foncReturn.replace([1, 0])
+  end
+
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
   def cycle(tutoOuRapide)
 
     # :nomMethode => [Case, "Message adapté", boolean (Ligne == false / Colonne == true), indice ligne/colonne]
     listeDesAides = { :nbCasesIncorrect => [nil, "Il y a " + self.nbCasesIncorrect.at(0).to_s + " erreur(s)", nil, nil], 
         :listeCasesIncorrect => [self.listeCasesIncorrect.at(0), "Les cases en surbrillance sont fausses", nil, nil], 
-        :impossibleTenteAdjacente => [self.impossibleTenteAdjacente.at(0), "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon", nil, nil], 
+         :impossibleTenteAdjacente => [self.impossibleTenteAdjacente.at(0), "Les tentes ne peuvent pas se toucher,\n donc la case en surbrillance est du gazon", nil, nil], 
         :resteQueTentesLigne => [nil, "Il ne reste que des tentes à placer sur la ligne en surbrillance", false, self.resteQueTentesLigne.at(0)], 
         :resteQueTentesColonne => [nil, "Il ne reste que des tentes à placer sur la colonne en surbrillance", true, self.resteQueTentesColonne.at(0)], 
         :resteQueGazonLigne => [nil, "Il ne reste que du gazon à placer sur la ligne en surbrillance", false, self.resteQueGazonLigne.at(0)], 
         :resteQueGazonColonne => [nil, "Il ne reste que du gazon à placer sur la colonne en surbrillance", true, self.resteQueGazonColonne.at(0)], 
         :casePasACoteArbre => [self.casePasACoteArbre.at(0), "La case en surbrillance est forcement du gazon", nil, nil], 
-        :uniquePossibiliteArbre => [self.uniquePossibiliteArbre.at(0), "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance", nil, nil], 
-        :dispositionPossibleLigne => [self.dispositionPossibleLigne.at(0), "D'après les dispositions de la ligne en surbrillance, il n'y a qu'une seule possibilité pour la case en surbrillance", false, self.dispositionPossibleLigne.at(1)+1], 
-        :dispositionPossibleColonne => [self.dispositionPossibleColonne.at(0), "D'après les dispositions de la colonne en surbrillance, il n'y a qu'une seule possibilité pour la case en surbrillance", true, self.dispositionPossibleColonne.at(1)+1], 
-        :arbreAutourCasePossedeTente => [self.arbreAutourCasePossedeTente.at(0), "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes", nil, nil],
-        :caseArbreAssocieTente => [self.caseArbreAssocieTente.at(0), "L'arbre en surbrillance n'a pas encore placé sa tente", nil, nil] }
+        :uniquePossibiliteArbre => [self.uniquePossibiliteArbre.at(0), "Il n'y a qu'une seule possibilité de placer une tente\n pour l'arbre en surbrillance", nil, nil], 
+        :dispositionPossibleLigne => [self.dispositionPossibleLigne.at(0), "D'après les dispositions de la ligne en surbrillance,\n il n'y a qu'une seule possibilité pour la case en surbrillance", false, self.dispositionPossibleLigne.at(1)+1], 
+        :dispositionPossibleColonne => [self.dispositionPossibleColonne.at(0), "D'après les dispositions de la colonne en surbrillance,\n il n'y a qu'une seule possibilité pour la case en surbrillance", true, self.dispositionPossibleColonne.at(1)+1], 
+        :caseArbreAssocieTente => [self.caseArbreAssocieTente.at(0), "L'arbre en surbrillance n'a pas encore placé sa tente", nil, nil], 
+        :arbreAutourCasePossedeTente => [self.arbreAutourCasePossedeTente.at(0), "La case en surbrillance est forcement du gazon\n puisque tous les arbres autours ont leurs tentes", nil, nil], 
+        :aucuneAide => [nil, "Aucune aide disponible.\n Il faut jouer au hasard (demander à Jacoboni).", nil, nil] }
 
     listeDesAides.each { | key, value |
     

@@ -27,8 +27,9 @@ class HudProfil < Hud
 		self.attach(@menuResolution, 4, 6, 2, 1)
 		self.attach(@btnSauvegardeResolution, 4, 7, 2, 1)
 
-		self.attach(@btnRetour, 1, 11, 2, 1)
-		self.attach(@fond,0,0,12,12)
+		self.attach(@btnRetour, 1, 11, 1, 1)
+		
+		ajoutFondEcran
 	end
 
 	def initChampScore
@@ -75,12 +76,14 @@ class HudProfil < Hud
 
 		@menuResolution = Gtk::ComboBoxText	.new
 		@menuResolution.append_text("1920*1080")
+		@menuResolution.append_text("1600*900")
 		@menuResolution.append_text("1080*720")
 		@menuResolution.append_text("800*480")
-		@menuResolution.append_text("640*270")
+		@menuResolution.append_text("640*360")
 		@menuResolution.active=0;
 		@menuResolution.set_visible(true)
-		
+		@resolution=@menuResolution.active_text
+
 		@menuResolution.signal_connect('changed') do
 				@resolution=@menuResolution.active_text			
 		end
@@ -90,11 +93,13 @@ class HudProfil < Hud
 		@btnSauvegardeResolution=Gtk::Button.new(label: "Appliquer")
 		@btnSauvegardeResolution.signal_connect('clicked') do
 			f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
-			f['resolution']={'width' => @resolution.split('*')[0].to_i,
-											 'height'=> @resolution.split('*')[1].to_i}
+			@@winX=@resolution.split('*')[0].to_i
+			@@winY=@resolution.split('*')[1].to_i
+			f['resolution']={'width' => @@winX,
+											 'height'=> @@winY}
 			f.write
-			self.resizeWindow(@resolution.split('*')[0].to_i, 
-												@resolution.split('*')[1].to_i)
+			self.resizeWindow(@@winX, 
+												@@winY)
 		end
 	end
 	

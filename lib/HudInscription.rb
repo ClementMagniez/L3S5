@@ -18,14 +18,19 @@ class HudInscription < Hud
 		@entMdp = Gtk::Entry.new
 		
 		# Rend le mot de passe entré invisible
-		@entMdp.set_visibility(FALSE)
+		@entMdp.set_visibility(false)
 
 		#Label d'erreur
 		@lblErreur = Gtk::Label.new("Bonne inscription !")
 
 		initBoutonEnregistrement
 		initBoutonRetour
-		self.attach(@btnRetour,16,25,2,2)
+
+		sizeGridWin=20
+		
+		milieu=sizeGridWin/2-1
+		
+		self.attach(@btnRetour,sizeGridWin-2,sizeGridWin-2,1,1)
 		self.attach(@lblErreur,2,1,2,1)
 		self.attach(@lblTitreInscr,2,0,2,1)
 		self.attach(@lblId,2,2,1,1)
@@ -33,6 +38,7 @@ class HudInscription < Hud
 		self.attach(@lblMdp,2,3,1,1)
 		self.attach(@entMdp,3,3,1,1)
 		self.attach(@btnEnr,2,5,1,1)
+		ajoutFondEcran
 	end
 	# Créé et initialise le bouton de retour
 	def initBoutonRetour
@@ -67,14 +73,11 @@ class HudInscription < Hud
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-					
-					# TODO : créer le fichier de config non-vide (fullscreen / résolution)
-					
+					# TODO : créer le fichier de config non-vide (fullscreen / résolution)		
 #					File.open("../config/#{id}.ini", "w+") # Création du fichier de config (vide)
 					self.lancementModeJeu
 				end
 			end
 		}
 	end
-	
 end
