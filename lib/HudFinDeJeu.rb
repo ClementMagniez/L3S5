@@ -14,7 +14,10 @@ class HudFinDeJeu < Hud
 		@lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
 		# lblScore = Gtk::Label.new("Score = 0")
 		fenetrePrecedente.grille.score.recupererTemps(fenetrePrecedente.getTime)
-		lblScore = Gtk::Label.new("Score = " + fenetrePrecedente.grille.score.calculerScoreFinal.to_s)
+		scoreObtenu = fenetrePrecedente.grille.score.calculerScoreFinal()
+		lblScore = Gtk::Label.new("Score = " + scoreObtenu.to_s)
+		session = Connexion.new()
+		#session.enregistrerScore(session.id,nomMode,grille,scoreObtenu)
 
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu

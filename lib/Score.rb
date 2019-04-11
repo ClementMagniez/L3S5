@@ -25,6 +25,6 @@ class Score < ActiveRecord::Base
 	# l'objet appelé.
 	#
 	def to_s
-		return "Score (\##{id}) du joueur n°#{profil_id} pour la grille n°#{map_id} (mode \"#{modeJeu}\") : #{montantScore}, obtenu le #{dateObtention}."
+		return "Grille n°#{map_id} (mode \"#{modeJeu}\") : #{montantScore}, obtenu le #{dateObtention}."
 	end
 end

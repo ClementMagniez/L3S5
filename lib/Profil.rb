@@ -22,31 +22,7 @@ class Profil < ActiveRecord::Base
 
 	# @id, @pseudonyme, @mdpEncrypted - L'identifiant du joueur, une chaîne de caractères représentant
 	# son nom dans l'application, une chaîne de caractères lui permettant de se connecter à l'application
-	
-	# Ajouts de Romane :
-	# @estConnecte vaut 1 si l'utilisateur est connecté, 0 sinon
-	# @connexion vaut nil si l'utilisateur n'est pas connecté
-	#			 contient un objet de la classe Connexion s'il est connecté
-	
-	# Méthode permettant à l'utilisateur de se connecter au jeu.
-	#
-	# Paramètres :
-	#	- login : le login entré par l'utilisateur
-	#	- password : le mot de passe entré par l'utilisateur
-	def seConnecter(uneSession, login, password)
-		@connexion = uneSession
-		@estConnecte = @connexion.seConnecter(login, password)
-		if(@estConnecte)
-			@connexion.modifierSession(@id, login, password)
-		end
-	end
-	
-	# Méthode permettant à l'utilisateur de se déconnecter du jeu.
-	def seDeconnecter()
-		@connexion = @connexion.deconnexion()
-		@estConnecte = 0
-	end
-	
+
 	##
 	# == to_s
 	#

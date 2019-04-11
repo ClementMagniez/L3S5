@@ -7,7 +7,6 @@
 require "active_record"
 require "openssl"
 require_relative "connectSqlite3.rb"
-require_relative "Profil.rb"
 require_relative "Score.rb"
 
 
@@ -44,7 +43,7 @@ class Connexion
 			#On propose à l'utilisateur de créer un compte ou de tenter une nouvelle identification
 		else 															#si le login est présent dans la base de données
 			puts "-----> CONNECTE <-----"								#l'utilisateur est connecté
-			@id = rechercheProfil.id
+			@id = reqProfil.id
 			@login = login
 			return 0
 		end
@@ -90,18 +89,18 @@ class Connexion
 	# * +nomMap+ - Le nom de la grille jouée
 	# * +score+ - Le montant du score obtenu à la fin de la partie
 	#
-	def enregistrerScore(idJoueur,nomMode,nomMap,score)
+	def enregistrerScore(idJoueur,nomMode,grille,score)
 		# Chercher si la grille courante possède déjà une entrée dans la BDD ou pas ; agir en conséquence
-		reqMap = Map.find_by(nomMap: nomMap)
+		reqMap = Map.find_by(nomMap: grille[0])
 		if(reqMap == nil)
 			# Insertion d'un nouveau champ dans la table Map - voir si on importe un objet grille dans les paramètres
 			insertMap = Map.new(
-				hash_name: nomMap,
-				taille: taille,
-				difficulte: difficulte
+				hash_name: grille[0],
+				taille: grille[1],
+				difficulte: grille[2]
 			);
 			insertMap.save
-			reqMap = Map.find_by(nomMap: nomMap)
+			reqMap = Map.find_by(nomMap: grille[0])
 		end
 
 		reqScore = Score.new(
@@ -124,12 +123,21 @@ class Connexion
 	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
 	#
 	def rechercherScore(idJoueur)
-		reqScore = Score.find_by(id: idJoueur)
+		reqScore = Score.find_by(id: idJoueur).order("modeJeu, dateObtention, montantScore DESC")
 
-		if(reqScore != nil)
-			puts "Des scores ont été trouvés. Par contre, faudra allonger la monnaie pour les voir..."
-		else
-			puts "Aucun score n'existe encore pour ce joueur."
-		end
+		return (reqScore != nil) ? reqScore : nil
+	end
+
+	##
+	# == rechercherScore(1)
+	#
+	# Cette méthode permet de sortir tous les scores contenues dans la base de données.
+	#
+	# === Paramètre
+	#
+	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
+	#
+	def supprimerScore(idScore)
+		Score.find_by(id: idScore).destroy
 	end
 end

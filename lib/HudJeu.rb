@@ -71,6 +71,7 @@ class HudJeu < Hud
 				0.upto(@tailleGrille-1) { |k|
 					if @grille[k][i].statutVisible.isVide?
 						@grille[k][i].cycle(@grille)
+						# Méthode d'actualisation du score ici
 						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
 					end
 				}
@@ -87,7 +88,7 @@ class HudJeu < Hud
 				0.upto(@tailleGrille-1) { |k|
 					if @grille[i][k].statutVisible.isVide?
 						@grille[i][k].cycle(@grille)
-
+						# Méthode d'actualisation du score ici
 						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
 						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 
@@ -152,7 +153,6 @@ class HudJeu < Hud
 		return lblIndice
 	end
 
-
 	# A partir du fichier en path _string_, crée une Gtk::Image
 	# et la redimensionne pour s'adapter à la taille de la fenêtre
 	# Return cette Gtk::Image redimensionnée
@@ -190,7 +190,7 @@ class HudJeu < Hud
 			end
 			desurbrillanceIndice
 		}
-		
+
 	end
 
 	def getTime
@@ -198,6 +198,11 @@ class HudJeu < Hud
 			return @horloge
 		end
 	end
+
+	def initLabelScore
+		@lblScore = Gtk::Label.new("Score : " + @grille.score.getValeur.to_s)
+	end
+	# Méthode d'actualisation du score ici
 
 	def initBoutonTimer
 		@btnPause = Gtk::Button.new :label => "Pause"
@@ -207,7 +212,6 @@ class HudJeu < Hud
 		@horloge = 0
 		@stockHorloge = 0
 		@t=Thread.new{timer}
-
 	end
 
 	def initBoutonPause

@@ -27,17 +27,21 @@ class HudProfil < Hud
 	end
 
 	def initChampScore
-		@champScores = Gtk::ScrolledWindow.new
-		@champScores.set_min_content_height(100)
-			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				# Liste des scores récupérés dans la BDD
-				session = Connexion.new()
-				session.rechercherScore(session.id)
+		# Liste des scores récupérés dans la BDD
+		session = Connexion.new()
+		listeScores = session.rechercherScore(session.id)
 
-				0.upto(10) do |i|
-					boxChamp.add(Gtk::Label.new("choix " + i.to_s))
-				end
-			@champScores.add(boxChamp)
+		if(listeScores != nil)
+			@champScores = Gtk::ScrolledWindow.new
+			@champScores.set_min_content_height(100)
+				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+					0.upto(listeScores.size()) do |i|
+						boxChamp.add(Gtk::Label.new(listeScores.at(i)))
+					end
+				@champScores.add(boxChamp)
+		else
+			@champScores = Gtk::Label.new("Aucun score trouvé")
+		end
 		@champScores.set_visible(true)
 	end
 
