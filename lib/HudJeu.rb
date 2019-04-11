@@ -33,25 +33,25 @@ class HudJeu < Hud
 		initBoutonSauvegarde
 		initBoutonRemplissage
 		initBoutonRegle
-	
+
 		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
-		@varDebutPlaceGrid = @sizeGridWin/4 
-		
-		self.attach(@btnReset,@varFinPlaceGrid,@varFinPlaceGrid-4,1,1)
-		self.attach(@btnCancel,@varFinPlaceGrid,@varFinPlaceGrid-3,1,1)
-		self.attach(@btnRemplissage,@varFinPlaceGrid,@varFinPlaceGrid-2,1,1)
-		self.attach(@btnSauvegard,@varFinPlaceGrid,@varFinPlaceGrid-1,1,1)
+		@varDebutPlaceGrid = @sizeGridWin/4
 
-		self.attach(@btnRetour,@sizeGridWin-2,@sizeGridWin-2,1,1)
-		self.attach(@btnOptions, 2, @sizeGridWin-2, 1,1)
+		# self.attach(@btnReset,@varFinPlaceGrid,@varFinPlaceGrid-4,1,1)
+		# self.attach(@btnCancel,@varFinPlaceGrid,@varFinPlaceGrid-3,1,1)
+		# self.attach(@btnRemplissage,@varFinPlaceGrid,@varFinPlaceGrid-2,1,1)
+		# self.attach(@btnSauvegard,@varFinPlaceGrid,@varFinPlaceGrid-1,1,1)
+		#
+		# self.attach(@btnRetour,@sizeGridWin-2,@sizeGridWin-2,1,1)
+		# self.attach(@btnOptions, 2, @sizeGridWin-2, 1,1)
 
-		
+
 	end
 
 
 	def initBoutonRegle
 		@btnRegle = creerBouton(Gtk::Label.new("?"),"pink","ultrabold","xx-large")
-		self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
+		# self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
 	end
 
 
@@ -194,7 +194,7 @@ class HudJeu < Hud
 			end
 			desurbrillanceIndice
 		}
-		
+
 	end
 
 	def getTime
@@ -211,8 +211,6 @@ class HudJeu < Hud
 		@horloge = 0
 		@stockHorloge = 0
 		@t=Thread.new{timer}
-
-
 	end
 
 	def initBoutonPause
@@ -234,10 +232,8 @@ class HudJeu < Hud
 
 
 	def initBoutonCancel
-
 		@btnCancel = creerBouton(Gtk::Label.new("Cancel"),"white","ultrabold","x-large")
 		@btnCancel.signal_connect('clicked'){
-
 			cell = @grille.cancel
 			if cell != nil
 				@gridJeu.get_child_at(cell.y+1,cell.x+1)\
@@ -276,8 +272,8 @@ class HudJeu < Hud
 	end
 
 	def initBoutonSauvegarde
-		@btnSauvegard = creerBouton(Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
-		@btnSauvegard.signal_connect('clicked') {
+		@btnSauvegarde = creerBouton(Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
+		@btnSauvegarde.signal_connect('clicked') {
 			File.open("saves/"+@@name+".txt", 'w+') do |f|
 				f.write([Marshal.dump(@grille), Marshal.dump(@@mode), Marshal.dump(@@difficulte)])
 			end
@@ -294,11 +290,11 @@ class HudJeu < Hud
 		self.styleLabel(@lblAide,"white","normal","x-large","Bienvenue sur notre super jeu !")
 		#@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
 
-		self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
+		# self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
 
 		image = Gtk::Image.new( :file => "../img/gris.png")
 		image.pixbuf = image.pixbuf.scale((@winX/2.5),(@winY/@sizeGridWin)*2)
-		self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
+		# self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
 
 		taille = @grille.length
 
@@ -320,9 +316,9 @@ class HudJeu < Hud
 
 			if tableau.at(2) != nil
 				if tableau.at(2) == false
-					lblIndice = @gridJeu.get_child_at(0,indice).child				
+					lblIndice = @gridJeu.get_child_at(0,indice).child
 				else
-					lblIndice = @gridJeu.get_child_at(indice,0).child				
+					lblIndice = @gridJeu.get_child_at(indice,0).child
 				end
 				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
 				@lblIndiceSubr = lblIndice
@@ -355,7 +351,7 @@ class HudJeu < Hud
 				end
 			end
 		}
-		
+
 	end
 
 end

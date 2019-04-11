@@ -10,18 +10,26 @@ class HudFinDeJeu < Hud
 		varX, varY = 2, 2
 		@fenetrePrecedente = fenetrePrecedente
 		@lblAide = Gtk::Label.new
-		@lblAide.use_markup = true
-		@lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
+		# @lblAide.use_markup = true
+		# @lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
 		lblScore = Gtk::Label.new("Score = 0")
 		# lblScore = Gtk::Label.new("Score = " + fenetrePrecedente.grille.calculerScoreFinal)
 
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 
-		self.attach(@lblAide,0,0,1,1)
-		self.attach(lblScore, varX, varY, 1, 1)
-		self.attach(@btnRecommencer,varX+1, varY+1, 1, 1)
-		self.attach(@btnModeDeJeu, varX+1, varY+2, 1, 1)
+		# self.attach(@lblAide,0,0,1,1)
+		# self.attach(lblScore, varX, varY, 1, 1)
+		# self.attach(@btnRecommencer,varX+1, varY+1, 1, 1)
+		# self.attach(@btnModeDeJeu, varX+1, varY+2, 1, 1)
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+		vBox.add(Gtk::Label.new("Bravo, vous avez fini !"))
+		vBox.add(lblScore)
+		vBox.add(@btnRecommencer)
+		vBox.add(@btnModeDeJeu)
+
+		self.attach(vBox, 0, 0, 1, 1)
+
 		ajoutFondEcran
 	end
 

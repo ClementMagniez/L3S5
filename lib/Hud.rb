@@ -23,11 +23,15 @@ class Hud < Gtk::Grid
 
 		#nombre de cellule horizontale et verticale de la  fenetre
 		@sizeGridWin = 20
-		
+
 		initBoutonOptions
 
-		self.halign = Gtk::Align::CENTER
-		self.valign = Gtk::Align::CENTER
+		# fond = Gtk::Image.new( :file => "../img/fond2.png")
+		# fond.pixbuf = fond.pixbuf.scale(1280, 720)	if fond.pixbuf != nil
+		# self.attach(fond, 0, 0, 1, 1)
+
+		# self.halign = Gtk::Align::CENTER
+		# self.valign = Gtk::Align::CENTER
 	end
 
 	# TODO factoriser les lancementX
@@ -35,8 +39,8 @@ class Hud < Gtk::Grid
 	def lancementAccueil
 		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
 	end
-	
-	
+
+
 	def lancementAventure(grille)
 		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
 	end
@@ -44,7 +48,7 @@ class Hud < Gtk::Grid
 	def lancementTutoriel(grille)
 		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
 	end
-	
+
 
 	def lancementRapide(grille)
 		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
@@ -58,7 +62,7 @@ class Hud < Gtk::Grid
 	def lancementModeJeu
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
 	end
-	
+
 	def lancementChoixDifficulte(mode)
 		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode))
 	end
@@ -105,7 +109,7 @@ class Hud < Gtk::Grid
 		}
 	end
 
-	
+
 	# Créé et initialise le bouton de retour
 	def initBoutonRetour
 		@btnRetour = creerBouton(Gtk::Label.new("Retour"),"white","ultrabold","x-large")
@@ -125,12 +129,9 @@ class Hud < Gtk::Grid
 
 
 	def ajoutFondEcran
-		# puts ("Resolution : " + @winX.to_s + ";" + @winY.to_s)
-
 		fond = Gtk::Image.new( :file => "../img/fond2.png")
-		fond.pixbuf = fond.pixbuf.scale(@winX,@winY)	if fond.pixbuf != nil
-
-		self.attach(fond,0,0,@sizeGridWin,@sizeGridWin)
+		fond.pixbuf = fond.pixbuf.scale(1280, 720)	if fond.pixbuf != nil
+		self.attach(fond,0,0,1, 1)
 	end
 
 	def initBoutonQuitter
@@ -148,7 +149,7 @@ class Hud < Gtk::Grid
 
 
 	def creerBouton(label,couleur,style,size)
-		bouton = Gtk::Button.new 
+		bouton = Gtk::Button.new
 		self.styleLabel(label,couleur,style,size,label.text)
 		bouton.add(label)
 		bouton.set_relief(Gtk::ReliefStyle::NONE)
@@ -158,7 +159,7 @@ class Hud < Gtk::Grid
 		return bouton
 	end
 
-	
+
 	def initBoutonProfil
 		@btnProfil = creerBouton(Gtk::Label.new("Profil"),"white","ultrabold","x-large")
 		@btnProfil.signal_connect("clicked") do

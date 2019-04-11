@@ -1,5 +1,4 @@
-
-require "rubygems"
+# require "rubygems"
 require_relative "connectSqlite3.rb"
 require_relative "Profil.rb"
 require_relative "Connexion.rb"
@@ -10,8 +9,8 @@ class HudAccueil < Hud
 	# @btnQuitter
 	# @entryIdentifiant
 	# @entryMotDePasse
-	
-	
+
+
 
 	def initialize(window)
 		super(window)
@@ -29,20 +28,40 @@ class HudAccueil < Hud
 		initBoutonQuitter
 
 
-		self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
-		self.attach(@entryIdentifiant,varX+2, varY+1, 1, 1)
+		# self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
+		# self.attach(@entryIdentifiant,varX+2, varY+1, 1, 1)
+		#
+		# self.attach(Gtk::Label.new("Mot de passe : "),varX+1, varY+2, 1, 1)
+		# self.attach(@entryMotDePasse,varX+2, varY+2, 1, 1)
+		#
+		# self.attach(@btnInscrire,varX+1, varY+3, 1, 1)
+		# self.attach(@btnConnecter,varX+2, varY+3, 1, 1)
+		#
+		# self.attach(@btnOptions, varX, varY+4, 1, 1)
+		# self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
+		width = 250
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(Gtk::Label.new("Identifiant"))
+			hBox.add(@entryIdentifiant)
+			hBox.width_request = width
+		vBox.add(hBox)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(Gtk::Label.new("Mot de passe : "))
+			hBox.add(@entryMotDePasse)
+		vBox.add(hBox)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(@btnInscrire)
+			hBox.add(@btnConnecter)
+		vBox.add(hBox)
+		vBox.add(@btnQuitter)
+		vBox.add(@btnOptions)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
-		self.attach(Gtk::Label.new("Mot de passe : "),varX+1, varY+2, 1, 1)
-		self.attach(@entryMotDePasse,varX+2, varY+2, 1, 1)
-
-		self.attach(@btnInscrire,varX+1, varY+3, 1, 1)
-		self.attach(@btnConnecter,varX+2, varY+3, 1, 1)
-
-		self.attach(@btnOptions, varX, varY+4, 1, 1)
-		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
+		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
-		
 	end
 
 
@@ -51,7 +70,7 @@ class HudAccueil < Hud
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
 			session = Connexion.new
-				
+
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
 				puts "Veuillez renseigner tous les champs."
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
@@ -63,7 +82,7 @@ class HudAccueil < Hud
 			end
 		}
 	end
-	
+
 	def initBoutonInscription
 		puts "Inscription => Traitement manquant"
 		@btnInscrire = Gtk::Button.new :label => "S'inscrire"

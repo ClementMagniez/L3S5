@@ -1,5 +1,5 @@
-# Instance du menu de sélection des modes de jeu : permet la sélection 
-# entre l'un des quatre modes, le chargement d'une sauvegarde, l'accès au profil, 
+# Instance du menu de sélection des modes de jeu : permet la sélection
+# entre l'un des quatre modes, le chargement d'une sauvegarde, l'accès au profil,
 # aux options, et un retour au menu de connexion
 
 # TODO : bouton d'accès au menu de connexion
@@ -27,19 +27,30 @@ class HudModeDeJeu < Hud
 		# TODO - foutus nombres magiques
 		debutMilieu = (@sizeGridWin/2)-2
 
-		self.attach(@btnSauvegarde,debutMilieu,1, 4, 1)
+		# self.attach(@btnSauvegarde,debutMilieu,1, 4, 1)
+		#
+		# self.attach(@btnTutoriel,debutMilieu, 4, 4, 1)
+		#
+		# self.attach(@btnAventure,debutMilieu, 6, 4, 3)
+		#
+		# self.attach(@btnChrono,debutMilieu, 9, 4, 3)
+		#
+		# self.attach(@btnExplo,debutMilieu, 12, 4, 3)
+		#
+		# self.attach(@btnOptions, 1, @sizeGridWin, 1, 1)
+		# self.attach(@btnQuitter, @sizeGridWin-1, @sizeGridWin-1, 1, 1)
+		# self.attach(@btnProfil, @sizeGridWin -1 , 1, 1, 1)
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+		vBox.add(@btnSauvegarde)
+		vBox.add(@btnTutoriel)
+		vBox.add(@btnAventure)
+		vBox.add(@btnChrono)
+		vBox.add(@btnExplo)
+		vBox.add(@btnOptions)
+		vBox.add(@btnQuitter)
+		vBox.add(@btnProfil)
 
-		self.attach(@btnTutoriel,debutMilieu, 4, 4, 1)
-
-		self.attach(@btnAventure,debutMilieu, 6, 4, 3)
-
-		self.attach(@btnChrono,debutMilieu, 9, 4, 3)
-
-		self.attach(@btnExplo,debutMilieu, 12, 4, 3)
-		
-		self.attach(@btnOptions, 1, @sizeGridWin, 1, 1)
-		self.attach(@btnQuitter, @sizeGridWin-1, @sizeGridWin-1, 1, 1)
-		self.attach(@btnProfil, @sizeGridWin -1 , 1, 1, 1)
+		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
 
@@ -85,7 +96,7 @@ class HudModeDeJeu < Hud
 		end
 		self
 	end
-	
+
 	# Crée et connecte le bouton de lancement du mode explo
 	# Return self
 	def initBoutonExplo
@@ -107,7 +118,7 @@ class HudModeDeJeu < Hud
 		end
 		self
 	end
-	
-	protected 
+
+	protected
 		attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
 end
