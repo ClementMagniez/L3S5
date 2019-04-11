@@ -1,23 +1,26 @@
 class HudTutoriel < HudJeu
 	def initialize (window,grille)
+		window.set_hexpand(false)
+		window.set_vexpand(false)
+
 		super(window,grille)
 		@lblAide = Gtk::Label.new()
 		@lblAide.use_markup = true
 		self.styleLabel(@lblAide,'white','normal','large','Bienvenue sur notre super jeu !')
 		self.setTitre("Tutoriel")
+		fondAide = Gtk::Image.new( :file => "../img/gris.png")
+		fondAide.pixbuf = fondAide.pixbuf.scale((@@winX/2.5),(@@winY/@sizeGridWin)*2)
+
 
 		initBoutonAide
 
 		@varBoutonEnPlus=1
-		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-3,@sizeGridJeu,@sizeGridJeu+4)
 
-		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
-		self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
-		
-		image = Gtk::Image.new( :file => "../img/gris.png")
-		image.pixbuf = image.pixbuf.scale((@@winX/2.5),(@@winY/@sizeGridWin)*2)
-		self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
-
+		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-9,4,@heightButton)	
+		self.attach(@gridJeu,@varDebutPlaceGrid+1, @varDebutPlaceGrid-2,
+								@sizeGridJeu+4,@sizeGridJeu+4)
+		self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+1,@sizeGridJeu,2)
+		self.attach(fondAide,@varDebutPlaceGrid,@varFinPlaceGrid+1,@sizeGridJeu,2)
 		ajoutFondEcran
 	end
 

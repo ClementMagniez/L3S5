@@ -15,7 +15,15 @@ class HudJeu < Hud
 		super(window)
 		@align = Gtk::Align.new(1)
 		@aide = Aide.new(grille)
-
+		
+#		####################
+#			self.set_column_homogeneous(true)
+#			self.set_row_homogeneous(true)
+		####################
+	
+		@heightButton=2 # TODO CONSTAAAAAAAAAAAAANTE
+		@widthButton=4 
+	
 		@gridJeu = Gtk::Grid.new
 			@gridJeu.set_column_homogeneous(true)
 			@gridJeu.set_row_homogeneous(true)
@@ -32,17 +40,19 @@ class HudJeu < Hud
 		chargementGrille
 		initBoutonSauvegarde
 		initBoutonRemplissage
-	
+		initBoutonProfil
 		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
 		@varDebutPlaceGrid = @sizeGridWin/4 
-		
-		self.attach(@btnReset,@varFinPlaceGrid,@varFinPlaceGrid-4,1,1)
-		self.attach(@btnCancel,@varFinPlaceGrid,@varFinPlaceGrid-3,1,1)
-		self.attach(@btnRemplissage,@varFinPlaceGrid,@varFinPlaceGrid-2,1,1)
-		self.attach(@btnSauvegard,@varFinPlaceGrid,@varFinPlaceGrid-1,1,1)
 
-		self.attach(@btnRetour,@sizeGridWin-2,@sizeGridWin-2,1,1)
-		self.attach(@btnOptions, 2, @sizeGridWin-2, 1,1)
+		
+		self.attach(@btnReset,@varFinPlaceGrid,@varFinPlaceGrid-7,4,2)
+		self.attach(@btnCancel,@varFinPlaceGrid,@varFinPlaceGrid-5,4,2)
+		self.attach(@btnRemplissage,@varFinPlaceGrid,@varFinPlaceGrid-3,4,2)
+		self.attach(@btnSauvegard,@varFinPlaceGrid,@varFinPlaceGrid-1,5,2)
+		self.attach(@btnProfil, @sizeGridWin -3 , 1, 3, 2)
+
+		self.attach(@btnRetour,@sizeGridWin-3,@sizeGridWin-3,3,2)
+		self.attach(@btnOptions, 1, @sizeGridWin-3, 4,3)
 
 		
 	end
@@ -56,43 +66,43 @@ class HudJeu < Hud
 
 		# TODO - Ruby-fier ce loop
 
-		0.upto(@tailleGrille-1) { |i|
-			# ici les indices des colonnes (nb tentes sur chaque colonne)
-			lblIndiceCol = labelIndice(i,"colonne")
-			btnIndiceCol = Gtk::Button.new
-			btnIndiceCol.add(lblIndiceCol)
-			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
-			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
-			#Quand on clique dessus, met toutes les cases vides à gazon
-			btnIndiceCol.signal_connect("clicked") {
-				0.upto(@tailleGrille-1) { |k|
-					if @grille[k][i].statutVisible.isVide?
-						@grille[k][i].cycle(@grille)
-						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
-					end
-				}
-				desurbrillanceIndice
-			}
-			# ici les indices des lignes (nb tentes sur chaque ligne)
-			lblIndiceLig = labelIndice(i,"ligne")
-			btnIndiceLig = Gtk::Button.new
-			btnIndiceLig.add(lblIndiceLig)
-			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
-			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
-			#Quand on clique dessus, met toutes les cases vides à gazon
-			btnIndiceLig.signal_connect("clicked") {
-				0.upto(@tailleGrille-1) { |k|
-					if @grille[i][k].statutVisible.isVide?
-						@grille[i][k].cycle(@grille)
+#		0.upto(@tailleGrille-1) { |i|
+#			# ici les indices des colonnes (nb tentes sur chaque colonne)
+#			lblIndiceCol = labelIndice(i,"colonne")
+#			btnIndiceCol = Gtk::Button.new
+#			btnIndiceCol.add(lblIndiceCol)
+#			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
+#			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
+#			#Quand on clique dessus, met toutes les cases vides à gazon
+#			btnIndiceCol.signal_connect("clicked") {
+#				0.upto(@tailleGrille-1) { |k|
+#					if @grille[k][i].statutVisible.isVide?
+#						@grille[k][i].cycle(@grille)
+#						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
+#					end
+#				}
+#				desurbrillanceIndice
+#			}
+#			# ici les indices des lignes (nb tentes sur chaque ligne)
+#			lblIndiceLig = labelIndice(i,"ligne")
+#			btnIndiceLig = Gtk::Button.new
+#			btnIndiceLig.add(lblIndiceLig)
+#			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
+#			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
+#			#Quand on clique dessus, met toutes les cases vides à gazon
+#			btnIndiceLig.signal_connect("clicked") {
+#				0.upto(@tailleGrille-1) { |k|
+#					if @grille[i][k].statutVisible.isVide?
+#						@grille[i][k].cycle(@grille)
 
-						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
-						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
+#						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
+#						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 
-					end
-				}
-				desurbrillanceIndice
-			}
-		}
+#					end
+#				}
+#				desurbrillanceIndice
+#			}
+#		}
 
 		# positionne les cases de la grille
 		@grille.grille.each do |line|
@@ -155,9 +165,15 @@ class HudJeu < Hud
 	# Return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
-		winX = @fenetre.size.fetch(0)
-		winY = @fenetre.size.fetch(1)
-		imgSize = winY / (@tailleGrille*2)
+#		winX = @fenetre.size.fetch(0)
+#		winY = @fenetre.size.fetch(1)
+		minSize=(@@winX > @@winY ? @@winY : @@winX) / @grille.length
+		minSize*=0.45
+
+		
+		imgSize = minSize#@@winX / (@tailleGrille*5) # TODO tester
+
+
 
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil

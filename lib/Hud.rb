@@ -25,7 +25,7 @@ class Hud < Gtk::Grid
 		# TODO - faire que ça ne s'exécute qu'une fois
 
 		@lblDescription = Gtk::Label.new
-		@varPlaceGrid = 6
+		@varPlaceGrid = 0
 
 		@fenetre.signal_connect('check-resize') do |window|
 			if window.size[0]!=@@winX && window.size[1]!=@@winY
@@ -44,7 +44,7 @@ class Hud < Gtk::Grid
 				puts "test : #{@fenetre.size[0]},#{@fenetre.size[1]}, #{@@winX}, #{@@winY}"
 				resizeWindow(@@winX, @@winY)
 		}
-		self.attach(test,1,1,1,1)
+		self.attach(test,1,1,2,2)
 		initBoutonOptions
 
 		self.halign = Gtk::Align::CENTER
@@ -195,7 +195,6 @@ class Hud < Gtk::Grid
 #		puts ("Actuel : " + @fenetre.size[0].to_s + "*" + @fenetre.size[1].to_s)
 
 		@fenetre.set_resizable(true)
-#		@fenetre.set_size_request(width-100,height-100)
 		@fenetre.resize(width,height)
 		@fenetre.set_resizable(false)
 	end

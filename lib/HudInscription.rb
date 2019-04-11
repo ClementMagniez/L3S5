@@ -25,12 +25,10 @@ class HudInscription < Hud
 
 		initBoutonEnregistrement
 		initBoutonRetour
-
-		sizeGridWin=20
 		
-		milieu=sizeGridWin/2-1
+		milieu=@sizeGridWin/2-1
 		
-		self.attach(@btnRetour,sizeGridWin-2,sizeGridWin-2,1,1)
+		self.attach(@btnRetour,@sizeGridWin-2,@sizeGridWin-2,1,1)
 		self.attach(@lblErreur,2,1,2,1)
 		self.attach(@lblTitreInscr,2,0,2,1)
 		self.attach(@lblId,2,2,1,1)

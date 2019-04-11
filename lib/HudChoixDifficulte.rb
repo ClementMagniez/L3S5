@@ -28,8 +28,7 @@ class HudChoixDifficulte < Hud
 		self.initBoutonsDifficulte
 		self.initBoutonRetour
 		self.initBoutonProfil
-		
-		@sizeGridWin=20
+	
 		# TODO - foutus nombres magiques
 		debutMilieu = (@sizeGridWin/2)-1
 
@@ -38,8 +37,7 @@ class HudChoixDifficulte < Hud
 		self.attach(@btnDifficile,debutMilieu, debutMilieu+1,4,1)
 		self.attach(@btnOptions, 1, @sizeGridWin-2, 1, 1)
 		self.attach(@btnRetour, @sizeGridWin-2, @sizeGridWin-2, 1, 1)
-		self.attach(@btnProfil, @sizeGridWin -2 , 1, 1, 1)
-		self.attach(test5,0, 0,@sizeGridWin, @sizeGridWin)
+		self.attach(@btnProfil, @sizeGridWin -2 , 1, 1, 4)
 		ajoutFondEcran
 	end
 	
