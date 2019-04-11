@@ -39,9 +39,9 @@ class CaseVide < Case
 		super(grille)
 		self
 	end
-	
+
 	def cancel(grille)
-	
+
 		self.statutVisible.cancel
 		i=self.x
 		j=self.y
@@ -60,7 +60,7 @@ class CaseVide < Case
 		end
 		self
 	end
-	
+
 
 
 	def affichageSubr

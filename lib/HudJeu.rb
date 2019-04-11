@@ -1,7 +1,10 @@
 require_relative 'Hud'
+require_relative 'AidesConstantes'
+
 
 # class abstraite permettant de créer un ecran de jeu
 class HudJeu < Hud
+	include AidesConstantes
 	attr_reader :grille, :timer
 	# @btnReset
 	# @btnAide
@@ -23,20 +26,20 @@ class HudJeu < Hud
 			@gridJeu.set_valign(@align)
 		@grille = grille
 		@tailleGrille = @grille.length
-
+		@caseSurbrillanceList = Array.new
 		@sizeGridJeu = 10
 
 		initBoutonReset
-		initBoutonRetour
+		initBoutonRetourModeJeu
 		initBoutonCancel
 		chargementGrille
 		initBoutonSauvegarde
 		initBoutonRemplissage
 		initBoutonRegle
-	
+
 		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
-		@varDebutPlaceGrid = @sizeGridWin/4 
-		
+		@varDebutPlaceGrid = @sizeGridWin/4
+
 		self.attach(@btnReset,@varFinPlaceGrid,@varFinPlaceGrid-4,1,1)
 		self.attach(@btnCancel,@varFinPlaceGrid,@varFinPlaceGrid-3,1,1)
 		self.attach(@btnRemplissage,@varFinPlaceGrid,@varFinPlaceGrid-2,1,1)
@@ -45,13 +48,16 @@ class HudJeu < Hud
 		self.attach(@btnRetour,@sizeGridWin-2,@sizeGridWin-2,1,1)
 		self.attach(@btnOptions, 2, @sizeGridWin-2, 1,1)
 
-		
+
 	end
 
 
 	def initBoutonRegle
 		@btnRegle = creerBouton(Gtk::Label.new("?"),"pink","ultrabold","xx-large")
 		self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
+		@btnRegle.signal_connect('clicked'){
+			lancementHudRegle
+		}
 	end
 
 
@@ -79,6 +85,10 @@ class HudJeu < Hud
 					end
 				}
 				desurbrillanceIndice
+				if @tutoriel==true
+					aideTutoriel
+				end
+
 			}
 			# ici les indices des lignes (nb tentes sur chaque ligne)
 			lblIndiceLig = labelIndice(i,"ligne")
@@ -98,6 +108,10 @@ class HudJeu < Hud
 					end
 				}
 				desurbrillanceIndice
+				if @tutoriel==true
+					aideTutoriel
+				end
+
 			}
 		}
 
@@ -115,6 +129,11 @@ class HudJeu < Hud
 					# button.set_image(i,j)
 					desurbrillanceCase
 					desurbrillanceIndice
+					if @tutoriel==true
+						aideTutoriel
+					end
+
+
 					self.jeuTermine		if @grille.estValide
 				end
 				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
@@ -194,7 +213,7 @@ class HudJeu < Hud
 			end
 			desurbrillanceIndice
 		}
-		
+
 	end
 
 	def getTime
@@ -206,6 +225,7 @@ class HudJeu < Hud
 	def initBoutonTimer
 		@btnPause = creerBouton(Gtk::Label.new("Pause"),"white","ultrabold","x-large")
 		@lblTime = Gtk::Label.new(" 00:00 ")
+		self.attach(@lblTime,@varDebutPlaceGrid,@varDebutPlaceGrid-2,@sizeGridJeu,1)
 		@timer = Time.now
 		@pause = false
 		@horloge = 0
@@ -248,6 +268,7 @@ class HudJeu < Hud
 
 	# Réinitialise la grille
 	def reset
+
 		@grille.grille.each do |line|
 			line.each do |cell|
 				cell.reset
@@ -265,6 +286,9 @@ class HudJeu < Hud
 				if @pause
 					@btnPause.set_label("Pause")
 				end
+		end
+		if @tutoriel != nil
+			aideTutoriel
 		end
 	end
 
@@ -320,9 +344,9 @@ class HudJeu < Hud
 
 			if tableau.at(2) != nil
 				if tableau.at(2) == false
-					lblIndice = @gridJeu.get_child_at(0,indice).child				
+					lblIndice = @gridJeu.get_child_at(0,indice).child
 				else
-					lblIndice = @gridJeu.get_child_at(indice,0).child				
+					lblIndice = @gridJeu.get_child_at(indice,0).child
 				end
 				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
 				@lblIndiceSubr = lblIndice
@@ -355,7 +379,55 @@ class HudJeu < Hud
 				end
 			end
 		}
-		
+
+	end
+
+	def aideTutoriel
+			tableau = @aide.cycle("tuto")
+			puts(tableau)
+			premAide = tableau.at(CASE)
+			puts("pouet")
+			puts(tableau.at(CASE))
+			puts(premAide)
+
+			if premAide != nil then
+					@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(scaleImage(premAide.affichageSubr))
+					# puts(" X :" + premAide.x.to_s + " Y :" +premAide.y.to_s )
+					@caseSurbrillanceList.push(premAide)
+
+		#		while not premAide.empty?
+				#	caseAide = premAide
+
+			#		@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage( caseAide.getCase.affichageSubr))
+				#	@caseSurbrillanceList.push(caseAide)
+			#	end
+			end
+			listCase = tableau.at(LISTCASES)
+			puts("licorne")
+			puts (listCase)
+			if listCase != nil
+				while not listCase.empty?
+					caseAide = listCase.pop
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage('../img/Subr.png'))
+					puts(caseAide.class)
+					@caseSurbrillanceList.push(caseAide)
+				end
+			end
+
+			@lblAide.use_markup = true
+			styleLabel(@lblAide,'white','ultrabold','x-large',tableau.at(1))
+
+			indice = tableau.at(3)
+
+			if tableau.at(2) != nil
+				if tableau.at(2) == false
+					lblIndice = @gridJeu.get_child_at(0,indice).child
+				else
+					lblIndice = @gridJeu.get_child_at(indice,0).child
+				end
+				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
+				@lblIndiceSubr = lblIndice
+			end
 	end
 
 end

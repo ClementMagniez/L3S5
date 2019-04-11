@@ -5,20 +5,19 @@ class HudOption < Hud
 	# @fullscreen
 
 	def initialize(window,fenetrePrecedente)
-		super(window)
+		super(window,fenetrePrecedente)
 		varX, varY = 2, 2
-		@fenetrePrecedente = fenetrePrecedente
+
 		self.setTitre("Options")
 
 		initBoutonFenetre
-		initBoutonRetour
 
 
 		self.attach(Gtk::Label.new("Mode : "),varX, varY, 1, 1)
 		self.attach(@btnFenetre,varX+1, varY, 1, 1)
 		self.attach(@btnRetour,varX+2, varY+1, 1, 1)
 		ajoutFondEcran
-		
+
 	end
 
 	def initBoutonFenetre
@@ -38,10 +37,4 @@ class HudOption < Hud
 		}
 	end
 
-	def initBoutonRetour
-		@btnRetour = Gtk::Button.new :label => "Retour"
-		@btnRetour.signal_connect("clicked") {
-				@fenetre.changerWidget(self,@fenetrePrecedente)
-		}
-	end
 end

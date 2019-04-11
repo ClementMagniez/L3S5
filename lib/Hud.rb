@@ -13,7 +13,7 @@ class Hud < Gtk::Grid
 	@@name=""
 
 
-	def initialize(window)
+	def initialize(window,fenetrePrecedente=nil)
 		super()
 		@fenetre = window
 		@lblDescription = Gtk::Label.new
@@ -23,8 +23,10 @@ class Hud < Gtk::Grid
 
 		#nombre de cellule horizontale et verticale de la  fenetre
 		@sizeGridWin = 20
-		
+		@fenetrePrecedente = fenetrePrecedente
+
 		initBoutonOptions
+		initBoutonRetour
 
 		self.halign = Gtk::Align::CENTER
 		self.valign = Gtk::Align::CENTER
@@ -35,8 +37,8 @@ class Hud < Gtk::Grid
 	def lancementAccueil
 		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
 	end
-	
-	
+
+
 	def lancementAventure(grille)
 		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
 	end
@@ -44,7 +46,7 @@ class Hud < Gtk::Grid
 	def lancementTutoriel(grille)
 		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
 	end
-	
+
 
 	def lancementRapide(grille)
 		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
@@ -58,9 +60,9 @@ class Hud < Gtk::Grid
 	def lancementModeJeu
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
 	end
-	
+
 	def lancementChoixDifficulte(mode)
-		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode))
+		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode,self))
 	end
 
 	# Lance le menu de fin de jeu
@@ -79,7 +81,7 @@ class Hud < Gtk::Grid
 
 	def lancementHudRegle
 		puts " Page de regle "
-		@fenetre.changerWidget(self, HudRegle.new(@fenetre))
+		@fenetre.changerWidget(self, HudRegle.new(@fenetre,self))
 	end
 
 	def lancementHudPresentationTutoriel(grille)
@@ -105,9 +107,16 @@ class Hud < Gtk::Grid
 		}
 	end
 
-	
-	# Créé et initialise le bouton de retour
 	def initBoutonRetour
+		@btnRetour = Gtk::Button.new :label => "Retour"
+		@btnRetour = creerBouton(Gtk::Label.new("Retour"),"white","ultrabold","x-large")
+		@btnRetour.signal_connect("clicked") {
+				@fenetre.changerWidget(self,@fenetrePrecedente)
+		}
+	end
+
+	# Créé et initialise le bouton de retour au mode de jeu
+	def initBoutonRetourModeJeu
 		@btnRetour = creerBouton(Gtk::Label.new("Retour"),"white","ultrabold","x-large")
 		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
 	end
@@ -148,7 +157,7 @@ class Hud < Gtk::Grid
 
 
 	def creerBouton(label,couleur,style,size)
-		bouton = Gtk::Button.new 
+		bouton = Gtk::Button.new
 		self.styleLabel(label,couleur,style,size,label.text)
 		bouton.add(label)
 		bouton.set_relief(Gtk::ReliefStyle::NONE)
@@ -158,7 +167,7 @@ class Hud < Gtk::Grid
 		return bouton
 	end
 
-	
+
 	def initBoutonProfil
 		@btnProfil = creerBouton(Gtk::Label.new("Profil"),"white","ultrabold","x-large")
 		@btnProfil.signal_connect("clicked") do
