@@ -3,6 +3,7 @@ require_relative 'AidesConstantes'
 class Aide
 
   include AidesConstantes
+
  #####################################################################################################
 
   # initialise @grille avec la grille passé en argument
@@ -237,7 +238,6 @@ class Aide
   # * 'arbre' - cf. caseArbreAssocieTente
   # * 'vide' - cf. arbreAutourCasePossedeTente
   def arbreAssocieTente(arbreOuVide)
-
     grille=@grille.grille
     hashArbreTente = Hash.new
 
@@ -336,7 +336,6 @@ class Aide
               x = caseArbre.x
               y = caseArbre.y
               nbCasesVide = 0
-
               # On prend connaissance pour les 4 cases adjacentes
               self.liste4Cases(cases).each do |uneCase|
                 nbCasesVide += 1 if uneCase.statutVisible == @newStatutVide && uneCase != cases
@@ -474,7 +473,7 @@ class Aide
 
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
   def cycle(tutoOuRapide)
-
+    
     # liste des aides (l'ordre est important, première -> ... -> dernière)
     listeDesAides = [:impossibleTenteAdjacente, :resteQueTentesLigne, :resteQueTentesColonne, :resteQueGazonLigne, :resteQueGazonColonne, :casePasACoteArbre, :uniquePossibiliteArbre, :dispositionPossibleLigne, :dispositionPossibleColonne, :caseArbreAssocieTente, :arbreAutourCasePossedeTente, :aucuneAide]
 
@@ -493,6 +492,5 @@ class Aide
         return foncReturn
       end
     end
-
   end
 end
