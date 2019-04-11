@@ -1,11 +1,9 @@
 require_relative 'Statut'
-require_relative 'StatutConstantes'
 
 # Définit une case de la grille de jeu ; chaque case est interactible d'un clic
 # selon son statut réel (tente/arbre/gazon)
 # Cette classe est à considérer abstraite.
 class Case 
-	include StatutConstantes
 	
 	def initialize(i,j)
 		@x=i
@@ -24,6 +22,14 @@ class Case
 	def cycle(grille)
 		grille.stack.push(self)
 	end
+	
+	# Effectue un cycle opposé à CaseVide#cycle
+	# TODO - utilise deux cycles : vérifier cohérence avec calcul du score	
+	def cancel(grille)
+		self.statutVisible.cancel
+	end
+
+	
 	
 	def reset
 		self.statutVisible.reset

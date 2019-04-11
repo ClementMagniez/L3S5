@@ -3,14 +3,20 @@ class HudAventure < HudJeu
 		super(window,grille)
 
 		self.setTitre("Aventure")
-		# self.setDesc("Ici la desc du mode aventure")
+		initBoutonTimer
+		initBoutonPause
+		initBoutonResetRapide
 
-		# self.initBoutonOptions
+
+		self.attach(@btnPause,@varPlaceGrid-2,0,1,1)
+		self.attach(@lblTime,@varPlaceGrid-3,0,1,1)
+		fond = ajoutFondEcran
+		self.attach(fond,0,0,@varPlaceGrid+2,5)
 	end
 
-	# Comportement a la fin du jeu
-	# Lance une nouvelle grille
+
+	# Lance une nouvelle grille plus grande en mode aventure
 	def jeuTermine
-		self.lancementAventure(@tailleGrille+1)
+		lancementAventure(Grille.new(@tailleGrille+1))
 	end
 end

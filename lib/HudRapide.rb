@@ -1,92 +1,67 @@
 require_relative "HudJeu"
 
 class HudRapide < HudJeu
-	# @btnPause
-	# @timer
+
+	TEMPS_FACILE=60*15
+	TEMPS_MOYEN=TEMPS_FACILE*2/3
+	TEMPS_DIFFICILE=TEMPS_MOYEN/2
 
 	def initialize(window,grille)
 		super(window,grille)
-		@btnPause = Gtk::Button.new :label => "Pause"
-		@lblTime = Gtk::Label.new(" 0:0 ")
-		@lblAide = Gtk::Label.new("Bienvenue sur notre super jeu !")
-		@timer = Time.now
-		@pause = false
-		@horloge = 0
-		@stockHorloge = 0
+		
+		case grille.length
+			when 6..8 then @temps=TEMPS_FACILE
+			when 9..12 then @temps=TEMPS_MOYEN
+			when 13..16 then @temps=TEMPS_DIFFICILE
+		end
+		@lblAide = Gtk::Label.new()
+		@lblAide.use_markup = true
+		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
 		self.setTitre("Partie rapide")
-		# self.setDesc("Ici la desc du mode rapide")
 
-
-		# self.initBoutonOptions
+		initBoutonTimer
 		initBoutonPause
 		initBoutonAide
+		initBoutonResetRapide
+		self.attach(@btnPause,@varPlaceGrid-3,0,1,1)
+		self.attach(@lblTime,@varPlaceGrid-4,0,1,1)
+		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
+		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
+		fond = ajoutFondEcran
+		self.attach(fond,0,0,@varPlaceGrid+2,5)
+	end
 
-		self.attach(@btnAide,@tailleGrille,0,1,1)
-		self.attach(@btnPause,@tailleGrille-1,0,1,1)
-		self.attach(@lblTime,@tailleGrille-2,0,1,1)
-
-		self.attach(@lblAide, 1, @tailleGrille+2, @tailleGrille+1, 1)
-
-		@t=Thread.new{timer}
+	def initBoutonTimer
+		super()
+		if @temps < 10
+			@lblTime.set_label("0" + @temps.to_s + ":00")
+		else
+			@lblTime.set_label(@temps.to_s + ":00")
+		end
 	end
 
 	def timer
 		while true do
-			@horloge = (Time.now - @timer) + @stockHorloge
-			@lblTime.set_label((@horloge/60).to_i.to_s + ":" + (@horloge%60).to_i.to_s)
-			sleep 1
+			@horloge = 
+			@horloge = @temps - ((Time.now - @timer) - @stockHorloge)
+				minutes = (@horloge/60).to_i
+					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
+				secondes = (@horloge%60).to_i
+					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
+			@lblTime.set_label(strMinutes + ":" + strSecondes)
+			if @horloge<=0
+				jeuTermine
+				return 0
+			end
+			sleep(1)
 		end
 	end
 
-	def initBoutonPause
-		@btnPause.signal_connect('clicked'){
-			if @pause
-				@timer = Time.now
-				@t = Thread.new{timer}
-				@btnPause.set_label("Pause")
-				@pause = false
-			else
-				@stockHorloge = @stockHorloge + (Time.now - @timer)
-				@t.kill
-				@btnPause.set_label("Play")
-				@pause = true
-			end
-		}
-
-	end
-	def initBoutonReset
-		super()
-		@btnReset.signal_connect("clicked") {
-			@t.kill
-			@stockHorloge =0
-			@timer = Time.now
-			@t = Thread.new{timer}
-			if @pause
-				@btnPause.set_label("Pause")
-			end
-		}
-
-	end
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide
-		taille = @grille.length
-		@btnAide = Gtk::Button.new :label => " Aide "
+		aide
 		@btnAide.signal_connect("clicked") {
-			tableau = @aide.cycle("rapide")
-			caseAide = tableau.at(0)
-			if caseAide != nil then
-				if caseAide.class == Case # TODO WTF
-
-					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(Gtk::Image.new :file => caseAide.getCase.affichageSubr)
-					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
-
-					@caseSurbrillance =caseAide
-				end
-
-			end
-
-			@lblAide.set_label(tableau.at(1))
-
+			@stockHorloge-=5
 		}
 	end
 end

@@ -1,5 +1,10 @@
+require "rubygems"
+#require_relative "connectSqlite3.rb"
+#require_relative "Profil.rb"
+require_relative "Connexion.rb"
 
 class HudInscription < Hud
+
 	def initialize(fenetre)
 		super(fenetre)
 
@@ -11,13 +16,15 @@ class HudInscription < Hud
 		#Entrée : Identifiat - Mot de passe
 		@entId = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
+		
+		# Rend le mot de passe entré invisible
+		@entMdp.set_visibility(FALSE)
 
 		#Label d'erreur
 		@lblErreur = Gtk::Label.new("Bonne inscription !")
 
 		initBoutonEnregistrement
 		initBoutonRetour
-		
 		self.attach(@btnRetour,16,25,2,2)
 		self.attach(@lblErreur,2,1,2,1)
 		self.attach(@lblTitreInscr,2,0,2,1)
@@ -26,9 +33,6 @@ class HudInscription < Hud
 		self.attach(@lblMdp,2,3,1,1)
 		self.attach(@entMdp,3,3,1,1)
 		self.attach(@btnEnr,2,5,1,1)
-		
-		
-
 	end
 	# Créé et initialise le bouton de retour
 	def initBoutonRetour
@@ -43,13 +47,33 @@ class HudInscription < Hud
 		#Bouton : Enregistrer
 		@btnEnr = Gtk::Button.new :label => "S'enregistrer"
 		@btnEnr.signal_connect("clicked") {
-		if @entMdp.text.empty? || @entId.text.empty?
-			@lblErreur.set_label("Veuillez renseigner toutes les informations.")
-		else
-			@lblErreur.set_label("Enregistrement base de donnée à faire.")
+			if @entMdp.text.empty? || @entId.text.empty?
+				@lblErreur.set_label("Veuillez renseigner toutes les informations.")
+			else
+				#@lblErreur.set_label("Enregistrement base de donnée à faire.")
+				session = Connexion.new()
+				
+				id = @entId.text
+				mdp = @entMdp.text
+				mdp = session.crypterMdp(mdp)
+				#mdp = mdp.crypt(mdp)
 			
-		end
+				if id == "drop table" || mdp == "drop table"
+					@lblErreur.set_label("Entrez un identifiant et un mot de passe valides.")
+				elsif Profil.find_by(pseudonyme: id) != nil
+					@lblErreur.set_label("Cet identifiant existe déjà.")
+				else
+					user = Profil.new(
+						pseudonyme: id,
+						mdpEncrypted: mdp
+					)
+					# Sauvegarde du profil dans la BDD
+					user.save
+			
+					self.lancementModeJeu
+				end
+			end
 		}
 	end
-
+	
 end

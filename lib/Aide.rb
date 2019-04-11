@@ -1,126 +1,124 @@
 # Classe Aide contenant toutes les méthodes permettant d'aider le joueur
+require_relative 'AidesConstantes'
 class Aide
 
-  include StatutConstantes
+  include AidesConstantes
  #####################################################################################################
 
   # initialise @grille avec la grille passé en argument
+  # initialise aussi 4 nouveaux statut (Vide, Arbre, Tente, Gazon)
   def initialize(grille)
     @grille=grille
+    @newStatutVide = StatutVide.new(:VIDE)
+    @newStatutArbre = StatutArbre.new(:ARBRE)
+    @newStatutTente = StatutVide.new(:TENTE)
+    @newStatutGazon = StatutVide.new(:GAZON)
+    @sansSucces = [nil, nil, nil, nil, false, nil]
+  end
+
+  # permet d'avoir la liste des 4 cases adjacentes à la case passé en argument (dessus, dessous, à gauche et à droite)
+  def liste4Cases(cases)
+    listeCases(cases, 4)
+  end
+
+  # permet d'avoir la liste des 8 cases autour de la case passé en argument
+  def liste8Cases(cases)
+    listeCases(cases, 8)
+  end
+
+  # métaméthode
+  def listeCases(cases, nbCases)
+    grille=@grille.grille
+    listeCases = Array.new
+    x = cases.x
+    y = cases.y
+    for i in (x-1)..(x+1)
+      for j in (y-1)..(y+1)
+        if nbCases == 4
+          if ( (i == x && j != y) || (i != x && j == y) ) && i >= 0 && i <= grille.length-1 && j >= 0 && j <= grille.length-1
+            listeCases.push(grille[i][j])
+          end
+        elsif nbCases == 8
+          if !(i < 0 || i > grille.length-1 || j < 0 || j > grille.length-1) && (i != x || j != y)
+            listeCases.push(grille[i][j])
+          end
+        end
+      end
+    end
+    return listeCases
   end
 
   # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
   def nbCasesIncorrect
-    nbErr = 0
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
-    @grille.grille.each do | ligne |
-      ligne.each do | cases |
-        #######################################################################################################
-        # Là on rajoute 1 erreur si le statut visible de la case n'est pas identique a son statut véritable
-        # et seulement si la case n'est pas vide ou qu'il ne s'agisse pas d'un arbre
-        #######################################################################################################
-        nbErr += 1 if (cases.statutVisible != cases.statut && cases.statutVisible != newStatutVide && cases.statut != newStatutArbre)
-        # case.estValide? à tester
-      end
-    end
-    return nbErr
+    casesIncorrect("Nombre")
   end
 
   # renvoie un tableau de cases contenant les erreurs qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
-  def casesIncorrect
+  def listeCasesIncorrect
+    casesIncorrect("Liste")
+  end
 
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
+  # métaméthode
+  def casesIncorrect(nombreOuListe)
     tabCasesErr = Array.new
-    grille=@grille.grille
-    for i in 0..grille.length-1
-      for j in 0..grille.length-1
-
-        tabCasesErr.unshift(grille[i][j]) if (grille[i][j].statutVisible != grille[i][j].statut && grille[i][j].statutVisible != newStatutVide && grille[i][j].statut != newStatutArbre)
-
+    @grille.grille.each do | ligne |
+      ligne.each do | cases |
+        # rajoute la case si son état visible ne correspond pas à son état réel, la case ne doit pas être vide et ne doit pas être un arbre
+        tabCasesErr.unshift(cases) if cases.statutVisible != cases.statut && cases.statutVisible != @newStatutVide && cases.statut != @newStatutArbre
       end
     end
-    return tabCasesErr.empty? ? 0 : tabCasesErr
+    
+    if(nombreOuListe == "Nombre")
+      return [nil, "Il y a " + tabCasesErr.count.to_s + " erreur(s)", nil, nil, true, nil] if tabCasesErr.count != 0
+    elsif nombreOuListe == "Liste"
+      return [nil, "Les cases en surbrillance sont fausses", nil, nil, true, tabCasesErr] if !tabCasesErr.empty?
+    end
+    return @sansSucces
   end
 
   # renvoie la premiere case vide adjacente à une tente, il s'agit donc de gazon
   def impossibleTenteAdjacente
-
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutTente = StatutVide.new(TENTE)
     grille=@grille.grille
-
-    for i in 0..grille.length-1
-      for j in 0..grille.length-1
-
+    grille.each_with_index do | ligne, i |
+      ligne.each_with_index do | cases, j |
         # Si la case est une caseVide
-        if grille[i][j].statutVisible == newStatutVide
-
-            # On prend connaissance pour les 8 cases adjacentes
-
-            # D'abord les diagonales
-            if i-1 >= 0 && j-1 >= 0
-              return grille[i][j] if grille[i-1][j-1].statutVisible == newStatutTente
-            end
-            if i-1 >= 0 && j+1 <= grille.length-1
-              return grille[i][j] if grille[i-1][j+1].statutVisible == newStatutTente
-            end
-            if i+1 <= grille.length-1 && j-1 >= 0
-              return grille[i][j] if grille[i+1][j-1].statutVisible == newStatutTente
-            end
-            if i+1 <= grille.length-1 && j+1 <= grille.length-1
-              return grille[i][j] if grille[i+1][j+1].statutVisible == newStatutTente
-            end
-
-            # Puis les 4 cases à cotés
-            if i-1 >= 0
-              return grille[i][j] if grille[i-1][j].statutVisible == newStatutTente
-            end
-            if i+1 <= grille.length-1
-              return grille[i][j] if grille[i+1][j].statutVisible == newStatutTente
-            end
-            if j-1 >= 0
-              return grille[i][j] if grille[i][j-1].statutVisible == newStatutTente
-            end
-            if j+1 <= grille.length-1
-              return grille[i][j] if grille[i][j+1].statutVisible == newStatutTente
-            end
-
-        end
+        if cases.statutVisible == @newStatutVide
+          # On prend connaissance pour les 8 cases adjacentes
+          self.liste8Cases(cases).each do |uneCase|
+            return [cases, "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon", nil, nil, true, nil] if uneCase.statutVisible == @newStatutTente
+          end
+        end # Fin if
       end
-    end # FinForI
-
-    return 0
+    end # Fin each
+    return @sansSucces
   end
 
-  # indique la ligne où il ne reste plus que des tentes à mettre, sinon renvoie 0
+  # indique la ligne où il ne reste plus que des tentes à mettre
   def resteQueTentesLigne
-    resteQueLigne(TENTE)
+    resteQueLigne(:TENTE)
   end
 
-  # indique la ligne où il ne reste plus que du gazon à mettre, sinon renvoie 0
+  # indique la ligne où il ne reste plus que du gazon à mettre
   def resteQueGazonLigne
-
-    resteQueLigne(GAZON)
+    resteQueLigne(:GAZON)
   end
 
-  # indique la colonne où il ne reste plus que des tentes à mettre, sinon renvoie 0
+  # indique la colonne où il ne reste plus que des tentes à mettre
   def resteQueTentesColonne
-    resteQueColonne(TENTE)
+    resteQueColonne(:TENTE)
   end
 
-  # indique la colonne où il ne reste plus que du gazon à mettre, sinon renvoie 0
+  # indique la colonne où il ne reste plus que du gazon à mettre
   def resteQueGazonColonne
-    resteQueColonne(GAZON)
+    resteQueColonne(:GAZON)
   end
 
-  # cf resteQue, col?==false
+  # cf resteQue, col==false
   def resteQueLigne(gazonOuTente)
       resteQue(gazonOuTente, false)
   end
 
-  # cf resteQue, col?==true
+  # cf resteQue, col==true
   def resteQueColonne(gazonOuTente)
   resteQue(gazonOuTente, true)
   end
@@ -129,475 +127,372 @@ class Aide
   # et renvoie une valeur dépendant de gazonOuTente :
   # * TENTE - cf. resteQueTentesColonne et resteQueTentesLigne
   # * GAZON - cf. resteQueGazonColonne et resteQueGazonLigne
-  # * autres - 0
   def resteQue(gazonOuTente, col)
-
-    num = 0
-
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutTente = StatutVide.new(TENTE)
-
     grille=@grille.grille
     grille=grille.transpose if col
 
-    grille.each_with_index do | array,i |
+    grille.each_with_index do | ligne, i |
       nbCasesVide = 0
       nbCasesTente = 0
-      array.each do | cases |
-
-
-        nbCasesVide += 1 if cases.statutVisible == newStatutVide
-        nbCasesTente += 1 if cases.statutVisible == newStatutTente
-
+      ligne.each do | cases |
+        nbCasesVide += 1 if cases.statutVisible == @newStatutVide
+        nbCasesTente += 1 if cases.statutVisible == @newStatutTente
       end
-      # print "Valeur de grille " + @grille.tentesCol[i].to_s + "\n"
-      # print "Nombre cases vide = " + nbCasesVide.to_s + " Nombre cases tentes = " + nbCasesTente.to_s + "\n\n"
 
       if col
-        if gazonOuTente==GAZON
-          num = i+1 if nbCasesTente == @grille.tentesCol[i] && nbCasesVide != 0
-        elsif gazonOuTente==TENTE
-          num = i+1 if nbCasesVide == @grille.tentesCol[i]-nbCasesTente && nbCasesVide != 0
+        if gazonOuTente==:GAZON
+          return [nil, "Il ne reste que du gazon à placer sur la colonne en surbrillance", true, i+1, true, nil] if nbCasesTente == @grille.tentesCol[i] && nbCasesVide != 0
+        elsif gazonOuTente==:TENTE
+          return [nil, "Il ne reste que des tentes à placer sur la colonne en surbrillance", true, i+1, true, nil] if nbCasesVide == @grille.tentesCol[i]-nbCasesTente && nbCasesVide != 0
         end
       else
-        if gazonOuTente==GAZON
-          num=i+1 if nbCasesTente == @grille.tentesLigne[i] && nbCasesVide!=0
-        elsif gazonOuTente==TENTE
-          num=i+1 if nbCasesVide == @grille.tentesLigne[i]-nbCasesTente && nbCasesVide!=0
+        if gazonOuTente==:GAZON
+          return [nil, "Il ne reste que du gazon à placer sur la ligne en surbrillance", false, i+1, true, nil] if nbCasesTente == @grille.tentesLigne[i] && nbCasesVide != 0
+        elsif gazonOuTente==:TENTE
+          return [nil, "Il ne reste que des tentes à placer sur la ligne en surbrillance", false, i+1, true, nil] if nbCasesVide == @grille.tentesLigne[i]-nbCasesTente && nbCasesVide != 0
         end
       end
 
-
-    end
-    return num
+    end # Fin each
+    return @sansSucces
   end
 
 
   # renvoie la premiere case qui n'est pas a cote d'un arbre, il s'agit donc de gazon
   def casePasACoteArbre
-
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
     grille=@grille.grille
 
-    for i in 0..grille.length-1
-      for j in 0..grille.length-1
+    grille.each_with_index do | ligne, i |
+      ligne.each_with_index do | cases, j |
         ok = true
-        if (grille[i][j].statutVisible == newStatutVide)
-
-          if (i-1 >= 0 && grille[i-1][j].statut == newStatutArbre) || (j-1 >= 0 && grille[i][j-1].statut == newStatutArbre) || (i+1 <= grille.length-1 && grille[i+1][j].statut == newStatutArbre) || (j+1 <= grille.length-1 && grille[i][j+1].statut == newStatutArbre)
-            ok = false
+        # Si la case est une caseVide
+        if (cases.statutVisible == @newStatutVide)
+          self.liste4Cases(cases).each do |uneCase|
+            ok = false if uneCase.statut == @newStatutArbre
           end
-
-          return grille[i][j] if ok
-
-        end
+          return [cases, "La case en surbrillance est forcement du gazon", nil, nil, true, nil] if ok
+        end # Fin if
       end
-    end
+    end # Fin each
+    return @sansSucces
+  end
 
-    return 0
+  # renvoie la liste de cases vides adjacente à une tente, il s'agit donc de gazon
+  def listeCasesGazon
+    grille=@grille.grille
+
+    listeCaseGazon = Array.new
+
+    grille.each_with_index do | ligne, i |
+      ligne.each_with_index do | cases, j |
+        ok = true
+        # Si la case est une caseVide
+        if cases.statutVisible == @newStatutVide
+          self.liste4Cases(cases).each do |uneCase|
+            ok = false if uneCase.statut == @newStatutArbre
+          end
+          listeCaseGazon.push(cases) if ok && !listeCaseGazon.include?(cases)
+        end # Fin if
+      end
+    end # Fin each
+    return listeCaseGazon
   end
 
   # renvoie la premiere case où il n'existe qu'une seule possibilité pour un arbre
   def uniquePossibiliteArbre
-
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
-    newStatutTente = StatutVide.new(TENTE)
-
     grille=@grille.grille
 
-    for i in 0..grille.length-1
-      for j in 0..grille.length-1
+    grille.each_with_index do | ligne, i |
+      ligne.each_with_index do | cases, j |
         nbCasesVide = 0
         nbCasesTente = 0
-        if (grille[i][j].statut == newStatutArbre)
-
-          if (i-1 >= 0)
-            nbCasesVide += 1 if (grille[i-1][j].statutVisible == newStatutVide)
-            nbCasesTente += 1 if (grille[i-1][j].statutVisible == newStatutTente)
+        # Si la case est une caseArbre
+        if (cases.statut == @newStatutArbre)
+          # on regarde les 4 cases adjacentes,
+          # et on incrémente nbCasesVide et nbCasesTente si ce sont respectivement des cases vides ou tentes
+          self.liste4Cases(cases).each do |uneCase|
+            nbCasesVide += 1 if uneCase.statutVisible == @newStatutVide
+            nbCasesTente += 1 if uneCase.statutVisible == @newStatutTente
           end
-          if (i+1 <= grille.length-1)
-            nbCasesVide += 1 if (grille[i+1][j].statutVisible == newStatutVide)
-            nbCasesTente += 1 if (grille[i+1][j].statutVisible == newStatutTente)
-          end
-          if (j-1 >= 0)
-            nbCasesVide += 1 if (grille[i][j-1].statutVisible == newStatutVide)
-            nbCasesTente += 1 if (grille[i][j-1].statutVisible == newStatutTente)
-          end
-          if (j+1 <= grille.length-1)
-            nbCasesVide += 1 if (grille[i][j+1].statutVisible == newStatutVide)
-            nbCasesTente += 1 if (grille[i][j+1].statutVisible == newStatutTente)
-          end
-
-
-          return grille[i][j] if (nbCasesVide == 1 && nbCasesTente == 0)
-
+          return [cases, "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance", nil, nil, true, nil] if nbCasesVide == 1 && nbCasesTente == 0
         end
       end
     end
-
-    return 0
+    return @sansSucces
   end
 
   # renvoie la premiere case où tous les arbres autour de la case possèdent leur tente, donc la case contient du gazon
   def arbreAutourCasePossedeTente
-    arbreAssocieTente(VIDE)
+    arbreAssocieTente(:VIDE)
 
   end
 
   # renvoie la première caseArbre qui n'a pas placer sa tente et qui ne possède qu'une case seule caseVide à côté d'elle
   def caseArbreAssocieTente
-    arbreAssocieTente(ARBRE)
+    arbreAssocieTente(:ARBRE)
   end
 
   # Metaméthode O(??) :
   # renvoie une valeur dépendant de arbreOuVide :
   # * 'arbre' - cf. caseArbreAssocieTente
   # * 'vide' - cf. arbreAutourCasePossedeTente
-  # * autres - 0
   def arbreAssocieTente(arbreOuVide)
-
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutArbre = StatutArbre.new(ARBRE)
-    newStatutTente = StatutVide.new(TENTE)
 
     grille=@grille.grille
     hashArbreTente = Hash.new
-    compt = 0
 
     # Tant que la taille de la table de hashage est différente du nombre de tentes de la grille, on boucle ...
     while hashArbreTente.size != @grille.tentesCol.sum
-      compt += 1
       # On parcourt toutes les cases de la grille
-      for i in 0..grille.length-1
-        for j in 0..grille.length-1
+      grille.each_with_index do | ligne, i |
+        ligne.each_with_index do | cases, j |
 
           nbCasesTente = 0
 
           # Si la case est une caseArbre
-          if grille[i][j].statut == newStatutArbre
+          if cases.statut == @newStatutArbre
             # On vérifie que la case ne soit pas déjà dans la table
-            if ! hashArbreTente.has_key?(grille[i][j])
+            if ! hashArbreTente.has_key?(cases)
               derniereCoordI = i
               derniereCoordJ = j
               # On prend connaissance pour les 4 cases adjacentes s'il s'agit de caseTente et qu'elle ne soit pas déjà dans la table
-              if i-1 >= 0
-                nbCasesTente += 1 if grille[i-1][j].statut == newStatutTente && (! hashArbreTente.has_value?(grille[i-1][j]))
-                derniereCoordI = i-1 if grille[i-1][j].statut == newStatutTente && (! hashArbreTente.has_value?(grille[i-1][j]))
-              end
-              if i+1 <= grille.length-1
-                nbCasesTente += 1 if grille[i+1][j].statut == newStatutTente && (! hashArbreTente.has_value?(grille[i+1][j]))
-                derniereCoordI = i+1 if grille[i+1][j].statut == newStatutTente && (! hashArbreTente.has_value?(grille[i+1][j]))
-              end
-              if j-1 >= 0
-                nbCasesTente += 1 if grille[i][j-1].statut == newStatutTente && (! hashArbreTente.has_value?(grille[i][j-1]))
-                derniereCoordJ = j-1 if grille[i][j-1].statut == newStatutTente && (! hashArbreTente.has_value?(grille[i][j-1]))
-              end
-              if j+1 <= grille.length-1
-                nbCasesTente += 1 if grille[i][j+1].statut == newStatutTente && (! hashArbreTente.has_value?(grille[i][j+1]))
-                derniereCoordJ = j+1 if grille[i][j+1].statut == newStatutTente && (! hashArbreTente.has_value?(grille[i][j+1]))
+              self.liste4Cases(cases).each do |uneCase|
+                x = uneCase.x
+                y = uneCase.y
+                nbCasesTente += 1 if uneCase.statut == @newStatutTente && (! hashArbreTente.has_value?(uneCase))
+                derniereCoordI = x if uneCase.statut == @newStatutTente && (! hashArbreTente.has_value?(uneCase)) && x != i
+                derniereCoordJ = y if uneCase.statut == @newStatutTente && (! hashArbreTente.has_value?(uneCase)) && y != j
               end
               # On rajoute la caseArbre actuelle si seulement elle ne s'est associée qu'à une seule autre caseTente
-              hashArbreTente[grille[i][j]] = grille[derniereCoordI][derniereCoordJ] if nbCasesTente == 1
+              hashArbreTente[cases] = grille[derniereCoordI][derniereCoordJ] if nbCasesTente == 1
             end
           # Sinon si la case est une caseTente
-          elsif grille[i][j].statut == newStatutTente
+          elsif cases.statut == @newStatutTente
             # On vérifie que la case ne soit pas déjà dans la table
-            if ! hashArbreTente.has_value?(grille[i][j])
+            if ! hashArbreTente.has_value?(cases)
               derniereCoordI = i
               derniereCoordJ = j
               # On prend connaissance pour les 4 cases adjacentes s'il s'agit de caseArbre et qu'elle ne soit pas déjà dans la table
-              if i-1 >= 0
-                nbCasesTente += 1 if grille[i-1][j].statut == newStatutArbre && (! hashArbreTente.has_key?(grille[i-1][j]))
-                derniereCoordI = i-1 if grille[i-1][j].statut == newStatutArbre && (! hashArbreTente.has_key?(grille[i-1][j]))
-              end
-              if i+1 <= grille.length-1
-                nbCasesTente += 1 if grille[i+1][j].statut == newStatutArbre && (! hashArbreTente.has_key?(grille[i+1][j]))
-                derniereCoordI = i+1 if grille[i+1][j].statut == newStatutArbre && (! hashArbreTente.has_key?(grille[i+1][j]))
-              end
-              if j-1 >= 0
-                nbCasesTente += 1 if grille[i][j-1].statut == newStatutArbre && (! hashArbreTente.has_key?(grille[i][j-1]))
-                derniereCoordJ = j-1 if grille[i][j-1].statut == newStatutArbre && (! hashArbreTente.has_key?(grille[i][j-1]))
-              end
-              if j+1 <= grille.length-1
-                nbCasesTente += 1 if grille[i][j+1].statut == newStatutArbre && (! hashArbreTente.has_key?(grille[i][j+1]))
-                derniereCoordJ = j+1 if grille[i][j+1].statut == newStatutArbre && (! hashArbreTente.has_key?(grille[i][j+1]))
+              self.liste4Cases(cases).each do |uneCase|
+                x = uneCase.x
+                y = uneCase.y
+                nbCasesTente += 1 if uneCase.statut == @newStatutArbre && (! hashArbreTente.has_key?(uneCase))
+                derniereCoordI = x if uneCase.statut == @newStatutArbre && (! hashArbreTente.has_key?(uneCase)) && x != i
+                derniereCoordJ = y if uneCase.statut == @newStatutArbre && (! hashArbreTente.has_key?(uneCase)) && y != j
               end
               # On rajoute la caseTente actuelle si seulement elle ne s'est associée qu'à une seule autre caseArbre
-              hashArbreTente[grille[derniereCoordI][derniereCoordJ]] = grille[i][j] if nbCasesTente == 1
-
+              hashArbreTente[grille[derniereCoordI][derniereCoordJ]] = cases if nbCasesTente == 1
             end
           end
         end
       end
-    end
+    end # Fin while
 
-
-    if arbreOuVide == ARBRE
-      for i in 0..grille.length-1
-        for j in 0..grille.length-1
-
-          nbCasesVide = 0
-
+    if arbreOuVide == :ARBRE
+      grille.each_with_index do | ligne, i |
+        ligne.each_with_index do | cases, j |
           # Si la case est une caseArbre et que sa tente associée est en caseVide
-          if grille[i][j].statut == newStatutArbre && hashArbreTente.fetch(grille[i][j]).statutVisible == newStatutVide
+          if cases.statut == @newStatutArbre && hashArbreTente.fetch(cases).statutVisible == @newStatutVide
+            isOk = 1
+            pileCaseArbre = [cases]
+            pileCaseArbreUnique = [cases]
+
+            while !pileCaseArbre.empty?
+              caseArbre = pileCaseArbre.pop
+              x = caseArbre.x
+              y = caseArbre.y
+              nbCasesVide = 0
+
               # On prend connaissance pour les 4 cases adjacentes
-              if i-1 >= 0
-                nbCasesVide += 1 if grille[i-1][j].statutVisible == newStatutVide
+              self.liste4Cases(cases).each do |uneCase|
+                nbCasesVide += 1 if uneCase.statutVisible == @newStatutVide && uneCase != hashArbreTente.fetch(cases)
+                if uneCase.statut == @newStatutTente && !pileCaseArbreUnique.include?(hashArbreTente.key(uneCase))
+                  pileCaseArbre.push(hashArbreTente.key(uneCase))
+                  pileCaseArbreUnique.push(hashArbreTente.key(uneCase))
+                end
               end
-              if i+1 <= grille.length-1
-                nbCasesVide += 1 if grille[i+1][j].statutVisible == newStatutVide
-              end
-              if j-1 >= 0
-                nbCasesVide += 1 if grille[i][j-1].statutVisible == newStatutVide
-              end
-              if j+1 <= grille.length-1
-                nbCasesVide += 1 if grille[i][j+1].statutVisible == newStatutVide
-              end
-              return grille[i][j] if nbCasesVide == 1
+              isOk = 0 if nbCasesVide != 0
+            end
+            return [cases, "L'arbre en surbrillance n'a pas encore placé sa tente", nil, nil, true, nil] if isOk == 1
           end
         end
-      end
-
-    elsif arbreOuVide == VIDE
-      for i in 0..grille.length-1
-        for j in 0..grille.length-1
-
-          isOk = 1
-
+      end # Fin each
+    elsif arbreOuVide == :VIDE
+      grille.each_with_index do | ligne, i |
+        ligne.each_with_index do | cases, j |
           # Si la case est une caseVide
-          if grille[i][j].statutVisible == newStatutVide
-              # On prend connaissance pour les 4 cases adjacentes
-              if i-1 >= 0
-                if hashArbreTente.member?(grille[i-1][j])
-                  isOk = 0 if hashArbreTente.fetch(grille[i-1][j]).statutVisible != newStatutTente
-                end
-              end
-              if i+1 <= grille.length-1
-                if hashArbreTente.member?(grille[i+1][j])
-                  isOk = 0 if hashArbreTente.fetch(grille[i+1][j]).statutVisible != newStatutTente
-                end
-              end
-              if j-1 >= 0
-                if hashArbreTente.member?(grille[i][j-1])
-                  isOk = 0 if hashArbreTente.fetch(grille[i][j-1]).statutVisible != newStatutTente
-                end
-              end
-              if j+1 <= grille.length-1
-                if hashArbreTente.member?(grille[i][j+1])
-                  isOk = 0 if hashArbreTente.fetch(grille[i][j+1]).statutVisible != newStatutTente
-                end
-              end
+          if cases.statutVisible == @newStatutVide && cases.statut == @newStatutGazon
+            isOk = 1
+            pileCaseArbre = Array.new
+            pileCaseArbreUnique = Array.new
+            # On prend connaissance pour les 4 cases adjacentes
+            self.liste4Cases(cases).each do |uneCase|
+              pileCaseArbre.push(uneCase) if uneCase.statut == @newStatutArbre
+              pileCaseArbreUnique.push(uneCase) if uneCase.statut == @newStatutArbre
+            end
 
-              return grille[i][j] if isOk == 1
+            while !pileCaseArbre.empty?
+              caseArbre = pileCaseArbre.pop
+              x = caseArbre.x
+              y = caseArbre.y
+              nbCasesVide = 0
+
+              # On prend connaissance pour les 4 cases adjacentes
+              self.liste4Cases(cases).each do |uneCase|
+                nbCasesVide += 1 if uneCase.statutVisible == @newStatutVide && uneCase != cases
+                # si uneCase == tente et que cette tente à un autre arbre a cote d'elle que celui de depart
+                if uneCase.statut == @newStatutTente
+                  self.liste4Cases(uneCase).each do |uneAutreCase|
+                    if uneAutreCase.statut == @newStatutArbre && uneAutreCase != caseArbre && !pileCaseArbreUnique.include?(uneAutreCase)
+                      pileCaseArbre.push(uneAutreCase)
+                      pileCaseArbreUnique.push(uneAutreCase)
+                    end
+                  end
+                end
+              end
+              isOk = 0 if nbCasesVide != 0
+            end # Fin while
+            return [cases, "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes", nil, nil, true, nil] if isOk == 1
           end
         end
-      end # FinForI
-
+      end # Fin each
     end # FinElse
-    return 0
+    return @sansSucces
   end
 
 
-  # renvoie la premiere case où les dispositions possibles de la ligne obligeront la case à etre du gazon
+  # renvoie la premiere case où les dispositions possibles de la ligne obligeront la case à etre du gazon ou une tente
   def dispositionPossibleLigne
     dispositionPossible(false)
   end
 
-  # renvoie la premiere case où les dispositions possibles de la colonne obligeront la case à etre du gazon
+  # renvoie la premiere case où les dispositions possibles de la colonne obligeront la case à etre du gazon ou une tente
   def dispositionPossibleColonne
     dispositionPossible(true)
   end
 
   # Metaméthode O(??) : parcourt la grille en ligne ou en colonne selon col
   def dispositionPossible(col)
-
-    newStatutVide = StatutVide.new(VIDE)
-    newStatutTente = StatutVide.new(TENTE)
     grille=@grille.grille
     grille=grille.transpose if col
 
-    for i in 0..grille.length-1
+    grille.each_with_index do | ligne, i |
       nbCasesTente = 0
-      casePrecedente = false
       nbCaseVideSucc = 0
       nbTentePoss = 0
+      listeCase = Array.new
       hashGroupeCase = Hash.new # => la table de hashage contient comme clé la première case vide et en valeur le nombre de case(s) vide(s) qui suive(nt) la première case (inclus)
-      for j in 0..grille.length-1
-
-          nbCasesTente += 1 if grille[i][j].statutVisible == newStatutTente
-          if grille[i][j].statutVisible == newStatutVide
-            nbTentePoss += 1 if nbCaseVideSucc%2 == 0
-            nbCaseVideSucc += 1
-          else
-            nbCaseVideSucc = 0
+      ligne.each_with_index do | cases, j |
+        nbCasesTente += 1 if cases.statutVisible == @newStatutTente
+        if cases.statutVisible == @newStatutVide
+          listeCase.push(cases)
+          nbCaseVideSucc += 1
+          nbTentePoss += 1 if nbCaseVideSucc%2 != 0
+        elsif cases.statutVisible != @newStatutVide
+          for k in 1..nbCaseVideSucc
+            hashGroupeCase[listeCase.shift] = nbCaseVideSucc
           end
-
-          if grille[i][j].statutVisible == newStatutVide && casePrecedente == false
-
-            hashGroupeCase[ grille[i][j]] = 1
-            casePrecedente = true
-          elsif grille[i][j].statutVisible == newStatutVide && casePrecedente == true
-            hashGroupeCase[ grille[i][j]] = hashGroupeCase.values_at(grille[i][j]).pop.to_i+1
-          elsif grille[i][j].statutVisible != newStatutVide
-            casePrecedente = false
-          end
-
+          nbCaseVideSucc = 0
+        end
+      end # Fin each j
+      if nbCaseVideSucc != 0
+        for k in 1..nbCaseVideSucc
+          hashGroupeCase[listeCase.shift] = nbCaseVideSucc
+        end
       end
 
-      # on alloue la mémoire des tableaux
-      if col
-        tabCaseEnTente = Array.new(@grille.tentesCol[i]-nbCasesTente)
-      else
-        tabCaseEnTente = Array.new(@grille.tentesLigne[i]-nbCasesTente)
-      end
-      tabCaseEnGazon1 = Array.new(20)
-      tabCaseEnGazon2 = Array.new(20)
+      # déclaration des 3 tableaux utiles
+      tabCaseEnTente = Array.new
+      tabCaseEnGazon1 = Array.new
+      tabCaseEnGazon2 = Array.new
 
+      nbImpair = 0
       # pour chaque groupe de case(s) vide(s)
-      hashGroupeCase.each {|key, value|
+      hashGroupeCase.each { |key, value|
         # correspond aux coordonnées de la case "clé"
-        i = key.x
-        j = key.y
-
-        # si le nombre de case(s) successive(s) est impaire
-        if value%2 != 0
-          k = 1
-          # on met dans la table une case sur 2 qui deviendront potentiellement une tente
-          while k <= value
-            tabCaseEnTente.unshift(grille[i][j+k-1])
-            k += 2
-          end
-        # sinon si c'est pair
+        if col
+          y = key.x
+          x = key.y
         else
-          # on met dans la table les cases au dessus et en dessous dans la table des cases qui deviendront potentiellement du gazon
-          for k in 0..value-1
-            tabCaseEnGazon1.unshift(grille[i+1][j+k]) if grille[i+1][j+k].statutVisible == newStatutVide && i+1 <= grille.length-1
-            tabCaseEnGazon1.unshift(grille[i-1][j+k]) if grille[i-1][j+k].statutVisible == newStatutVide && i-1 >= 0
-          end
+          x = key.x
+          y = key.y
         end
 
-        # si le nombre de case(s) successive(s) est impaire et supérieure à 1
-        if value%2 != 0 && value > 1
-          k = 1
-          while k < value
-            if i+1 <= grille.length-1 && j+k <= grille.length-1
-              tabCaseEnGazon2.unshift(grille[i+1][j+k]) if grille[i+1][j+k].statutVisible == newStatutVide
-            end
-            if i-1 >= 0 && j+k <= grille.length-1
-              tabCaseEnGazon2.unshift(grille[i-1][j+k]) if grille[i-1][j+k].statutVisible == newStatutVide
-            end
-            k += 2
+        nbImpair = value if nbImpair == 0
+
+        if value%2 != 0
+          tabCaseEnTente.unshift(grille[x][y]) if nbImpair%2 != 0
+          nbImpair -= 1
+        elsif nbImpair%2 == 0
+          nbImpair = 0
+        end
+        if value%2 != 0 && y+2 <= grille.length-1 && hashGroupeCase.has_key?(grille[x][y+2])
+          if x+1 <= grille.length-1 && hashGroupeCase.fetch(grille[x][y+2])%2 != 0
+            tabCaseEnGazon2.unshift(grille[x+1][y+1]) if grille[x+1][y+1].statutVisible == @newStatutVide
           end
-        # sinon si le nombre de case(s) successive(s) est impaire et égal à 1
-        elsif value%2 != 0 && value == 1
-          if j+2 <= grille.length-1
-            if grille[i][j+2].statutVisible == newStatutVide
-              sontEgaux = false
-              nbCaseVideSuivante = 1
-              hashGroupeCase.each { |key2, value2|
-                if sontEgaux
-                  nbCaseVideSuivante = value2
-                  sontEgaux = false
-                end
-                sontEgaux = true if key == key2
-              }
-              if i+1 <= grille.length-1
-                tabCaseEnGazon2.unshift(grille[i+1][j+1]) if grille[i+1][j+1].statutVisible == newStatutVide && nbCaseVideSuivante%2 != 0
-              end
-              if i-1 >= 0
-                tabCaseEnGazon2.unshift(grille[i-1][j+1]) if grille[i-1][j+1].statutVisible == newStatutVide && nbCaseVideSuivante%2 != 0
-              end
-            end
+          if x-1 >= 0 && hashGroupeCase.fetch(grille[x][y+2])%2 != 0
+            tabCaseEnGazon2.unshift(grille[x-1][y+1]) if grille[x-1][y+1].statutVisible == @newStatutVide
+          end
+        end
+        if value%2 == 0
+          # on met dans la table les cases au dessus et en dessous dans la table des cases qui deviendront potentiellement du gazon
+          if x+1 <= grille.length-1
+            tabCaseEnGazon1.unshift(grille[x+1][y]) if grille[x+1][y].statutVisible == @newStatutVide
+          end
+          if x-1 >= 0
+            tabCaseEnGazon1.unshift(grille[x-1][y]) if grille[x-1][y].statutVisible == @newStatutVide
           end
         end
       }#FinEach
-
-
-      # On enleve le surplus de place alloué
-      tabCaseEnTente.compact!
-      tabCaseEnGazon1.compact!
-      tabCaseEnGazon2.compact!
-
-
+      
       if col
-        if nbTentePoss == @grille.tentesCol[i]-nbCasesTente
-          if ! tabCaseEnTente.empty?
-            return tabCaseEnTente.shift
-          elsif ! tabCaseEnGazon1.empty?
-            return tabCaseEnGazon1.shift
-          end
-        elsif nbTentePoss == @grille.tentesCol[i]-nbCasesTente+1
-          if ! tabCaseEnGazon2.empty?
-            return tabCaseEnGazon2.shift
-          end
-        end
+        nombreTentes = @grille.tentesCol[i]
       else
-        if nbTentePoss == @grille.tentesLigne[i]-nbCasesTente
-          if ! tabCaseEnTente.empty?
-            return tabCaseEnTente.shift
-          elsif ! tabCaseEnGazon1.empty?
-            return tabCaseEnGazon1.shift
-          end
-        elsif nbTentePoss == @grille.tentesLigne[i]-nbCasesTente+1
-          if ! tabCaseEnGazon2.empty?
-            return tabCaseEnGazon2.shift
-          end
+        nombreTentes = @grille.tentesLigne[i]
+      end
+
+      if nbTentePoss == nombreTentes-nbCasesTente
+        if ! tabCaseEnTente.empty?
+          return [tabCaseEnTente.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est une tente", false, i+1, true, nil]
+        elsif ! tabCaseEnGazon1.empty?
+          return [tabCaseEnGazon1.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est du gazon", false, i+1, true, nil]
+        end
+      elsif nbTentePoss == nombreTentes-nbCasesTente+1
+        if ! tabCaseEnGazon2.empty?
+          return [tabCaseEnGazon2.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est du gazon", false, i+1, true, nil]
         end
       end
-    end # FinForI
+    end # Fin each i
+    return @sansSucces
+  end
 
-    return 0
+  # cette aide est la dernière aide du cycle des aides
+  # intervient seulement si aucune aide précédente n'a eu de succès
+  def aucuneAide
+    return [nil, "Aucune aide disponible. Il faut jouer au hasard (demander à Jacoboni).", nil, nil, true, nil]
   end
 
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
   def cycle(tutoOuRapide)
 
-    tableau = Array.new
+    # liste des aides (l'ordre est important, première -> ... -> dernière)
+    listeDesAides = [:impossibleTenteAdjacente, :resteQueTentesLigne, :resteQueTentesColonne, :resteQueGazonLigne, :resteQueGazonColonne, :casePasACoteArbre, :uniquePossibiliteArbre, :dispositionPossibleLigne, :dispositionPossibleColonne, :caseArbreAssocieTente, :arbreAutourCasePossedeTente, :aucuneAide]
 
-    if (funcReturn=self.nbCasesIncorrect) != 0 && tutoOuRapide == "rapide"
-      tableau.push(nil, "Il y a " + funcReturn.to_s + " erreur(s)")
-      return tableau
-    elsif (funcReturn=self.casesIncorrect) != 0 && tutoOuRapide == "tuto"
-      tableau.push(funcReturn, "Les cases en surbrillance sont fausses")
-      return tableau
-    elsif (funcReturn=self.impossibleTenteAdjacente) != 0
-      tableau.push(funcReturn, "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon")
-      return tableau
-    elsif (funcReturn=self.resteQueTentesLigne) != 0
-      tableau.push(nil, "Il ne reste que des tentes à placer sur la ligne " + funcReturn.to_s)
-      return tableau
-    elsif (funcReturn=self.resteQueTentesColonne) != 0
-      tableau.push(nil, "Il ne reste que des tentes à placer sur la colonne " + funcReturn.to_s)
-      return tableau
-    elsif (funcReturn=self.resteQueGazonLigne) != 0
-      tableau.push(nil, "Il ne reste que du gazon à placer sur la ligne " + funcReturn.to_s)
-      return tableau
-    elsif (funcReturn=self.resteQueGazonColonne) != 0
-      tableau.push(nil, "Il ne reste que du gazon à placer sur la colonne " + funcReturn.to_s)
-      return tableau
-    elsif (funcReturn=self.casePasACoteArbre) != 0
-      tableau.push(funcReturn, "La case en surbrillance est forcement du gazon")
-      return tableau
-    elsif (funcReturn=self.uniquePossibiliteArbre) != 0
-      tableau.push(funcReturn, "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance")
-      return tableau
-    elsif (funcReturn=self.dispositionPossibleLigne) != 0
-      tableau.push(funcReturn, "D'après les dispositions de la ligne, il n'y a qu'une seule possibilité pour la case en surbrillance")
-      return tableau
-    elsif (funcReturn=self.dispositionPossibleColonne) != 0
-      tableau.push(funcReturn, "D'après les dispositions de la colonne, il n'y a qu'une seule possibilité pour la case en surbrillance")
-      return tableau
-    elsif (funcReturn=self.arbreAutourCasePossedeTente) != 0
-      tableau.push(funcReturn, "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes")
-      return tableau
-    elsif (funcReturn=self.caseArbreAssocieTente) != 0
-      tableau.push(funcReturn, "La case en surbrillance n'a pas encore placé sa tente")
-      return tableau
-    else
-      tableau.push(nil, "Aucune aide disponible ...")
-      return tableau
+    # vérifie si erreur
+    if tutoOuRapide == "tuto" && (foncReturn = self.listeCasesIncorrect).at(BOOL_SUCCES)
+      return foncReturn
+    elsif tutoOuRapide == "rapide" && (foncReturn = self.nbCasesIncorrect).at(BOOL_SUCCES)
+      return foncReturn
     end
+
+    # tant que la liste des aides n'est pas vide
+    while !listeDesAides.empty?
+      aide = listeDesAides.shift
+      foncReturn = self.send(aide) # self.send(aide) => renvoie le retour de la fonction appelée
+      if foncReturn.at(BOOL_SUCCES)
+        return foncReturn
+      end
+    end
+
   end
 end

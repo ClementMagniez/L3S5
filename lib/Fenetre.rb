@@ -1,4 +1,7 @@
 require 'gtk3'
+
+# TODO génériciser ce truc
+
 require_relative 'Hud'
 require_relative 'HudAccueil'
 require_relative 'HudOption'
@@ -9,6 +12,9 @@ require_relative 'HudRapide'
 require_relative "HudInscription"
 require_relative 'HudTutoriel'
 require_relative 'HudFinDeJeu'
+require_relative 'HudProfil'
+require_relative 'HudExploration'	
+require_relative 'HudChoixDifficulte'
 
 class Fenetre < Gtk::Window
 	def initialize

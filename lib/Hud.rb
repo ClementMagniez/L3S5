@@ -1,55 +1,75 @@
 require_relative 'Grille'
 require 'gtk3'
+
+# Superclasse abstraite de tous les menus de l'application : enregistre le nom du joueur
+# à la connexion, instancie les éléments communs aux menus et permet le passage
+# de l'un à l'autre
 class Hud < Gtk::Grid
 	# @fenetre
 	# @btnOptions
 	# @lblDescription
 
+	# Nom du joueur connecté, nécessaire à tous les menus de l'application
+	@@name=""
+	@@difficulte = nil
+	@@mode = nil
+
+
 	def initialize(window)
 		super()
 		@fenetre = window
 		@lblDescription = Gtk::Label.new
+		@winX = @fenetre.size.fetch(0)
+		@winY = @fenetre.size.fetch(1)
+		@varPlaceGrid = 6
 
 		initBoutonOptions
-		#fond = Gtk::Image.new( :file => "../img/fond2.png")
 
-		# self.attach(@btnOptions, 2, 16, 2, 2)
-		# self.attach(@lblDescription, 0, 0, 6, 1)
-		#self.attach(fond,0,0,30,20)
 
 		self.halign = Gtk::Align::CENTER
 		self.valign = Gtk::Align::CENTER
 	end
 
-
-
-	def lancementAventure(taille)
-		# grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
-		grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
-		# aide = Aide.new(grille)
-		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
-	end
+	# TODO factoriser les lancementX
 
 	def lancementAccueil
-		puts "Retour à l'accueil"
 		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
 	end
 
 
-	def lancementTutoriel(taille)
-		grille = Grille.new(Random.rand(Range.new((taille-6)*100+1,(taille-5)*100)),"../grilles.txt")
-		puts "Retour à l'accueil"
+	def lancementAventure(grille)
+		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
+	end
+
+	def lancementTutoriel(grille)
 		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
 	end
 
 
+	def lancementRapide(grille)
+		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
+	end
+
+
+	def lancementExplo(grille)
+		@fenetre.changerWidget(self,HudExploration.new(@fenetre,grille))
+	end
+
 	def lancementModeJeu
-		puts "Retour au menu"
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
 	end
 
+	def lancementChoixDifficulte(mode)
+		@@mode = mode
+		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode))
+	end
+
+	# Lance le menu de fin de jeu
 	def lancementFinDeJeu
-		puts "Fin de jeu"
+		score = 0
+		if(grille != nil)
+			score = 10
+		end
 		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self))
 	end
 
@@ -58,30 +78,20 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudInscription.new(@fenetre))
 	end
 
-	def lancementRapide(taille)
-		grille = Grille.new((taille-6)*100 + Random.rand((taille-5)*100 - (taille-6)*100),"../grilles.txt");
-
-		# aide = Aide.new(grille)
-		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
+	def lancementProfil
+		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
 	end
 
 	# Créé et initialise le bouton des options
 	# Le bouton affiche le menu des options
 	def initBoutonOptions
-		lblOption = Gtk::Label.new
-		# lblOption.use_markup = true
-		# lblOption.set_markup ("<span weight='ultrabold' foreground='white' size='x-large'>Options</span>");
-			lblOption.set_text("Options")
 		@btnOptions = Gtk::Button.new
-		@btnOptions.add(lblOption)
-		# @btnOptions.set_relief(Gtk::ReliefStyle::NONE)
-		# @btnOptions.signal_connect("enter-notify-event"){
-		# 	@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
-			# puts ("pouet")
-		# }
+		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
+		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
+		engrenage.pixbuf = engrenage.pixbuf.scale(@winX/20,@winX/20)	if engrenage.pixbuf != nil
+		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
 				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
-				# lblOption.set_markup ("<span weight='ultrabold' foreground='black' size='x-large'>Options</span>");
 		}
 	end
 
@@ -90,13 +100,40 @@ class Hud < Gtk::Grid
 		@lblDescription.set_text(str)
 	end
 
+
 	# Modifie le titre de la fenetre
 	def setTitre(str)
 		@fenetre.set_title(str)
 	end
 
 
+	def ajoutFondEcran
+		# puts ("Resolution : " + @winX.to_s + ";" + @winY.to_s)
 
+		fond = Gtk::Image.new( :file => "../img/fond2.png")
+		fond.pixbuf = fond.pixbuf.scale(@winX,@winY)	if fond.pixbuf != nil
 
+		return fond
+	end
+
+	def initBoutonQuitter
+		@btnQuitter = Gtk::Button.new
+		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
+		quitter = Gtk::Image.new(:file => '../img/quitter.png')
+		quitter.pixbuf = quitter.pixbuf.scale(@winX/20,@winX/20)	if quitter.pixbuf != nil
+		@btnQuitter.set_image(quitter)
+		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
+	end
+
+	def styleLabel(label,couleur,style,size,contenu)
+		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
+	end
+
+	def initBoutonProfil
+		@btnProfil = Gtk::Button.new label: "Profil"
+		@btnProfil.signal_connect("clicked") do
+			lancementProfil
+		end
+	end
 
 end
