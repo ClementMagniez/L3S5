@@ -1,34 +1,20 @@
 require_relative 'Hud'
 
-# class abstraite permettant de créer un ecran de jeu
+# Classe abstraite permettant de créer un écran de jeu 
 class HudJeu < Hud
 	attr_reader :grille, :timer
-	# @btnReset
-	# @btnAide
-	# @btnRetour
-	# @lblAide
-	# @gridJeu
-	# @aide
-	# @grille
 
+	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
+	# - window : la fenêtre principale de l'application
+	# - grille : une Grille de jeu
 	def initialize(window,grille)
 		super(window)
 		@align = Gtk::Align.new(1)
 		@aide = Aide.new(grille)
 		
-#		####################
-#			self.set_column_homogeneous(true)
-#			self.set_row_homogeneous(true)
-		####################
-	
-		@heightButton=2 # TODO CONSTAAAAAAAAAAAAANTE
-		@widthButton=4 
-	
 		@gridJeu = Gtk::Grid.new
-			@gridJeu.set_column_homogeneous(true)
-			@gridJeu.set_row_homogeneous(true)
-			@gridJeu.set_halign(@align)
-			@gridJeu.set_valign(@align)
+		@gridJeu.set_halign(@align)
+		@gridJeu.set_valign(@align)
 		@grille = grille
 		@tailleGrille = @grille.length
 
@@ -45,16 +31,16 @@ class HudJeu < Hud
 		@varDebutPlaceGrid = @sizeGridWin/4 
 
 		
-		self.attach(@btnReset,@varFinPlaceGrid,@varFinPlaceGrid-7,4,2)
-		self.attach(@btnCancel,@varFinPlaceGrid,@varFinPlaceGrid-5,4,2)
-		self.attach(@btnRemplissage,@varFinPlaceGrid,@varFinPlaceGrid-3,4,2)
-		self.attach(@btnSauvegard,@varFinPlaceGrid,@varFinPlaceGrid-1,5,2)
-		self.attach(@btnProfil, @sizeGridWin -3 , 1, 3, 2)
+		self.attach(@btnReset,@varFinPlaceGrid-1,@varDebutPlaceGrid+1,4,2)
+		self.attach(@btnCancel,@varFinPlaceGrid-1,@varDebutPlaceGrid+3,4,2)
+		self.attach(@btnRemplissage,@varFinPlaceGrid-1,@varDebutPlaceGrid+5,4,2)
+		self.attach(@btnSauvegard,@varFinPlaceGrid-1,@varDebutPlaceGrid+7,4,2)
+		self.attach(@btnProfil, @sizeGridWin -3 , 0, 3, 2)
 
 		self.attach(@btnRetour,@sizeGridWin-3,@sizeGridWin-3,3,2)
 		self.attach(@btnOptions, 1, @sizeGridWin-3, 4,3)
 
-		
+#		
 	end
 
 
@@ -66,43 +52,43 @@ class HudJeu < Hud
 
 		# TODO - Ruby-fier ce loop
 
-#		0.upto(@tailleGrille-1) { |i|
-#			# ici les indices des colonnes (nb tentes sur chaque colonne)
-#			lblIndiceCol = labelIndice(i,"colonne")
-#			btnIndiceCol = Gtk::Button.new
-#			btnIndiceCol.add(lblIndiceCol)
-#			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
-#			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
-#			#Quand on clique dessus, met toutes les cases vides à gazon
-#			btnIndiceCol.signal_connect("clicked") {
-#				0.upto(@tailleGrille-1) { |k|
-#					if @grille[k][i].statutVisible.isVide?
-#						@grille[k][i].cycle(@grille)
-#						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
-#					end
-#				}
-#				desurbrillanceIndice
-#			}
-#			# ici les indices des lignes (nb tentes sur chaque ligne)
-#			lblIndiceLig = labelIndice(i,"ligne")
-#			btnIndiceLig = Gtk::Button.new
-#			btnIndiceLig.add(lblIndiceLig)
-#			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
-#			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
-#			#Quand on clique dessus, met toutes les cases vides à gazon
-#			btnIndiceLig.signal_connect("clicked") {
-#				0.upto(@tailleGrille-1) { |k|
-#					if @grille[i][k].statutVisible.isVide?
-#						@grille[i][k].cycle(@grille)
+		0.upto(@tailleGrille-1) { |i|
+			# ici les indices des colonnes (nb tentes sur chaque colonne)
+			lblIndiceCol = labelIndice(i,"colonne")
+			btnIndiceCol = Gtk::Button.new
+			btnIndiceCol.add(lblIndiceCol)
+			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
+			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
+			#Quand on clique dessus, met toutes les cases vides à gazon
+			btnIndiceCol.signal_connect("clicked") {
+				0.upto(@tailleGrille-1) { |k|
+					if @grille[k][i].statutVisible.isVide?
+						@grille[k][i].cycle(@grille)
+						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
+					end
+				}
+				desurbrillanceIndice
+			}
+#			 ici les indices des lignes (nb tentes sur chaque ligne)
+			lblIndiceLig = labelIndice(i,"ligne")
+			btnIndiceLig = Gtk::Button.new
+			btnIndiceLig.add(lblIndiceLig)
+			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
+			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
+#			Quand on clique dessus, met toutes les cases vides à gazon
+			btnIndiceLig.signal_connect("clicked") {
+				0.upto(@tailleGrille-1) { |k|
+					if @grille[i][k].statutVisible.isVide?
+						@grille[i][k].cycle(@grille)
 
-#						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
-#						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
+						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
+						 @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 
-#					end
-#				}
-#				desurbrillanceIndice
-#			}
-#		}
+					end
+				}
+				desurbrillanceIndice
+			}
+		}
 
 		# positionne les cases de la grille
 		@grille.grille.each do |line|
@@ -140,7 +126,6 @@ class HudJeu < Hud
 				caseSubr = @caseSurbrillanceList.shift
 				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
 									scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
-				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
 
 			end
 		end
@@ -150,10 +135,13 @@ class HudJeu < Hud
 	def labelIndice(i,ligneOuColonne)
 		lblIndice = Gtk::Label.new
 		lblIndice.use_markup = true
+		size=@grille.length>12 ? "small" : "x-large"
 		if ligneOuColonne == "ligne"
-			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesLigne.fetch(i).to_s)
+			self.styleLabel(lblIndice,"white","ultrabold",size,
+											@grille.tentesLigne.fetch(i).to_s)
 		else
-			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesCol.fetch(i).to_s)
+			self.styleLabel(lblIndice,"white","ultrabold",	size,
+											@grille.tentesCol.fetch(i).to_s)
 		end
 
 		return lblIndice
@@ -168,10 +156,13 @@ class HudJeu < Hud
 #		winX = @fenetre.size.fetch(0)
 #		winY = @fenetre.size.fetch(1)
 		minSize=(@@winX > @@winY ? @@winY : @@winX) / @grille.length
-		minSize*=0.45
+		minSize*=0.4
+		
+		puts minSize
+		puts @grille.length
 
 		
-		imgSize = minSize#@@winX / (@tailleGrille*5) # TODO tester
+		imgSize =  minSize#@@winX / (@tailleGrille*5) # TODO tester
 
 
 
@@ -343,6 +334,7 @@ class HudJeu < Hud
 			end
 		}
 	end
+	
 	def timer
 		while true do
 			@horloge = (Time.now - @timer) + @stockHorloge

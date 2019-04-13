@@ -23,7 +23,7 @@ class HudProfil < Hud
 		self.attach(@btnSauvegardeLogin, 4, 4, 2, 1)
 
 #		self.attach(@champScores, 0, 4, 2, 4)
-		self.attach(Gtk::Label.new("Résolution"), 4, 5, 2, 1)
+		self.attach(Gtk::Label.new("Résolution (16:9)"), 4, 5, 2, 1)
 		self.attach(@menuResolution, 4, 6, 2, 1)
 		self.attach(@btnSauvegardeResolution, 4, 7, 2, 1)
 
@@ -77,9 +77,8 @@ class HudProfil < Hud
 		@menuResolution = Gtk::ComboBoxText	.new
 		@menuResolution.append_text("1920*1080")
 		@menuResolution.append_text("1600*900")
-		@menuResolution.append_text("1080*720")
-		@menuResolution.append_text("800*480")
-		@menuResolution.append_text("640*360")
+		@menuResolution.append_text("1280*720")
+		@menuResolution.append_text("896*504")
 		@menuResolution.active=0;
 		@menuResolution.set_visible(true)
 		@resolution=@menuResolution.active_text

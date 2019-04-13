@@ -15,12 +15,9 @@ class Hud < Gtk::Grid
 	def initialize(window)
 		super()
 
-		self.set_hexpand(true)
 		@fenetre = window
 		@sizeGridWin = 20
 		@@initblock=@@initblock||self.initWindow
-
-
 
 		# TODO - faire que ça ne s'exécute qu'une fois
 
@@ -37,14 +34,6 @@ class Hud < Gtk::Grid
 			end
 		end
 
-		#nombre de cellule horizontale et verticale de la fenetre
-		
-		test=Gtk::Button.new(label: "test")
-		test.signal_connect('clicked') { 
-				puts "test : #{@fenetre.size[0]},#{@fenetre.size[1]}, #{@@winX}, #{@@winY}"
-				resizeWindow(@@winX, @@winY)
-		}
-		self.attach(test,1,1,2,2)
 		initBoutonOptions
 
 		self.halign = Gtk::Align::CENTER
@@ -182,7 +171,6 @@ class Hud < Gtk::Grid
 		@btnProfil.signal_connect("clicked") do
 			lancementProfil
 		end
-
 	end
 
 
@@ -191,9 +179,6 @@ class Hud < Gtk::Grid
 	end
 
 	def resizeWindow(width, height)
-#		puts ("Resolution : " + @@winX.to_s + "*" + @@winY.to_s)
-#		puts ("Actuel : " + @fenetre.size[0].to_s + "*" + @fenetre.size[1].to_s)
-
 		@fenetre.set_resizable(true)
 		@fenetre.resize(width,height)
 		@fenetre.set_resizable(false)

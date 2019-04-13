@@ -35,7 +35,7 @@ class HudChoixDifficulte < Hud
 		self.attach(@btnFacile,debutMilieu, debutMilieu-1, 4, 1)
 		self.attach(@btnMoyen,debutMilieu, debutMilieu, 4, 1)
 		self.attach(@btnDifficile,debutMilieu, debutMilieu+1,4,1)
-		self.attach(@btnOptions, 1, @sizeGridWin-2, 1, 1)
+		self.attach(@btnOptions, 1, @sizeGridWin-2, 1, 3)
 		self.attach(@btnRetour, @sizeGridWin-2, @sizeGridWin-2, 1, 1)
 		self.attach(@btnProfil, @sizeGridWin -2 , 1, 1, 4)
 		ajoutFondEcran
