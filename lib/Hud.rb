@@ -19,8 +19,6 @@ class Hud < Gtk::Grid
 		@sizeGridWin = 20
 		@@initblock=@@initblock||self.initWindow
 
-		# TODO - faire que ça ne s'exécute qu'une fois
-
 		@lblDescription = Gtk::Label.new
 		@varPlaceGrid = 0
 

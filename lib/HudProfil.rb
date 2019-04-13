@@ -11,8 +11,6 @@ class HudProfil < Hud
 		initChampScore
 		initBoutonSauvegarderLogin
 		initBoutonRetourMenu
-		initMenuResolution
-		initBoutonSauvegarderResolution
 
 		self.attach(Gtk::Label.new("Compte"), 4, 0, 2, 1)
 		self.attach(@lblDescription, 4, 1, 2, 1)
@@ -23,9 +21,6 @@ class HudProfil < Hud
 		self.attach(@btnSauvegardeLogin, 4, 4, 2, 1)
 
 #		self.attach(@champScores, 0, 4, 2, 4)
-		self.attach(Gtk::Label.new("Résolution (16:9)"), 4, 5, 2, 1)
-		self.attach(@menuResolution, 4, 6, 2, 1)
-		self.attach(@btnSauvegardeResolution, 4, 7, 2, 1)
 
 		self.attach(@btnRetour, 1, 11, 1, 1)
 		
@@ -72,34 +67,5 @@ class HudProfil < Hud
 	#			height=@menuResolution.split(*)[1].to_i
 
 	
-	def initMenuResolution
-
-		@menuResolution = Gtk::ComboBoxText	.new
-		@menuResolution.append_text("1920*1080")
-		@menuResolution.append_text("1600*900")
-		@menuResolution.append_text("1280*720")
-		@menuResolution.append_text("896*504")
-		@menuResolution.active=0;
-		@menuResolution.set_visible(true)
-		@resolution=@menuResolution.active_text
-
-		@menuResolution.signal_connect('changed') do
-				@resolution=@menuResolution.active_text			
-		end
-	end
-	
-	def initBoutonSauvegarderResolution
-		@btnSauvegardeResolution=Gtk::Button.new(label: "Appliquer")
-		@btnSauvegardeResolution.signal_connect('clicked') do
-			f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
-			@@winX=@resolution.split('*')[0].to_i
-			@@winY=@resolution.split('*')[1].to_i
-			f['resolution']={'width' => @@winX,
-											 'height'=> @@winY}
-			f.write
-			self.resizeWindow(@@winX, 
-												@@winY)
-		end
-	end
 	
 end

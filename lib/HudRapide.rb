@@ -23,12 +23,13 @@ class HudRapide < HudJeu
 		initBoutonPause
 		initBoutonAide
 		initBoutonReset
-		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-1,@sizeGridJeu,@sizeGridJeu+4)
+		self.attach(@gridJeu,@varDebutPlaceGrid,
+								@varDebutPlaceGrid-2,@sizeGridJeu,@sizeGridJeu+5)
 
-		self.attach(@lblTime,@varDebutPlaceGrid,@varDebutPlaceGrid-2,@sizeGridJeu,1)
+		self.attach(@lblTime,@varDebutPlaceGrid,0,@sizeGridJeu,4)
 
-		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-6,1,1)
-		self.attach(@btnPause,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
+		self.attach(@btnAide,@varFinPlaceGrid-1,@varDebutPlaceGrid-2,4,2)	
+		self.attach(@btnPause,@varFinPlaceGrid-1,@varFinPlaceGrid-1,4,2)
 
 		ajoutFondEcran
 	end

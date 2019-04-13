@@ -153,18 +153,10 @@ class HudJeu < Hud
 	# Return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
-#		winX = @fenetre.size.fetch(0)
-#		winY = @fenetre.size.fetch(1)
+
 		minSize=(@@winX > @@winY ? @@winY : @@winX) / @grille.length
-		minSize*=0.4
-		
-		puts minSize
-		puts @grille.length
-
-		
+		minSize*=0.4		
 		imgSize =  minSize#@@winX / (@tailleGrille*5) # TODO tester
-
-
 
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil

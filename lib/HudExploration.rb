@@ -11,9 +11,10 @@ class HudExploration < HudJeu
 		self.setTitre("Partie exploration")
 
 		initBoutonAide
-		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-3,@sizeGridJeu,@sizeGridJeu+4)
+		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-4,
+								@sizeGridJeu,@sizeGridJeu+6)
 
-		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
+		self.attach(@btnAide,@varFinPlaceGrid-1,@varDebutPlaceGrid-2,4,2)	
 		ajoutFondEcran
 	end
 

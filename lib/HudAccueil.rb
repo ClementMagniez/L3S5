@@ -37,7 +37,7 @@ class HudAccueil < Hud
 		self.attach(@btnInscrire,varX+1, varY+3, 1, 1)
 		self.attach(@btnConnecter,varX+2, varY+3, 1, 1)
 
-		self.attach(@btnOptions, varX, varY+4, 1, 1)
+#		self.attach(@btnOptions, varX, varY+4, 1, 1)
 		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
 
 		ajoutFondEcran
