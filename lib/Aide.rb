@@ -238,6 +238,8 @@ class Aide
   # * 'arbre' - cf. caseArbreAssocieTente
   # * 'vide' - cf. arbreAutourCasePossedeTente
   def arbreAssocieTente(arbreOuVide)
+
+
     grille=@grille.grille
     hashArbreTente = Hash.new
 
@@ -399,6 +401,11 @@ class Aide
           hashGroupeCase[listeCase.shift] = nbCaseVideSucc
         end
       end
+      if nbCaseVideSucc != 0
+        for k in 1..nbCaseVideSucc
+          hashGroupeCase[listeCase.shift] = nbCaseVideSucc
+        end
+      end
 
       # déclaration des 3 tableaux utiles
       tabCaseEnTente = Array.new
@@ -469,6 +476,10 @@ class Aide
   # intervient seulement si aucune aide précédente n'a eu de succès
   def aucuneAide
     return [nil, "Aucune aide disponible. Il faut jouer au hasard (demander à Jacoboni).", nil, nil, true, nil]
+  end
+
+  def aucuneAide
+    return @foncReturn.replace([1, 0])
   end
 
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)

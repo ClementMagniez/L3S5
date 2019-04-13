@@ -28,7 +28,6 @@ class HudAccueil < Hud
 		initBoutonInscription
 		initBoutonQuitter
 
-
 		self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
 		self.attach(@entryIdentifiant,varX+2, varY+1, 1, 1)
 
@@ -38,11 +37,10 @@ class HudAccueil < Hud
 		self.attach(@btnInscrire,varX+1, varY+3, 1, 1)
 		self.attach(@btnConnecter,varX+2, varY+3, 1, 1)
 
-		self.attach(@btnOptions, varX, varY+4, 1, 1)
+#		self.attach(@btnOptions, varX, varY+4, 1, 1)
 		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
 
-			fond = ajoutFondEcran
-		self.attach(fond,0,0,5,5)
+		ajoutFondEcran
 	end
 
 
@@ -56,6 +54,10 @@ class HudAccueil < Hud
 				puts "Veuillez renseigner tous les champs."
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
 				@@name=@entryIdentifiant.text
+				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+				@@winX=f['resolution']['width']
+				@@winY=f['resolution']['height']
+				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
 			else
 				# Ici, il faudrait afficher un message d'erreur sur la fenêtre

@@ -1,4 +1,6 @@
 # Cette classe fait a peut pres les memes choses que HudInscription
+require 'inifile'
+
 class HudProfil < Hud
 	def initialize(window)
 		super(window)
@@ -6,24 +8,23 @@ class HudProfil < Hud
 		@entNom = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
 
-
-
 		initChampScore
-		initBoutonSauvegarder
+		initBoutonSauvegarderLogin
 		initBoutonRetourMenu
 
+		self.attach(Gtk::Label.new("Compte"), 4, 0, 2, 1)
+		self.attach(@lblDescription, 4, 1, 2, 1)
+		self.attach(Gtk::Label.new("Nouveau nom"), 4, 2, 1, 1)
+		self.attach(@entNom, 5, 2, 1, 1)
+		self.attach(Gtk::Label.new("Nouveau mot de passe"), 4, 3, 1, 1)
+		self.attach(@entMdp, 5, 3, 1, 1)
+		self.attach(@btnSauvegardeeLogin, 4, 4, 2, 1)
 
+#		self.attach(@champScores, 0, 4, 2, 4)
 
-		self.attach(@lblDescription, 0, 0, 2, 1)
-		self.attach(Gtk::Label.new("Nouveau nom"), 0, 1, 1, 1)
-		self.attach(@entNom, 1, 1, 1, 1)
-		self.attach(Gtk::Label.new("Nouveau mot de passe"), 0, 2, 1, 1)
-		self.attach(@entMdp, 1, 2, 1, 1)
-
-		self.attach(@champScores, 0, 4, 2, 4)
-
-		self.attach(@btnSauvegarde, 0, 10, 2, 1)
-		self.attach(@btnRetour, 0, 11, 2, 1)
+		self.attach(@btnRetour, 1, 11, 1, 1)
+		
+		ajoutFondEcran
 	end
 
 	def initChampScore
@@ -37,9 +38,9 @@ class HudProfil < Hud
 		@champScores.set_visible(true)
 	end
 
-	def initBoutonSauvegarder
-		@btnSauvegarde = Gtk::Button.new label: "Sauvegarder"
-		@btnSauvegarde.signal_connect("clicked") {
+	def initBoutonSauvegarderLogin
+		@btnSauvegardeeLogin = Gtk::Button.new(label: "Sauvegarder les modifications")
+		@btnSauvegardeeLogin.signal_connect("clicked") {
 			strNom = @entNom.text
 			strMdp = @entMdp.text
 			if(strNom.empty?)
@@ -58,8 +59,13 @@ class HudProfil < Hud
 	def initBoutonRetourMenu
 		@btnRetour = Gtk::Button.new label: "Retour"
 		@btnRetour.signal_connect("clicked") {
-			puts "Retour au menu"
 			lancementModeJeu
 		}
 	end
+	
+	#				width=@menuResolution.split(*)[0].to_i
+	#			height=@menuResolution.split(*)[1].to_i
+
+	
+	
 end
