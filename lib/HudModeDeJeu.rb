@@ -30,18 +30,31 @@ class HudModeDeJeu < Hud
 
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-		vBox.add(@btnSauvegarde)
-		vBox.add(@btnTutoriel)
-		vBox.add(@btnAventure)
-		vBox.add(@btnChrono)
-		vBox.add(@btnExplo)
+			@btnProfil.halign = Gtk::Align::END
+		vBox.add(@btnProfil)
+			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			vBox2.halign = Gtk::Align::CENTER
+				@btnSauvegarde.valign = Gtk::Align::CENTER
+				@btnSauvegarde.vexpand = true
+			vBox2.add(@btnSauvegarde)
+				@btnTutoriel.valign = Gtk::Align::CENTER
+				@btnTutoriel.vexpand = true
+			vBox2.add(@btnTutoriel)
+			vBox2.add(@btnAventure)
+			vBox2.add(@btnChrono)
+			vBox2.add(@btnExplo)
+		vBox.add(vBox2)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.vexpand = true
+			hBox.hexpand = true
+			hBox.homogeneous = true
+				@btnOptions.valign = Gtk::Align::END
+				@btnOptions.halign = Gtk::Align::START
 			hBox.add(@btnOptions)
-			hBox.add(@btnProfil)
+				@btnQuitter.valign = Gtk::Align::END
+				@btnQuitter.halign = Gtk::Align::END
 			hBox.add(@btnQuitter)
 		vBox.add(hBox)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 

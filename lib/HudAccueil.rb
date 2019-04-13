@@ -20,31 +20,48 @@ class HudAccueil < Hud
 		initBoutonQuitter
 
 
+		width = 150
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.add(Gtk::Label.new("Identifiant"))
+			hBox.vexpand = true
+			hBox.halign = Gtk::Align::CENTER
+			hBox.homogeneous = true
+				lbl = CustomLabel.new("Identifiant")
+				lbl.valign = Gtk::Align::END
+				lbl.halign = Gtk::Align::END
+				lbl.width_request = width
+			hBox.add(lbl)
+				@entryIdentifiant.valign = Gtk::Align::END
+				@entryIdentifiant.halign = Gtk::Align::START
 			hBox.add(@entryIdentifiant)
-			hBox.width_request = 100
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.add(Gtk::Label.new("Mot de passe : "))
+			hBox.halign = Gtk::Align::CENTER
+			hBox.homogeneous = true
+				lbl = CustomLabel.new("Mot de passe")
+				lbl.width_request = width
+			hBox.add(lbl)
 			hBox.add(@entryMotDePasse)
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.halign = Gtk::Align::CENTER
+			hBox.homogeneous = true
+				@btnInscrire.width_request = width
 			hBox.add(@btnInscrire)
 			hBox.add(@btnConnecter)
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.add(@btnOptions)
+			hBox.vexpand = true
+			hBox.hexpand = true
+			hBox.homogeneous = true
 				@btnOptions.valign = Gtk::Align::END
-				@btnOptions.halign = Gtk::Align::END
-			hBox.add(@btnQuitter)
+				@btnOptions.halign = Gtk::Align::START
+			hBox.add(@btnOptions)
 				@btnQuitter.valign = Gtk::Align::END
 				@btnQuitter.halign = Gtk::Align::END
+			hBox.add(@btnQuitter)
 		vBox.add(hBox)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 

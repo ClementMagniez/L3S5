@@ -12,7 +12,7 @@ class HudFinDeJeu < Hud
 		@lblAide = Gtk::Label.new
 		# @lblAide.use_markup = true
 		# @lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
-		lblScore = Gtk::Label.new("Score = 0")
+		lblScore = CustomLabel.new("Votre score : 0")
 		# lblScore = Gtk::Label.new("Score = " + fenetrePrecedente.grille.calculerScoreFinal)
 
 		initBoutonRecommencer
@@ -23,12 +23,19 @@ class HudFinDeJeu < Hud
 		# self.attach(@btnRecommencer,varX+1, varY+1, 1, 1)
 		# self.attach(@btnModeDeJeu, varX+1, varY+2, 1, 1)
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-		vBox.add(Gtk::Label.new("Bravo, vous avez fini !"))
+			lblTxt = CustomLabel.new("Bravo, vous avez fini !")
+			lblTxt.vexpand = true
+		vBox.add(lblTxt)
+			lblScore.vexpand = true
 		vBox.add(lblScore)
+			@btnRecommencer.hexpand = false
+			@btnRecommencer.halign = Gtk::Align::CENTER
 		vBox.add(@btnRecommencer)
+			@btnModeDeJeu.vexpand = true
+			@btnModeDeJeu.hexpand = false
+			@btnModeDeJeu.halign = Gtk::Align::CENTER
+			@btnModeDeJeu.valign = Gtk::Align::START
 		vBox.add(@btnModeDeJeu)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 

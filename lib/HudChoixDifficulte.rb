@@ -41,16 +41,27 @@ class HudChoixDifficulte < Hud
 		# self.attach(@btnRetour, @sizeGridWin-1, @sizeGridWin-1, 1, 1)
 		# self.attach(@btnProfil, @sizeGridWin -1 , 1, 1, 1)
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-		vBox.add(@btnFacile)
-		vBox.add(@btnMoyen)
-		vBox.add(@btnDifficile)
+			@btnProfil.halign = Gtk::Align::END
+		vBox.add(@btnProfil)
+			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			vBox2.halign = Gtk::Align::CENTER
+				@btnFacile.vexpand = true
+				@btnFacile.valign = Gtk::Align::END
+			vBox2.add(@btnFacile)
+			vBox2.add(@btnMoyen)
+			vBox2.add(@btnDifficile)
+		vBox.add(vBox2)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.vexpand = true
+			hBox.hexpand = true
+			hBox.homogeneous = true
+				@btnOptions.valign = Gtk::Align::END
+				@btnOptions.halign = Gtk::Align::START
 			hBox.add(@btnOptions)
-			hBox.add(@btnProfil)
+				@btnRetour.valign = Gtk::Align::END
+				@btnRetour.halign = Gtk::Align::END
 			hBox.add(@btnRetour)
 		vBox.add(hBox)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 

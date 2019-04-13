@@ -100,10 +100,13 @@ class HudJeu < Hud
 				button.set_relief(Gtk::ReliefStyle::NONE)
 
 				button.set_image(scaleImage(cell.affichage))
+				# button.add(scaleImage(cell.affichage))
 				# button.set_image(scaleImage(i,j))
 				button.signal_connect("clicked") do
 					cell.cycle(@grille)
 					button.set_image(scaleImage(cell.affichage))
+					# button.remove_child
+					# button.add(scaleImage(cell.affichage))
 					# button.set_image(i,j)
 					desurbrillanceCase
 					desurbrillanceIndice
@@ -172,7 +175,8 @@ class HudJeu < Hud
 		@btnReset.signal_connect("clicked") {
 			reset
 			if @lblAide != nil
-			self.styleLabel(@lblAide,"white","normal","x-large","Alors comme ça, on recommence? :O !")
+			# self.styleLabel(@lblAide,"white","normal","x-large","Alors comme ça, on recommence? :O !")
+			@lblAide.set_text("Alors comme ça, on recommence? :O !")
 			#@lblAide.set_markup ("<span foreground='white' > Alors comme ça, on recommence? :O !</span>")
 			end
 			if @t != nil
@@ -197,7 +201,7 @@ class HudJeu < Hud
 
 	def initBoutonTimer
 		@btnPause = creerBouton(Gtk::Label.new("Pause"),"white","ultrabold","x-large")
-		@lblTime = Gtk::Label.new(" 00:00 ")
+		@lblTime = CustomLabel.new("00:00")
 		@timer = Time.now
 		@pause = false
 		@horloge = 0
@@ -277,9 +281,9 @@ class HudJeu < Hud
 
 	#Fonction d'aide pour l'HUD exploration et rapide
 	def aide
-		@lblAide = Gtk::Label.new()
-		@lblAide.use_markup = true
-		self.styleLabel(@lblAide,"white","normal","x-large","Bienvenue sur notre super jeu !")
+		@lblAide = CustomLabel.new("")
+		# @lblAide.use_markup = true
+		# self.styleLabel(@lblAide,"white","normal","x-large","Bienvenue sur notre super jeu !")
 		#@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
 
 		# self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
@@ -301,8 +305,9 @@ class HudJeu < Hud
 					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
 
 			end
-			@lblAide.use_markup = true
-			styleLabel(@lblAide,'white','ultrabold','x-large',tableau.at(1))
+			# @lblAide.use_markup = true
+			# styleLabel(@lblAide,'white','ultrabold','x-large',tableau.at(1))
+			@lblAide.set_text(tableau.at(1))
 
 			indice = tableau.at(3)
 
@@ -317,6 +322,7 @@ class HudJeu < Hud
 			end
 		}
 	end
+
 	def timer
 		while true do
 			@horloge = (Time.now - @timer) + @stockHorloge
@@ -324,7 +330,8 @@ class HudJeu < Hud
 					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
 				secondes = (@horloge%60).to_i
 					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			styleLabel(@lblTime,"white","ultrabold","xx-large",strMinutes + ":" + strSecondes)
+			# styleLabel(@lblTime,"white","ultrabold","xx-large",strMinutes + ":" + strSecondes)
+			@lblTime.set_text(strMinutes + ":" + strSecondes)
 			sleep 1
 		end
 	end
