@@ -34,7 +34,7 @@ class HudJeu < Hud
 		self.attach(@btnReset,@varFinPlaceGrid-1,@varDebutPlaceGrid+1,4,2)
 		self.attach(@btnCancel,@varFinPlaceGrid-1,@varDebutPlaceGrid+3,4,2)
 		self.attach(@btnRemplissage,@varFinPlaceGrid-1,@varDebutPlaceGrid+5,4,2)
-		self.attach(@btnSauvegard,@varFinPlaceGrid-1,@varDebutPlaceGrid+7,4,2)
+		self.attach(@btnSauvegarde,@varFinPlaceGrid-1,@varDebutPlaceGrid+7,4,2)
 		self.attach(@btnProfil, @sizeGridWin -3 , 0, 3, 2)
 
 		self.attach(@btnRetour,@sizeGridWin-3,@sizeGridWin-3,3,2)
@@ -271,13 +271,14 @@ class HudJeu < Hud
 	end
 
 	def initBoutonSauvegarde
-		@btnSauvegard = Gtk::Button.new 
-		styleBouton(@btnSauvegard,Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
-		@btnSauvegard.signal_connect('clicked') {
-			File.open("saves/"+@@name+".txt", 'w+') do |f|
-				f.write([Marshal.dump(@grille), Marshal.dump(@@mode), Marshal.dump(@@difficulte)])
+		puts "test"
+		@btnSauvegarde = Gtk::Button.new :label => "Sauvegarder"
+		@btnSauvegarde.signal_connect('clicked') do
+			Dir.mkdir("saves")	unless Dir.exist?("saves")
+			File.open("saves/"+@@name+".txt", "w+", 0644) do |f|
+				f.write( Marshal.dump([@grille,@@mode,@@difficulte]))
 			end
-		}
+		end
 
 
 	end

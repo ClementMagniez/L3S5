@@ -1,5 +1,5 @@
-# Instance du menu de sélection des modes de jeu : permet la sélection 
-# entre l'un des quatre modes, le chargement d'une sauvegarde, l'accès au profil, 
+# Instance du menu de sélection des modes de jeu : permet la sélection
+# entre l'un des quatre modes, le chargement d'une sauvegarde, l'accès au profil,
 # aux options, et un retour au menu de connexion
 
 # TODO : bouton d'accès au menu de connexion
@@ -27,16 +27,11 @@ class HudModeDeJeu < Hud
 		debutMilieu = @sizeGridWin/2-2
 
 
-		self.attach(@btnSauvegarde,debutMilieu,1, 1, 1)
-
+		self.attach(@btnSauvegardee,debutMilieu,1, 1, 1)
 		self.attach(@btnTutoriel,debutMilieu, 4, 2, 1)
-
 		self.attach(@btnAventure,debutMilieu, 6,2, 1)
-
 		self.attach(@btnChrono,debutMilieu, 9, 2, 1)
-
 		self.attach(@btnExplo,debutMilieu, 12, 2, 1)
-		
 		self.attach(@btnOptions, 2, @sizeGridWin-1, 1, 1)
 		self.attach(@btnQuitter, @sizeGridWin-2, @sizeGridWin-1, 1, 1)
 		self.attach(@btnProfil, @sizeGridWin -2 , 1, 1, 1)
@@ -49,20 +44,25 @@ class HudModeDeJeu < Hud
 	# Return self
 	# TODO : gérer l'exception ERRNOENT si pas de fichier (afficher un popup)
 	def initBoutonChargerSauvegarde
-		@btnSauvegarde = Gtk::Button.new 
-		styleBouton(@btnSauvegarde,Gtk::Label.new("Charger une sauvegarde"),"white","ultrabold","x-large")
 
-		@btnSauvegarde.signal_connect('clicked') do
-			File.open("saves/"+@@name+".txt", 'r') do |f|
-				dataLoaded=Marshal.load(f)
-				grille=dataLoaded[0]
-				@@mode=dataLoaded[1]
-				@difficulte=dataLoaded[2] # TODO ?????
-				case @@mode
-					when :explo then lancementExplo(grille)
-					when :rapide then lancementRapide(grille)
-					when :tutoriel then lancementTutoriel(grille)
-					when :aventure then lancementAventure(grille)
+		@btnSauvegardee = Gtk::Button.new :label => "Charger la dernière sauvegarde"
+		@btnSauvegardee.signal_connect('clicked') do
+			if !Dir.exist?("saves")
+				self.setDesc("Le dossier de sauvegarde n'existe pas !")
+			elsif !File.exist?("saves/"+@@name+".txt")
+				self.setDesc("Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !")
+			else
+				File.open("saves/"+@@name+".txt", 'r') do |f|
+					dataLoaded=Marshal.load(f)
+					grille=dataLoaded[0]
+					@@mode=dataLoaded[1]
+					@@difficulte=dataLoaded[2]
+					case @@mode
+						when :explo then lancementExplo(grille)
+						when :rapide then lancementRapide(grille)
+						when :tutoriel then lancementTutoriel(grille)
+						when :aventure then lancementAventure(grille)
+					end
 				end
 			end
 		end
@@ -88,7 +88,7 @@ class HudModeDeJeu < Hud
 		end
 		self
 	end
-	
+
 	# Crée et connecte le bouton de lancement du mode explo
 	# Return self
 	def initBoutonExplo
@@ -112,7 +112,7 @@ class HudModeDeJeu < Hud
 		end
 		self
 	end
-	
-	protected 
+
+	protected
 		attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
 end

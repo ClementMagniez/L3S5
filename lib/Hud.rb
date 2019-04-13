@@ -12,11 +12,16 @@ class Hud < Gtk::Grid
 	# Nom du joueur connecté, nécessaire à tous les menus de l'application
 	@@name=""
 	@@initblock=false
+	@@difficulte = nil
+	@@mode = nil
+
 	def initialize(window)
 		super()
 
 		@fenetre = window
 		@sizeGridWin = 20
+		
+		# Hacky façon de n'exécuter initWindow qu'une fois
 		@@initblock=@@initblock||self.initWindow
 
 		@lblDescription = Gtk::Label.new
@@ -51,8 +56,8 @@ class Hud < Gtk::Grid
 	def lancementAccueil
 		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
 	end
-	
-	
+
+
 	def lancementAventure(grille)
 		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
 	end
@@ -60,7 +65,7 @@ class Hud < Gtk::Grid
 	def lancementTutoriel(grille)
 		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
 	end
-	
+
 
 	def lancementRapide(grille)
 		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
@@ -74,8 +79,9 @@ class Hud < Gtk::Grid
 	def lancementModeJeu
 		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
 	end
-	
+
 	def lancementChoixDifficulte(mode)
+		@@mode = mode
 		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode))
 	end
 

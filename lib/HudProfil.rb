@@ -18,7 +18,7 @@ class HudProfil < Hud
 		self.attach(@entNom, 5, 2, 1, 1)
 		self.attach(Gtk::Label.new("Nouveau mot de passe"), 4, 3, 1, 1)
 		self.attach(@entMdp, 5, 3, 1, 1)
-		self.attach(@btnSauvegardeLogin, 4, 4, 2, 1)
+		self.attach(@btnSauvegardeeLogin, 4, 4, 2, 1)
 
 #		self.attach(@champScores, 0, 4, 2, 4)
 
@@ -39,8 +39,8 @@ class HudProfil < Hud
 	end
 
 	def initBoutonSauvegarderLogin
-		@btnSauvegardeLogin = Gtk::Button.new(label: "Sauvegarder les modifications")
-		@btnSauvegardeLogin.signal_connect("clicked") {
+		@btnSauvegardeeLogin = Gtk::Button.new(label: "Sauvegarder les modifications")
+		@btnSauvegardeeLogin.signal_connect("clicked") {
 			strNom = @entNom.text
 			strMdp = @entMdp.text
 			if(strNom.empty?)
