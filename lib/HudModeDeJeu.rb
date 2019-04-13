@@ -13,47 +13,39 @@ class HudModeDeJeu < Hud
 	# Paramètre : window - la Fenetre de l'application
 	def initialize(window)
 		super(window)
-		varX, varY = 4,4
+		# varX, varY = 4,4
  		self.setTitre("Choix du mode de jeu")
 
+		self.initBoutonChargerSauvegarde
+		self.initBoutonTuto
 		self.initBoutonAventure
 		self.initBoutonRapide
-		self.initBoutonTuto
-		self.initBoutonQuitter
-		self.initBoutonChargerSauvegarde
-		self.initBoutonProfil
 		self.initBoutonExplo
+		self.initBoutonProfil
+		self.initBoutonQuitter
 
 		# TODO - foutus nombres magiques
 		debutMilieu = (@sizeGridWin/2)-2
 
-		# self.attach(@btnSauvegarde,debutMilieu,1, 4, 1)
-		#
-		# self.attach(@btnTutoriel,debutMilieu, 4, 4, 1)
-		#
-		# self.attach(@btnAventure,debutMilieu, 6, 4, 3)
-		#
-		# self.attach(@btnChrono,debutMilieu, 9, 4, 3)
-		#
-		# self.attach(@btnExplo,debutMilieu, 12, 4, 3)
-		#
-		# self.attach(@btnOptions, 1, @sizeGridWin, 1, 1)
-		# self.attach(@btnQuitter, @sizeGridWin-1, @sizeGridWin-1, 1, 1)
-		# self.attach(@btnProfil, @sizeGridWin -1 , 1, 1, 1)
+
+
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@btnSauvegarde)
 		vBox.add(@btnTutoriel)
 		vBox.add(@btnAventure)
 		vBox.add(@btnChrono)
 		vBox.add(@btnExplo)
-		vBox.add(@btnOptions)
-		vBox.add(@btnQuitter)
-		vBox.add(@btnProfil)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(@btnOptions)
+			hBox.add(@btnProfil)
+			hBox.add(@btnQuitter)
+		vBox.add(hBox)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
-
 	end
 
 	# Crée et connecte le bouton de chargement d'une sauvegarde

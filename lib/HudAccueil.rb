@@ -1,50 +1,31 @@
-# require "rubygems"
 require_relative "connectSqlite3.rb"
 require_relative "Profil.rb"
 require_relative "Connexion.rb"
 
 class HudAccueil < Hud
-	# @btnConnecter
-	# @btnInscrire
-	# @btnQuitter
-	# @entryIdentifiant
-	# @entryMotDePasse
-
-
-
 	def initialize(window)
 		super(window)
-		varX, varY = 0, 0
+		# varX, varY = 0, 0
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
+		@entryMotDePasse.set_visibility(false)
 
 		# TODO TEMPORAIRE - confort de tests
 		@entryIdentifiant.text="test"
 		@entryMotDePasse.text="test"
 		####################################
 
-		initBoutonConnecter
 		initBoutonInscription
+		initBoutonConnecter
 		initBoutonQuitter
 
 
-		# self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
-		# self.attach(@entryIdentifiant,varX+2, varY+1, 1, 1)
-		#
-		# self.attach(Gtk::Label.new("Mot de passe : "),varX+1, varY+2, 1, 1)
-		# self.attach(@entryMotDePasse,varX+2, varY+2, 1, 1)
-		#
-		# self.attach(@btnInscrire,varX+1, varY+3, 1, 1)
-		# self.attach(@btnConnecter,varX+2, varY+3, 1, 1)
-		#
-		# self.attach(@btnOptions, varX, varY+4, 1, 1)
-		# self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
-		width = 250
+
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(Gtk::Label.new("Identifiant"))
 			hBox.add(@entryIdentifiant)
-			hBox.width_request = width
+			hBox.width_request = 100
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(Gtk::Label.new("Mot de passe : "))
@@ -54,8 +35,14 @@ class HudAccueil < Hud
 			hBox.add(@btnInscrire)
 			hBox.add(@btnConnecter)
 		vBox.add(hBox)
-		vBox.add(@btnQuitter)
-		vBox.add(@btnOptions)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(@btnOptions)
+				@btnOptions.valign = Gtk::Align::END
+				@btnOptions.halign = Gtk::Align::END
+			hBox.add(@btnQuitter)
+				@btnQuitter.valign = Gtk::Align::END
+				@btnQuitter.halign = Gtk::Align::END
+		vBox.add(hBox)
 		vBox.valign = Gtk::Align::CENTER
 		vBox.halign = Gtk::Align::CENTER
 
@@ -84,7 +71,6 @@ class HudAccueil < Hud
 	end
 
 	def initBoutonInscription
-		puts "Inscription => Traitement manquant"
 		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
 		@btnInscrire.signal_connect('clicked') do
 			self.lancementInscription

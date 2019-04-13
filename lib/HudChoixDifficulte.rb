@@ -44,9 +44,13 @@ class HudChoixDifficulte < Hud
 		vBox.add(@btnFacile)
 		vBox.add(@btnMoyen)
 		vBox.add(@btnDifficile)
-		vBox.add(@btnOptions)
-		vBox.add(@btnRetour)
-		vBox.add(@btnProfil)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(@btnOptions)
+			hBox.add(@btnProfil)
+			hBox.add(@btnRetour)
+		vBox.add(hBox)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 

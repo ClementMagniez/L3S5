@@ -35,6 +35,8 @@ class HudExploration < HudJeu
 			hBox.add(@lblAide)
 			hBox.add(@btnRetour)
 		vBox.add(hBox)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 

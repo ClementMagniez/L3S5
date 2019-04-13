@@ -4,19 +4,15 @@ class HudAventure < HudJeu
 	def initialize(window,grille)
 		super(window,grille)
 		@@NbPartie += 1
-
+		@varBoutonEnPlus=1
 
 		self.setTitre("Aventure")
+
 		initBoutonTimer
 		initBoutonPause
 		initBoutonReset
 
-		@varBoutonEnPlus=1
-		# self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-1,@sizeGridJeu,@sizeGridJeu+4)
-		#
-		# self.attach(@lblTime,@varDebutPlaceGrid,@varDebutPlaceGrid-2,@sizeGridJeu,1)
-		#
-		# self.attach(@btnPause,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
+
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(@lblTime)
@@ -30,12 +26,18 @@ class HudAventure < HudJeu
 				vBox2.add(@btnCancel)
 				vBox2.add(@btnRemplissage)
 				vBox2.add(@btnSauvegarde)
+				vBox2.valign = Gtk::Align::CENTER
 			hBox.add(vBox2)
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(@btnOptions)
+				@btnOptions.halign = Gtk::Align::START
 			hBox.add(@btnRetour)
+				@btnRetour.halign = Gtk::Align::END
+			# hBox.halign = Gtk::Align::CENTER
 		vBox.add(hBox)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 

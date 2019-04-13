@@ -25,6 +25,8 @@ class HudJeu < Hud
 		@tailleGrille = @grille.length
 
 		@sizeGridJeu = 10
+		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
+		@varDebutPlaceGrid = @sizeGridWin/4
 
 		initBoutonReset
 		initBoutonRetour
@@ -34,16 +36,6 @@ class HudJeu < Hud
 		initBoutonRemplissage
 		initBoutonRegle
 
-		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
-		@varDebutPlaceGrid = @sizeGridWin/4
-
-		# self.attach(@btnReset,@varFinPlaceGrid,@varFinPlaceGrid-4,1,1)
-		# self.attach(@btnCancel,@varFinPlaceGrid,@varFinPlaceGrid-3,1,1)
-		# self.attach(@btnRemplissage,@varFinPlaceGrid,@varFinPlaceGrid-2,1,1)
-		# self.attach(@btnSauvegard,@varFinPlaceGrid,@varFinPlaceGrid-1,1,1)
-		#
-		# self.attach(@btnRetour,@sizeGridWin-2,@sizeGridWin-2,1,1)
-		# self.attach(@btnOptions, 2, @sizeGridWin-2, 1,1)
 
 
 	end

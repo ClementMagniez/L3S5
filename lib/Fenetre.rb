@@ -21,8 +21,7 @@ require_relative 'HudRegle'
 class Fenetre < Gtk::Window
 	def initialize
 		super()
-		# @fullscreen = false
-        # self.set_resizable(true)
+        self.set_resizable(false)
 		# self.maximize
         self.signal_connect('destroy') { Gtk.main_quit }
 		self.add(HudAccueil.new(self))

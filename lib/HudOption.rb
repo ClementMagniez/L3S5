@@ -14,11 +14,22 @@ class HudOption < Hud
 		initBoutonRetour
 
 
-		self.attach(Gtk::Label.new("Mode : "),varX, varY, 1, 1)
-		self.attach(@btnFenetre,varX+1, varY, 1, 1)
-		self.attach(@btnRetour,varX+2, varY+1, 1, 1)
+		# self.attach(Gtk::Label.new("Mode : "),varX, varY, 1, 1)
+		# self.attach(@btnFenetre,varX+1, varY, 1, 1)
+		# self.attach(@btnRetour,varX+2, varY+1, 1, 1)
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(Gtk::Label.new("Mode de fenetre"))
+			hBox.add(@btnFenetre)
+		vBox.add(hBox)
+		vBox.add(@btnRetour)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
+
+		self.attach(vBox, 0, 0, 1, 1)
+
 		ajoutFondEcran
-		
+
 	end
 
 	def initBoutonFenetre

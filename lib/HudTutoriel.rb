@@ -30,11 +30,13 @@ class HudTutoriel < HudJeu
 				vBox2.add(@btnSauvegarde)
 			hBox.add(vBox2)
 		vBox.add(hBox)
+		vBox.add(@lblAide)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(@btnOptions)
-			hBox.add(@lblAide)
 			hBox.add(@btnRetour)
 		vBox.add(hBox)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 

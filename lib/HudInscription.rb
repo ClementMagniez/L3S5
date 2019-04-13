@@ -7,32 +7,36 @@ class HudInscription < Hud
 
 	def initialize(fenetre)
 		super(fenetre)
-
-		#label : Titre - Identifiant - Mot de passe 
-		@lblTitreInscr = Gtk::Label.new(" INSCRIPTION ")
-		@lblId = Gtk::Label.new("Identifiant : ")
-		@lblMdp = Gtk::Label.new("Mot de passe : ")
-
-		#Entrée : Identifiat - Mot de passe
+		self.setTitre("Inscription")
 		@entId = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
-		
 		# Rend le mot de passe entré invisible
-		@entMdp.set_visibility(FALSE)
-
-		#Label d'erreur
-		@lblErreur = Gtk::Label.new("Bonne inscription !")
+		@entMdp.set_visibility(false)
+		@lblErreur = Gtk::Label.new
 
 		initBoutonEnregistrement
 		initBoutonRetour
-		self.attach(@btnRetour,16,25,2,2)
-		self.attach(@lblErreur,2,1,2,1)
-		self.attach(@lblTitreInscr,2,0,2,1)
-		self.attach(@lblId,2,2,1,1)
-		self.attach(@entId,3,2,1,1)
-		self.attach(@lblMdp,2,3,1,1)
-		self.attach(@entMdp,3,3,1,1)
-		self.attach(@btnEnr,2,5,1,1)
+
+
+
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+		vBox.add(@lblErreur)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(Gtk::Label.new("Identifiant"))
+			hBox.add(@entId)
+		vBox.add(hBox)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(Gtk::Label.new("Mot de passe"))
+			hBox.add(@entMdp)
+		vBox.add(hBox)
+		vBox.add(@btnEnr)
+		vBox.add(@btnRetour)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
+
+		self.attach(vBox, 0, 0, 1, 1)
+
+		ajoutFondEcran
 	end
 	# Créé et initialise le bouton de retour
 	def initBoutonRetour
@@ -52,12 +56,12 @@ class HudInscription < Hud
 			else
 				#@lblErreur.set_label("Enregistrement base de donnée à faire.")
 				session = Connexion.new()
-				
+
 				id = @entId.text
 				mdp = @entMdp.text
 				mdp = session.crypterMdp(mdp)
 				#mdp = mdp.crypt(mdp)
-			
+
 				if id == "drop table" || mdp == "drop table"
 					@lblErreur.set_label("Entrez un identifiant et un mot de passe valides.")
 				elsif Profil.find_by(pseudonyme: id) != nil
@@ -69,11 +73,11 @@ class HudInscription < Hud
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-			
+
 					self.lancementModeJeu
 				end
 			end
 		}
 	end
-	
+
 end

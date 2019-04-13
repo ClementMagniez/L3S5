@@ -27,6 +27,8 @@ class HudFinDeJeu < Hud
 		vBox.add(lblScore)
 		vBox.add(@btnRecommencer)
 		vBox.add(@btnModeDeJeu)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 
@@ -44,7 +46,7 @@ class HudFinDeJeu < Hud
 	end
 
 	def initBoutonChangerModeDeJeu
-		@btnModeDeJeu = creerBouton(Gtk::Label.new("Changer de grille"),"white","ultrabold","x-large")
+		@btnModeDeJeu = creerBouton(Gtk::Label.new("Retour au menu"),"white","ultrabold","x-large")
 		@btnModeDeJeu.signal_connect('clicked'){
 			self.lancementModeJeu
 		}

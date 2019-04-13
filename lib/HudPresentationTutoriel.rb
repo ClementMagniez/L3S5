@@ -14,9 +14,11 @@ class HudPresentationTutoriel < Hud
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(styleLabel(Gtk::Label.new,"white","ultrabold","x-large","Bienvenue dans le mode tutoriel !"))
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.add(@btnContinuer)
 			hBox.add(@btnRegle)
+			hBox.add(@btnContinuer)
 		vBox.add(hBox)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 		ajoutFondEcran

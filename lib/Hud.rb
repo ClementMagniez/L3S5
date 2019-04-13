@@ -5,26 +5,22 @@ require 'gtk3'
 # à la connexion, instancie les éléments communs aux menus et permet le passage
 # de l'un à l'autre
 class Hud < Gtk::Grid
-	# @fenetre
-	# @btnOptions
-	# @lblDescription
-
-	# Nom du joueur connecté, nécessaire à tous les menus de l'application
 	@@name=""
 
 
 	def initialize(window)
 		super()
 		@fenetre = window
-		@lblDescription = Gtk::Label.new
+		setTitre("Des Tentes et des Arbres")
 		@winX = @fenetre.size.fetch(0)
 		@winY = @fenetre.size.fetch(1)
 
+		initBoutonOptions
 
 		#nombre de cellule horizontale et verticale de la  fenetre
 		@sizeGridWin = 20
 
-		initBoutonOptions
+		# initBoutonOptions
 
 		# fond = Gtk::Image.new( :file => "../img/fond2.png")
 		# fond.pixbuf = fond.pixbuf.scale(1280, 720)	if fond.pixbuf != nil
@@ -116,11 +112,6 @@ class Hud < Gtk::Grid
 		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
 	end
 
-	# Modifie la description : le texte en haut de la page
-	def setDesc(str)
-		@lblDescription.set_text(str)
-	end
-
 
 	# Modifie le titre de la fenetre
 	def setTitre(str)
@@ -153,9 +144,6 @@ class Hud < Gtk::Grid
 		self.styleLabel(label,couleur,style,size,label.text)
 		bouton.add(label)
 		bouton.set_relief(Gtk::ReliefStyle::NONE)
-	#	bouton.signal_connect('enter'){
-		#	styleLabel(label,"black",style,size,label.text)
-	#	}
 		return bouton
 	end
 
