@@ -82,7 +82,7 @@ class HudJeu < Hud
 						@grille[i][k].cycle(@grille)
 
 						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
-						 @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
+		#				 @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 
 					end
 				}
