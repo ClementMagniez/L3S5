@@ -18,11 +18,13 @@ class HudProfil < Hud
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.add(Gtk::Label.new("Nouveau nom"))
+			hBox.homogeneous = true
+			hBox.add(CustomLabel.new("Nouveau nom"))
 			hBox.add(@entNom)
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.add(Gtk::Label.new("Nouveau mot de passe"))
+			hBox.homogeneous = true
+			hBox.add(CustomLabel.new("Nouveau mot de passe"))
 			hBox.add(@entMdp)
 		vBox.add(hBox)
 		vBox.add(@champScores)

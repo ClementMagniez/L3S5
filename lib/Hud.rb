@@ -20,15 +20,6 @@ class Hud < Gtk::Grid
 
 		#nombre de cellule horizontale et verticale de la  fenetre
 		@sizeGridWin = 20
-
-		# initBoutonOptions
-
-		# fond = Gtk::Image.new( :file => "../img/fond2.png")
-		# fond.pixbuf = fond.pixbuf.scale(1280, 720)	if fond.pixbuf != nil
-		# self.attach(fond, 0, 0, 1, 1)
-
-		# self.halign = Gtk::Align::CENTER
-		# self.valign = Gtk::Align::CENTER
 	end
 
 	# TODO factoriser les lancementX
@@ -93,8 +84,9 @@ class Hud < Gtk::Grid
 		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
 	end
 
-	# Créé et initialise le bouton des options
-	# Le bouton affiche le menu des options
+	# Initialise le bouton des options :
+	# 	ajoute une variable d'instance @btnOptions
+	# 	initialise sont comportement
 	def initBoutonOptions
 		@btnOptions = Gtk::Button.new
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
@@ -106,11 +98,34 @@ class Hud < Gtk::Grid
 		}
 	end
 
-
-	# Créé et initialise le bouton de retour
+	# Initialise le bouton de retour au menu pricipal (choix des modes de jeu ) :
+	# 	ajoute une variable d'instance @btnRetour
+	# 	initialise sont comportement
 	def initBoutonRetour
 		@btnRetour = creerBouton(Gtk::Label.new("Retour"),"white","ultrabold","x-large")
 		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
+	end
+
+	# Initialise le bouton pour quitter (ferme la fenetre) :
+	# 	ajoute une variable d'instance @btnQuitter
+	# 	initialise sont comportement
+	def initBoutonQuitter
+		@btnQuitter = Gtk::Button.new
+		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
+		quitter = Gtk::Image.new(:file => '../img/quitter.png')
+		quitter.pixbuf = quitter.pixbuf.scale(@winX/20,@winX/20)	if quitter.pixbuf != nil
+		@btnQuitter.set_image(quitter)
+		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
+	end
+
+	# Initialise le bouton pour profil (lance le menu profil) :
+	# 	ajoute une variable d'instance @btnProfil
+	# 	initialise sont comportement
+	def initBoutonProfil
+		@btnProfil = creerBouton(Gtk::Label.new("Profil"),"white","ultrabold","x-large")
+		@btnProfil.signal_connect("clicked") do
+			lancementProfil
+		end
 	end
 
 
@@ -124,15 +139,6 @@ class Hud < Gtk::Grid
 		fond = Gtk::Image.new( :file => "../img/fond2.png")
 		fond.pixbuf = fond.pixbuf.scale(1280, 720)	if fond.pixbuf != nil
 		self.attach(fond,0,0,1, 1)
-	end
-
-	def initBoutonQuitter
-		@btnQuitter = Gtk::Button.new
-		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
-		quitter = Gtk::Image.new(:file => '../img/quitter.png')
-		quitter.pixbuf = quitter.pixbuf.scale(@winX/20,@winX/20)	if quitter.pixbuf != nil
-		@btnQuitter.set_image(quitter)
-		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
 	end
 
 	def styleLabel(label,couleur,style,size,contenu)
@@ -149,13 +155,6 @@ class Hud < Gtk::Grid
 	end
 
 
-	def initBoutonProfil
-		@btnProfil = creerBouton(Gtk::Label.new("Profil"),"white","ultrabold","x-large")
-		@btnProfil.signal_connect("clicked") do
-			lancementProfil
-		end
-
-	end
 
 
 end

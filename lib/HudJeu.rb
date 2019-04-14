@@ -28,33 +28,177 @@ class HudJeu < Hud
 		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
 		@varDebutPlaceGrid = @sizeGridWin/4
 
-		initBoutonReset
-		initBoutonRetour
-		initBoutonCancel
-		chargementGrille
-		initBoutonSauvegarde
-		initBoutonRemplissage
+		initTimer
 		initBoutonRegle
+		chargementGrille
+		initBoutonAide
+		initBoutonPause
+		initBoutonReset
+		initBoutonCancel
+		initBoutonRemplissage
+		initBoutonSauvegarde
+		initBoutonRetour
 
 
 
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+				@lblTime.hexpand = true
+				@lblTime.halign = Gtk::Align::CENTER
+			hBox.add(@lblTime)
+			hBox.add(@btnRegle)
+		vBox.add(hBox)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.halign = Gtk::Align::CENTER
+			hBox.add(@gridJeu)
+				vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+				vBox2.valign = Gtk::Align::CENTER
+				vBox2.add(@btnAide)
+				vBox2.add(@btnPause)
+				vBox2.add(@btnReset)
+				vBox2.add(@btnCancel)
+				vBox2.add(@btnRemplissage)
+				vBox2.add(@btnSauvegarde)
+			hBox.add(vBox2)
+		vBox.add(hBox)
+		vBox.add(@lblAide)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.vexpand = true
+			hBox.hexpand = true
+			hBox.homogeneous = true
+				@btnOptions.valign = Gtk::Align::END
+				@btnOptions.halign = Gtk::Align::START
+			hBox.add(@btnOptions)
+				@btnRetour.valign = Gtk::Align::END
+				@btnRetour.halign = Gtk::Align::END
+			hBox.add(@btnRetour)
+		vBox.add(hBox)
+
+		self.attach(vBox, 0, 0, 1, 1)
+
+		ajoutFondEcran
+	end
+
+	def desurbrillanceIndice
+		if @lblIndiceSubr != nil
+			self.styleLabel(@lblIndiceSubr,"white","ultrabold","x-large",@lblIndiceSubr.text)
+			#@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
+			@lblIndiceSubr = nil
+		end
+	end
+
+	def desurbrillanceCase
+		if @caseSurbrillanceList != nil
+			while not @caseSurbrillanceList.empty? # TODO chercher autre chose
+				caseSubr = @caseSurbrillanceList.shift
+				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
+									scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
+				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
+
+			end
+		end
+	end
+
+	def labelIndice(i,ligneOuColonne)
+		lblIndice = Gtk::Label.new
+		lblIndice.use_markup = true
+		if ligneOuColonne == "ligne"
+			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesLigne.fetch(i).to_s)
+		else
+			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesCol.fetch(i).to_s)
+		end
+
+		return lblIndice
+	end
+
+	# Réinitialise la grille
+	def reset
+		@grille.grille.each do |line|
+			line.each do |cell|
+				cell.reset
+				#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=scaleImage(cell.affichage)
+				# @gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(i,j))
+			end
+		end
+		@grille.raz
+		if @t != nil
+				@t.kill
+				@stockHorloge =0
+				@timer = Time.now
+				@t = Thread.new{timer}
+				if @pause
+					@btnPause.set_label("Pause")
+				end
+		end
 	end
 
 
-	def initBoutonRegle
-		@btnRegle = creerBouton(Gtk::Label.new("?"),"pink","ultrabold","xx-large")
-		# self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
+	# Méthode invoquée a la fin du jeu
+	def jeuTermine
+		self.lancementFinDeJeu
+	end
+
+	def getTime
+		if @horloge != nil
+			return @horloge
+		end
 	end
 
 
 
+
+	private
+
+	# Méthode appelée lorsque l'utilisateur souhaite avoir de l'aide
+	# 	Cette m"thode modifie le label d'aide @lblAide et les indices disponibles sur les lignes et colonnes, pour guider le joueur
+	def aide
+		# @lblAide = CustomLabel.new("")
+		# @lblAide.use_markup = true
+		# self.styleLabel(@lblAide,"white","normal","x-large","Bienvenue sur notre super jeu !")
+		#@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
+
+		# self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
+
+		image = Gtk::Image.new( :file => "../img/gris.png")
+		image.pixbuf = image.pixbuf.scale((@winX/2.5),(@winY/@sizeGridWin)*2)
+		# self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
+
+		taille = @grille.length
+
+		@btnAide = creerBouton(Gtk::Label.new("Aide"),"white","ultrabold","x-large")
+		@btnAide.signal_connect("clicked") {
+
+			tableau = @aide.cycle("rapide")
+			caseAide = tableau.at(0)
+			if caseAide != nil then
+
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
+					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
+
+			end
+			# @lblAide.use_markup = true
+			# styleLabel(@lblAide,'white','ultrabold','x-large',tableau.at(1))
+			@lblAide.set_text(tableau.at(1))
+
+			indice = tableau.at(3)
+
+			if tableau.at(2) != nil
+				if tableau.at(2) == false
+					lblIndice = @gridJeu.get_child_at(0,indice).child
+				else
+					lblIndice = @gridJeu.get_child_at(indice,0).child
+				end
+				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
+				@lblIndiceSubr = lblIndice
+			end
+		}
+	end
+
+	# Initialise la grille de jeu :
+	# 	ajoute une variable d'instance @gridJeu : la grille de jeu avec laquelle le joueur interagira
 	def chargementGrille
-		# taille = @grille.length
-		# positionne les indices autour de la table @gridJeu
-
-
 		# TODO - Ruby-fier ce loop
-
 		0.upto(@tailleGrille-1) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
 			lblIndiceCol = labelIndice(i,"colonne")
@@ -118,58 +262,80 @@ class HudJeu < Hud
 		return self
 	end
 
-	def desurbrillanceIndice
-		if @lblIndiceSubr != nil
-			self.styleLabel(@lblIndiceSubr,"white","ultrabold","x-large",@lblIndiceSubr.text)
-			#@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
-			@lblIndiceSubr = nil
-		end
+	# Initialise le bouton d'aide :
+	# 	ajoute une variable d'instance @lblAide
+	# 	ajoute une variable d'instance @btnAide
+	def initBoutonAide
+		@lblAide = CustomLabel.new("")
+		@btnAide = Gtk::Button.new(label: "Aide")
+		@btnAide.signal_connect("clicked") {
+			aide
+		}
 	end
 
-	def desurbrillanceCase
-		if @caseSurbrillanceList != nil
-			while not @caseSurbrillanceList.empty? # TODO chercher autre chose
-				caseSubr = @caseSurbrillanceList.shift
-				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
-									scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
-				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
-
+	# Initialise le bouton d'annulation :
+	# 	ajoute une variable d'instance @btnCancel
+	# 	initialise sont comportement
+	def initBoutonCancel
+		@btnCancel = creerBouton(Gtk::Label.new("Annuler"),"white","ultrabold","x-large")
+		@btnCancel.signal_connect('clicked'){
+			cell = @grille.cancel
+			if cell != nil
+				@gridJeu.get_child_at(cell.y+1,cell.x+1)\
+				.set_image(scaleImage(cell.affichage))
 			end
-		end
+		}
 	end
 
-
-	def labelIndice(i,ligneOuColonne)
-		lblIndice = Gtk::Label.new
-		lblIndice.use_markup = true
-		if ligneOuColonne == "ligne"
-			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesLigne.fetch(i).to_s)
-		else
-			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesCol.fetch(i).to_s)
-		end
-
-		return lblIndice
+	# Initialise le bouton pause :
+	# 	ajoute une variable d'instance @btnPause
+	# 	initialise sont comportement
+	def initBoutonPause
+		@btnPause = creerBouton(Gtk::Label.new("Pause"),"white","ultrabold","x-large")
+		@btnPause.signal_connect('clicked'){
+			if @pause
+				@timer = Time.now
+				@t = Thread.new{timer}
+				@btnPause.set_label("Pause")
+				@pause = false
+			else
+				@stockHorloge = @stockHorloge + (Time.now - @timer)
+				@t.kill
+				@btnPause.set_label("Play")
+				@pause = true
+			end
+		}
 	end
 
-
-	# A partir du fichier en path _string_, crée une Gtk::Image
-	# et la redimensionne pour s'adapter à la taille de la fenêtre
-	# Return cette Gtk::Image redimensionnée
-	def scaleImage(string)
-		image=Gtk::Image.new(:file => string)
-		winX = @fenetre.size.fetch(0)
-		winY = @fenetre.size.fetch(1)
-		imgSize = winY / (@tailleGrille*2)
-
-		# image = Gtk::Image.new :file => @grille[x][y].affichage
-		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
-
-		return image
+	# Initialise le bouton des règles de jeu :
+	# 	ajoute une variable d'instance @btnRegle
+	# 	initialise sont comportement
+	def initBoutonRegle
+		@btnRegle = creerBouton(Gtk::Label.new("?"),"pink","ultrabold","xx-large")
+		# self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
 	end
 
+	# Initialise le bouton de remplisssage des cases triviales, les cases non adjascentes à un arbre :
+	# 	ajoute une variable d'instance @btnRemplissage
+	# 	initialise sont comportement
+	def initBoutonRemplissage
+		@btnRemplissage = creerBouton(Gtk::Label.new("Remplir"),"white","ultrabold","x-large")
+		@btnRemplissage.signal_connect('clicked') {
+			liste = @aide.listeCasesGazon
+			while not liste.empty?
+				caseRemp = liste.pop
+				if caseRemp.statutVisible.isVide?
+					caseRemp.cycle(@grille)
+					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
 
-	# Créé un attribut @btnReset qui est le bouton de remise à zéro
-	# initialise le bouton
+				end
+			end
+		}
+	end
+
+	# Initialise le bouton reset (qui fait recommencer la grille) :
+	# 	ajoute une variable d'instance @btnReset
+	# 	initialise sont comportement
 	def initBoutonReset
 		@btnReset = creerBouton(Gtk::Label.new("Reset"),"white","ultrabold","x-large")
 		@btnReset.signal_connect("clicked") {
@@ -190,17 +356,23 @@ class HudJeu < Hud
 			end
 			desurbrillanceIndice
 		}
-
 	end
 
-	def getTime
-		if @horloge != nil
-			return @horloge
-		end
+	# Initialise le bouton de sauvegarde :
+	# 	ajoute une variable d'instance @btnSauvegarde
+	# 	initialise sont comportement
+	def initBoutonSauvegarde
+		@btnSauvegarde = creerBouton(Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
+		@btnSauvegarde.signal_connect('clicked') {
+			File.open("saves/"+@@name+".txt", 'w+') do |f|
+				f.write([Marshal.dump(@grille), Marshal.dump(@@mode), Marshal.dump(@@difficulte)])
+			end
+		}
 	end
 
-	def initBoutonTimer
-		@btnPause = creerBouton(Gtk::Label.new("Pause"),"white","ultrabold","x-large")
+	# Initialise le timer :
+	# 	ajoute une variable d'instance @lblTime, le label associé au timer.
+	def initTimer
 		@lblTime = CustomLabel.new("00:00")
 		@timer = Time.now
 		@pause = false
@@ -209,120 +381,23 @@ class HudJeu < Hud
 		@t=Thread.new{timer}
 	end
 
-	def initBoutonPause
-		@btnPause.signal_connect('clicked'){
-			if @pause
-				@timer = Time.now
-				@t = Thread.new{timer}
-				@btnPause.set_label("Pause")
-				@pause = false
-			else
-				@stockHorloge = @stockHorloge + (Time.now - @timer)
-				@t.kill
-				@btnPause.set_label("Play")
-				@pause = true
-			end
-		}
+	# A partir du fichier en path _string_, crée une Gtk::Image
+	# et la redimensionne pour s'adapter à la taille de la fenêtre
+	# Return cette Gtk::Image redimensionnée
+	def scaleImage(string)
+		image=Gtk::Image.new(:file => string)
+		winX = @fenetre.size.fetch(0)
+		winY = @fenetre.size.fetch(1)
+		imgSize = winY / (@tailleGrille*2)
 
+		# image = Gtk::Image.new :file => @grille[x][y].affichage
+		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
+
+		return image
 	end
 
-
-	def initBoutonCancel
-		@btnCancel = creerBouton(Gtk::Label.new("Cancel"),"white","ultrabold","x-large")
-		@btnCancel.signal_connect('clicked'){
-			cell = @grille.cancel
-			if cell != nil
-				@gridJeu.get_child_at(cell.y+1,cell.x+1)\
-				.set_image(scaleImage(cell.affichage))
-			end
-		}
-	end
-
-	# Réinitialise la grille
-	def reset
-		@grille.grille.each do |line|
-			line.each do |cell|
-				cell.reset
-				#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
-				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=scaleImage(cell.affichage)
-				# @gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(i,j))
-			end
-		end
-		@grille.raz
-		if @t != nil
-				@t.kill
-				@stockHorloge =0
-				@timer = Time.now
-				@t = Thread.new{timer}
-				if @pause
-					@btnPause.set_label("Pause")
-				end
-		end
-	end
-
-
-	# Méthode invoquée a la fin du jeu
-
-	def jeuTermine
-		self.lancementFinDeJeu
-	end
-
-	def initBoutonSauvegarde
-		@btnSauvegarde = creerBouton(Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
-		@btnSauvegarde.signal_connect('clicked') {
-			File.open("saves/"+@@name+".txt", 'w+') do |f|
-				f.write([Marshal.dump(@grille), Marshal.dump(@@mode), Marshal.dump(@@difficulte)])
-			end
-		}
-
-
-	end
-
-
-	#Fonction d'aide pour l'HUD exploration et rapide
-	def aide
-		@lblAide = CustomLabel.new("")
-		# @lblAide.use_markup = true
-		# self.styleLabel(@lblAide,"white","normal","x-large","Bienvenue sur notre super jeu !")
-		#@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
-
-		# self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
-
-		image = Gtk::Image.new( :file => "../img/gris.png")
-		image.pixbuf = image.pixbuf.scale((@winX/2.5),(@winY/@sizeGridWin)*2)
-		# self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
-
-		taille = @grille.length
-
-		@btnAide = creerBouton(Gtk::Label.new("Aide"),"white","ultrabold","x-large")
-		@btnAide.signal_connect("clicked") {
-
-			tableau = @aide.cycle("rapide")
-			caseAide = tableau.at(0)
-			if caseAide != nil then
-
-					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
-					puts(" X :" + caseAide.x.to_s + " Y :" +caseAide.y.to_s )
-
-			end
-			# @lblAide.use_markup = true
-			# styleLabel(@lblAide,'white','ultrabold','x-large',tableau.at(1))
-			@lblAide.set_text(tableau.at(1))
-
-			indice = tableau.at(3)
-
-			if tableau.at(2) != nil
-				if tableau.at(2) == false
-					lblIndice = @gridJeu.get_child_at(0,indice).child
-				else
-					lblIndice = @gridJeu.get_child_at(indice,0).child
-				end
-				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
-				@lblIndiceSubr = lblIndice
-			end
-		}
-	end
-
+	# Implémentation du timer,
+	# boucle infinie qui modifie @lblTime à chaque seconde qui passe
 	def timer
 		while true do
 			@horloge = (Time.now - @timer) + @stockHorloge
@@ -335,22 +410,4 @@ class HudJeu < Hud
 			sleep 1
 		end
 	end
-
-
-	def initBoutonRemplissage
-		@btnRemplissage = creerBouton(Gtk::Label.new("Remplir"),"white","ultrabold","x-large")
-		@btnRemplissage.signal_connect('clicked') {
-			liste = @aide.listeCasesGazon
-			while not liste.empty?
-				caseRemp = liste.pop
-				if caseRemp.statutVisible.isVide?
-					caseRemp.cycle(@grille)
-					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
-
-				end
-			end
-		}
-
-	end
-
 end
