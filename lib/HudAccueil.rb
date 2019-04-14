@@ -18,7 +18,7 @@ class HudAccueil < Hud
 		varX, varY = 0, 0
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
-		
+
 		# TODO TEMPORAIRE - confort de tests
 		@entryIdentifiant.text="test"
 		@entryMotDePasse.text="test"
@@ -30,9 +30,9 @@ class HudAccueil < Hud
 
 		# Rend le mot de passe entré invisible
 		@entryMotDePasse.set_visibility(false)
-		
+
 		@lblErreur = Gtk::Label.new("Connectez-vous !")
-		
+
 		self.attach(@lblErreur, varX+2, varY-1, 1, 1)
 
 		self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
@@ -56,7 +56,7 @@ class HudAccueil < Hud
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
 			@session = Connexion.new()
-				
+
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
 				@lblErreur.set_label("Veuillez renseigner tous les champs.")
 			elsif(@session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == -1)
@@ -73,7 +73,7 @@ class HudAccueil < Hud
 			end
 		}
 	end
-	
+
 	def initBoutonInscription
 		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
 		@btnInscrire.signal_connect('clicked'){

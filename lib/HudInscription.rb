@@ -6,7 +6,7 @@ class HudInscription < Hud
 	def initialize(fenetre)
 		super(fenetre)
 
-		#label : Titre - Identifiant - Mot de passe 
+		#label : Titre - Identifiant - Mot de passe
 		@lblTitreInscr = Gtk::Label.new(" INSCRIPTION ")
 		@lblId = Gtk::Label.new("Identifiant : ")
 		@lblMdp = Gtk::Label.new("Mot de passe : ")
@@ -14,7 +14,7 @@ class HudInscription < Hud
 		#Entrée : Identifiat - Mot de passe
 		@entId = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
-		
+
 		# Rend le mot de passe entré invisible
 		@entMdp.set_visibility(false)
 
@@ -49,11 +49,11 @@ class HudInscription < Hud
 				@lblErreur.set_label("Veuillez renseigner toutes les informations.")
 			else
 				session = Connexion.new()
-				
+
 				id = @entId.text
 				mdp = @entMdp.text
 				mdp = session.crypterMdp(mdp)
-			
+
 				if Profil.find_by(pseudonyme: id) != nil
 					@lblErreur.set_label("Cet identifiant existe déjà.")
 				else
@@ -64,11 +64,11 @@ class HudInscription < Hud
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-			
+
 					self.lancementModeJeu
 				end
 			end
 		}
 	end
-	
+
 end

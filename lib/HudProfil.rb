@@ -6,7 +6,7 @@ require_relative "connectSqlite3.rb"
 require_relative "Profil.rb"
 
 class HudProfil < Hud
-	
+
 	def initialize(window)
 		super(window)
 		self.setTitre("Profil")
@@ -16,13 +16,13 @@ class HudProfil < Hud
 		initChampScore
 		initBoutonSauvegarderLogin
 		initBoutonRetourMenu
-		
+
 		# Rend le mot de passe entré invisible
 		@entMdp.set_visibility(false)
 
 		# Affichage de l'identifiant de l'utilisateur connecté
 		#@lblLogin = Gtk::Label.new($login)
-		
+
 		#self.attach(@lblLogin, 0, -1, 2, 1)
 		self.attach(Gtk::Label.new("Compte"), 4, 0, 2, 1)
 		self.attach(@lblDescription, 4, 1, 2, 1)
@@ -35,7 +35,7 @@ class HudProfil < Hud
 #		self.attach(@champScores, 0, 4, 2, 4)
 
 		self.attach(@btnRetour, 1, 11, 1, 1)
-		
+
 		ajoutFondEcran
 	end
 
@@ -55,9 +55,9 @@ class HudProfil < Hud
 		@btnSauvegardeeLogin.signal_connect("clicked") {
 			strNom = @entNom.text
 			strMdp = @entMdp.text
-			
+
 			user = Profil.find_by(pseudonyme: $login)
-			
+
 			# Si aucun des champs n'est renseigné
 			if strNom.empty? && strMdp.empty?
 				self.setDesc("Vous devez remplir au moins un champ")
@@ -75,11 +75,11 @@ class HudProfil < Hud
 				else
 					user.pseudonyme = @entNom.text
 					user.save
-					
+
 					# Modification de l'affichage de l'identifiant de l'utilisateur connecté
 					#$login = strNom
 					#@lblLogin.set_label($login)
-					
+
 					self.setDesc("Modifications enregistrées !")
 				end
 			# Si les deux champs sont renseignés
@@ -92,13 +92,13 @@ class HudProfil < Hud
 					user.pseudonyme = strNom
 					user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)
 					user.save
-					
+
 					# Modification de l'affichage de l'identifiant de l'utilisateur connecté
 					#$login = strNom
 					#@lblLogin.set_label($login)
-					
+
 					self.setDesc("Modifications enregistrées !")
-				end			
+				end
 			end
 		}
 	end
@@ -109,7 +109,7 @@ class HudProfil < Hud
 			lancementModeJeu
 		}
 	end
-	
+
 	#				width=@menuResolution.split(*)[0].to_i
 	#			height=@menuResolution.split(*)[1].to_i
 end

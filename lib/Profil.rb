@@ -22,7 +22,7 @@ class Profil < ActiveRecord::Base
 
 	# @id, @pseudonyme, @mdpEncrypted - L'identifiant du joueur, une chaîne de caractères représentant
 	# son nom dans l'application, une chaîne de caractères lui permettant de se connecter à l'application
-	
+
 	##
 	# == to_s
 	#
