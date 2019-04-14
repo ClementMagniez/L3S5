@@ -19,18 +19,16 @@ class HudChoixDifficulte < Hud
 	# - mode : un symbole ∈ { :rapide, :explo, :aventure } - détermine quel mode de jeu est lancé
 	def initialize(window, mode)
 		super(window)
-		varX, varY = 4,4
- 		self.setTitre("Choix de la difficulté - mode #{:mode.to_s}")
 
+ 		self.setTitre("Choix de la difficulté - mode #{mode.to_s}")
+ 		@@mode=mode
  		# Définit la fonction de lancement utilisée selon le symbole fourni
 		@mode="lancement"+mode.to_s.capitalize
-
 
 		self.initBoutonsDifficulte
 		self.initBoutonRetour
 		self.initBoutonProfil
-
-		# TODO - foutus nombres magiques
+	
 		debutMilieu = (@sizeGridWin/2)-1
 
 		# self.attach(@btnFacile,debutMilieu, debutMilieu-1, 1, 1)
@@ -76,14 +74,17 @@ class HudChoixDifficulte < Hud
 		@btnDifficile = creerBouton(Gtk::Label.new("Difficile"),"white","ultrabold","x-large")
 
 		@btnFacile.signal_connect('clicked') do
+			@@difficulte = "Facile"
 			self.send(@mode, Grille.new(TAILLE_FACILE))
 		end
 
 		@btnMoyen.signal_connect('clicked') do
+			@@difficulte = "Moyen"
 			self.send(@mode, Grille.new(TAILLE_MOYEN))
 		end
 
 		@btnDifficile.signal_connect('clicked') do
+			@@difficulte = "Difficile"
 			self.send(@mode, Grille.new(TAILLE_DIFFICILE))
 		end
 		self

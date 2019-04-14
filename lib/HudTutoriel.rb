@@ -1,12 +1,23 @@
+# Menu de jeu du tutoriel
 class HudTutoriel < HudJeu
+
+	# Génère le menu de jeu
+	# - window : la fenêtre principale de l'application
+	# - grille : une Grille de jeu
 	def initialize (window,grille)
+#		window.set_hexpand(false)
+#		window.set_vexpand(false)
+
 		super(window,grille)
-		@lblAide = Gtk::Label.new()
+		@lblAide = Gtk::Label.new
 		@lblAide.use_markup = true
 		self.styleLabel(@lblAide,'white','normal','large','Bienvenue sur notre super jeu !')
 		self.setTitre("Tutoriel")
+		fondAide = Gtk::Image.new( :file => "../img/gris.png")
+		fondAide.pixbuf = fondAide.pixbuf.scale((@@winX/2.5),(@@winY/@sizeGridWin)*2)
 
 		initBoutonAide
+
 		aideTutoriel
 
 		@varBoutonEnPlus=1
@@ -40,11 +51,15 @@ class HudTutoriel < HudJeu
 
 		self.attach(vBox, 0, 0, 1, 1)
 
+#		self.attach(@btnAide,@varFinPlaceGrid-1,@varDebutPlaceGrid-2,4,2)	
+#		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-4,
+#								@sizeGridJeu,@sizeGridJeu+6)
+#		self.attach(@lblAide,@varDebutPlaceGrid-1,@varFinPlaceGrid+2,@sizeGridJeu,2)
+#		self.attach(fondAide,@varDebutPlaceGrid-1,@varFinPlaceGrid+2,@sizeGridJeu,2)
 		ajoutFondEcran
 	end
 
-
-	def aideTutoriel
+	def aide
 			tableau = @aide.cycle("tuto")
 			puts(tableau)
 			premAide = tableau.at(0)
@@ -80,17 +95,16 @@ class HudTutoriel < HudJeu
 			end
 	end
 
-
-
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide
 		taille = @grille.length
 		@caseSurbrillanceList = Array.new
 
 		@btnAide = creerBouton(Gtk::Label.new("Aide"),"white","ultrabold","x-large")
-		@btnAide.signal_connect("clicked") {
+		@btnAide.signal_connect("clicked") do
 			aideTutoriel
-		}
+		end
+		self
 	end
 
 end

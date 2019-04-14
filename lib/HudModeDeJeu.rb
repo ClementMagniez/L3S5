@@ -13,7 +13,6 @@ class HudModeDeJeu < Hud
 	# Paramètre : window - la Fenetre de l'application
 	def initialize(window)
 		super(window)
-		# varX, varY = 4,4
  		self.setTitre("Choix du mode de jeu")
 
 		self.initBoutonChargerSauvegarde
@@ -25,7 +24,7 @@ class HudModeDeJeu < Hud
 		self.initBoutonQuitter
 
 		# TODO - foutus nombres magiques
-		debutMilieu = (@sizeGridWin/2)-2
+		debutMilieu = @sizeGridWin/2-2
 
 
 
@@ -57,7 +56,6 @@ class HudModeDeJeu < Hud
 		vBox.add(hBox)
 
 		self.attach(vBox, 0, 0, 1, 1)
-
 		ajoutFondEcran
 	end
 
@@ -65,19 +63,28 @@ class HudModeDeJeu < Hud
 	# Return self
 	# TODO : gérer l'exception ERRNOENT si pas de fichier (afficher un popup)
 	def initBoutonChargerSauvegarde
+
 		@btnSauvegarde = creerBouton(Gtk::Label.new("Charger une sauvegarde"),"white","ultrabold","x-large")
 
+
+		@btnSauvegarde = Gtk::Button.new :label => "Charger la dernière sauvegarde"
 		@btnSauvegarde.signal_connect('clicked') do
-			File.open("saves/"+@@name+".txt", 'r') do |f|
-				dataLoaded=Marshal.load(f)
-				grille=dataLoaded[0]
-				@@mode=dataLoaded[1]
-				@difficulte=dataLoaded[2]
-				case @@mode
-					when :explo then lancementExplo(grille)
-					when :rapide then lancementRapide(grille)
-					when :tutoriel then lancementTutoriel(grille)
-					when :aventure then lancementAventure(grille)
+			if !Dir.exist?("saves")
+				self.setDesc("Le dossier de sauvegarde n'existe pas !")
+			elsif !File.exist?("saves/"+@@name+".txt")
+				self.setDesc("Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !")
+			else
+				File.open("saves/"+@@name+".txt", 'r') do |f|
+					dataLoaded=Marshal.load(f)
+					grille=dataLoaded[0]
+					@@mode=dataLoaded[1]
+					@@difficulte=dataLoaded[2]
+					case @@mode
+						when :explo then lancementExplo(grille)
+						when :rapide then lancementRapide(grille)
+						when :tutoriel then lancementTutoriel(grille)
+						when :aventure then lancementAventure(grille)
+					end
 				end
 			end
 		end

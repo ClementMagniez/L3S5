@@ -1,26 +1,20 @@
 require_relative 'Hud'
 
-# class abstraite permettant de créer un ecran de jeu
+# Classe abstraite permettant de créer un écran de jeu 
 class HudJeu < Hud
 	attr_reader :grille, :timer
-	# @btnReset
-	# @btnAide
-	# @btnRetour
-	# @lblAide
-	# @gridJeu
-	# @aide
-	# @grille
 
+	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
+	# - window : la fenêtre principale de l'application
+	# - grille : une Grille de jeu
 	def initialize(window,grille)
 		super(window)
 		@align = Gtk::Align.new(1)
 		@aide = Aide.new(grille)
-
+		
 		@gridJeu = Gtk::Grid.new
-			@gridJeu.set_column_homogeneous(true)
-			@gridJeu.set_row_homogeneous(true)
-			@gridJeu.set_halign(@align)
-			@gridJeu.set_valign(@align)
+		@gridJeu.set_halign(@align)
+		@gridJeu.set_valign(@align)
 		@grille = grille
 		@tailleGrille = @grille.length
 
@@ -35,8 +29,6 @@ class HudJeu < Hud
 		initBoutonSauvegarde
 		initBoutonRemplissage
 		initBoutonRegle
-
-
 
 	end
 
@@ -72,20 +64,20 @@ class HudJeu < Hud
 				}
 				desurbrillanceIndice
 			}
-			# ici les indices des lignes (nb tentes sur chaque ligne)
+#			 ici les indices des lignes (nb tentes sur chaque ligne)
 			lblIndiceLig = labelIndice(i,"ligne")
 			btnIndiceLig = Gtk::Button.new
 			btnIndiceLig.add(lblIndiceLig)
 			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
-			#Quand on clique dessus, met toutes les cases vides à gazon
+#			Quand on clique dessus, met toutes les cases vides à gazon
 			btnIndiceLig.signal_connect("clicked") {
 				0.upto(@tailleGrille-1) { |k|
 					if @grille[i][k].statutVisible.isVide?
 						@grille[i][k].cycle(@grille)
 
 						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
-						# @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
+		#				 @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 
 					end
 				}
@@ -120,7 +112,8 @@ class HudJeu < Hud
 
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
-			self.styleLabel(@lblIndiceSubr,"white","ultrabold","x-large",@lblIndiceSubr.text)
+			size=self.getIndiceSize
+			self.styleLabel(@lblIndiceSubr,"white","ultrabold",size,@lblIndiceSubr.text)
 			#@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
 			@lblIndiceSubr = nil
 		end
@@ -132,20 +125,27 @@ class HudJeu < Hud
 				caseSubr = @caseSurbrillanceList.shift
 				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
 									scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
-				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
 
 			end
 		end
+	end
+
+	# Renvoie la taille préférentielle des nombres encadrant la grille
+	def getIndiceSize
+			return @grille.length>12 ? "small" : "x-large"
 	end
 
 
 	def labelIndice(i,ligneOuColonne)
 		lblIndice = Gtk::Label.new
 		lblIndice.use_markup = true
+		size=self.getIndiceSize
 		if ligneOuColonne == "ligne"
-			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesLigne.fetch(i).to_s)
+			self.styleLabel(lblIndice,"white","ultrabold",size,
+											@grille.tentesLigne.fetch(i).to_s)
 		else
-			self.styleLabel(lblIndice,"white","ultrabold","x-large",@grille.tentesCol.fetch(i).to_s)
+			self.styleLabel(lblIndice,"white","ultrabold",	size,
+											@grille.tentesCol.fetch(i).to_s)
 		end
 
 		return lblIndice
@@ -157,9 +157,10 @@ class HudJeu < Hud
 	# Return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
-		winX = @fenetre.size.fetch(0)
-		winY = @fenetre.size.fetch(1)
-		imgSize = winY / (@tailleGrille*2)
+
+		minSize=(@@winX > @@winY ? @@winY : @@winX) / @grille.length
+		minSize*=0.4		
+		imgSize =  minSize#@@winX / (@tailleGrille*5) # TODO tester
 
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
@@ -268,14 +269,13 @@ class HudJeu < Hud
 	end
 
 	def initBoutonSauvegarde
-		@btnSauvegarde = creerBouton(Gtk::Label.new("Sauvegarder"),'white','ultrabold','x-large')
-		@btnSauvegarde.signal_connect('clicked') {
-			File.open("saves/"+@@name+".txt", 'w+') do |f|
-				f.write([Marshal.dump(@grille), Marshal.dump(@@mode), Marshal.dump(@@difficulte)])
+		@btnSauvegarde = Gtk::Button.new :label => "Sauvegarder"
+		@btnSauvegarde.signal_connect('clicked') do
+			Dir.mkdir("saves")	unless Dir.exist?("saves")
+			File.open("saves/"+@@name+".txt", "w+", 0644) do |f|
+				f.write( Marshal.dump([@grille,@@mode,@@difficulte]))
 			end
-		}
-
-
+		end
 	end
 
 
@@ -289,10 +289,13 @@ class HudJeu < Hud
 		# self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
 
 		image = Gtk::Image.new( :file => "../img/gris.png")
-		image.pixbuf = image.pixbuf.scale((@winX/2.5),(@winY/@sizeGridWin)*2)
-		# self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
+
+		image.pixbuf = image.pixbuf.scale((@@winX/2.5),(@@winY/@sizeGridWin)*2)
+#		self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2) # TODO
 
 		taille = @grille.length
+	
+		size=self.getIndiceSize
 
 		@btnAide = creerBouton(Gtk::Label.new("Aide"),"white","ultrabold","x-large")
 		@btnAide.signal_connect("clicked") {
@@ -317,7 +320,7 @@ class HudJeu < Hud
 				else
 					lblIndice = @gridJeu.get_child_at(indice,0).child
 				end
-				styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
+				styleLabel(lblIndice,'red','ultrabold',size,lblIndice.text)
 				@lblIndiceSubr = lblIndice
 			end
 		}
@@ -339,18 +342,16 @@ class HudJeu < Hud
 
 	def initBoutonRemplissage
 		@btnRemplissage = creerBouton(Gtk::Label.new("Remplir"),"white","ultrabold","x-large")
-		@btnRemplissage.signal_connect('clicked') {
+		@btnRemplissage.signal_connect('clicked') do
 			liste = @aide.listeCasesGazon
 			while not liste.empty?
 				caseRemp = liste.pop
 				if caseRemp.statutVisible.isVide?
 					caseRemp.cycle(@grille)
 					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
-
 				end
 			end
-		}
-
+		end
 	end
 
 end

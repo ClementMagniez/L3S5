@@ -15,6 +15,7 @@ class HudFinDeJeu < Hud
 		lblScore = CustomLabel.new("Votre score : 0")
 		# lblScore = Gtk::Label.new("Score = " + fenetrePrecedente.grille.calculerScoreFinal)
 
+
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 

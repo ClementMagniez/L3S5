@@ -63,6 +63,7 @@ class HudAccueil < Hud
 			hBox.add(@btnQuitter)
 		vBox.add(hBox)
 
+
 		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
@@ -79,6 +80,10 @@ class HudAccueil < Hud
 				puts "Veuillez renseigner tous les champs."
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
 				@@name=@entryIdentifiant.text
+				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+				@@winX=f['resolution']['width']
+				@@winY=f['resolution']['height']
+				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
 			else
 				# Ici, il faudrait afficher un message d'erreur sur la fenêtre

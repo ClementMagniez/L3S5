@@ -7,19 +7,29 @@ require_relative 'CustomLabel'
 # de l'un à l'autre
 class Hud < Gtk::Grid
 	@@name=""
-
+	@@initblock=false
+	@@difficulte = nil
+	@@mode = nil
 
 	def initialize(window)
 		super()
+
 		@fenetre = window
+		# Hacky façon de n'exécuter initWindow qu'une fois
+		@@initblock=@@initblock||self.initWindow
 		setTitre("Des Tentes et des Arbres")
-		@winX = @fenetre.size.fetch(0)
-		@winY = @fenetre.size.fetch(1)
 
 		initBoutonOptions
 
 		#nombre de cellule horizontale et verticale de la  fenetre
 		@sizeGridWin = 20
+		
+
+#		@lblDescription = Gtk::Label.new
+
+
+		initBoutonOptions
+
 
 		# initBoutonOptions
 
@@ -30,6 +40,23 @@ class Hud < Gtk::Grid
 		# self.halign = Gtk::Align::CENTER
 		# self.valign = Gtk::Align::CENTER
 	end
+
+	def initWindow
+		puts "Initialisation des HUD"
+		@@winX = @fenetre.size.fetch(0)
+		@@winY = @fenetre.size.fetch(1)
+
+		@fenetre.signal_connect('check-resize') do |window|
+			if window.size[0]!=@@winX && window.size[1]!=@@winY
+				puts (window.size[0].to_s + "," + window.size[1].to_s)
+
+				self.remove(@fond) if @fond !=nil
+				ajoutFondEcran
+			end
+		end
+		true
+	end
+
 
 	# TODO factoriser les lancementX
 
@@ -61,6 +88,7 @@ class Hud < Gtk::Grid
 	end
 
 	def lancementChoixDifficulte(mode)
+		@@mode = mode
 		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode))
 	end
 
@@ -99,7 +127,7 @@ class Hud < Gtk::Grid
 		@btnOptions = Gtk::Button.new
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
-		engrenage.pixbuf = engrenage.pixbuf.scale(@winX/20,@winX/20)	if engrenage.pixbuf != nil
+		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
 				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
@@ -121,23 +149,27 @@ class Hud < Gtk::Grid
 
 
 	def ajoutFondEcran
-		fond = Gtk::Image.new( :file => "../img/fond2.png")
-		fond.pixbuf = fond.pixbuf.scale(1280, 720)	if fond.pixbuf != nil
-		self.attach(fond,0,0,1, 1)
-	end
 
+		@fond = Gtk::Image.new( pixbuf: updateFondEcran(@@winX, @@winY))
+		self.attach(@fond,0,0,1,1)
+		@fond.set_visible(true)
+
+	end
+	
+	def updateFondEcran(width, height)
+			return GdkPixbuf::Pixbuf.new( :file => "../img/fond2.png",\
+																		:width=>width,:height=>height)
+	end	
+	
 	def initBoutonQuitter
 		@btnQuitter = Gtk::Button.new
 		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
 		quitter = Gtk::Image.new(:file => '../img/quitter.png')
-		quitter.pixbuf = quitter.pixbuf.scale(@winX/20,@winX/20)	if quitter.pixbuf != nil
+		quitter.pixbuf = quitter.pixbuf.scale(@@winX/20,@@winX/20)	if quitter.pixbuf != nil
 		@btnQuitter.set_image(quitter)
 		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
 	end
 
-	def styleLabel(label,couleur,style,size,contenu)
-		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
-	end
 
 
 	def creerBouton(label,couleur,style,size)
@@ -154,8 +186,17 @@ class Hud < Gtk::Grid
 		@btnProfil.signal_connect("clicked") do
 			lancementProfil
 		end
-
 	end
 
+
+	def styleLabel(label,couleur,style,size,contenu)
+		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
+	end
+
+	def resizeWindow(width, height)
+		@fenetre.set_resizable(true)
+		@fenetre.resize(width,height)
+		@fenetre.set_resizable(false)
+	end
 
 end

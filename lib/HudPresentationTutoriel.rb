@@ -26,15 +26,15 @@ class HudPresentationTutoriel < Hud
 
 	def initBoutonRegle
 		@btnRegle = creerBouton(Gtk::Label.new("Regle"),"white","ultrabold","x-large")
-		@btnRegle.signal_connect('clicked'){
+		@btnRegle.signal_connect('clicked') do
 			lancementHudRegle
-		}
+		end
 	end
 
 	def initBoutonContinuer
 		@btnContinuer = creerBouton(Gtk::Label.new("Continuer"),"white","ultrabold","x-large")
-		@btnContinuer.signal_connect('clicked'){
+		@btnContinuer.signal_connect('clicked') do
 			 lancementTutoriel(@grille)
-		}
+		end
 	end
 end
