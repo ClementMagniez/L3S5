@@ -13,8 +13,8 @@ class HudJeu < Hud
 		@aide = Aide.new(grille)
 
 		@gridJeu = Gtk::Grid.new
-		@gridJeu.set_halign(@align)
-		@gridJeu.set_valign(@align)
+		@gridJeu.row_homogeneous = true
+		@gridJeu.column_homogeneous = true
 		@grille = grille
 		@tailleGrille = @grille.length
 
@@ -85,10 +85,9 @@ class HudJeu < Hud
 		if @caseSurbrillanceList != nil
 			while not @caseSurbrillanceList.empty? # TODO chercher autre chose
 				caseSubr = @caseSurbrillanceList.shift
-				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
-									scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
-				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).set_image(scaleImage(caseSubr.x,caseSubr.y))
-
+				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
+				# 					scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
+				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).replace(scaleImage(@grille[caseSubr.x][caseSubr.y].affichage))
 			end
 		end
 	end
@@ -115,8 +114,7 @@ class HudJeu < Hud
 			line.each do |cell|
 				cell.reset
 				#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
-				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=scaleImage(cell.affichage)
-				# @gridJeu.get_child_at(j+1,i+1).set_image(scaleImage(i,j))
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
 			end
 		end
 		@grille.raz
@@ -154,8 +152,8 @@ protected
 		tableau = @aide.cycle("rapide")
 		caseAide = tableau.at(0)
 		if caseAide != nil
-			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1)\
-			.set_image(scaleImage(caseAide.affichageSubr))
+			# @gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
+			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage(caseAide.affichageSubr))
 		end
 		 @lblAide.set_text(tableau.at(1))
 
@@ -190,7 +188,8 @@ protected
 				0.upto(@tailleGrille-1) { |k|
 					if @grille[k][i].statutVisible.isVide?
 						@grille[k][i].cycle(@grille)
-						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
+						# @gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
+						@gridJeu.get_child_at(i+1,k+1).replace(scaleImage(@grille[k][i].affichage))
 					end
 				}
 				desurbrillanceIndice
@@ -206,9 +205,8 @@ protected
 					if @grille[i][k].statutVisible.isVide?
 						@grille[i][k].cycle(@grille)
 
-						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
 		#				 @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
-
+						@gridJeu.get_child_at(k+1,i+1).replace(scaleImage(@grille[i][k].affichage))
 					end
 				}
 				desurbrillanceIndice
@@ -218,20 +216,14 @@ protected
 		# positionne les cases de la grille
 		@grille.grille.each do |line|
 			line.each do |cell|
-				button = Gtk::Button.new()
-				button.set_relief(Gtk::ReliefStyle::NONE)
-
-				button.set_image(scaleImage(cell.affichage))
-				# button.add(scaleImage(cell.affichage))
-				# button.set_image(scaleImage(i,j))
-				button.signal_connect("clicked") do
+				button = CustomEventBox.new
+				button.add(scaleImage(cell.affichage))
+				button.signal_connect("button-press-event") do
 					cell.cycle(@grille)
-					button.set_image(scaleImage(cell.affichage))
-					# button.remove_child
-					# button.add(scaleImage(cell.affichage))
-					# button.set_image(i,j)
+					button.replace(scaleImage(cell.affichage))
 					desurbrillanceCase
 					desurbrillanceIndice
+					# Sleep pour palié les clique trop rapide qui font passé 2 états à la suite
 					self.jeuTermine		if @grille.estValide
 				end
 				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
@@ -244,13 +236,8 @@ protected
 	# 	ajoute une variable d'instance @lblAide
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
-<<<<<<< HEAD
 		@lblAide = CustomLabel.new
 		@btnAide = CustomButton.new("Aide")
-=======
-		@lblAide = CustomLabel.new('','white','x-large','ultrabold')
-		@btnAide = Gtk::Button.new(label: "Aide")
->>>>>>> 10d230026b89c0e368f6dda9778e4e9d9dcebd37
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide
 		}
@@ -260,16 +247,13 @@ protected
 	# 	ajoute une variable d'instance @btnCancel
 	# 	initialise sont comportement
 	def initBoutonCancel
-<<<<<<< HEAD
 		@btnCancel = CustomButton.new("Annuler")
-=======
-		@btnCancel = creerBouton(Gtk::Label.new("Annuler"),"white","ultrabold","x-large")
->>>>>>> 10d230026b89c0e368f6dda9778e4e9d9dcebd37
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil
-				@gridJeu.get_child_at(cell.y+1,cell.x+1)\
-				.set_image(scaleImage(cell.affichage))
+				# @gridJeu.get_child_at(cell.y+1,cell.x+1)\
+				# .set_image(scaleImage(cell.affichage))
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
 			end
 		}
 	end
@@ -313,8 +297,8 @@ protected
 				caseRemp = liste.pop
 				if caseRemp.statutVisible.isVide?
 					caseRemp.cycle(@grille)
-					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
-
+					# @gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
+					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).replace(scaleImage(caseRemp.affichage))
 				end
 			end
 		}
@@ -381,7 +365,7 @@ protected
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
 
-		imgSize = @@winY / (@tailleGrille*2)
+		imgSize = @@winY / (@tailleGrille*1.4)
 		imgSize*=0.85
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil

@@ -2,6 +2,7 @@ require 'gtk3'
 require_relative 'Grille'
 require_relative 'CustomLabel'
 require_relative 'CustomButton'
+require_relative 'CustomEventBox'
 
 # Superclasse abstraite de tous les menus de l'application : enregistre le nom du joueur
 # à la connexion, instancie les éléments communs aux menus et permet le passage
