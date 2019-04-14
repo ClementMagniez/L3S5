@@ -249,7 +249,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @lblAide
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
-		@lblAide = CustomLabel.new('white','x-large','ultrabold')
+		@lblAide = CustomLabel.new('','white','x-large','ultrabold')
 		@btnAide = Gtk::Button.new(label: "Aide")
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide
@@ -260,7 +260,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @btnCancel
 	# 	initialise sont comportement
 	def initBoutonCancel
-		@btnCancel = creerBouton(Gtk::Label.new("Annuler"),"white","x-large","ultrabold")
+		@btnCancel = creerBouton(Gtk::Label.new("Annuler"),"white","ultrabold","x-large")
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil
