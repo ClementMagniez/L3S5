@@ -20,8 +20,8 @@ class HudAccueil < Hud
 		@entryMotDePasse = Gtk::Entry.new
 		
 		# TODO TEMPORAIRE - confort de tests
-		#@entryIdentifiant.text="test"
-		#@entryMotDePasse.text="test"
+		@entryIdentifiant.text="test"
+		@entryMotDePasse.text="test"
 		####################################
 
 		initBoutonConnecter
