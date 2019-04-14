@@ -18,7 +18,11 @@ class HudAccueil < Hud
 		varX, varY = 0, 0
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
-
+		
+		# TODO TEMPORAIRE - confort de tests
+		#@entryIdentifiant.text="test"
+		#@entryMotDePasse.text="test"
+		####################################
 
 		initBoutonConnecter
 		initBoutonInscription
@@ -40,11 +44,10 @@ class HudAccueil < Hud
 		self.attach(@btnInscrire,varX+1, varY+3, 1, 1)
 		self.attach(@btnConnecter,varX+2, varY+3, 1, 1)
 
-		self.attach(@btnOptions, varX, varY+4, 1, 1)
+#		self.attach(@btnOptions, varX, varY+4, 1, 1)
 		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
 
-			fond = ajoutFondEcran
-		self.attach(fond,0,0,5,5)
+		ajoutFondEcran
 	end
 
 
@@ -59,7 +62,13 @@ class HudAccueil < Hud
 			elsif(@session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == -1)
 				@lblErreur.set_label("Identifiant ou mot de passe incorrect.")
 			else
-				$login = @session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text())
+				#$login = @session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text())
+				$login = @entryIdentifiant.text
+				@@name=@entryIdentifiant.text
+				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+				@@winX=f['resolution']['width']
+				@@winY=f['resolution']['height']
+				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
 			end
 		}
@@ -71,7 +80,4 @@ class HudAccueil < Hud
 			self.lancementInscription
 		}
 	end
-	
-	attr_reader :session
-
 end

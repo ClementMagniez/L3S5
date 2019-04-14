@@ -1,12 +1,9 @@
-require_relative 'StatutConstantes'
-
 # Définit un statut pour les Cases du jeu
 # Un statut est ce que contient la case parmi les diverses possibilités du jeu :
 # arbre (coché/décoché), rien, gazon, tente.
 # Cette classe est à considérer abstraite.
 
 class Statut
-	include StatutConstantes
 
 	# Constructeur appelé par Case#initialize
 	def initialize(statut)

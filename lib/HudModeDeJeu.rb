@@ -1,155 +1,118 @@
+# Instance du menu de sélection des modes de jeu : permet la sélection
+# entre l'un des quatre modes, le chargement d'une sauvegarde, l'accès au profil,
+# aux options, et un retour au menu de connexion
+
+# TODO : bouton d'accès au menu de connexion
+# virer le choix de la difficulté : le remettre dans un autre menu auquel on accède
+# en choisissant l'un des trois modes de jeu
 class HudModeDeJeu < Hud
-	# @@tailleFacile
-	# @@tailleMoyen
-	# @@tailleDifficile
 
-	# @btnTutoriel
-	# @btnAvFacile
-	# @btnAvMoyen
-	# @btnAvDifficile
-	# @btnRapideFacile
-	# @btnRapideMoyen
-	# @btnRapideDifficile
 
-	def initialize (window)
+	# Instancie le menu de sélection
+	#
+	# Paramètre : window - la Fenetre de l'application
+	def initialize(window)
 		super(window)
-		varX, varY = 4,4
-		@@tailleFacile = 6
-		@@tailleMoyen = 9
-		@@tailleDifficile = 12
+ 		self.setTitre("Choix du mode de jeu")
 
-		@@tempsFacile = 15
-		@@tempsMoyen = 10
-		@@tempsDifficile = 5
-		self.setTitre("MODE DE JEU")
+		self.initBoutonAventure
+		self.initBoutonRapide
+		self.initBoutonTuto
+		self.initBoutonQuitter
+		self.initBoutonChargerSauvegarde
+		self.initBoutonProfil
+		self.initBoutonExplo
+
+		# TODO - foutus nombres magiques
+		debutMilieu = @sizeGridWin/2-2
 
 
+		self.attach(@btnSauvegardee,debutMilieu,1, 1, 1)
+		self.attach(@btnTutoriel,debutMilieu, 4, 2, 1)
+		self.attach(@btnAventure,debutMilieu, 6,2, 1)
+		self.attach(@btnChrono,debutMilieu, 9, 2, 1)
+		self.attach(@btnExplo,debutMilieu, 12, 2, 1)
+		self.attach(@btnOptions, 2, @sizeGridWin-1, 1, 1)
+		self.attach(@btnQuitter, @sizeGridWin-2, @sizeGridWin-1, 1, 1)
+		self.attach(@btnProfil, @sizeGridWin -2 , 1, 1, 1)
 
-		initBoutonsAventure
-		initBoutonsRapide
-		initBoutonTuto
-		initBoutonQuitter
-		initBoutonChargerSauvegarde
-		initBoutonProfil
-		initBoutonsExplo
+		ajoutFondEcran
 
-		#Bouton sauvegarde !
-		self.attach(@btnSauvegarde,varX,varY-2,2,1)
-
-		self.attach(@btnTutoriel,varX, varY, 2, 1)
-
-		self.attach(Gtk::Label.new("Mode Aventure"),varX, varY+1, 2, 1)
-			self.attach(@btnAvFacile,varX+1, varY+2, 1, 1)
-			self.attach(@btnAvMoyen,varX+1, varY+3, 1, 1)
-			self.attach(@btnAvDifficile,varX+1, varY+4, 1, 1)
-
-		self.attach(Gtk::Label.new("Mode rapide"),varX, varY+5, 2, 1)
-			self.attach(@btnRapideFacile,varX+1, varY+6, 1, 1)
-			self.attach(@btnRapideMoyen,varX+1, varY+7, 1, 1)
-			self.attach(@btnRapideDifficile,varX+1, varY+8, 1, 1)
-
-		self.attach(Gtk::Label.new("Mode exploration"),varX, varY+9, 2, 1)
-			self.attach(@btnExloFacile,varX+1, varY+10, 1, 1)
-			self.attach(@btnExploMoyen,varX+1, varY+11, 1, 1)
-			self.attach(@btnExploDifficile,varX+1, varY+12, 1, 1)
-
-		self.attach(@btnOptions, 1, varY+14, 1, 1)
-
-		self.attach(@btnQuitter, varX+4, varY+14, 1, 1)
-
-		self.attach(@btnProfil, varX+2, varY, 1, 1)
-
-			fond = self.ajoutFondEcran
-		self.attach(fond,0,0,varX+6,varY+15)
 	end
 
+	# Crée et connecte le bouton de chargement d'une sauvegarde
+	# Return self
+	# TODO : gérer l'exception ERRNOENT si pas de fichier (afficher un popup)
 	def initBoutonChargerSauvegarde
-		@btnSauvegarde = Gtk::Button.new :label => "Charger une sauvegarde"
-		@btnSauvegarde.signal_connect('clicked') {
-			puts(" Je ne fais actuellement rien, mais j'aimerai charger une sauvegarder et j'aime aussi les Pommes.")
-		}
+
+		@btnSauvegardee = Gtk::Button.new :label => "Charger la dernière sauvegarde"
+		@btnSauvegardee.signal_connect('clicked') do
+			if !Dir.exist?("saves")
+				self.setDesc("Le dossier de sauvegarde n'existe pas !")
+			elsif !File.exist?("saves/"+@@name+".txt")
+				self.setDesc("Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !")
+			else
+				File.open("saves/"+@@name+".txt", 'r') do |f|
+					dataLoaded=Marshal.load(f)
+					grille=dataLoaded[0]
+					@@mode=dataLoaded[1]
+					@@difficulte=dataLoaded[2]
+					case @@mode
+						when :explo then lancementExplo(grille)
+						when :rapide then lancementRapide(grille)
+						when :tutoriel then lancementTutoriel(grille)
+						when :aventure then lancementAventure(grille)
+					end
+				end
+			end
+		end
+		self
 	end
 
-	def initBoutonProfil
-		@btnProfil = Gtk::Button.new label: "Profil"
-		@btnProfil.signal_connect("clicked") {
-			lancementProfil
-		}
+	# Crée et connecte le bouton de lancement du mode aventure
+	# Return self
+	def initBoutonAventure
+		@btnAventure = Gtk::Button.new
+		styleBouton(@btnAventure,Gtk::Label.new("Mode Aventure"),"white","ultrabold","x-large")
+		@btnAventure.signal_connect('clicked') do
+			lancementChoixDifficulte(:aventure)
+		end
+		self
+	end
+	# Crée et connecte le bouton de lancement du mode chrono
+	def initBoutonRapide
+		@btnChrono = Gtk::Button.new
+		styleBouton(@btnChrono,Gtk::Label.new("Mode Chrono"),"white","ultrabold","x-large")
+		@btnChrono.signal_connect('clicked') do
+			lancementChoixDifficulte(:rapide)
+		end
+		self
 	end
 
-	def initBoutonsAventure
-		@btnAvFacile = Gtk::Button.new :label => "Facile"
-		@btnAvMoyen = Gtk::Button.new :label => "Moyen"
-		@btnAvDifficile = Gtk::Button.new :label => "Difficile"
-
-		@btnAvFacile.signal_connect('clicked') {
-			puts "Lancement du mode facile d'Aventure"
-			#Niveau entre 6 et 9
-			lancementAventure(@@tailleFacile)
-		}
-		@btnAvMoyen.signal_connect('clicked') {
-			puts "Lancement du mode moyen d'Aventure"
-			#Niveau entre 9 et 12
-			lancementAventure(@@tailleMoyen)
-		}
-		@btnAvDifficile.signal_connect('clicked') {
-			puts "Lancement du mode difficile d'Aventure"
-			#Niveau entre 12 et 16
-			lancementAventure(@@tailleDifficile)
-		}
+	# Crée et connecte le bouton de lancement du mode explo
+	# Return self
+	def initBoutonExplo
+		@btnExplo = Gtk::Button.new
+		styleBouton(@btnExplo,Gtk::Label.new("Mode Exploration"),"white","ultrabold","x-large")
+		@btnExplo.signal_connect('clicked') do
+			lancementChoixDifficulte(:explo)
+		end
+		self
 	end
 
-	def initBoutonsRapide
-		@btnRapideFacile = Gtk::Button.new :label => "Facile"
-		@btnRapideMoyen = Gtk::Button.new :label => "Moyen"
-		@btnRapideDifficile = Gtk::Button.new :label => "Difficile"
-
-		@btnRapideFacile.signal_connect('clicked') {
-			puts "Lancement du mode facile de rapide"
-			#Niveau entre 6 et 9
-			lancementRapide(Random.rand(Range.new(@@tailleFacile, @@tailleFacile+3)),@@tempsFacile)
-		}
-		@btnRapideMoyen.signal_connect('clicked') {
-			puts "Lancement du mode moyen de rapide"
-			#Niveau entre 9 et 12
-			lancementRapide(Random.rand(Range.new(@@tailleMoyen, @@tailleMoyen+3)),@@tempsMoyen)
-		}
-		@btnRapideDifficile.signal_connect('clicked') {
-			puts "Lancement du mode difficile de rapide"
-			#Niveau entre 12 et 16
-			lancementRapide(Random.rand(Range.new(@@tailleDifficile, @@tailleDifficile+4)),@@tempsDifficile)
-		}
-	end
-
-	def initBoutonsExplo
-		@btnExloFacile = Gtk::Button.new :label => "Facile"
-		@btnExploMoyen = Gtk::Button.new :label => "Moyen"
-		@btnExploDifficile = Gtk::Button.new :label => "Difficile"
-
-		@btnExloFacile.signal_connect('clicked') {
-			puts "Lancement du mode facile de explo"
-			#Niveau entre 6 et 9
-			lancementExplo(Random.rand(Range.new(@@tailleFacile, @@tailleFacile+3)))
-		}
-		@btnExploMoyen.signal_connect('clicked') {
-			puts "Lancement du mode moyen de explo"
-			#Niveau entre 9 et 12
-			lancementExplo(Random.rand(Range.new(@@tailleMoyen, @@tailleMoyen+3)))
-		}
-		@btnExploDifficile.signal_connect('clicked') {
-			puts "Lancement du mode difficile de explo"
-			#Niveau entre 12 et 16
-			lancementExplo(Random.rand(Range.new(@@tailleDifficile, @@tailleDifficile+4)))
-		}
-	end
-
-
+	# Crée et connecte le bouton de lancement du tutoriel
+	# Return self
 	def initBoutonTuto
-		@btnTutoriel = Gtk::Button.new :label => " Tutoriel"
-		@btnTutoriel.signal_connect('clicked') {
+		@btnTutoriel = Gtk::Button.new 
+		styleBouton(@btnTutoriel,Gtk::Label.new("Tutoriel"),"white","ultrabold","x-large")
+		@btnTutoriel.signal_connect('clicked') do
 			puts "Lancement du mode tutoriel"
 			#Niveau le plus facile : 6
-			lancementTutoriel(@@tailleFacile)
-		}
+			 lancementTutoriel(Grille.new(HudChoixDifficulte::TAILLE_FACILE))
+		end
+		self
 	end
+
+	protected
+		attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
 end
