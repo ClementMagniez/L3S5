@@ -15,29 +15,48 @@ class HudModeDeJeu < Hud
 		super(window)
  		self.setTitre("Choix du mode de jeu")
 
+		self.initBoutonChargerSauvegarde
+		self.initBoutonTuto
 		self.initBoutonAventure
 		self.initBoutonRapide
-		self.initBoutonTuto
-		self.initBoutonQuitter
-		self.initBoutonChargerSauvegarde
-		self.initBoutonProfil
 		self.initBoutonExplo
+		self.initBoutonProfil
+		self.initBoutonQuitter
 
 		# TODO - foutus nombres magiques
 		debutMilieu = @sizeGridWin/2-2
 
 
-		self.attach(@btnSauvegardee,debutMilieu,1, 1, 1)
-		self.attach(@btnTutoriel,debutMilieu, 4, 2, 1)
-		self.attach(@btnAventure,debutMilieu, 6,2, 1)
-		self.attach(@btnChrono,debutMilieu, 9, 2, 1)
-		self.attach(@btnExplo,debutMilieu, 12, 2, 1)
-		self.attach(@btnOptions, 2, @sizeGridWin-1, 1, 1)
-		self.attach(@btnQuitter, @sizeGridWin-2, @sizeGridWin-1, 1, 1)
-		self.attach(@btnProfil, @sizeGridWin -2 , 1, 1, 1)
 
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			@btnProfil.halign = Gtk::Align::END
+		vBox.add(@btnProfil)
+			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			vBox2.halign = Gtk::Align::CENTER
+				@btnSauvegarde.valign = Gtk::Align::CENTER
+				@btnSauvegarde.vexpand = true
+			vBox2.add(@btnSauvegarde)
+				@btnTutoriel.valign = Gtk::Align::CENTER
+				@btnTutoriel.vexpand = true
+			vBox2.add(@btnTutoriel)
+			vBox2.add(@btnAventure)
+			vBox2.add(@btnChrono)
+			vBox2.add(@btnExplo)
+		vBox.add(vBox2)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.vexpand = true
+			hBox.hexpand = true
+			hBox.homogeneous = true
+				@btnOptions.valign = Gtk::Align::END
+				@btnOptions.halign = Gtk::Align::START
+			hBox.add(@btnOptions)
+				@btnQuitter.valign = Gtk::Align::END
+				@btnQuitter.halign = Gtk::Align::END
+			hBox.add(@btnQuitter)
+		vBox.add(hBox)
+
+		self.attach(vBox, 0, 0, 1, 1)
 		ajoutFondEcran
-
 	end
 
 	# Crée et connecte le bouton de chargement d'une sauvegarde
@@ -45,8 +64,11 @@ class HudModeDeJeu < Hud
 	# TODO : gérer l'exception ERRNOENT si pas de fichier (afficher un popup)
 	def initBoutonChargerSauvegarde
 
-		@btnSauvegardee = Gtk::Button.new :label => "Charger la dernière sauvegarde"
-		@btnSauvegardee.signal_connect('clicked') do
+		@btnSauvegarde = creerBouton(Gtk::Label.new("Charger une sauvegarde"),"white","ultrabold","x-large")
+
+
+		@btnSauvegarde = Gtk::Button.new :label => "Charger la dernière sauvegarde"
+		@btnSauvegarde.signal_connect('clicked') do
 			if !Dir.exist?("saves")
 				self.setDesc("Le dossier de sauvegarde n'existe pas !")
 			elsif !File.exist?("saves/"+@@name+".txt")
@@ -72,8 +94,7 @@ class HudModeDeJeu < Hud
 	# Crée et connecte le bouton de lancement du mode aventure
 	# Return self
 	def initBoutonAventure
-		@btnAventure = Gtk::Button.new
-		styleBouton(@btnAventure,Gtk::Label.new("Mode Aventure"),"white","ultrabold","x-large")
+		@btnAventure = creerBouton(Gtk::Label.new("Mode Aventure"),"white","ultrabold","x-large")
 		@btnAventure.signal_connect('clicked') do
 			lancementChoixDifficulte(:aventure)
 		end
@@ -81,8 +102,7 @@ class HudModeDeJeu < Hud
 	end
 	# Crée et connecte le bouton de lancement du mode chrono
 	def initBoutonRapide
-		@btnChrono = Gtk::Button.new
-		styleBouton(@btnChrono,Gtk::Label.new("Mode Chrono"),"white","ultrabold","x-large")
+		@btnChrono = creerBouton(Gtk::Label.new("Mode Chrono"),"white","ultrabold","x-large")
 		@btnChrono.signal_connect('clicked') do
 			lancementChoixDifficulte(:rapide)
 		end
@@ -92,8 +112,7 @@ class HudModeDeJeu < Hud
 	# Crée et connecte le bouton de lancement du mode explo
 	# Return self
 	def initBoutonExplo
-		@btnExplo = Gtk::Button.new
-		styleBouton(@btnExplo,Gtk::Label.new("Mode Exploration"),"white","ultrabold","x-large")
+		@btnExplo = creerBouton(Gtk::Label.new("Mode Exploration"),"white","ultrabold","x-large")
 		@btnExplo.signal_connect('clicked') do
 			lancementChoixDifficulte(:explo)
 		end
@@ -103,12 +122,11 @@ class HudModeDeJeu < Hud
 	# Crée et connecte le bouton de lancement du tutoriel
 	# Return self
 	def initBoutonTuto
-		@btnTutoriel = Gtk::Button.new 
-		styleBouton(@btnTutoriel,Gtk::Label.new("Tutoriel"),"white","ultrabold","x-large")
+		@btnTutoriel = creerBouton(Gtk::Label.new("Tutoriel"),"white","ultrabold","x-large")
 		@btnTutoriel.signal_connect('clicked') do
 			puts "Lancement du mode tutoriel"
 			#Niveau le plus facile : 6
-			 lancementTutoriel(Grille.new(HudChoixDifficulte::TAILLE_FACILE))
+			 lancementHudPresentationTutoriel(Grille.new(HudChoixDifficulte::TAILLE_FACILE))
 		end
 		self
 	end

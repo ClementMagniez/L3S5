@@ -12,16 +12,28 @@ class HudOption < Hud
 		initBoutonRetour
 		initMenuResolution
 		initBoutonSauvegarderResolution
-		self.attach(Gtk::Label.new("Résolution (16:9)"), 4, 5, 3, 3)
-		self.attach(@menuResolution, 4, 8, 3, 3)
-		self.attach(@btnSauvegardeeResolution, 4, 11, 3, 3)
+#		self.attach(Gtk::Label.new("Résolution (16:9)"), 4, 5, 3, 3)
+#		self.attach(@menuResolution, 4, 8, 3, 3)
+#		self.attach(@btnSauvegardeResolution, 4, 11, 3, 3)
 
 
-#		self.attach(Gtk::Label.new("Mode : "),varX, varY, 1, 1)
-#		self.attach(@btnFenetre,varX+1, varY, 1, 1)
-		self.attach(@btnRetour,@sizeGridWin-3,@sizeGridWin-3,3,2)
+		# self.attach(Gtk::Label.new("Mode : "),varX, varY, 1, 1)
+		# self.attach(@btnFenetre,varX+1, varY, 1, 1)
+		# self.attach(@btnRetour,varX+2, varY+1, 1, 1)
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(Gtk::Label.new("Résolution (16:9) : "))
+			hBox.add(@menuResolution)
+		vBox.add(hBox)
+		vBox.add(@btnSauvegardeResolution)
+		vBox.add(@btnRetour)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
+
+		self.attach(vBox, 0, 0, 1, 1)
+
 		ajoutFondEcran
-		
+
 	end
 
 #	def initBoutonFenetre
@@ -66,8 +78,8 @@ class HudOption < Hud
 	end
 	
 	def initBoutonSauvegarderResolution
-		@btnSauvegardeeResolution=Gtk::Button.new(label: "Appliquer")
-		@btnSauvegardeeResolution.signal_connect('clicked') do
+		@btnSauvegardeResolution=Gtk::Button.new(label: "Appliquer")
+		@btnSauvegardeResolution.signal_connect('clicked') do
 			f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
 			@@winX=@resolution.split('*')[0].to_i
 			@@winY=@resolution.split('*')[1].to_i
