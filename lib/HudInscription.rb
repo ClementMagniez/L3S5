@@ -16,7 +16,7 @@ class HudInscription < Hud
 		@entMdp = Gtk::Entry.new
 		
 		# Rend le mot de passe entré invisible
-		@entMdp.set_visibility(FALSE)
+		@entMdp.set_visibility(false)
 
 		#Label d'erreur
 		@lblErreur = Gtk::Label.new("Bonne inscription !")

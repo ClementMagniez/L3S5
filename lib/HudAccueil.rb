@@ -25,7 +25,7 @@ class HudAccueil < Hud
 		initBoutonQuitter
 
 		# Rend le mot de passe entré invisible
-		@entryMotDePasse.set_visibility(FALSE)
+		@entryMotDePasse.set_visibility(false)
 		
 		@lblErreur = Gtk::Label.new("Connectez-vous !")
 		
@@ -71,7 +71,7 @@ class HudAccueil < Hud
 			self.lancementInscription
 		}
 	end
-
+	
 	attr_reader :session
 
 end
