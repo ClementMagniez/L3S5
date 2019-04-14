@@ -10,9 +10,10 @@ class HudAventure < HudJeu
 
 		@btnAide.set_visible(true)
 		@btnAide.sensitive = false
+		@btnPause.set_visible(false)
+		@btnPause.sensitive = false
 		@lblAide.visible = false
 	end
-
 
 	# Redéfinie la méthode jeuTermine de HudJeu.
 	# La méthode va maintenant lancer une autre grille (toujours en mode aventure) de plus en plus grande

@@ -12,7 +12,7 @@ class HudInscription < Hud
 		@entMdp = Gtk::Entry.new
 		# Rend le mot de passe entré invisible
 		@entMdp.set_visibility(false)
-		@lblErreur = Gtk::Label.new
+		@lblErreur = CustomLabel.new
 
 		initBoutonEnregistrement
 		initBoutonRetour
@@ -40,32 +40,27 @@ class HudInscription < Hud
 
 		ajoutFondEcran
 	end
-	# Créé et initialise le bouton de retour
-	def initBoutonRetour
-		@btnRetour = Gtk::Button.new :label => "Retour"
-		@btnRetour.signal_connect("clicked") do
-			self.lancementAccueil
-		end
-	end
+
+private
 
 	#Créé et initialise le bouton s'enregistrer
 	def initBoutonEnregistrement
 		#Bouton : Enregistrer
-		@btnEnr = Gtk::Button.new :label => "S'enregistrer"
+		@btnEnr = CustomButton.new("S'enregistrer")
 		@btnEnr.signal_connect("clicked") do
 			if @entMdp.text.empty? || @entId.text.empty?
-				@lblErreur.set_label("Veuillez renseigner toutes les informations.")
+				@lblErreur.set_text("Veuillez renseigner toutes les informations.")
 			else
 				#@lblErreur.set_label("Enregistrement base de donnée à faire.")
 				session = Connexion.new
-				
+
 				id = @entId.text
 				mdp = @entMdp.text
 				mdp = session.crypterMdp(mdp)
 				#mdp = mdp.crypt(mdp)
-			
+
 				if Profil.find_by(pseudonyme: id) != nil
-					@lblErreur.set_label("Cet identifiant existe déjà.")
+					@lblErreur.set_text("Cet identifiant existe déjà.")
 				else
 					user = Profil.new(
 						pseudonyme: id,
@@ -73,12 +68,20 @@ class HudInscription < Hud
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-					# TODO : créer le fichier de config non-vide (fullscreen / résolution)		
+					# TODO : créer le fichier de config non-vide (fullscreen / résolution)
 #					File.open("../config/#{id}.ini", "w+") # Création du fichier de config (vide)
 
 					self.lancementModeJeu
 				end
 			end
+		end
+	end
+
+	# Créé et initialise le bouton de retour
+	def initBoutonRetour
+		@btnRetour = CustomButton.new("Retour")
+		@btnRetour.signal_connect("clicked") do
+			self.lancementAccueil
 		end
 	end
 end

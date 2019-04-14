@@ -12,9 +12,11 @@ class HudTutoriel < HudJeu
 		self.setTitre("Tutoriel")
 	end
 
+private
 
 	# Redéfinition de la méthode aide de HudJeu
 	def aide
+		puts "HudTutoriel::aide"
 		@caseSurbrillanceList = Array.new
 		tableau = @aide.cycle("tuto")
 		puts(tableau)

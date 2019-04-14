@@ -48,9 +48,9 @@ class HudRapide < HudJeu
 	def initTimer
 		super
 		if @temps < 10
-			@lblTime.set_label("0" + @temps.to_s + ":00")
+			@lblTime.set_text("0" + @temps.to_s + ":00")
 		else
-			@lblTime.set_label(@temps.to_s + ":00")
+			@lblTime.set_text(@temps.to_s + ":00")
 		end
 	end
 
@@ -63,7 +63,7 @@ class HudRapide < HudJeu
 					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
 				secondes = (@horloge%60).to_i
 					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			styleLabel(@lblTime,"white","ultrabold","xx-large",strMinutes + ":" + strSecondes)
+			@lblTime.text = strMinutes + ":" + strSecondes
 			if @horloge<=0
 				jeuTermine
 				return 0

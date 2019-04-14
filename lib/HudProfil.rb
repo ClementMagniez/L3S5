@@ -5,22 +5,15 @@ class HudProfil < Hud
 	def initialize(window)
 		super(window)
 		self.setTitre("Profil")
-		@lblErreur = Gtk::Label.new
+		@lblErreur = CustomLabel.new
 		@entNom = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
 		@entMdp.set_visibility(false)
 
-		initChampScore
-		initBoutonSauvegarderLogin
 		initBoutonRetourMenu
+		initBoutonSauvegarderLogin
+		initChampScore
 
-#		self.attach(Gtk::Label.new("Compte"), 4, 0, 2, 1)
-#		self.attach(@lblDescription, 4, 1, 2, 1)
-#		self.attach(Gtk::Label.new("Nouveau nom"), 4, 2, 1, 1)
-#		self.attach(@entNom, 5, 2, 1, 1)
-#		self.attach(Gtk::Label.new("Nouveau mot de passe"), 4, 3, 1, 1)
-#		self.attach(@entMdp, 5, 3, 1, 1)
-#		self.attach(@btnSauvegardeLogin, 4, 4, 2, 1)
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
@@ -45,19 +38,18 @@ class HudProfil < Hud
 		ajoutFondEcran
 	end
 
-	def initChampScore
-		@champScores = Gtk::ScrolledWindow.new
-		@champScores.set_min_content_height(100)
-			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				0.upto(10) do |i|
-					boxChamp.add(Gtk::Label.new("choix " + i.to_s))
-				end
-			@champScores.add(boxChamp)
-		@champScores.set_visible(true)
+
+private
+
+	def initBoutonRetourMenu
+		@btnRetour = CustomButton.new("Retour")
+		@btnRetour.signal_connect("clicked") do
+			lancementModeJeu
+		end
 	end
 
 	def initBoutonSauvegarderLogin
-		@btnSauvegarde = Gtk::Button.new(label: "Sauvegarder les modifications")
+		@btnSauvegarde = CustomButton.new("Sauvegarder les modifications")
 		@btnSauvegarde.signal_connect("clicked") do
 			strNom = @entNom.text
 			strMdp = @entMdp.text
@@ -74,11 +66,14 @@ class HudProfil < Hud
 		end
 	end
 
-	def initBoutonRetourMenu
-		@btnRetour = Gtk::Button.new label: "Retour"
-		@btnRetour.signal_connect("clicked") do
-			lancementModeJeu
-		end
+	def initChampScore
+		@champScores = Gtk::ScrolledWindow.new
+		@champScores.set_min_content_height(100)
+			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+				0.upto(10) do |i|
+					boxChamp.add(Gtk::Label.new("choix " + i.to_s))
+				end
+			@champScores.add(boxChamp)
+		@champScores.set_visible(true)
 	end
-	
 end

@@ -1,6 +1,6 @@
 require_relative 'Hud'
 
-# Classe abstraite permettant de créer un écran de jeu 
+# Classe abstraite permettant de créer un écran de jeu
 class HudJeu < Hud
 	attr_reader :grille, :timer
 
@@ -11,7 +11,7 @@ class HudJeu < Hud
 		super(window)
 		@align = Gtk::Align.new(1)
 		@aide = Aide.new(grille)
-		
+
 		@gridJeu = Gtk::Grid.new
 		@gridJeu.set_halign(@align)
 		@gridJeu.set_valign(@align)
@@ -43,6 +43,8 @@ class HudJeu < Hud
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
+			hBox.valign = Gtk::Align::CENTER
+			hBox.vexpand = true
 			hBox.add(@gridJeu)
 				vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 				vBox2.valign = Gtk::Align::CENTER
@@ -74,9 +76,7 @@ class HudJeu < Hud
 
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
-		
-			self.styleLabel(@lblIndiceSubr,"white","ultrabold",self.getIndiceSize,@lblIndiceSubr.text)
-			#@lblIndiceSubr.set_markup ("<span foreground='white' weight='ultrabold' size='x-large'> "+@lblIndiceSubr.text+"</span>")
+			@lblIndiceSubr.color = "white"
 			@lblIndiceSubr = nil
 		end
 	end
@@ -92,6 +92,7 @@ class HudJeu < Hud
 			end
 		end
 	end
+
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
 		return @grille.length>12 && @@winY<700 ? "small" : "x-large"
@@ -125,14 +126,9 @@ class HudJeu < Hud
 				@timer = Time.now
 				@t = Thread.new{timer}
 				if @pause
-					@btnPause.set_label("Pause")
+					@btnPause.text = "Pause"
 				end
 		end
-	end
-
-	# Méthode invoquée a la fin du jeu
-	def jeuTermine
-		self.lancementFinDeJeu
 	end
 
 	def getTime
@@ -140,8 +136,8 @@ class HudJeu < Hud
 			return @horloge
 		end
 	end
-	
-	protected
+
+protected
 
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
 	# dans @lblAide ; peut mettre en surbrillance (changement de couleur) une case ou un indice
@@ -171,9 +167,10 @@ class HudJeu < Hud
 			else
 				lblIndice = @gridJeu.get_child_at(indice,0).child
 			end
-			
-			styleLabel(lblIndice,'red','ultrabold',self.getIndiceSize,lblIndice.text)
-			@lblIndiceSubr = CustomLabel.new(lblIndice, "white",'large','ultrabold')
+
+			lblIndice.color = "red"
+			# On garde une référence sur le label de la ligne ou colonne mise en évidence
+			@lblIndiceSubr = lblIndice
 		end
 
 	end
@@ -184,9 +181,8 @@ class HudJeu < Hud
 		# TODO - Ruby-fier ce loop
 		0.upto(@tailleGrille-1) { |i|
 			# ici les indices des colonnes (nb tentes sur chaque colonne)
-			lblIndiceCol = labelIndice(i,:varTentesCol)
-			btnIndiceCol = Gtk::Button.new
-			btnIndiceCol.add(lblIndiceCol)
+			btnIndiceCol = CustomButton.new
+			btnIndiceCol.label = labelIndice(i,:varTentesCol)
 			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
 			#Quand on clique dessus, met toutes les cases vides à gazon
@@ -200,9 +196,8 @@ class HudJeu < Hud
 				desurbrillanceIndice
 			}
 #			 ici les indices des lignes (nb tentes sur chaque ligne)
-			lblIndiceLig = labelIndice(i,:varTentesLigne)
-			btnIndiceLig = Gtk::Button.new
-			btnIndiceLig.add(lblIndiceLig)
+			btnIndiceLig = CustomButton.new
+			btnIndiceLig.label = labelIndice(i,:varTentesLigne)
 			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
 			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
 #			Quand on clique dessus, met toutes les cases vides à gazon
@@ -249,8 +244,8 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @lblAide
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
-		@lblAide = CustomLabel.new('white','x-large','ultrabold')
-		@btnAide = Gtk::Button.new(label: "Aide")
+		@lblAide = CustomLabel.new
+		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide
 		}
@@ -260,7 +255,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @btnCancel
 	# 	initialise sont comportement
 	def initBoutonCancel
-		@btnCancel = creerBouton(Gtk::Label.new("Annuler"),"white","x-large","ultrabold")
+		@btnCancel = CustomButton.new("Annuler")
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil
@@ -274,17 +269,17 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @btnPause
 	# 	initialise sont comportement
 	def initBoutonPause
-		@btnPause = creerBouton(Gtk::Label.new("Pause"),"white","ultrabold","x-large")
+		@btnPause = CustomButton.new("Pause")
 		@btnPause.signal_connect('clicked'){
 			if @pause
 				@timer = Time.now
 				@t = Thread.new{timer}
-				@btnPause.set_label("Pause")
+				@btnPause.text = "Pause"
 				@pause = false
 			else
 				@stockHorloge = @stockHorloge + (Time.now - @timer)
 				@t.kill
-				@btnPause.set_label("Play")
+				@btnPause.text = "Play"
 				@pause = true
 			end
 		}
@@ -294,7 +289,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @btnRegle
 	# 	initialise sont comportement
 	def initBoutonRegle
-		@btnRegle = creerBouton(Gtk::Label.new("?"),"pink","ultrabold","xx-large")
+		@btnRegle = CustomButton.new("?", "pink")
 		# self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
 	end
 
@@ -302,7 +297,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @btnRemplissage
 	# 	initialise sont comportement
 	def initBoutonRemplissage
-		@btnRemplissage = creerBouton(Gtk::Label.new("Remplir"),"white","ultrabold","x-large")
+		@btnRemplissage = CustomButton.new("Remplir")
 		@btnRemplissage.signal_connect('clicked') {
 			liste = @aide.listeCasesGazon
 			while not liste.empty?
@@ -320,7 +315,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @btnReset
 	# 	initialise sont comportement
 	def initBoutonReset
-		@btnReset = creerBouton(Gtk::Label.new("Reset"),"white","ultrabold","x-large")
+		@btnReset = CustomButton.new("Reset")
 		@btnReset.signal_connect("clicked") {
 			reset
 			if @lblAide != nil
@@ -345,7 +340,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @btnSauvegarde
 	# 	initialise sont comportement
 	def initBoutonSauvegarde
-		@btnSauvegarde = Gtk::Button.new :label => "Sauvegarder"
+		@btnSauvegarde = CustomButton.new("Sauvegarder")
 		@btnSauvegarde.signal_connect('clicked') do
 			Dir.mkdir("saves")	unless Dir.exist?("saves")
 			File.open("saves/"+@@name+".txt", "w+", 0644) do |f|
@@ -358,12 +353,17 @@ class HudJeu < Hud
 	# Initialise le timer :
 	# 	ajoute une variable d'instance @lblTime, le label associé au timer.
 	def initTimer
-		@lblTime = CustomLabel.new("00:00")
+		@lblTime = CustomLabel.new("00:00", "white")
 		@timer = Time.now
 		@pause = false
 		@horloge = 0
 		@stockHorloge = 0
 		@t=Thread.new{timer}
+	end
+
+	# Méthode invoquée a la fin du jeu
+	def jeuTermine
+		self.lancementFinDeJeu
 	end
 
 	# A partir du fichier en path _string_, crée une Gtk::Image
