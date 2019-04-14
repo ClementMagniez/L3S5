@@ -12,27 +12,31 @@ class HudPresentationTutoriel < Hud
 		# self.attach(@btnContinuer,(@sizeGridWin/4)*2,(@sizeGridWin/4)*3,1,1)
 		# self.attach(@btnRegle,@sizeGridWin/4,(@sizeGridWin/4)*3,1,1)
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-		vBox.add(styleLabel(Gtk::Label.new,"white","ultrabold","x-large","Bienvenue dans le mode tutoriel !"))
+			lbl = CustomLabel.new("Bienvenue dans le mode tutoriel !")
+			lbl.vexpand = true
+		vBox.add(lbl)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.vexpand = true
+			hBox.valign = Gtk::Align::CENTER
+			hBox.halign = Gtk::Align::CENTER
+			hBox.homogeneous = true
 			hBox.add(@btnRegle)
 			hBox.add(@btnContinuer)
 		vBox.add(hBox)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
 
 		self.attach(vBox, 0, 0, 1, 1)
 		ajoutFondEcran
 	end
 
 	def initBoutonRegle
-		@btnRegle = creerBouton(Gtk::Label.new("Regle"),"white","ultrabold","x-large")
+		@btnRegle = Gtk::Button.new(label: "Regle")
 		@btnRegle.signal_connect('clicked') do
 			lancementHudRegle
 		end
 	end
 
 	def initBoutonContinuer
-		@btnContinuer = creerBouton(Gtk::Label.new("Continuer"),"white","ultrabold","x-large")
+		@btnContinuer = Gtk::Button.new(label: "Continuer")
 		@btnContinuer.signal_connect('clicked') do
 			 lancementTutoriel(@grille)
 		end

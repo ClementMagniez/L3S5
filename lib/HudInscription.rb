@@ -22,10 +22,12 @@ class HudInscription < Hud
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.homogeneous = true
 			hBox.add(CustomLabel.new("Identifiant"))
 			hBox.add(@entId)
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.homogeneous = true
 			hBox.add(CustomLabel.new("Mot de passe"))
 			hBox.add(@entMdp)
 		vBox.add(hBox)
