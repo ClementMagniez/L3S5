@@ -244,8 +244,13 @@ protected
 	# 	ajoute une variable d'instance @lblAide
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
+<<<<<<< HEAD
 		@lblAide = CustomLabel.new
 		@btnAide = CustomButton.new("Aide")
+=======
+		@lblAide = CustomLabel.new('','white','x-large','ultrabold')
+		@btnAide = Gtk::Button.new(label: "Aide")
+>>>>>>> 10d230026b89c0e368f6dda9778e4e9d9dcebd37
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide
 		}
@@ -255,7 +260,11 @@ protected
 	# 	ajoute une variable d'instance @btnCancel
 	# 	initialise sont comportement
 	def initBoutonCancel
+<<<<<<< HEAD
 		@btnCancel = CustomButton.new("Annuler")
+=======
+		@btnCancel = creerBouton(Gtk::Label.new("Annuler"),"white","ultrabold","x-large")
+>>>>>>> 10d230026b89c0e368f6dda9778e4e9d9dcebd37
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil
