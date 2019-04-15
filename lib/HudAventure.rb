@@ -7,12 +7,6 @@ class HudAventure < HudJeu
 
 		@@NbPartie += 1
 		@varBoutonEnPlus=1
-
-		@btnAide.set_visible(true)
-		@btnAide.sensitive = false
-		@btnPause.set_visible(false)
-		@btnPause.sensitive = false
-		@lblAide.visible = false
 	end
 
 	# Redéfinie la méthode jeuTermine de HudJeu.
