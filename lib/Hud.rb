@@ -68,8 +68,8 @@ protected
 	end
 
 	# Lance le menu de fin de jeu
-	def lancementFinDeJeu
-		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self))
+	def lancementFinDeJeu(finTuto=false)
+		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self, finTuto))
 	end
 
 	def lancementInscription
@@ -138,11 +138,11 @@ protected
 		quitter = Gtk::Image.new(:file => '../img/quitter.png')
 		quitter.pixbuf = quitter.pixbuf.scale(@@winX/20,@@winX/20)	if quitter.pixbuf != nil
 		@btnQuitter.set_image(quitter)
-		@btnQuitter.signal_connect('clicked') {	
+		@btnQuitter.signal_connect('clicked') {
 		if block_given?
 			yield
 		else
-			Gtk.main_quit 
+			Gtk.main_quit
 		end
 		}
 	end

@@ -11,6 +11,12 @@ class HudTutoriel < HudJeu
 		@lblTime.set_visible(false)
 	end
 
+	# Surcharge de la méthode jeuTermine de HudJeu
+	# pour que le menu de fin de jeu n'affiche pas certains éléments
+	def jeuTermine
+		self.lancementFinDeJeu(true)
+	end
+
 private
 
 	# Redéfinition de la méthode aide de HudJeu

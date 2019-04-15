@@ -3,7 +3,7 @@ class HudFinDeJeu < Hud
 	# Nouvelle instance de fin de jeu
 	# 	window : La Fenetre contenant le HudFinDeJeu
 	# 	fenetrePrecedente : Le HudJeu qui appel ce constructeur, permet de recommencer une meme partie
-	def initialize(window, fenetrePrecedente)
+	def initialize(window, fenetrePrecedente, finTuto=false)
 		super(window)
 		varX, varY = 2, 2
 		@fenetrePrecedente = fenetrePrecedente
@@ -37,6 +37,11 @@ class HudFinDeJeu < Hud
 		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
+
+		if finTuto
+			# On ne doit pas voir les score à la fin du tuto
+			lblScore.destroy
+		end
 	end
 
 private
