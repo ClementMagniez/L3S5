@@ -5,8 +5,8 @@ class CaseArbre < Case
 
 	def initialize(i,j)
 		super(i,j)
-		@statut=StatutArbre.new(ARBRE)
-		@statutVisible=StatutArbre.new(ARBREDECOCHE)
+		@statut=StatutArbre.new(:ARBRE)
+		@statutVisible=StatutArbre.new(:ARBREDECOCHE)
 	end
 
 	# Renvoie true, la case étant systématiquement valide

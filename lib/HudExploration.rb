@@ -6,18 +6,16 @@ class HudExploration < HudJeu
 
 	def initialize(window,grille)
 		super(window,grille)
-		@lblAide = Gtk::Label.new()
-		@lblAide.use_markup = true
-		@lblAide.set_markup ("<span foreground='white' >Bienvenue sur notre super jeu !</span>");
-		
+
+
 		self.setTitre("Partie exploration")
-
+		initBoutonTimer
+		initBoutonPause
 		initBoutonAide
-
-		self.attach(@btnAide,@varPlaceGrid-2,0,1,1)
-		self.attach(@lblAide,1,2, @varPlaceGrid, 1)
-		fond = ajoutFondEcran
-		self.attach(fond,0,0,@varPlaceGrid+2,5)
+		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-1,@sizeGridJeu,@sizeGridJeu+4)
+		self.attach(@btnPause,@varFinPlaceGrid,@varFinPlaceGrid-6,1,1)
+		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
+		ajoutFondEcran
 	end
 
 

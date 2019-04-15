@@ -12,17 +12,22 @@ class HudAccueil < Hud
 	# @entryIdentifiant
 	# @entryMotDePasse
 
+
+
 	def initialize(window)
 		super(window)
 		varX, varY = 0, 0
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 
+		# TODO TEMPORAIRE - confort de tests
+		@entryIdentifiant.text="test"
+		@entryMotDePasse.text="test"
+		####################################
 
 		initBoutonConnecter
 		initBoutonInscription
 		initBoutonQuitter
-
 
 
 		self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
@@ -37,8 +42,8 @@ class HudAccueil < Hud
 		self.attach(@btnOptions, varX, varY+4, 1, 1)
 		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
 
-			fond = ajoutFondEcran
-		self.attach(fond,0,0,5,5)
+		ajoutFondEcran
+
 	end
 
 
@@ -46,10 +51,13 @@ class HudAccueil < Hud
 		@btnConnecter = Gtk::Button.new :label => "Se connecter"
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
-			session = Connexion.new()
+			session = Connexion.new
 
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
 				puts "Veuillez renseigner tous les champs."
+			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
+				@@name=@entryIdentifiant.text
+				self.lancementModeJeu
 			else
 				if(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) != 1)
 					self.lancementModeJeu
@@ -60,14 +68,12 @@ class HudAccueil < Hud
 			end
 		}
 	end
+
 	def initBoutonInscription
 		puts "Inscription => Traitement manquant"
 		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
-		@btnInscrire.signal_connect('clicked'){
+		@btnInscrire.signal_connect('clicked') do
 			self.lancementInscription
-		}
+		end
 	end
-
-
-
 end

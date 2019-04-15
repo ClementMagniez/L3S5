@@ -12,7 +12,7 @@ class CaseVide < Case
 	def initialize(etat,i,j)
 		super(i,j)
 		@statut=StatutVide.new(etat)
-		@statutVisible=StatutVide.new(VIDE)
+		@statutVisible=StatutVide.new(:VIDE)
 	end
 
 	# TODO refactoriser cycle/cancel
@@ -87,6 +87,8 @@ class CaseVide < Case
 			'../img/gazon.png'
 		elsif self.statutVisible.isTente?
 			'../img/tente.png'
+		else
+			'../img/gris.png'
 		end
 	end
 end

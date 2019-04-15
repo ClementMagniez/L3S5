@@ -1,9 +1,8 @@
 require "test/unit"
 
-
-Dir[File.join(__dir__, '../lib', '*.rb')].each { |file|
-	 require_relative file if (!file.match('main*') && (!file.match('Hud*')))  }
-
+require_relative '../lib/CaseArbre'
+require_relative '../lib/CaseGazon'
+require_relative '../lib/Grille'	
 
 
 class TestCase < Test::Unit::TestCase
