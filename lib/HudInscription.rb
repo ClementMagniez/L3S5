@@ -68,10 +68,16 @@ private
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-					# TODO : créer le fichier de config non-vide (fullscreen / résolution)
-#					File.open("../config/#{id}.ini", "w+") # Création du fichier de config (vide)
 
-					self.lancementModeJeu
+					f=IniFile.new(filename:"../config/#{id}.ini", encoding: 'UTF-8')
+
+					# Résolution par défaut - option paresseuse, pourrait dépendre
+					# de la taille de la fenêtre
+					f['resolution']={'width' => 1280,
+													 'height'=> 720}
+					f.write
+
+					self.lancementAccueil
 				end
 			end
 		end

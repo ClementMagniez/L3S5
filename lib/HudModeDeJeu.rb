@@ -23,11 +23,6 @@ class HudModeDeJeu < Hud
 		initBoutonProfil
 		initBoutonQuitter
 
-		# TODO - foutus nombres magiques
-		debutMilieu = @sizeGridWin/2-2
-
-
-
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			@btnProfil.halign = Gtk::Align::END
 		vBox.add(@btnProfil)

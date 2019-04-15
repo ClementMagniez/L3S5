@@ -30,13 +30,7 @@ class Hud < Gtk::Grid
 		setTitre("Des Tentes et des Arbres")
 
 		initBoutonOptions
-
-		#nombre de cellule horizontale et verticale de la  fenetre
-		@sizeGridWin = 20
-
 	end
-
-
 
 protected
 

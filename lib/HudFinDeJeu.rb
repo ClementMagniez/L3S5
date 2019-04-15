@@ -7,8 +7,8 @@ class HudFinDeJeu < Hud
 		super(window)
 		varX, varY = 2, 2
 		@fenetrePrecedente = fenetrePrecedente
-		tpsMin = fenetrePrecedente.getTime / 60
-		tpsSec = fenetrePrecedente.getTime % 60
+		tpsMin = fenetrePrecedente.timer / 60
+		tpsSec = fenetrePrecedente.timer % 60
 		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
 		lblScore = CustomLabel.new("Votre score : 0")
 

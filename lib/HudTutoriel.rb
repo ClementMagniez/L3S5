@@ -10,7 +10,7 @@ class HudTutoriel < HudJeu
 
 		super(window,grille)
 		self.setTitre("Tutoriel")
-
+		@@difficulte="Facile"
 		@lblTime.set_visible(false)
 	end
 

@@ -3,7 +3,7 @@ require_relative 'Hud'
 # Classe abstraite permettant de créer un écran de jeu
 class HudJeu < Hud
 	attr_reader :grille, :timer
-
+	
 	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
@@ -210,12 +210,13 @@ protected
 				button.set_border_width(1)
 				button.add(scaleImage(cell.affichage))
 				button.signal_connect("button-release-event") do
-					cell.cycle(@grille)
-					button.replace(scaleImage(cell.affichage))
-					desurbrillanceCase
-					desurbrillanceIndice
-					# Sleep pour palié les clique trop rapide qui font passé 2 états à la suite
-					self.jeuTermine		if @grille.estValide
+					unless @pause
+						cell.cycle(@grille)
+						button.replace(scaleImage(cell.affichage))
+						desurbrillanceCase
+						desurbrillanceIndice
+						self.jeuTermine		if @grille.estValide
+					end
 				end
 				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
 			end
@@ -354,6 +355,7 @@ protected
 	def increaseTimer(modeCalcul = :'+' )
 		return false if @pause # interrompt le décompte en cas de pause
 
+
 		@timer=@timer.send(modeCalcul, 1)
 		@lblTime.text=self.parseTimer
 		return true 
@@ -380,13 +382,16 @@ protected
 	end
 
 	# A partir du fichier en path _string_, crée une Gtk::Image
-	# et la redimensionne pour s'adapter à la taille de la fenêtre
-	# Return cette Gtk::Image redimensionnée
+	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu sans forcer
+	# la redimension de la fenêtre
+	# - string : path d'un fichier image à charger 
+	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
 
 		imgSize = @@winY / (@tailleGrille*1.4)
-		# image = Gtk::Image.new :file => @grille[x][y].affichage
+		imgSize*=0.95 if(@@difficulte=="Facile") # pansement sur un oversight de scaling
+		
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 
 		return image
