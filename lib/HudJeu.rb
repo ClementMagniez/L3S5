@@ -348,7 +348,7 @@ protected
 		@btnReset = CustomButton.new("Reset")
 		@btnReset.signal_connect("clicked") {
 			reset
-			if @lblAide != nil
+			if @lblAide != nil && @tutoriel==nil
 			@lblAide.set_text("") # TODO
 			end
 			if @t != nil
