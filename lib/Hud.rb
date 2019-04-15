@@ -15,7 +15,7 @@ class Hud < Gtk::Grid
 
 	def initialize(window,fenetrePrecedente=nil)
 		super()
-
+		@fenetrePrecedente = fenetrePrecedente
 		@fenetre = window
 		@fenetre.signal_connect('check-resize') do |window|
 			if window.size[0]!=@@winX && window.size[1]!=@@winY
@@ -31,11 +31,8 @@ class Hud < Gtk::Grid
 
 		initBoutonOptions
 
-		#nombre de cellule horizontale et verticale de la  fenetre
+		#nombre de cellule horizontale et verticale de la  fenetre ( à enlever )
 		@sizeGridWin = 20
-		@fenetrePrecedente = fenetrePrecedente
-
-
 
 	end
 
