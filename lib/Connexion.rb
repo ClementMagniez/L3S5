@@ -40,14 +40,12 @@ class Connexion
 		reqProfil = Profil.find_by(pseudonyme: login, mdpEncrypted: mdp)
 
 		if(reqProfil == nil) #si le login n'est pas présent
-			puts("ERREUR : Login ou mot de passe incorrect") 			#Affichage d'une erreur
-			return 1
+			return false
 			#On propose à l'utilisateur de créer un compte ou de tenter une nouvelle identification
 		else 															#si le login est présent dans la base de données
-			puts "-----> CONNECTE <-----"								#l'utilisateur est connecté
 			@id = reqProfil.id
 			@login = login
-			return 0
+			return true
 		end
 	end
 
@@ -92,26 +90,29 @@ class Connexion
 	# * +score+ - Le montant du score obtenu à la fin de la partie
 	#
 	def enregistrerScore(idJoueur,infoGrille)
-		# Chercher si la grille courante possède déjà une entrée dans la BDD ou pas ; agir en conséquence
-		reqMap = Map.find_by(nomMap: infoGrille[0])
-		
-		if(reqMap == nil)
-			# Insertion d'un nouveau champ dans la table Map - voir si on importe un objet grille dans les paramètres
-			insertMap = Map.new(
-				hash_name: infoGrille[0],
-				difficulte: infoGrille[1]
-			);
-			insertMap.save
-			reqMap = Map.find_by(nomMap: infoGrille[0])
-		end
-
 		reqScore = Score.new(
 			montantScore: infoGrille[3],
 			modeJeu: infoGrille[2],
-			dateObtention: Time.now.split(" ").at(0)
+			dateObtention: Time.now.to_s.split(" ").at(0).to_s
 		);
 		reqScore.profil_id = idJoueur
-		reqScore.map_id = reqMap.id
+		reqScore.map_id = nil
+
+		if(infoGrille[2] == "Rapide" || infoGrille[2] == "Exploration")
+			# Cherche si la grille courante possède déjà une entrée dans la BDD ou pas
+			reqMap = Map.find_by(nomMap: infoGrille[0])
+
+			if(reqMap == nil)
+				# Insertion d'un nouveau champ dans la table Map
+				insertMap = Map.new(
+					hash_name: infoGrille[0],
+					difficulte: infoGrille[1]
+				);
+				insertMap.save
+				reqMap = Map.find_by(nomMap: infoGrille[0])
+				reqScore.map_id = reqMap.id
+			end
+		end
 		reqScore.save
 	end
 
@@ -125,9 +126,12 @@ class Connexion
 	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
 	#
 	def rechercherScore(idJoueur)
-		reqScore = Score.find_by(id: idJoueur)#.order("modeJeu, dateObtention, montantScore DESC")
+		reqScore = Score.find_by(id: idJoueur)
 
-		return (reqScore != nil) ? reqScore : nil
+		if(reqScore != nil)
+			reqScore.order("modeJeu, dateObtention, montantScore DESC")
+		end
+		return reqScore
 	end
 
 	##

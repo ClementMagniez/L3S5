@@ -62,7 +62,6 @@ class CaseVide < Case
 	def updateNbTents(grille, afterTent)
 		i=
 		j=
-		puts grille.score
 
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[self.x]-=1

@@ -78,10 +78,10 @@ private
 		@btnSauvegarde.signal_connect('clicked') do
 			if !Dir.exist?("saves")
 				self.setDesc("Le dossier de sauvegarde n'existe pas !")
-			elsif !File.exist?("saves/"+@@name+".txt")
-				self.setDesc("Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !")
+			elsif !File.exist?("saves/"+@@joueur.login+".txt")
+				self.setDesc("Le fichier de sauvegarde \"" + @@joueur.login + "\" n'existe pas !")
 			else
-				File.open("saves/"+@@name+".txt", 'r') do |f|
+				File.open("saves/"+@@joueur.login+".txt", 'r') do |f|
 					dataLoaded=Marshal.load(f)
 					grille=dataLoaded[0]
 					@@mode=dataLoaded[1]

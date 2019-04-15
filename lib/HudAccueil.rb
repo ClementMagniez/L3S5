@@ -76,24 +76,18 @@ private
 		@btnConnecter = CustomButton.new("Se connecter")
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
-			session = Connexion.new
+			@@joueur = Connexion.new
 
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
-				puts "Veuillez renseigner tous les champs."
-			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
-				@@name=@entryIdentifiant.text
-				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+				@lblErreur.set_label("Veuillez renseigner tous les champs.")
+			elsif(@@joueur.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == -1)
+				@lblErreur.set_label("Identifiant ou mot de passe incorrect.")
+			else
+				f=IniFile.load("../config/#{@@joueur.login}.ini", encoding: 'UTF-8')
 				@@winX=f['resolution']['width']
 				@@winY=f['resolution']['height']
 				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
-			else
-				if(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) != 1)
-					self.lancementModeJeu
-				else
-					# Ici, il faudrait afficher un message d'erreur sur la fenêtre
-					puts "Echec : connexion impossible"
-				end
 			end
 		}
 	end

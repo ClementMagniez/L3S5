@@ -8,9 +8,9 @@ require_relative 'CustomEventBox'
 # à la connexion, instancie les éléments communs aux menus et permet le passage
 # de l'un à l'autre
 class Hud < Gtk::Grid
-	@@name=""
 	@@initblock=false
 	@@difficulte = nil
+	@@joueur = nil
 	@@mode = nil
 	@@scoreTotal = 0
 

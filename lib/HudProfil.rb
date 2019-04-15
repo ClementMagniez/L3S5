@@ -14,7 +14,6 @@ class HudProfil < Hud
 		initBoutonSauvegarderLogin
 		initChampScore
 
-
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
@@ -40,8 +39,7 @@ class HudProfil < Hud
 
 	def initChampScore
 		# Liste des scores récupérés dans la BDD
-		session = Connexion.new()
-		listeScores = session.rechercherScore(session.id)
+		listeScores = @@joueur.rechercherScore(@@joueur.id)
 
 		if(listeScores != nil)
 			@champScores = Gtk::ScrolledWindow.new
@@ -82,16 +80,5 @@ private
 				@lblErreur.text = "Sauvegarde dans la base !"
 			end
 		end
-	end
-
-	def initChampScore
-		@champScores = Gtk::ScrolledWindow.new
-		@champScores.set_min_content_height(100)
-			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				0.upto(10) do |i|
-					boxChamp.add(Gtk::Label.new("choix " + i.to_s))
-				end
-			@champScores.add(boxChamp)
-		@champScores.set_visible(true)
 	end
 end

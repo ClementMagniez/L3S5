@@ -10,14 +10,11 @@ class HudFinDeJeu < Hud
 		tpsMin = fenetrePrecedente.timer / 60
 		tpsSec = fenetrePrecedente.timer % 60
 		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
-		lblScore = CustomLabel.new("Score = " + @@scoreTotal.to_s)
-		session = Connexion.new
-		session.enregistrerScore(session.id,[@@name,@@difficulte,@@mode,@@scoreTotal])
-
+		lblScore = CustomLabel.new("Score final = " + @@scoreTotal.to_s)
+		@@joueur.enregistrerScore(@@joueur.id,["nomGrille",@@difficulte,@@mode,@@scoreTotal])
 
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
-
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			lblTxt = CustomLabel.new("Bravo, vous avez fini !")
@@ -55,6 +52,8 @@ private
 		@btnRecommencer = CustomButton.new("Recommencer")
 		@btnRecommencer.signal_connect('clicked') {
 			@fenetrePrecedente.reset
+			@fenetrePrecedente.grille.score.reset
+			@fenetrePrecedente.reloadScore
 			@fenetre.changerWidget(self,@fenetrePrecedente)
 		}
 

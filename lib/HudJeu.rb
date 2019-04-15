@@ -135,19 +135,15 @@ class HudJeu < Hud
 		@btnPause.text = @pause ? "Jouer	" : "Pause"
 	end
 
-	# Méthode invoquée a la fin du jeu
-	def jeuTermine
-		# Rajout du calcul du score pour la fin de la partie
-		@grille.score.recupererTemps(self.getTime)
-		@@scoreTotal += self.grille.score.calculerScoreFinal
-
-		self.lancementFinDeJeu
+	def getTime
+		if @timer != nil
+			return @timer
+		end
 	end
 
-	def getTime
-		if @horloge != nil
-			return @horloge
-		end
+	# Met à jour l'affichage du score avec une valeur modifiée
+	def reloadScore
+		@lblScore.set_text("Score : " + @grille.score.getValeur.to_s)
 	end
 
 	protected
@@ -365,7 +361,7 @@ class HudJeu < Hud
 		@btnSauvegarde = CustomButton.new("Sauvegarder")
 		@btnSauvegarde.signal_connect('clicked') do
 			Dir.mkdir("saves")	unless Dir.exist?("saves")
-			File.open("saves/"+@@name+".txt", "w+", 0644) do |f|
+			File.open("saves/"+@@joueur.login+".txt", "w+", 0644) do |f|
 				f.write( Marshal.dump([@grille,@@mode,@@difficulte]))
 			end
 		end
@@ -376,11 +372,6 @@ class HudJeu < Hud
 	# 	récupère la valeur actuelle de l'objet "ScorePartie"
 	def initScore
 		@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
-	end
-
-	# Met à jour l'affichage du score avec une valeur modifiée
-	def reloadScore
-		@lblScore.set_text("Score : " + @grille.score.getValeur.to_s)
 	end
 
 	# Initialise le timer ; ajoute une variable d'instance @lblTime, le label associé au timer.
@@ -432,6 +423,10 @@ class HudJeu < Hud
 
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
+		# Rajout du calcul du score pour la fin de la partie
+		@grille.score.recupererTemps(self.getTime)
+		@@scoreTotal += self.grille.score.calculerScoreFinal
+
 		self.lancementFinDeJeu
 	end
 
