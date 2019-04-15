@@ -12,7 +12,7 @@ class HudFinDeJeu < Hud
 		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
 		lblScore = CustomLabel.new("Score = " + @@scoreTotal.to_s)
 		session = Connexion.new
-		session.enregistrerScore(session.id,[@@mode,@@nom,@@difficulte],@@scoreTotal)
+		session.enregistrerScore(session.id,[@@name,@@difficulte,@@mode,@@scoreTotal])
 
 
 		initBoutonRecommencer

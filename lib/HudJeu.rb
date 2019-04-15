@@ -130,6 +130,7 @@ class HudJeu < Hud
 			end
 		end
 		@grille.raz
+		self.reloadScore
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer	" : "Pause"
 	end
@@ -222,7 +223,7 @@ class HudJeu < Hud
 						@grille[i][k].cycle(@grille)
 
 						# Méthode d'actualisation du score
-						self.initScore
+						self.reloadScore
 
 		#				 @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 						@gridJeu.get_child_at(k+1,i+1).replace(scaleImage(@grille[i][k].affichage))
@@ -245,6 +246,7 @@ class HudJeu < Hud
 				button.signal_connect("button-release-event") do
 					unless @pause
 						cell.cycle(@grille)
+						self.reloadScore
 						button.replace(scaleImage(cell.affichage))
 						desurbrillanceCase
 						desurbrillanceIndice
@@ -281,6 +283,7 @@ class HudJeu < Hud
 				# .set_image(scaleImage(cell.affichage))
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
 			end
+			self.reloadScore
 		}
 	end
 
@@ -324,6 +327,7 @@ class HudJeu < Hud
 				caseRemp = liste.pop
 				if caseRemp.statutVisible.isVide?
 					caseRemp.cycle(@grille)
+					self.reloadScore
 					# @gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
 					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).replace(scaleImage(caseRemp.affichage))
 				end
@@ -356,7 +360,7 @@ class HudJeu < Hud
 
 	# Initialise le bouton de sauvegarde :
 	# 	ajoute une variable d'instance @btnSauvegarde
-	# 	initialise sont comportement
+	# 	initialise son comportement
 	def initBoutonSauvegarde
 		@btnSauvegarde = CustomButton.new("Sauvegarder")
 		@btnSauvegarde.signal_connect('clicked') do
@@ -368,13 +372,15 @@ class HudJeu < Hud
 
 	end
 
+	# Initialise l'affichage du score :
+	# 	récupère la valeur actuelle de l'objet "ScorePartie"
 	def initScore
 		@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
 	end
 
-	# Méthode d'actualisation du score
+	# Met à jour l'affichage du score avec une valeur modifiée
 	def reloadScore
-		# ???
+		@lblScore.set_text("Score : " + @grille.score.getValeur.to_s)
 	end
 
 	# Initialise le timer ; ajoute une variable d'instance @lblTime, le label associé au timer.
