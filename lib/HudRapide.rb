@@ -24,7 +24,7 @@ class HudRapide < HudJeu
 	def initBoutonAide
 		super
 		@btnAide.signal_connect("clicked") do
-			@stockHorloge = @stockHorloge - @@malus
+			@timer -= @@malus
 		end
 	end
 
