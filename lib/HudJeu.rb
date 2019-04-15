@@ -59,7 +59,7 @@ class HudJeu < Hud
 			gridLblAide = Gtk::Grid.new
 			gridLblAide.halign = Gtk::Align::CENTER
 				image = Gtk::Image.new( :file => "../img/gris.png")
-				image.pixbuf = image.pixbuf.scale((@@winX/2),(@@winY/@sizeGridWin)*2)
+				image.pixbuf = image.pixbuf.scale((@@winX/2),(@@winY/10))
 			gridLblAide.attach(image, 0, 0, 1, 1)
 			gridLblAide.attach(@lblAide, 0, 0, 1, 1)
 		vBox.add(gridLblAide)
@@ -394,7 +394,7 @@ protected
 		image=Gtk::Image.new(:file => string)
 
 		imgSize = @@winY / (@tailleGrille*1.4)
-		imgSize*=0.95 if(@@difficulte=="Facile") # pansement sur un oversight de scaling
+		imgSize*=0.75
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 
 		return image
