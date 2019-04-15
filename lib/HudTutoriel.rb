@@ -5,9 +5,6 @@ class HudTutoriel < HudJeu
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
 	def initialize (window,grille)
-#		window.set_hexpand(false)
-#		window.set_vexpand(false)
-
 		super(window,grille)
 		self.setTitre("Tutoriel")
 		@@difficulte="Facile"
@@ -28,19 +25,10 @@ private
 
 		if premAide != nil then
 				@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(scaleImage(premAide.affichageSubr))
-				# puts(" X :" + premAide.x.to_s + " Y :" +premAide.y.to_s )
 				@caseSurbrillanceList.push(premAide)
-
-	#		while not premAide.empty?
-			#	caseAide = premAide
-
-		#		@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage( caseAide.getCase.affichageSubr))
-			#	@caseSurbrillanceList.push(caseAide)
-		#	end
 		end
 
-		@lblAide.use_markup = true
-		styleLabel(@lblAide,'white','ultrabold','x-large',tableau.at(1))
+		@lblAide.text = tableau.at(1).to_s
 
 		indice = tableau.at(3)
 
@@ -50,7 +38,7 @@ private
 			else
 				lblIndice = @gridJeu.get_child_at(indice,0).child
 			end
-			styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
+			lblIndice.color = 'red'
 			@lblIndiceSubr = lblIndice
 		end
 	end

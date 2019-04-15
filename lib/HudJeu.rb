@@ -3,7 +3,7 @@ require_relative 'Hud'
 # Classe abstraite permettant de créer un écran de jeu
 class HudJeu < Hud
 	attr_reader :grille, :timer
-	
+
 	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
@@ -58,10 +58,10 @@ class HudJeu < Hud
 		vBox.add(hBox)
 			gridLblAide = Gtk::Grid.new
 			gridLblAide.halign = Gtk::Align::CENTER
+			gridLblAide.attach(@lblAide, 0, 0, 1, 1)
 				image = Gtk::Image.new( :file => "../img/gris.png")
 				image.pixbuf = image.pixbuf.scale((@@winX/2),(@@winY/10))
 			gridLblAide.attach(image, 0, 0, 1, 1)
-			gridLblAide.attach(@lblAide, 0, 0, 1, 1)
 		vBox.add(gridLblAide)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
@@ -228,7 +228,8 @@ protected
 	# 	ajoute une variable d'instance @lblAide
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
-		@lblAide = CustomLabel.new("", "white")
+		@lblAide = CustomLabel.new
+		@lblAide.color = "white"
 		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide
@@ -305,9 +306,7 @@ protected
 		@btnReset.signal_connect("clicked") {
 			reset
 			if @lblAide != nil
-			# self.styleLabel(@lblAide,"white","normal","x-large","Alors comme ça, on recommence? :O !")
 			@lblAide.set_text("") # TODO
-			#@lblAide.set_markup ("<span foreground='white' > Alors comme ça, on recommence? :O !</span>")
 			end
 			if @t != nil
 				self.resetTimer
@@ -388,7 +387,7 @@ protected
 	# A partir du fichier en path _string_, crée une Gtk::Image
 	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu sans forcer
 	# la redimension de la fenêtre
-	# - string : path d'un fichier image à charger 
+	# - string : path d'un fichier image à charger
 	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)

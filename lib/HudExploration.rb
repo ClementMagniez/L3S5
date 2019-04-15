@@ -6,7 +6,5 @@ class HudExploration < HudJeu
 		super(window,grille)
 		self.setTitre("Partie exploration")
 
-		 self.remove(@btnPause)
-		# @btnPause.sensitive = false
 	end
 end
