@@ -173,6 +173,10 @@ protected
 		end
 		#Affiche le message d'aide
 		 @lblAide.set_text(tableau.at(MESSAGE))
+	 	 @lblAide.set_size('xx-large')  if @@winY<1100
+	 	 @lblAide.set_size('large')  if @@winY<800
+	 	 @lblAide.set_size('small')  if @@winY<600
+
 
 		#Met un indice de colonne ou ligne en surbrillance
 		indice = tableau.at(INDICE_LIG_COL)
