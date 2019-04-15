@@ -15,7 +15,7 @@ class HudRegle < Hud
 			Règle n°3 : \n
 			Si un arbre accueille une tente, il est \"occupé\" et aucune \nnouvelle tente ne peut s'y installer. Cependant, une tente \ndéjà associée à un arbre peut en côtoyer un autre. \n
 			Règle n°4 : \n
-			Le nombre de places est limité : les chiffres en haut et à\n gauche indiquent le nombre de tentes dans chaque travée.")
+			Le nombre de places est limité : les chiffres en haut et à\n gauche indiquent le nombre de tentes dans chaque travée.","pink")
 
 		 image = Gtk::Image.new( :file => "../img/gris.png")
 		 #Scale de l'image

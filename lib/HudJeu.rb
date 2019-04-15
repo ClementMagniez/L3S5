@@ -33,7 +33,6 @@ class HudJeu < Hud
 		initBoutonReset
 		initBoutonCancel
 		initBoutonRemplissage
-		initBoutonRegle
 		initBoutonSauvegarde
 		initBoutonRetour
 
@@ -90,13 +89,6 @@ class HudJeu < Hud
 			@lblIndiceSubr = nil
 		end
 	end
-
-	def initBoutonRegle
-		@btnRegle = CustomButton.new("?")
-		@btnRegle.signal_connect('clicked'){
-			lancementHudRegle
-		}
- end
 
  def initBoutonRetour
 	 @btnRetour = CustomButton.new("Retour")
@@ -320,7 +312,9 @@ protected
 	# 	initialise sont comportement
 	def initBoutonRegle
 		@btnRegle = CustomButton.new("?", "pink")
-		# self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
+		@btnRegle.signal_connect('clicked'){
+			lancementHudRegle
+		}
 	end
 
 	# Initialise le bouton de remplisssage des cases triviales, les cases non adjascentes à un arbre :
