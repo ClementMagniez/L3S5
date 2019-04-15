@@ -163,7 +163,7 @@ protected
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
 	# dans @lblAide ; peut mettre en surbrillance (changement de couleur) une case ou un indice
 	# - return self
-<<<<<<< HEAD
+
 	def afficherAide(tableau)
 		# TODO afficher l'image de fond en la mettant dans une grid avec le label
 #		image = Gtk::Image.new( :file => "../img/gris.png")
@@ -172,13 +172,7 @@ protected
 
 		#Met une case en surbrillance
 		caseAide = tableau.at(CASE)
-=======
-	def afficherAide
-		taille = @grille.length
 
-		tableau = @aide.cycle("rapide")
-		caseAide = tableau.at(0)
->>>>>>> origin/Restructuration
 		if caseAide != nil
 			# @gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
 			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage(caseAide.affichageSubr))
@@ -256,24 +250,16 @@ protected
 				button.set_border_width(1)
 				button.add(scaleImage(cell.affichage))
 				button.signal_connect("button-release-event") do
-<<<<<<< HEAD
-					cell.cycle(@grille)
-					button.replace(scaleImage(cell.affichage))
-					desurbrillanceCase
-					desurbrillanceIndice
-					if @tutoriel==true
-						afficherAideTutoriel
-					end
-					self.jeuTermine		if @grille.estValide
-=======
 					unless @pause
 						cell.cycle(@grille)
 						button.replace(scaleImage(cell.affichage))
 						desurbrillanceCase
 						desurbrillanceIndice
+						if @tutoriel==true
+							afficherAideTutoriel
+						end
 						self.jeuTermine		if @grille.estValide
 					end
->>>>>>> origin/Restructuration
 				end
 				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
 			end
