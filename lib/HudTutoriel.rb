@@ -10,6 +10,8 @@ class HudTutoriel < HudJeu
 
 		super(window,grille)
 		self.setTitre("Tutoriel")
+
+		@lblTime.set_visible(false)
 	end
 
 private

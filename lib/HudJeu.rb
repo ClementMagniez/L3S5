@@ -18,9 +18,9 @@ class HudJeu < Hud
 		@grille = grille
 		@tailleGrille = @grille.length
 
-		@sizeGridJeu = 10
-		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
-		@varDebutPlaceGrid = @sizeGridWin/4
+		# @sizeGridJeu = 10
+		# @varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
+		# @varDebutPlaceGrid = @sizeGridWin/4
 
 		initTimer
 		initBoutonRegle
@@ -94,7 +94,8 @@ class HudJeu < Hud
 
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
-		return @grille.length>12 && @@winY<700 ? "small" : "x-large"
+		return @grille.length < 9 ? "large" : (@grille.length < 12 ?  "medium" : "small")
+		# return @grille.length>=12 || @@winY<700 ? "small" : "x-large"
 	end
 
 	# Crée et stylise le label indiquant le nombre de tentes dans une ligne/colonne
@@ -219,7 +220,6 @@ protected
 				button = CustomEventBox.new
 				button.add(scaleImage(cell.affichage))
 				button.signal_connect("button-release-event") do
-					puts "signal"
 					cell.cycle(@grille)
 					button.replace(scaleImage(cell.affichage))
 					desurbrillanceCase
