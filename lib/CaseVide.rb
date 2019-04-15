@@ -27,15 +27,10 @@ class CaseVide < Case
 		if self.statutVisible.isGazon? # le statut vient de devenir "gazon"
 			grille.score.recupererPoints(1)
 		elsif self.statutVisible.isTente? # le statut vient de devenir "tente"
-			#grille.varTentesLigne[i]-=1
-			#grille.varTentesCol[j]-=1
 			grille.score.recupererPoints(5)
 		elsif self.statutVisible.isVide? # le statut vient de devenir "vide"
-			#grille.varTentesLigne[i]+=1
-			#grille.varTentesCol[j]+=1
 			grille.score.recupererPoints(-10)
 		end
-		# puts grille.score
 
 		self.updateNbTents(grille, :'isVide?')
 
@@ -46,6 +41,17 @@ class CaseVide < Case
 	def cancel(grille)
 
 		self.statutVisible.cancel
+
+		if self.statutVisible.isGazon? # le statut vient de devenir "gazon"
+			grille.score.recupererPoints(-5)
+		elsif self.statutVisible.isTente? # le statut vient de devenir "tente"
+			grille.score.recupererPoints(10)
+		elsif self.statutVisible.send(afterTent) # le statut était "tente"
+			grille.score.recupererPoints(-1)
+		end
+
+
+
 		self.updateNbTents(grille, :'isGazon?')
 
 
@@ -61,19 +67,7 @@ class CaseVide < Case
 	def updateNbTents(grille, afterTent)
 		i=
 		j=
-
-		if self.statutVisible.isGazon? # le statut vient de devenir "gazon"
-			grille.score.recupererPoints(-5)
-		elsif self.statutVisible.isTente? # le statut vient de devenir "tente"
-			grille.varTentesLigne[self.x]-=1
-			grille.varTentesCol[self.y]-=1
-			grille.score.recupererPoints(10)
-		elsif self.statutVisible.send(afterTent) # le statut était "tente"
-			grille.varTentesLigne[self.x]+=1
-			grille.varTentesCol[self.y]+=1
-			grille.score.recupererPoints(-1)
-		end
-		# puts grille.score
+		puts grille.score
 
 		if grille.varTentesLigne[self.x]==0 && grille.varTentesCol[self.y]==0
 			return grille.estComplete?

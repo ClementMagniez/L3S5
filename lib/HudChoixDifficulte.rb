@@ -27,6 +27,7 @@ class HudChoixDifficulte < Hud
 
 		self.initBoutonsDifficulte
 		self.initBoutonProfil
+		self.initBoutonRetour
 
 		debutMilieu = (@sizeGridWin/2)-1
 

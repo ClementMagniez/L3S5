@@ -25,6 +25,7 @@ class HudJeu < Hud
 		@varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
 		@varDebutPlaceGrid = @sizeGridWin/4
 
+		initScore
 		initTimer
 		initBoutonRegle
 		chargementGrille
@@ -41,6 +42,7 @@ class HudJeu < Hud
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 				@lblTime.hexpand = true
 				@lblTime.halign = Gtk::Align::CENTER
+			hBox.add(@lblScore)
 			hBox.add(@lblTime)
 			hBox.add(@btnRegle)
 		vBox.add(hBox)
@@ -198,6 +200,8 @@ class HudJeu < Hud
 					if @grille[k][i].statutVisible.isVide?
 						@grille[k][i].cycle(@grille)
 						# Méthode d'actualisation du score ici
+						
+
 						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
 					end
 				}
@@ -288,11 +292,6 @@ class HudJeu < Hud
 		}
 	end
 
-	def initLabelScore
-		@lblScore = Gtk::Label.new("Score : " + @grille.score.getValeur.to_s)
-	end
-	# Méthode d'actualisation du score ici
-
 	# Initialise le bouton pause :
 	# 	ajoute une variable d'instance @btnPause
 	# 	initialise sont comportement
@@ -378,6 +377,11 @@ class HudJeu < Hud
 		end
 
 	end
+
+	def initScore
+		@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
+	end
+	# Méthode d'actualisation du score ici
 
 	# Initialise le timer :
 	# 	ajoute une variable d'instance @lblTime, le label associé au timer.

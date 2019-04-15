@@ -123,7 +123,7 @@ class Connexion
 	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
 	#
 	def rechercherScore(idJoueur)
-		reqScore = Score.find_by(id: idJoueur).order("modeJeu, dateObtention, montantScore DESC")
+		reqScore = Score.find_by(id: idJoueur)#.order("modeJeu, dateObtention, montantScore DESC")
 
 		return (reqScore != nil) ? reqScore : nil
 	end

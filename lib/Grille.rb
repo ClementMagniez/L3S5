@@ -81,8 +81,8 @@ class Grille
 		end
 		self.estValide=res
 	end
-	
-	# Fonction de (ré)initialisation : déclare @varTentesCol, @varTentesLigne, 
+
+	# Fonction de (ré)initialisation : déclare @varTentesCol, @varTentesLigne,
 	# met @estValide à false et vide @stack
 	def raz
 		self.estValide = false
