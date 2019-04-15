@@ -96,6 +96,7 @@ class HudJeu < Hud
  end
 
 	def desurbrillanceCase
+		puts(" je veux desurbriller")
 		if @caseSurbrillanceList != nil
 			while not @caseSurbrillanceList.empty? # TODO chercher autre chose
 				caseSubr = @caseSurbrillanceList.shift
@@ -161,13 +162,14 @@ protected
 #		image = Gtk::Image.new( :file => "../img/gris.png")
 #		image.pixbuf = image.pixbuf.scale((@@winX/2.5),(@@winY/@sizeGridWin)*2)
 		# self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
-
+		@caseSurbrillanceList = Array.new
 		#Met une case en surbrillance
 		caseAide = tableau.at(CASE)
 
 		if caseAide != nil
 			# @gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
 			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage(caseAide.affichageSubr))
+			@caseSurbrillanceList.push(caseAide)
 		end
 		#Affiche le message d'aide
 		 @lblAide.set_text(tableau.at(MESSAGE))
@@ -438,7 +440,7 @@ protected
 
 	# Affiche l'aide pour le mode Tutoriel
 	def afficherAideTutoriel
-			@caseSurbrillanceList = Array.new
+
 
 			tableau = @aide.cycle("tuto")
 
