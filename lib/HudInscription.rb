@@ -1,6 +1,4 @@
 require "rubygems"
-#require_relative "connectSqlite3.rb"
-#require_relative "Profil.rb"
 require_relative "Connexion.rb"
 
 class HudInscription < Hud
@@ -8,7 +6,7 @@ class HudInscription < Hud
 	def initialize(fenetre)
 		super(fenetre)
 
-		#label : Titre - Identifiant - Mot de passe 
+		#label : Titre - Identifiant - Mot de passe
 		@lblTitreInscr = Gtk::Label.new(" INSCRIPTION ")
 		@lblId = Gtk::Label.new("Identifiant : ")
 		@lblMdp = Gtk::Label.new("Mot de passe : ")
@@ -16,9 +14,9 @@ class HudInscription < Hud
 		#Entrée : Identifiat - Mot de passe
 		@entId = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
-		
+
 		# Rend le mot de passe entré invisible
-		@entMdp.set_visibility(FALSE)
+		@entMdp.set_visibility(false)
 
 		#Label d'erreur
 		@lblErreur = Gtk::Label.new("Bonne inscription !")
@@ -50,30 +48,27 @@ class HudInscription < Hud
 			if @entMdp.text.empty? || @entId.text.empty?
 				@lblErreur.set_label("Veuillez renseigner toutes les informations.")
 			else
-				#@lblErreur.set_label("Enregistrement base de donnée à faire.")
 				session = Connexion.new()
-				
+
 				id = @entId.text
 				mdp = @entMdp.text
 				mdp = session.crypterMdp(mdp)
-				#mdp = mdp.crypt(mdp)
-			
-				if id == "drop table" || mdp == "drop table"
-					@lblErreur.set_label("Entrez un identifiant et un mot de passe valides.")
-				elsif Profil.find_by(pseudonyme: id) != nil
+
+				if Profil.find_by(pseudonyme: id) != nil
 					@lblErreur.set_label("Cet identifiant existe déjà.")
 				else
+					$login = id
 					user = Profil.new(
 						pseudonyme: id,
 						mdpEncrypted: mdp
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-			
+
 					self.lancementModeJeu
 				end
 			end
 		}
 	end
-	
+
 end

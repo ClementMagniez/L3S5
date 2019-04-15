@@ -12,62 +12,55 @@ class CaseVide < Case
 	def initialize(etat,i,j)
 		super(i,j)
 		@statut=StatutVide.new(etat)
-		@statutVisible=StatutVide.new(VIDE)
+		@statutVisible=StatutVide.new(:VIDE)
 	end
 
 	# TODO refactoriser cycle/cancel
 
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
+	# - grille : la Grille de jeu
+	# - return self
 	def cycle(grille)
-		self.statutVisible.cycle()
-		i=self.x
-		j=self.y
+		self.statutVisible.cycle
 
+		self.updateNbTents(grille, :'isVide?')
 
-		if self.statutVisible.isGazon? # le statut vient de devenir "gazon"
-			grille.score.recupererPoints(1)
-		elsif self.statutVisible.isTente? # le statut vient de devenir "tente"
-			grille.varTentesLigne[i]-=1
-			grille.varTentesCol[j]-=1
-			grille.score.recupererPoints(5)
-		elsif self.statutVisible.isVide? # le statut vient de devenir "vide"
-			grille.varTentesLigne[i]+=1
-			grille.varTentesCol[j]+=1
-			grille.score.recupererPoints(-10)
-		end
-		# puts grille.score
-
-		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
-			grille.estComplete?
-		end
 		super(grille)
 		self
 	end
-
+	# @see Case#cancel
 	def cancel(grille)
 
 		self.statutVisible.cancel
-		i=self.x
-		j=self.y
+		self.updateNbTents(grille, :'isGazon?')
 
-		if self.statutVisible.isGazon? # le statut vient de repasser à "gazon"
-			grille.score.recupererPoints(-5)
-		elsif self.statutVisible.isTente? # le statut vient de repasser à "tente"
-			grille.varTentesLigne[i]-=1
-			grille.varTentesCol[j]-=1
-			grille.score.recupererPoints(10)
-		elsif self.statutVisible.isVide? # le statut vient de repasser à "vide"
-			grille.varTentesLigne[i]+=1
-			grille.varTentesCol[j]+=1
-			grille.score.recupererPoints(-1)
-		end
-		# puts grille.score
 
-		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
-			grille.estComplete?
-		end
 		self
+	end
+
+	# Met à jour les varTentesCol et varTentesLigne de la grille selon le statut
+	# de self et vérifie la validité de la grille
+	# - grille : la Grille de jeu
+	# - afterTent : symbol de 'isGazon?' ou 'isVide?' déterminant quel type de case
+	# vient après :TENTE dans le cycle ; permet de différencier cancel et cycle
+	# - return true si la grille est complète, false sinon
+	def updateNbTents(grille, afterTent)
+		i=
+		j=
+
+		if self.statutVisible.isTente? # le statut vient de devenir "tente"
+			grille.varTentesLigne[self.x]-=1
+			grille.varTentesCol[self.y]-=1
+		elsif self.statutVisible.send(afterTent) # le statut était "tente"
+			grille.varTentesLigne[self.x]+=1
+			grille.varTentesCol[self.y]+=1
+		end
+
+		if grille.varTentesLigne[self.x]==0 && grille.varTentesCol[self.y]==0
+			return grille.estComplete?
+		end
+		false
 	end
 
 
@@ -87,6 +80,8 @@ class CaseVide < Case
 			'../img/gazon.png'
 		elsif self.statutVisible.isTente?
 			'../img/tente.png'
+		else
+			'../img/gris.png'
 		end
 	end
 end

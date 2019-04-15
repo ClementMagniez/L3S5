@@ -10,6 +10,8 @@ class HudAccueil < Hud
 	# @btnQuitter
 	# @entryIdentifiant
 	# @entryMotDePasse
+	# @lblErreur
+	# @session
 
 	def initialize(window)
 		super(window)
@@ -17,12 +19,21 @@ class HudAccueil < Hud
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 
+		# TODO TEMPORAIRE - confort de tests
+		@entryIdentifiant.text="test"
+		@entryMotDePasse.text="test"
+		####################################
 
 		initBoutonConnecter
 		initBoutonInscription
 		initBoutonQuitter
 
+		# Rend le mot de passe entré invisible
+		@entryMotDePasse.set_visibility(false)
 
+		@lblErreur = Gtk::Label.new("Connectez-vous !")
+
+		self.attach(@lblErreur, varX+2, varY-1, 1, 1)
 
 		self.attach(Gtk::Label.new("Identifiant : "),varX+1, varY+1, 1, 1)
 		self.attach(@entryIdentifiant,varX+2, varY+1, 1, 1)
@@ -33,11 +44,10 @@ class HudAccueil < Hud
 		self.attach(@btnInscrire,varX+1, varY+3, 1, 1)
 		self.attach(@btnConnecter,varX+2, varY+3, 1, 1)
 
-		self.attach(@btnOptions, varX, varY+4, 1, 1)
+#		self.attach(@btnOptions, varX, varY+4, 1, 1)
 		self.attach(@btnQuitter,varX+3, varY+4, 1, 1)
 
-			fond = ajoutFondEcran
-		self.attach(fond,0,0,5,5)
+		ajoutFondEcran
 	end
 
 
@@ -45,26 +55,29 @@ class HudAccueil < Hud
 		@btnConnecter = Gtk::Button.new :label => "Se connecter"
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
-			session = Connexion.new()
-				
+			@session = Connexion.new()
+
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
-				puts "Veuillez renseigner tous les champs."
-			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
-				self.lancementModeJeu
+				@lblErreur.set_label("Veuillez renseigner tous les champs.")
+			elsif(@session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == -1)
+				@lblErreur.set_label("Identifiant ou mot de passe incorrect.")
 			else
-				# Ici, il faudrait afficher un message d'erreur sur la fenêtre
-				puts "Echec : connexion impossible"
+				#$login = @session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text())
+				$login = @entryIdentifiant.text
+				@@name=@entryIdentifiant.text
+				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+				@@winX=f['resolution']['width']
+				@@winY=f['resolution']['height']
+				self.resizeWindow(@@winX, @@winY)
+				self.lancementModeJeu
 			end
 		}
 	end
+
 	def initBoutonInscription
-		puts "Inscription => Traitement manquant"
 		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
 		@btnInscrire.signal_connect('clicked'){
 			self.lancementInscription
 		}
 	end
-
-
-
 end

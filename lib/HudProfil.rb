@@ -1,29 +1,42 @@
-# Cette classe fait a peut pres les memes choses que HudInscription
+# Cette classe fait a peu pres les memes choses que HudInscription
+require 'inifile'
+require "rubygems"
+require "digest/sha1"
+require_relative "connectSqlite3.rb"
+require_relative "Profil.rb"
+
 class HudProfil < Hud
+
 	def initialize(window)
 		super(window)
 		self.setTitre("Profil")
 		@entNom = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
 
-
-
 		initChampScore
-		initBoutonSauvegarder
+		initBoutonSauvegarderLogin
 		initBoutonRetourMenu
 
+		# Rend le mot de passe entré invisible
+		@entMdp.set_visibility(false)
 
+		# Affichage de l'identifiant de l'utilisateur connecté
+		#@lblLogin = Gtk::Label.new($login)
 
-		self.attach(@lblDescription, 0, 0, 2, 1)
-		self.attach(Gtk::Label.new("Nouveau nom"), 0, 1, 1, 1)
-		self.attach(@entNom, 1, 1, 1, 1)
-		self.attach(Gtk::Label.new("Nouveau mot de passe"), 0, 2, 1, 1)
-		self.attach(@entMdp, 1, 2, 1, 1)
+		#self.attach(@lblLogin, 0, -1, 2, 1)
+		self.attach(Gtk::Label.new("Compte"), 4, 0, 2, 1)
+		self.attach(@lblDescription, 4, 1, 2, 1)
+		self.attach(Gtk::Label.new("Nouveau nom"), 4, 2, 1, 1)
+		self.attach(@entNom, 5, 2, 1, 1)
+		self.attach(Gtk::Label.new("Nouveau mot de passe"), 4, 3, 1, 1)
+		self.attach(@entMdp, 5, 3, 1, 1)
+		self.attach(@btnSauvegardeeLogin, 4, 4, 2, 1)
 
-		self.attach(@champScores, 0, 4, 2, 4)
+#		self.attach(@champScores, 0, 4, 2, 4)
 
-		self.attach(@btnSauvegarde, 0, 10, 2, 1)
-		self.attach(@btnRetour, 0, 11, 2, 1)
+		self.attach(@btnRetour, 1, 11, 1, 1)
+
+		ajoutFondEcran
 	end
 
 	def initChampScore
@@ -37,20 +50,55 @@ class HudProfil < Hud
 		@champScores.set_visible(true)
 	end
 
-	def initBoutonSauvegarder
-		@btnSauvegarde = Gtk::Button.new label: "Sauvegarder"
-		@btnSauvegarde.signal_connect("clicked") {
+	def initBoutonSauvegarderLogin
+		@btnSauvegardeeLogin = Gtk::Button.new label: "Sauvegarder les modifications"
+		@btnSauvegardeeLogin.signal_connect("clicked") {
 			strNom = @entNom.text
 			strMdp = @entMdp.text
-			if(strNom.empty?)
-				puts "Le nom ne peut etre vide !"
-				self.setDesc("Le nom ne peut etre vide !")
+
+			user = Profil.find_by(pseudonyme: $login)
+
+			# Si aucun des champs n'est renseigné
+			if strNom.empty? && strMdp.empty?
+				self.setDesc("Vous devez remplir au moins un champ")
+			# Si seul le champ "mot de passe" est renseigné
+			elsif(strNom.empty?)
+				# Enregistrement du mot de passe crypté
+				user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)
+				user.save
+				self.setDesc("Modifications enregistrées !")
+			# Si seul le champ "identifiant" est renseigné
 			elsif(strMdp.empty?)
-				puts "Le mot de passe ne peut etre vide !"
-				self.setDesc("Le mot de passe ne peut etre vide !")
+				# Si l'identifiant est déjà présent dans la base de données
+				if Profil.find_by(pseudonyme: strNom) != nil
+					self.setDesc("Cet identifiant existe déjà.")
+				else
+					user.pseudonyme = @entNom.text
+					user.save
+
+					# Modification de l'affichage de l'identifiant de l'utilisateur connecté
+					#$login = strNom
+					#@lblLogin.set_label($login)
+
+					self.setDesc("Modifications enregistrées !")
+				end
+			# Si les deux champs sont renseignés
 			else
-				puts "Sauvegarde dans la base !"
-				self.setDesc("Sauvegarde dans la base !")
+				# Si l'identifiant est déjà présent dans la base de données
+				if Profil.find_by(pseudonyme: strNom) != nil
+					self.setDesc("Cet identifiant existe déjà.")
+				else
+					# Modification des informations concernant l'utilisateur dans la base de données
+					user.pseudonyme = strNom
+					user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)
+					user.save
+
+					# Modification de l'affichage de l'identifiant de l'utilisateur connecté
+					#$login = strNom
+					#@lblLogin.set_label($login)
+
+					self.setDesc("Modifications enregistrées !")
+				end
 			end
 		}
 	end
@@ -58,8 +106,10 @@ class HudProfil < Hud
 	def initBoutonRetourMenu
 		@btnRetour = Gtk::Button.new label: "Retour"
 		@btnRetour.signal_connect("clicked") {
-			puts "Retour au menu"
 			lancementModeJeu
 		}
 	end
+
+	#				width=@menuResolution.split(*)[0].to_i
+	#			height=@menuResolution.split(*)[1].to_i
 end
