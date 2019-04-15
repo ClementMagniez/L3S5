@@ -24,9 +24,9 @@ class HudRapide < HudJeu
 	def initBoutonAide
 		super
 		@btnAide.signal_connect("clicked") do
-			@stockHorloge = @stockHorloge - @@malus
+			@timer -= @@malus
 		end
-	end
+end
 
 	# Surcharge la méthode d'init do bouton pause,
 	# la grille de jeu ainsi qu'une partie des boutons ne sont plus visibles (ceci à pour but d'éviter la triche)
@@ -42,17 +42,17 @@ class HudRapide < HudJeu
 			@lblAide.set_visible(!@pause)
 		end
 	end
- 
+
 	# Surcharge la méthode d'initialisation du timer,
 	# l'affichage de celui-ci se fait en compte à rebours
 	def initTimer
 		super(@temps)
 	end
-	
+
 	def increaseTimer
 		super(:-)
 	end
-	
+
 	def resetTimer
 		super(@temps)
 	end

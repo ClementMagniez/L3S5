@@ -86,11 +86,16 @@ class HudJeu < Hud
 	end
 
 	def initBoutonRegle
-		@btnRegle = creerBouton(Gtk::Label.new("?"),"pink","ultrabold","xx-large")
-		self.attach(@btnRegle,@sizeGridWin-2,3,1,1)
+		@btnRegle = CustomButton.new("?")
 		@btnRegle.signal_connect('clicked'){
 			lancementHudRegle
 		}
+ end
+
+ def initBoutonRetour
+	 @btnRetour = CustomButton.new("Retour")
+ 		@btnRetour.signal_connect("clicked") {self.lancementModeJeu }
+ end
 
 	def desurbrillanceCase
 		if @caseSurbrillanceList != nil
@@ -133,7 +138,9 @@ class HudJeu < Hud
 		@grille.raz
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer	" : "Pause"
-
+		if @tutoriel != nil
+			afficherAideTutoriel
+		end
 	end
 
 protected
@@ -141,7 +148,6 @@ protected
 #Affiche l'aide pour le mode Rapide ou Exploration
 	def afficherAideRapideOuExplo
 
-		puts "HudTutoriel::RapideOuExplo"
 		taille = @grille.length
 		tableau = @aide.cycle("rapide")
 		afficherAide(tableau)
@@ -202,7 +208,7 @@ protected
 				}
 				desurbrillanceIndice
 				if @tutoriel==true
-					aideTutoriel
+					afficherAideTutoriel
 				end
 
 			}
@@ -223,7 +229,7 @@ protected
 				}
 				desurbrillanceIndice
 				if @tutoriel==true
-					aideTutoriel
+					afficherAideTutoriel
 				end
 
 			}
@@ -258,7 +264,7 @@ protected
 		@lblAide = CustomLabel.new
 		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
-			self.afficherAide
+			self.afficherAideRapideOuExplo
 		}
 	end
 
@@ -422,7 +428,6 @@ protected
 
 	# Affiche l'aide pour le mode Tutoriel
 	def afficherAideTutoriel
-			puts "HudTutoriel::aide"
 			@caseSurbrillanceList = Array.new
 
 			tableau = @aide.cycle("tuto")
@@ -439,7 +444,5 @@ protected
 				end
 			end
 	end
-
-end
 
 end

@@ -12,8 +12,10 @@ class HudTutoriel < HudJeu
 		self.setTitre("Tutoriel")
 		@tutoriel = true
 
-		afficherAideTutoriel
 
+		afficherAideTutoriel
+		@btnAide.sensitive = false
+	@btnPause.sensitive = false
 		@lblTime.set_visible(false)
 	end
 
