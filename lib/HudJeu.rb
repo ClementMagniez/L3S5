@@ -218,7 +218,8 @@ protected
 			line.each do |cell|
 				button = CustomEventBox.new
 				button.add(scaleImage(cell.affichage))
-				button.signal_connect("button-press-event") do
+				button.signal_connect("button-release-event") do
+					puts "signal"
 					cell.cycle(@grille)
 					button.replace(scaleImage(cell.affichage))
 					desurbrillanceCase
