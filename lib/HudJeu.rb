@@ -56,7 +56,13 @@ class HudJeu < Hud
 				vBox2.add(@btnSauvegarde)
 			hBox.add(vBox2)
 		vBox.add(hBox)
-		vBox.add(@lblAide)
+			gridLblAide = Gtk::Grid.new
+			gridLblAide.halign = Gtk::Align::CENTER
+				image = Gtk::Image.new( :file => "../img/gris.png")
+				image.pixbuf = image.pixbuf.scale((@@winX/2),(@@winY/@sizeGridWin)*2)
+			gridLblAide.attach(image, 0, 0, 1, 1)
+			gridLblAide.attach(@lblAide, 0, 0, 1, 1)
+		vBox.add(gridLblAide)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -131,12 +137,6 @@ protected
 	# dans @lblAide ; peut mettre en surbrillance (changement de couleur) une case ou un indice
 	# - return self
 	def afficherAide
-
-		# TODO afficher l'image de fond en la mettant dans une grid avec le label
-#		image = Gtk::Image.new( :file => "../img/gris.png")
-#		image.pixbuf = image.pixbuf.scale((@@winX/2.5),(@@winY/@sizeGridWin)*2)
-		# self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
-
 		taille = @grille.length
 
 		tableau = @aide.cycle("rapide")
@@ -227,7 +227,7 @@ protected
 	# 	ajoute une variable d'instance @lblAide
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
-		@lblAide = CustomLabel.new
+		@lblAide = CustomLabel.new("", "white")
 		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide
