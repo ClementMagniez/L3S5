@@ -11,7 +11,7 @@ class HudOption < Hud
 		self.setTitre("Options")
 		initMenuResolution
 		initBoutonSauvegarderResolution
-
+		initBoutonRetour
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)

@@ -119,7 +119,7 @@ protected
 		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
-				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
+			 @fenetre.changerWidget(self,HudOption.new(@fenetre,self))
 		}
 	end
 
