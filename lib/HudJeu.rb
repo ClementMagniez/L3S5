@@ -17,7 +17,7 @@ class HudJeu < Hud
 		@gridJeu.column_homogeneous = true
 		@grille = grille
 		@tailleGrille = @grille.length
-
+		@pause=false
 		# @sizeGridJeu = 10
 		# @varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
 		# @varDebutPlaceGrid = @sizeGridWin/4
@@ -120,21 +120,9 @@ class HudJeu < Hud
 			end
 		end
 		@grille.raz
-		if @t != nil
-				@t.kill
-				@stockHorloge =0
-				@timer = Time.now
-				@t = Thread.new{timer}
-				if @pause
-					@btnPause.text = "Pause"
-				end
-		end
-	end
+		self.resetTimer
+		@btnPause.text = @pause ? "Jouer	" : "Pause"
 
-	def getTime
-		if @horloge != nil
-			return @horloge
-		end
 	end
 
 protected
@@ -268,15 +256,12 @@ protected
 		@btnPause = CustomButton.new("Pause")
 		@btnPause.signal_connect('clicked'){
 			if @pause
-				@timer = Time.now
-				@t = Thread.new{timer}
-				@btnPause.text = "Pause"
-				@pause = false
+				self.startTimer
+				@btnPause.set_text("Pause")
+				@pause=false
 			else
-				@stockHorloge = @stockHorloge + (Time.now - @timer)
-				@t.kill
-				@btnPause.text = "Play"
-				@pause = true
+				@pause=true
+				@btnPause.set_text("Jouer")
 			end
 		}
 	end
@@ -320,10 +305,7 @@ protected
 			#@lblAide.set_markup ("<span foreground='white' > Alors comme ça, on recommence? :O !</span>")
 			end
 			if @t != nil
-				@t.kill
-				@stockHorloge =0
-				@timer = Time.now
-				@t = Thread.new{timer}
+				self.resetTimer
 				if @pause
 					@btnPause.set_label("Pause")
 				end
@@ -346,15 +328,50 @@ protected
 
 	end
 
-	# Initialise le timer :
-	# 	ajoute une variable d'instance @lblTime, le label associé au timer.
-	def initTimer
-		@lblTime = CustomLabel.new("00:00", "white")
-		@timer = Time.now
-		@pause = false
-		@horloge = 0
-		@stockHorloge = 0
-		@t=Thread.new{timer}
+	# Initialise le timer ; ajoute une variable d'instance @lblTime, le label associé au timer.
+	# - start : par défaut 0, le temps de départ du timer
+	# - return self
+	def initTimer(start=0)
+
+		@timer = start
+		@lblTime = CustomLabel.new(self.parseTimer, "white")
+		self.startTimer
+		self
+	end
+
+	# Lance le décompte du temps
+	# - return self 
+	def startTimer
+		GLib::Timeout.add(1000) do
+			self.increaseTimer
+		end
+		self
+	end
+	# Incrémente le timer et met @lblTime à jour
+	# - modeCalcul : symbole { :+, +- } déterminant si le timer est croissant
+	# ou décroissant - par défaut croissant 
+	# - return !@pause 
+	def increaseTimer(modeCalcul = :'+' )
+		return false if @pause # interrompt le décompte en cas de pause
+
+		@timer=@timer.send(modeCalcul, 1)
+		@lblTime.text=self.parseTimer
+		return true 
+	end
+	
+	# Rend lisible le temps écoulé @timer et renvoie le String calculé
+	# - return un String contenant un temps mm:ss
+	def parseTimer
+		[@timer/60, @timer%60].map { |t| t.to_s.rjust(2,'0') }.join(':')
+	end
+	
+	# Réinitialise le timer à 0
+	# - start : par défaut 0, le temps de départ du timer
+	# - return self
+	def resetTimer(start=0)
+		@timer=start
+		@lblTime.text=self.parseTimer
+		self
 	end
 
 	# Méthode invoquée a la fin du jeu
@@ -369,25 +386,10 @@ protected
 		image=Gtk::Image.new(:file => string)
 
 		imgSize = @@winY / (@tailleGrille*1.4)
-		imgSize*=0.85
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 
 		return image
 	end
 
-	# Implémentation du timer,
-	# boucle infinie qui modifie @lblTime à chaque seconde qui passe
-	def timer
-		while true do
-			@horloge = (Time.now - @timer) + @stockHorloge
-				minutes = (@horloge/60).to_i
-					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
-				secondes = (@horloge%60).to_i
-					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			# styleLabel(@lblTime,"white","ultrabold","xx-large",strMinutes + ":" + strSecondes)
-			@lblTime.set_text(strMinutes + ":" + strSecondes)
-			sleep 1
-		end
-	end
 end

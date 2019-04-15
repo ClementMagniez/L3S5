@@ -23,16 +23,16 @@ class HudRapide < HudJeu
 	# cela à pour but de diminuer le temps restant (systeme de malus) à chaque demande d'aide
 	def initBoutonAide
 		super
-		@btnAide.signal_connect("clicked") {
+		@btnAide.signal_connect("clicked") do
 			@stockHorloge = @stockHorloge - @@malus
-		}
+		end
 	end
 
 	# Surcharge la méthode d'init do bouton pause,
 	# la grille de jeu ainsi qu'une partie des boutons ne sont plus visibles (ceci à pour but d'éviter la triche)
 	def initBoutonPause
 		super
-		@btnPause.signal_connect("clicked") {
+		@btnPause.signal_connect("clicked") do
 			@gridJeu.set_visible(!@pause)
 			@btnAide.set_visible(!@pause)
 			@btnReset.set_visible(!@pause)
@@ -40,35 +40,20 @@ class HudRapide < HudJeu
 			@btnRemplissage.set_visible(!@pause)
 			@btnSauvegarde.set_visible(!@pause)
 			@lblAide.set_visible(!@pause)
-		}
+		end
 	end
-
+ 
 	# Surcharge la méthode d'initialisation du timer,
 	# l'affichage de celui-ci se fait en compte à rebours
 	def initTimer
-		super
-		if @temps < 10
-			@lblTime.set_text("0" + @temps.to_s + ":00")
-		else
-			@lblTime.set_text(@temps.to_s + ":00")
-		end
+		super(@temps)
 	end
-
-	# Redéfinie la méthode timer,
-	# le timer est cette fois-ci un compte à rebours
-	def timer
-		while true do
-			@horloge = @temps - ((Time.now - @timer) - @stockHorloge)
-				minutes = (@horloge/60).to_i
-					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
-				secondes = (@horloge%60).to_i
-					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			@lblTime.text = strMinutes + ":" + strSecondes
-			if @horloge<=0
-				jeuTermine
-				return 0
-			end
-			sleep 1
-		end
+	
+	def increaseTimer
+		super(:-)
+	end
+	
+	def resetTimer
+		super(@temps)
 	end
 end
