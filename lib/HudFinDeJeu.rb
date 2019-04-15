@@ -10,28 +10,44 @@ class HudFinDeJeu < Hud
 		varX, varY = 2, 2
 		@fenetrePrecedente = fenetrePrecedente
 		@lblAide = Gtk::Label.new
-		@lblAide.use_markup = true
-		@lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
-		# lblScore = Gtk::Label.new("Score = 0")
-		fenetrePrecedente.grille.score.recupererTemps(fenetrePrecedente.getTime)
-		scoreObtenu = fenetrePrecedente.grille.score.calculerScoreFinal()
-		lblScore = Gtk::Label.new("Score = " + scoreObtenu.to_s)
-		session = Connexion.new()
+		# @lblAide.use_markup = true
+		# @lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
+		@fenetrePrecedente.grille.score.recupererTemps(@fenetrePrecedente.getTime)
+		scoreObtenu = @fenetrePrecedente.grille.score.calculerScoreFinal()
+		lblScore = CustomLabel.new("Score = " + scoreObtenu.to_s)
+		session = Connexion.new
 		#session.enregistrerScore(session.id,nomMode,grille,scoreObtenu)
+
 
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 
-		self.attach(@lblAide,0,0,1,1)
-		self.attach(lblScore, varX, varY, 1, 1)
-		self.attach(@btnRecommencer,varX+1, varY+1, 1, 1)
-		self.attach(@btnModeDeJeu, varX+1, varY+2, 1, 1)
-			fond = ajoutFondEcran
-		self.attach(fond,0,0,varX+3,varY+4)
+		# self.attach(@lblAide,0,0,1,1)
+		# self.attach(lblScore, varX, varY, 1, 1)
+		# self.attach(@btnRecommencer,varX+1, varY+1, 1, 1)
+		# self.attach(@btnModeDeJeu, varX+1, varY+2, 1, 1)
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			lblTxt = CustomLabel.new("Bravo, vous avez fini !")
+			lblTxt.vexpand = true
+		vBox.add(lblTxt)
+			lblScore.vexpand = true
+		vBox.add(lblScore)
+			@btnRecommencer.hexpand = false
+			@btnRecommencer.halign = Gtk::Align::CENTER
+		vBox.add(@btnRecommencer)
+			@btnModeDeJeu.vexpand = true
+			@btnModeDeJeu.hexpand = false
+			@btnModeDeJeu.halign = Gtk::Align::CENTER
+			@btnModeDeJeu.valign = Gtk::Align::START
+		vBox.add(@btnModeDeJeu)
+
+		self.attach(vBox, 0, 0, 1, 1)
+
+		ajoutFondEcran
 	end
 
 	def initBoutonRecommencer
-		@btnRecommencer = Gtk::Button.new :label => "Recommencer"
+		@btnRecommencer = creerBouton(Gtk::Label.new("Recommencer"),"white","ultrabold","x-large")
 		@btnRecommencer.signal_connect('clicked') {
 			@fenetrePrecedente.reset
 			#@fenetrePrecedente.raz
@@ -41,7 +57,7 @@ class HudFinDeJeu < Hud
 	end
 
 	def initBoutonChangerModeDeJeu
-		@btnModeDeJeu = Gtk::Button.new :label => "Changer de grille"
+		@btnModeDeJeu = creerBouton(Gtk::Label.new("Retour au menu"),"white","ultrabold","x-large")
 		@btnModeDeJeu.signal_connect('clicked'){
 			self.lancementModeJeu
 		}

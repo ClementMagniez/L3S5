@@ -7,35 +7,46 @@ class HudRapide < HudJeu
 	TEMPS_DIFFICILE=TEMPS_MOYEN/2
 
 	def initialize(window,grille)
-		super(window,grille)
-
-		@@malus = 15
-		@grille.score.estModeChrono()
 		case grille.length
 			when 6..8 then @temps=TEMPS_FACILE
 			when 9..12 then @temps=TEMPS_MOYEN
 			when 13..16 then @temps=TEMPS_DIFFICILE
 		end
 
-
+		super(window,grille)
 		self.setTitre("Partie rapide")
-
-		initBoutonTimer
-		initBoutonAide
-		initBoutonPause
-
-		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-1,@sizeGridJeu,@sizeGridJeu+4)
-
-		self.attach(@lblTime,@varDebutPlaceGrid,@varDebutPlaceGrid-2,@sizeGridJeu,1)
-
-		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-6,1,1)
-		self.attach(@btnPause,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
-
-		ajoutFondEcran
+		@grille.score.estModeChrono
+		@@malus = 15
 	end
 
-	def initBoutonTimer
-		super()
+	# Surcharge la méthode d'initialisation du bouton aide,
+	# cela à pour but de diminuer le temps restant (systeme de malus) à chaque demande d'aide
+	def initBoutonAide
+		super
+		@btnAide.signal_connect("clicked") {
+			@stockHorloge = @stockHorloge - @@malus
+		}
+	end
+
+	# Surcharge la méthode d'init do bouton pause,
+	# la grille de jeu ainsi qu'une partie des boutons ne sont plus visibles (ceci à pour but d'éviter la triche)
+	def initBoutonPause
+		super
+		@btnPause.signal_connect("clicked") {
+			@gridJeu.set_visible(!@pause)
+			@btnAide.set_visible(!@pause)
+			@btnReset.set_visible(!@pause)
+			@btnCancel.set_visible(!@pause)
+			@btnRemplissage.set_visible(!@pause)
+			@btnSauvegarde.set_visible(!@pause)
+			@lblAide.set_visible(!@pause)
+		}
+	end
+
+	# Surcharge la méthode d'initialisation du timer,
+	# l'affichage de celui-ci se fait en compte à rebours
+	def initTimer
+		super
 		if @temps < 10
 			@lblTime.set_label("0" + @temps.to_s + ":00")
 		else
@@ -43,6 +54,8 @@ class HudRapide < HudJeu
 		end
 	end
 
+	# Redéfinie la méthode timer,
+	# le timer est cette fois-ci un compte à rebours
 	def timer
 		while true do
 			@horloge = @temps - ((Time.now - @timer) - @stockHorloge)
@@ -55,33 +68,7 @@ class HudRapide < HudJeu
 				jeuTermine
 				return 0
 			end
-
 			sleep 1
-
 		end
-	end
-
-	# Créé et initialise le bouton d'aide
-	def initBoutonAide
-		aide
-		@btnAide.signal_connect("clicked") {
-			@grille.score.appelerAssistant
-			@stockHorloge = @stockHorloge - @@malus
-		}
-	end
-
-	def initBoutonPause
-		super
-		@btnPause.signal_connect("clicked") {
-			@gridJeu.set_visible(!@pause)
-			@btnAide.set_sensitive(!@pause)
-			@btnReset.set_sensitive(!@pause)
-			@btnCancel.set_sensitive(!@pause)
-			@btnRemplissage.set_sensitive(!@pause)
-		}
-	end
-
-	def getTime
-		return @temps-@horloge
 	end
 end

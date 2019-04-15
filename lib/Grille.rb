@@ -59,15 +59,18 @@ class Grille
 	end
 
 	# Annule le dernier coup de l'utilisateur sur la grille
+	# return la cellule où ce coup a été joué, ou nil s'il n'y en a pas
 	def cancel
 		if not self.stack.isEmpty?
 			cell=self.stack.pop
 			cell.cancel(self)
+			return cell
 		end
-		cell
+		nil
 	end
 
-	# Renvoie true si la grille est complète et valide, false sinon
+	# Renvoie true si la grille est complète et valide, false sinon, et affecte
+	# @estValide à cette valeur
 	def estComplete?
 		res=true
 		self.grille.each do |ligne|
@@ -78,7 +81,9 @@ class Grille
 		end
 		self.estValide=res
 	end
-
+	
+	# Fonction de (ré)initialisation : déclare @varTentesCol, @varTentesLigne, 
+	# met @estValide à false et vide @stack
 	def raz
 		self.estValide = false
 		@varTentesCol=@tentesCol.dup

@@ -3,6 +3,7 @@ require_relative 'AidesConstantes'
 class Aide
 
   include AidesConstantes
+
  #####################################################################################################
 
   # initialise @grille avec la grille passé en argument
@@ -14,6 +15,7 @@ class Aide
     @newStatutTente = StatutVide.new(:TENTE)
     @newStatutGazon = StatutVide.new(:GAZON)
     @sansSucces = [nil, nil, nil, nil, false, nil]
+
   end
 
   # permet d'avoir la liste des 4 cases adjacentes à la case passé en argument (dessus, dessous, à gauche et à droite)
@@ -47,6 +49,7 @@ class Aide
     end
     return listeCases
   end
+
 
   # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
   def nbCasesIncorrect
@@ -336,7 +339,6 @@ class Aide
               x = caseArbre.x
               y = caseArbre.y
               nbCasesVide = 0
-
               # On prend connaissance pour les 4 cases adjacentes
               self.liste4Cases(cases).each do |uneCase|
                 nbCasesVide += 1 if uneCase.statutVisible == @newStatutVide && uneCase != cases
@@ -470,11 +472,11 @@ class Aide
   # intervient seulement si aucune aide précédente n'a eu de succès
   def aucuneAide
     return [nil, "Aucune aide disponible. Il faut jouer au hasard (demander à Jacoboni).", nil, nil, true, nil]
+
   end
 
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
   def cycle(tutoOuRapide)
-
     # liste des aides (l'ordre est important, première -> ... -> dernière)
     listeDesAides = [:impossibleTenteAdjacente, :resteQueTentesLigne, :resteQueTentesColonne, :resteQueGazonLigne, :resteQueGazonColonne, :casePasACoteArbre, :uniquePossibiliteArbre, :dispositionPossibleLigne, :dispositionPossibleColonne, :caseArbreAssocieTente, :arbreAutourCasePossedeTente, :aucuneAide]
 
@@ -493,6 +495,5 @@ class Aide
         return foncReturn
       end
     end
-
   end
 end
