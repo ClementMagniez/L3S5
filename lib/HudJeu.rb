@@ -60,7 +60,13 @@ class HudJeu < Hud
 				vBox2.add(@btnSauvegarde)
 			hBox.add(vBox2)
 		vBox.add(hBox)
-		vBox.add(@lblAide)
+			gridLblAide = Gtk::Grid.new
+			gridLblAide.halign = Gtk::Align::CENTER
+			gridLblAide.attach(@lblAide, 0, 0, 1, 1)
+				image = Gtk::Image.new( :file => "../img/gris.png")
+				image.pixbuf = image.pixbuf.scale((@@winX/2),(@@winY/10))
+			gridLblAide.attach(image, 0, 0, 1, 1)
+		vBox.add(gridLblAide)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -157,6 +163,7 @@ protected
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
 	# dans @lblAide ; peut mettre en surbrillance (changement de couleur) une case ou un indice
 	# - return self
+<<<<<<< HEAD
 	def afficherAide(tableau)
 		# TODO afficher l'image de fond en la mettant dans une grid avec le label
 #		image = Gtk::Image.new( :file => "../img/gris.png")
@@ -165,6 +172,13 @@ protected
 
 		#Met une case en surbrillance
 		caseAide = tableau.at(CASE)
+=======
+	def afficherAide
+		taille = @grille.length
+
+		tableau = @aide.cycle("rapide")
+		caseAide = tableau.at(0)
+>>>>>>> origin/Restructuration
 		if caseAide != nil
 			# @gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage(caseAide.affichageSubr))
 			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage(caseAide.affichageSubr))
@@ -242,6 +256,7 @@ protected
 				button.set_border_width(1)
 				button.add(scaleImage(cell.affichage))
 				button.signal_connect("button-release-event") do
+<<<<<<< HEAD
 					cell.cycle(@grille)
 					button.replace(scaleImage(cell.affichage))
 					desurbrillanceCase
@@ -250,6 +265,15 @@ protected
 						afficherAideTutoriel
 					end
 					self.jeuTermine		if @grille.estValide
+=======
+					unless @pause
+						cell.cycle(@grille)
+						button.replace(scaleImage(cell.affichage))
+						desurbrillanceCase
+						desurbrillanceIndice
+						self.jeuTermine		if @grille.estValide
+					end
+>>>>>>> origin/Restructuration
 				end
 				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
 			end
@@ -262,6 +286,7 @@ protected
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
 		@lblAide = CustomLabel.new
+		@lblAide.color = "white"
 		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
 			self.afficherAideRapideOuExplo
@@ -292,11 +317,15 @@ protected
 			if @pause
 				self.startTimer
 				@btnPause.set_text("Pause")
-				@pause=false
 			else
-				@pause=true
 				@btnPause.set_text("Jouer")
 			end
+			@pause = !@pause
+			@gridJeu.sensitive = !@pause
+			@btnAide.sensitive = !@pause
+			@btnReset.sensitive = !@pause
+			@btnCancel.sensitive = !@pause
+			@btnRemplissage.sensitive = !@pause
 		}
 	end
 
@@ -334,9 +363,7 @@ protected
 		@btnReset.signal_connect("clicked") {
 			reset
 			if @lblAide != nil
-			# self.styleLabel(@lblAide,"white","normal","x-large","Alors comme ça, on recommence? :O !")
 			@lblAide.set_text("") # TODO
-			#@lblAide.set_markup ("<span foreground='white' > Alors comme ça, on recommence? :O !</span>")
 			end
 			if @t != nil
 				self.resetTimer
@@ -388,6 +415,7 @@ protected
 	def increaseTimer(modeCalcul = :'+' )
 		return false if @pause # interrompt le décompte en cas de pause
 
+
 		@timer=@timer.send(modeCalcul, 1)
 		@lblTime.text=self.parseTimer
 		return true
@@ -414,13 +442,15 @@ protected
 	end
 
 	# A partir du fichier en path _string_, crée une Gtk::Image
-	# et la redimensionne pour s'adapter à la taille de la fenêtre
-	# Return cette Gtk::Image redimensionnée
+	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu sans forcer
+	# la redimension de la fenêtre
+	# - string : path d'un fichier image à charger
+	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
 
 		imgSize = @@winY / (@tailleGrille*1.4)
-		# image = Gtk::Image.new :file => @grille[x][y].affichage
+		imgSize*=0.75
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 		return image
 

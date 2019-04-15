@@ -29,8 +29,6 @@ class HudChoixDifficulte < Hud
 		initBoutonRetour
 		initBoutonProfil
 
-		debutMilieu = (@sizeGridWin/2)-1
-
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			@btnProfil.halign = Gtk::Align::END
 		vBox.add(@btnProfil)

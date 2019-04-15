@@ -39,8 +39,6 @@ class Hud < Gtk::Grid
 
 	end
 
-
-
 protected
 
 	# TODO factoriser les lancementX

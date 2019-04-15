@@ -5,9 +5,6 @@ class HudTutoriel < HudJeu
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
 	def initialize (window,grille)
-#		window.set_hexpand(false)
-#		window.set_vexpand(false)
-
 		super(window,grille)
 		self.setTitre("Tutoriel")
 		@tutoriel = true
