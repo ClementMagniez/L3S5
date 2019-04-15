@@ -94,7 +94,7 @@ class HudJeu < Hud
 
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
-		return 'large' if @@winY>700 
+		return 'large' if @@winY>700
 		return @grille.length < 9 ? "large" : (@grille.length < 12 ?  "medium" : "small")
 		# return @grille.length>=12 || @@winY<700 ? "small" : "x-large"
 	end
@@ -259,11 +259,15 @@ protected
 			if @pause
 				self.startTimer
 				@btnPause.set_text("Pause")
-				@pause=false
 			else
-				@pause=true
 				@btnPause.set_text("Jouer")
 			end
+			@pause = !@pause
+			@gridJeu.sensitive = !@pause
+			@btnAide.sensitive = !@pause
+			@btnReset.sensitive = !@pause
+			@btnCancel.sensitive = !@pause
+			@btnRemplissage.sensitive = !@pause
 		}
 	end
 
@@ -341,7 +345,7 @@ protected
 	end
 
 	# Lance le décompte du temps
-	# - return self 
+	# - return self
 	def startTimer
 		GLib::Timeout.add(1000) do
 			self.increaseTimer
@@ -350,23 +354,23 @@ protected
 	end
 	# Incrémente le timer et met @lblTime à jour
 	# - modeCalcul : symbole { :+, +- } déterminant si le timer est croissant
-	# ou décroissant - par défaut croissant 
-	# - return !@pause 
+	# ou décroissant - par défaut croissant
+	# - return !@pause
 	def increaseTimer(modeCalcul = :'+' )
 		return false if @pause # interrompt le décompte en cas de pause
 
 
 		@timer=@timer.send(modeCalcul, 1)
 		@lblTime.text=self.parseTimer
-		return true 
+		return true
 	end
-	
+
 	# Rend lisible le temps écoulé @timer et renvoie le String calculé
 	# - return un String contenant un temps mm:ss
 	def parseTimer
 		[@timer/60, @timer%60].map { |t| t.to_s.rjust(2,'0') }.join(':')
 	end
-	
+
 	# Réinitialise le timer à 0
 	# - start : par défaut 0, le temps de départ du timer
 	# - return self
@@ -391,7 +395,6 @@ protected
 
 		imgSize = @@winY / (@tailleGrille*1.4)
 		imgSize*=0.95 if(@@difficulte=="Facile") # pansement sur un oversight de scaling
-		
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 
 		return image

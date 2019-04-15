@@ -49,17 +49,17 @@ class HudRapide < HudJeu
 			@lblAide.set_visible(!@pause)
 		end
 	end
- 
+
 	# Surcharge la méthode d'initialisation du timer,
 	# l'affichage de celui-ci se fait en compte à rebours
 	def initTimer
 		super(@temps)
 	end
-	
+
 	def increaseTimer
 		super(:-)
 	end
-	
+
 	def resetTimer
 		super(@temps)
 	end
