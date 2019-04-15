@@ -68,20 +68,15 @@ private
 
 	# Crée et connecte le bouton de chargement d'une sauvegarde
 	# Return self
-	# TODO : gérer l'exception ERRNOENT si pas de fichier (afficher un popup)
 	def initBoutonChargerSauvegarde
 
 		@btnSauvegarde = CustomButton.new("Charger une sauvegarde")
-
-
 		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde")
 		@btnSauvegarde.signal_connect('clicked') do
-			if !Dir.exist?("saves")
-				self.setDesc("Le dossier de sauvegarde n'existe pas !")
-			elsif !File.exist?("saves/"+@@name+".txt")
+			if !File.exist?("../saves/"+@@name+".txt")
 				self.setDesc("Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !")
 			else
-				File.open("saves/"+@@name+".txt", 'r') do |f|
+				File.open("../saves/"+@@name+".txt", 'r') do |f|
 					dataLoaded=Marshal.load(f)
 					grille=dataLoaded[0]
 					@@mode=dataLoaded[1]
@@ -128,7 +123,12 @@ private
 		end
 		self
 	end
-
+	
+	
+	# Ecrase Hud#initBoutonQuitter pour rediriger vers l'écran de connexion	
+	def initBoutonQuitter
+		super {	self.lancementAccueil }
+	end
 protected
 	attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
 end

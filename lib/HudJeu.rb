@@ -325,8 +325,8 @@ protected
 	def initBoutonSauvegarde
 		@btnSauvegarde = CustomButton.new("Sauvegarder")
 		@btnSauvegarde.signal_connect('clicked') do
-			Dir.mkdir("saves")	unless Dir.exist?("saves")
-			File.open("saves/"+@@name+".txt", "w+", 0644) do |f|
+
+			File.open("../saves/"+@@name+".txt", "w+", 0644) do |f|
 				f.write( Marshal.dump([@grille,@@mode,@@difficulte]))
 			end
 		end

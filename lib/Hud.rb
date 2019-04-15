@@ -129,15 +129,22 @@ protected
 	end
 
 	# Initialise le bouton pour quitter (ferme la fenetre) :
-	# 	ajoute une variable d'instance @btnQuitter
-	# 	initialise sont comportement
+	# -	ajoute une variable d'instance @btnQuitter
+	# -	initialise son comportement
+	# - - par défaut, interrompt l'exécution ; peut accepter un block
 	def initBoutonQuitter
 		@btnQuitter = Gtk::Button.new
 		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
 		quitter = Gtk::Image.new(:file => '../img/quitter.png')
 		quitter.pixbuf = quitter.pixbuf.scale(@@winX/20,@@winX/20)	if quitter.pixbuf != nil
 		@btnQuitter.set_image(quitter)
-		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
+		@btnQuitter.signal_connect('clicked') {	
+		if block_given?
+			yield
+		else
+			Gtk.main_quit 
+		end
+		}
 	end
 
 	# Initialise le bouton de retour au menu pricipal (choix des modes de jeu ) :
@@ -148,8 +155,8 @@ protected
 		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
 	end
 
+	# TODO : vraiment utile ?
 	def initWindow
-		puts "Initialisation des HUD"
 		@@winX = @fenetre.size.fetch(0)
 		@@winY = @fenetre.size.fetch(1)
 
@@ -166,11 +173,6 @@ protected
 	def setTitre(str)
 		@fenetre.set_title(str)
 	end
-
-	# TODO virer ce truc et implémenter CustomLabel intégralement
-	# def styleLabel(label,couleur,style,size,contenu)
-	# 	label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
-	# end
 
 	def updateFondEcran(width, height)
 			return GdkPixbuf::Pixbuf.new( :file => "../img/fond2.png",\

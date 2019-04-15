@@ -80,14 +80,19 @@ private
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
 				puts "Veuillez renseigner tous les champs."
 			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
+				# Connexion : initialisation des variables de classe et lancement 
+				# de l'écran de sélection du mode de jeu
+			
 				@@name=@entryIdentifiant.text
 				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
 				@@winX=f['resolution']['width']
 				@@winY=f['resolution']['height']
 				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
+				# S'assure que le répertoire est sain
+				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
 			else
-				# Ici, il faudrait afficher un message d'erreur sur la fenêtre
+				# TODO Ici, il faudrait afficher un message d'erreur sur la fenêtre
 				puts "Echec : connexion impossible"
 			end
 		}
