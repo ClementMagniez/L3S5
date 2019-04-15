@@ -25,11 +25,13 @@ class HudRapide < HudJeu
 		super
 		@btnAide.signal_connect("clicked") do
 			@timer -= @@malus
+			self.jeuTermine		if @timer <= 0
+			@@malus *= 1.2
 		end
 	end
 
-	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non 
-	# le temps écoulé	
+	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non
+	# le temps écoulé
 	def timer
 		puts @timer
 		return @temps-@timer
