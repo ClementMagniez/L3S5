@@ -13,6 +13,7 @@ class HudInscription < Hud
 		# Rend le mot de passe entré invisible
 		@entMdp.set_visibility(false)
 		@lblErreur = CustomLabel.new
+		@lblErreur.color = 'red'
 
 		initBoutonEnregistrement
 		initBoutonRetour
@@ -48,17 +49,23 @@ private
 		#Bouton : Enregistrer
 		@btnEnr = CustomButton.new("S'enregistrer")
 		@btnEnr.signal_connect("clicked") do
-			if @entMdp.text.empty? || @entId.text.empty?
-				@lblErreur.set_text("Veuillez renseigner toutes les informations.")
+			session = Connexion.new
+			id = @entId.text.tr("^[a-z][A-Z][0-9]\s_-", "")
+			mdp = @entMdp.text
+			if id != @entId.text
+				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
+				puts "Insription : Caractère(s) non autorisé(s)"
+			elsif id.length > 32
+				@lblErr.text = "Identifiant trop long (> 32) !"
+				puts "Connexion : L'identifiant trop long !"
+			elsif id.empty?
+				@lblErreur.text = "L'identifiant ne peut être vide !"
+				puts "Insription : L'identifiant ne peut être vide !"
+			elsif mdp.empty?
+				@lblErreur.text = "Le mot de passe ne peut être vide !"
+				puts "Insription : Le mot de passe ne peut être vide !"
 			else
-				#@lblErreur.set_label("Enregistrement base de donnée à faire.")
-				session = Connexion.new
-
-				id = @entId.text
-				mdp = @entMdp.text
 				mdp = session.crypterMdp(mdp)
-				#mdp = mdp.crypt(mdp)
-
 				if Profil.find_by(pseudonyme: id) != nil
 					@lblErreur.set_text("Cet identifiant existe déjà.")
 				else

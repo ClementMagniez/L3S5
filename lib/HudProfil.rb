@@ -6,6 +6,7 @@ class HudProfil < Hud
 		super(window)
 		self.setTitre("Profil")
 		@lblErreur = CustomLabel.new
+		@lblErreur.color = 'red'
 		@entNom = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
 		@entMdp.set_visibility(false)
@@ -51,9 +52,16 @@ private
 	def initBoutonSauvegarderLogin
 		@btnSauvegarde = CustomButton.new("Sauvegarder les modifications")
 		@btnSauvegarde.signal_connect("clicked") do
-			strNom = @entNom.text
+			strNom = @entNom.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = @entMdp.text
-			if(strNom.empty?)
+			@lblErreur.color = 'red'
+			if strNom != @entNom.text
+				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
+				puts "Insription : Caractère(s) non autorisé(s)"
+			elsif strNom.length > 32
+				@lblErr.text = "Identifiant trop long (> 32) !"
+				puts "Connexion : L'identifiant trop long !"
+			elsif(strNom.empty?)
 				puts "Le nom ne peut etre vide !"
 				@lblErreur.text = "Le nom ne peut etre vide !"
 			elsif(strMdp.empty?)
@@ -61,6 +69,7 @@ private
 				@lblErreur.text = "Le mot de passe ne peut etre vide !"
 			else
 				puts "Sauvegarde dans la base !"
+				@lblErreur.color = 'green'
 				@lblErreur.text = "Sauvegarde dans la base !"
 			end
 		end

@@ -5,6 +5,8 @@ require_relative "Connexion.rb"
 class HudAccueil < Hud
 	def initialize(window)
 		super(window)
+		@lblErr = CustomLabel.new
+		@lblErr.color = 'red'
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 		@entryMotDePasse.set_visibility(false)
@@ -22,10 +24,12 @@ class HudAccueil < Hud
 		width = 150
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			@lblErr.vexpand = true
+			@lblErr.halign = Gtk::Align::CENTER
+		vBox.add(@lblErr)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.vexpand = true
 			hBox.halign = Gtk::Align::CENTER
-			hBox.homogeneous = true
+			# hBox.homogeneous = true
 				lbl = CustomLabel.new("Identifiant")
 				lbl.valign = Gtk::Align::END
 				lbl.halign = Gtk::Align::END
@@ -76,19 +80,30 @@ private
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
 			session = Connexion.new
-
-			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
-				puts "Veuillez renseigner tous les champs."
-			elsif(session.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == 1)
-				@@name=@entryIdentifiant.text
+			strId = @entryIdentifiant.text.tr("^[a-z][A-Z][0-9]\s_-", "")
+			strMdp = @entryMotDePasse.text
+			if strId != @entryIdentifiant.text
+				@lblErr.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
+				puts "Connexion : Caractère(s) non autorisé(s)"
+			elsif strId.length > 32
+				@lblErr.text = "Identifiant trop long (> 32) !"
+				puts "Connexion : L'identifiant trop long !"
+			elsif strId.empty?
+				@lblErr.text = "L'identifiant ne peut être vide !"
+				puts "Connexion : L'identifiant ne peut être vide !"
+			elsif strMdp.empty?
+				@lblErr.text = "Le mot de passe ne peut être vide !"
+				puts "Connexion : Le mot de passe ne peut être vide !"
+			elsif(session.seConnecter(strId, strMdp) == 1)
+				@@name=strId
 				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
 				@@winX=f['resolution']['width']
 				@@winY=f['resolution']['height']
 				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
 			else
-				# Ici, il faudrait afficher un message d'erreur sur la fenêtre
-				puts "Echec : connexion impossible"
+				@lblErr.text = "Echec : connexion impossible !"
+				puts "Connexion : connexion impossible !"
 			end
 		}
 	end
