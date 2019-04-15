@@ -63,6 +63,7 @@ private
 		@btnRetour = CustomButton.new("Retour")
 		@btnRetour.signal_connect("clicked") do
 			lancementModeJeu
+		end
 	end
 
 	def initBoutonSauvegarderLogin

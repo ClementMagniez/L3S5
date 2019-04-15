@@ -132,6 +132,7 @@ class HudJeu < Hud
 		@grille.raz
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer	" : "Pause"
+	end
 
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
