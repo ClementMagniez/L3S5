@@ -2,6 +2,7 @@
 class CustomButton < Gtk::Button
 	def initialize(str="", couleur="black", size="large", weight="bold")
 		super()
+		self.set_relief(Gtk::ReliefStyle::NONE)
 		self.add(CustomLabel.new(str,couleur,size,weight))
 	end
 

@@ -94,6 +94,7 @@ class HudJeu < Hud
 
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
+		return 'large' if @@winY>700 
 		return @grille.length < 9 ? "large" : (@grille.length < 12 ?  "medium" : "small")
 		# return @grille.length>=12 || @@winY<700 ? "small" : "x-large"
 	end
@@ -218,6 +219,7 @@ protected
 		@grille.grille.each do |line|
 			line.each do |cell|
 				button = CustomEventBox.new
+				button.set_border_width(1)
 				button.add(scaleImage(cell.affichage))
 				button.signal_connect("button-release-event") do
 					cell.cycle(@grille)
