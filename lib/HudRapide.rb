@@ -31,6 +31,7 @@ class HudRapide < HudJeu
 	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non 
 	# le temps écoulé	
 	def timer
+		puts @timer
 		return @temps-@timer
 	end
 
@@ -57,7 +58,12 @@ class HudRapide < HudJeu
 	end
 
 	def increaseTimer
-		super(:-)
+		buff=super(:-)
+		if self.timer>=@temps
+			self.jeuTermine
+			return false
+		end
+		buff
 	end
 
 	def resetTimer
