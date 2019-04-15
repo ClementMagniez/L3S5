@@ -389,7 +389,7 @@ protected
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
 
-		imgSize = @@winY / (@tailleGrille*1.5)
+		imgSize = @@winY / (@tailleGrille*1.6)
 		# image = Gtk::Image.new :file => @grille[x][y].affichage
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 
