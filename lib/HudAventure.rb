@@ -3,35 +3,16 @@ class HudAventure < HudJeu
 
 	def initialize(window,grille)
 		super(window,grille)
-<<<<<<< HEAD
-		@@NbPartie += 1
-
-
-		initBoutonTimer
-		initBoutonPause
-
 		self.setTitre("Aventure")
-
-=======
-		self.setTitre("Aventure")
->>>>>>> origin/Restructuration
 
 		@@NbPartie += 1
 		@varBoutonEnPlus=1
 
-<<<<<<< HEAD
-	
-
-		self.attach(@btnPause,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
-
-		ajoutFondEcran
-=======
 		@btnAide.set_visible(true)
 		@btnAide.sensitive = false
 		@btnPause.set_visible(false)
 		@btnPause.sensitive = false
 		@lblAide.visible = false
->>>>>>> origin/Restructuration
 	end
 
 	# Redéfinie la méthode jeuTermine de HudJeu.

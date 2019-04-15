@@ -25,24 +25,20 @@ class CaseVide < Case
 		self.statutVisible.cycle
 
 		self.updateNbTents(grille, :'isVide?')
-		
+
 		super(grille)
 		self
 	end
-<<<<<<< HEAD
-
-=======
 	# @see Case#cancel
->>>>>>> origin/Restructuration
 	def cancel(grille)
 
 		self.statutVisible.cancel
 		self.updateNbTents(grille, :'isGazon?')
-		
+
 
 		self
 	end
-	
+
 	# Met à jour les varTentesCol et varTentesLigne de la grille selon le statut
 	# de self et vérifie la validité de la grille
 	# - grille : la Grille de jeu
