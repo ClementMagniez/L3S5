@@ -17,6 +17,7 @@ class HudChoixDifficulte < Hud
 	# Paramètres :
 	# - window : la Fenetre de l'application
 	# - mode : un symbole ∈ { :rapide, :explo, :aventure } - détermine quel mode de jeu est lancé
+<<<<<<< HEAD
 	def initialize(window, mode,fenetrePrecedente)
 		super(window,fenetrePrecedente)
 		varX, varY = 4,4
@@ -28,43 +29,84 @@ class HudChoixDifficulte < Hud
 
 		self.initBoutonsDifficulte
 		self.initBoutonProfil
+=======
+	def initialize(window, mode)
+		super(window)
 
-		# TODO - foutus nombres magiques
+ 		self.setTitre("Choix de la difficulté - mode #{mode.to_s}")
+ 		@@mode=mode
+ 		# Définit la fonction de lancement utilisée selon le symbole fourni
+		@mode="lancement"+mode.to_s.capitalize
+>>>>>>> origin/Restructuration
+
+		initBoutonsDifficulte
+		initBoutonRetour
+		initBoutonProfil
+
 		debutMilieu = (@sizeGridWin/2)-1
 
-		self.attach(@btnFacile,debutMilieu, debutMilieu-1, 1, 1)
-		self.attach(@btnMoyen,debutMilieu, debutMilieu, 1, 1)
-		self.attach(@btnDifficile,debutMilieu, debutMilieu+1, 1, 1)
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			@btnProfil.halign = Gtk::Align::END
+		vBox.add(@btnProfil)
+			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			vBox2.halign = Gtk::Align::CENTER
+				@btnFacile.vexpand = true
+				@btnFacile.valign = Gtk::Align::END
+			vBox2.add(@btnFacile)
+			vBox2.add(@btnMoyen)
+			vBox2.add(@btnDifficile)
+		vBox.add(vBox2)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.vexpand = true
+			hBox.hexpand = true
+			hBox.homogeneous = true
+				@btnOptions.valign = Gtk::Align::END
+				@btnOptions.halign = Gtk::Align::START
+			hBox.add(@btnOptions)
+				@btnRetour.valign = Gtk::Align::END
+				@btnRetour.halign = Gtk::Align::END
+			hBox.add(@btnRetour)
+		vBox.add(hBox)
 
-		self.attach(@btnOptions, 1, @sizeGridWin, 1, 1)
-		self.attach(@btnRetour, @sizeGridWin-1, @sizeGridWin-1, 1, 1)
-		self.attach(@btnProfil, @sizeGridWin -1 , 1, 1, 1)
-
+		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
 	end
 
+<<<<<<< HEAD
+=======
+private
+
+>>>>>>> origin/Restructuration
 	# Crée et instancie les boutons de choix de la difficulté
 	# Return self
 	def initBoutonsDifficulte
-		@btnFacile = creerBouton(Gtk::Label.new("Facile"),"white","ultrabold","x-large")
-		@btnMoyen = creerBouton(Gtk::Label.new("Moyen"),"white","ultrabold","x-large")
-		@btnDifficile = creerBouton(Gtk::Label.new("Difficile"),"white","ultrabold","x-large")
+		@btnFacile = CustomButton.new("Facile")
+		@btnMoyen = CustomButton.new("Moyen")
+		@btnDifficile = CustomButton.new("Difficile")
 
 		@btnFacile.signal_connect('clicked') do
+			@@difficulte = "Facile"
 			self.send(@mode, Grille.new(TAILLE_FACILE))
 		end
 
 		@btnMoyen.signal_connect('clicked') do
+			@@difficulte = "Moyen"
 			self.send(@mode, Grille.new(TAILLE_MOYEN))
 		end
 
 		@btnDifficile.signal_connect('clicked') do
+			@@difficulte = "Difficile"
 			self.send(@mode, Grille.new(TAILLE_DIFFICILE))
 		end
 		self
 	end
 
+<<<<<<< HEAD
 	protected
 		attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
+=======
+protected
+	attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
+>>>>>>> origin/Restructuration
 end

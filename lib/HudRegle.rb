@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class HudRegle < Hud
 	def initialize (window,fenetrePrecedente)
 		super(window,fenetrePrecedente)
@@ -24,3 +25,12 @@ class HudRegle < Hud
 		ajoutFondEcran
 	end
 end
+=======
+class HudRegle < Hud
+	def initialize (window)
+		super(window)
+
+		self.attach(Gtk::Label.new("Regles à definir"),0,0,1,1)
+	end
+end
+>>>>>>> origin/Restructuration

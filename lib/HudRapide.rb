@@ -7,75 +7,53 @@ class HudRapide < HudJeu
 	TEMPS_DIFFICILE=TEMPS_MOYEN/2
 
 	def initialize(window,grille)
-		super(window,grille)
-
-		@@malus = 15
 		case grille.length
 			when 6..8 then @temps=TEMPS_FACILE
 			when 9..12 then @temps=TEMPS_MOYEN
 			when 13..16 then @temps=TEMPS_DIFFICILE
 		end
 
-
+		super(window,grille)
 		self.setTitre("Partie rapide")
 
-		initBoutonTimer
-		initBoutonAide
-		initBoutonPause
-
-		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-1,@sizeGridJeu,@sizeGridJeu+4)
-
-		self.attach(@lblTime,@varDebutPlaceGrid,@varDebutPlaceGrid-2,@sizeGridJeu,1)
-
-		self.attach(@btnAide,@varFinPlaceGrid,@varFinPlaceGrid-6,1,1)
-		self.attach(@btnPause,@varFinPlaceGrid,@varFinPlaceGrid-5,1,1)
-
-		ajoutFondEcran
+		@@malus = 15
 	end
 
-	def initBoutonTimer
-		super()
-		if @temps < 10
-			@lblTime.set_label("0" + @temps.to_s + ":00")
-		else
-			@lblTime.set_label(@temps.to_s + ":00")
-		end
-	end
-
-	def timer
-		while true do
-			@horloge = @temps - ((Time.now - @timer) - @stockHorloge)
-				minutes = (@horloge/60).to_i
-					strMinutes = (minutes < 10 ? "0" : "") + minutes.to_s
-				secondes = (@horloge%60).to_i
-					strSecondes = (secondes < 10 ? "0" : "") + secondes.to_s
-			styleLabel(@lblTime,"white","ultrabold","xx-large",strMinutes + ":" + strSecondes)
-			if @horloge<=0
-				jeuTermine
-				return 0
-			end
-
-			sleep 1
-
-		end
-	end
-
-	# Créé et initialise le bouton d'aide
+	# Surcharge la méthode d'initialisation du bouton aide,
+	# cela à pour but de diminuer le temps restant (systeme de malus) à chaque demande d'aide
 	def initBoutonAide
-		aide
-		@btnAide.signal_connect("clicked") {
+		super
+		@btnAide.signal_connect("clicked") do
 			@stockHorloge = @stockHorloge - @@malus
-		}
+		end
 	end
 
+	# Surcharge la méthode d'init do bouton pause,
+	# la grille de jeu ainsi qu'une partie des boutons ne sont plus visibles (ceci à pour but d'éviter la triche)
 	def initBoutonPause
 		super
-		@btnPause.signal_connect("clicked") {
+		@btnPause.signal_connect("clicked") do
 			@gridJeu.set_visible(!@pause)
-			@btnAide.set_sensitive(!@pause)
-			@btnReset.set_sensitive(!@pause)
-			@btnCancel.set_sensitive(!@pause)
-			@btnRemplissage.set_sensitive(!@pause)
-		}
+			@btnAide.set_visible(!@pause)
+			@btnReset.set_visible(!@pause)
+			@btnCancel.set_visible(!@pause)
+			@btnRemplissage.set_visible(!@pause)
+			@btnSauvegarde.set_visible(!@pause)
+			@lblAide.set_visible(!@pause)
+		end
+	end
+ 
+	# Surcharge la méthode d'initialisation du timer,
+	# l'affichage de celui-ci se fait en compte à rebours
+	def initTimer
+		super(@temps)
+	end
+	
+	def increaseTimer
+		super(:-)
+	end
+	
+	def resetTimer
+		super(@temps)
 	end
 end

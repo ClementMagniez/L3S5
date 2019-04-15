@@ -1,11 +1,10 @@
 require_relative "HudJeu"
 
 class HudExploration < HudJeu
-	# @btnPause
-	# @timer
 
 	def initialize(window,grille)
 		super(window,grille)
+<<<<<<< HEAD
 
 
 		self.setTitre("Partie exploration")
@@ -22,5 +21,11 @@ class HudExploration < HudJeu
 	# Créé et initialise le bouton d'aide
 	def initBoutonAide
 		aide
+=======
+		self.setTitre("Partie exploration")
+
+		@btnPause.visible = false
+		@btnPause.sensitive = false
+>>>>>>> origin/Restructuration
 	end
 end

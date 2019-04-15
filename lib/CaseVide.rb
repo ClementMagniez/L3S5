@@ -19,46 +19,52 @@ class CaseVide < Case
 
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
+	# - grille : la Grille de jeu
+	# - return self
 	def cycle(grille)
 		self.statutVisible.cycle
-		i=self.x
-		j=self.y
 
-
-		if self.statutVisible.isTente? # le statut vient de devenir "tente"
-			grille.varTentesLigne[i]-=1
-			grille.varTentesCol[j]-=1
-		elsif self.statutVisible.isVide? # le statut était "tente"
-			grille.varTentesLigne[i]+=1
-			grille.varTentesCol[j]+=1
-		end
-
-		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
-			grille.estComplete?
-		end
+		self.updateNbTents(grille, :'isVide?')
+		
 		super(grille)
 		self
 	end
+<<<<<<< HEAD
 
+=======
+	# @see Case#cancel
+>>>>>>> origin/Restructuration
 	def cancel(grille)
 
 		self.statutVisible.cancel
-		i=self.x
-		j=self.y
+		self.updateNbTents(grille, :'isGazon?')
+		
 
+		self
+	end
+	
+	# Met à jour les varTentesCol et varTentesLigne de la grille selon le statut
+	# de self et vérifie la validité de la grille
+	# - grille : la Grille de jeu
+	# - afterTent : symbol de 'isGazon?' ou 'isVide?' déterminant quel type de case
+	# vient après :TENTE dans le cycle ; permet de différencier cancel et cycle
+	# - return true si la grille est complète, false sinon
+	def updateNbTents(grille, afterTent)
+		i=
+		j=
 
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
-			grille.varTentesLigne[i]-=1
-			grille.varTentesCol[j]-=1
-		elsif self.statutVisible.isVide? # le statut était "tente"
-			grille.varTentesLigne[i]+=1
-			grille.varTentesCol[j]+=1
+			grille.varTentesLigne[self.x]-=1
+			grille.varTentesCol[self.y]-=1
+		elsif self.statutVisible.send(afterTent) # le statut était "tente"
+			grille.varTentesLigne[self.x]+=1
+			grille.varTentesCol[self.y]+=1
 		end
 
-		if grille.varTentesLigne[i]==0 && grille.varTentesCol[j]==0
-			grille.estComplete?
+		if grille.varTentesLigne[self.x]==0 && grille.varTentesCol[self.y]==0
+			return grille.estComplete?
 		end
-		self
+		false
 	end
 
 

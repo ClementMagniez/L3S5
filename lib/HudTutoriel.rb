@@ -1,24 +1,20 @@
+# Menu de jeu du tutoriel
 class HudTutoriel < HudJeu
+
+	# Génère le menu de jeu
+	# - window : la fenêtre principale de l'application
+	# - grille : une Grille de jeu
 	def initialize (window,grille)
+#		window.set_hexpand(false)
+#		window.set_vexpand(false)
+
 		super(window,grille)
-		@lblAide = Gtk::Label.new()
-		@lblAide.use_markup = true
-		self.styleLabel(@lblAide,'white','normal','large','Bienvenue sur notre super jeu !')
 		self.setTitre("Tutoriel")
 		@tutoriel = true
 
-		aideTutoriel
+		afficherAideTutoriel
 
-		@varBoutonEnPlus=1
-		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-3,@sizeGridJeu,@sizeGridJeu+4)
-
-		self.attach(@lblAide,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
-
-		image = Gtk::Image.new( :file => "../img/gris.png")
-		image.pixbuf = image.pixbuf.scale((@winX/2.5),(@winY/@sizeGridWin)*2)
-		self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
-
-		ajoutFondEcran
+		@lblTime.set_visible(false)
 	end
 
 end
