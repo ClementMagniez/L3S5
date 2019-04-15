@@ -1,6 +1,8 @@
 require 'gtk3'
 require_relative 'Grille'
 require_relative 'CustomLabel'
+require_relative 'CustomButton'
+require_relative 'CustomEventBox'
 
 # Superclasse abstraite de tous les menus de l'application : enregistre le nom du joueur
 # à la connexion, instancie les éléments communs aux menus et permet le passage
@@ -29,23 +31,11 @@ class Hud < Gtk::Grid
 		setTitre("Des Tentes et des Arbres")
 
 		initBoutonOptions
-
-		#nombre de cellule horizontale et verticale de la  fenetre
-		@sizeGridWin = 20
-
 	end
 
-	def initWindow
-		puts "Initialisation des HUD"
-		@@winX = @fenetre.size.fetch(0)
-		@@winY = @fenetre.size.fetch(1)
-
-		true
-	end
-
+protected
 
 	# TODO factoriser les lancementX
-
 	def lancementAccueil
 		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
 	end
@@ -80,31 +70,39 @@ class Hud < Gtk::Grid
 
 	# Lance le menu de fin de jeu
 	def lancementFinDeJeu
-		score = 0
-		if(grille != nil)
-			score = 10
-		end
 		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self))
 	end
 
 	def lancementInscription
-		puts " Page d'inscription "
 		@fenetre.changerWidget(self, HudInscription.new(@fenetre))
 	end
 
 	def lancementHudRegle
-		puts " Page de regle "
-		@fenetre.changerWidget(self, HudRegle.new(@fenetre,self))
+		@fenetre.changerWidget(self, HudRegle.new(@fenetre))
 	end
 
 	def lancementHudPresentationTutoriel(grille)
-		puts " Page de presentation tutoriel "
 		@fenetre.changerWidget(self, HudPresentationTutoriel.new(@fenetre,grille))
 
 	end
 
 	def lancementProfil
 		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
+	end
+
+	# TODO inverser style et size pour respecter CustomLabel
+	# def creerBouton(label,couleur,style,size)
+	# 	bouton = Gtk::Button.new
+	# 	self.styleLabel(label,couleur,style,size,label.text)
+	# 	bouton.add(label)
+	# 	bouton.set_relief(Gtk::ReliefStyle::NONE)
+	# 	return bouton
+	# end
+
+	def ajoutFondEcran
+		@fond = Gtk::Image.new( pixbuf: updateFondEcran(@@winX, @@winY))
+		self.attach(@fond,0,0,1,1)
+		@fond.set_visible(true)
 	end
 
 	# Initialise le bouton des options :
@@ -121,21 +119,14 @@ class Hud < Gtk::Grid
 		}
 	end
 
-	# Initialise le bouton de retour au menu pricipal (choix des modes de jeu ) :
-	# 	ajoute une variable d'instance @btnRetour
+	# Initialise le bouton pour profil (lance le menu profil) :
+	# 	ajoute une variable d'instance @btnProfil
 	# 	initialise sont comportement
-	def initBoutonRetour
-		@btnRetour = Gtk::Button.new :label => "Retour"
-		@btnRetour = creerBouton(Gtk::Label.new("Retour"),"white","ultrabold","x-large")
-		@btnRetour.signal_connect("clicked") {
-				@fenetre.changerWidget(self,@fenetrePrecedente)
-		}
-	end
-
-	# Créé et initialise le bouton de retour au mode de jeu
-	def initBoutonRetourModeJeu
-		@btnRetour = creerBouton(Gtk::Label.new("Retour"),"white","ultrabold","x-large")
-		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
+	def initBoutonProfil
+		@btnProfil = CustomButton.new("Profil")
+		@btnProfil.signal_connect("clicked") do
+			lancementProfil
+		end
 	end
 
 	# Initialise le bouton pour quitter (ferme la fenetre) :
@@ -150,53 +141,21 @@ class Hud < Gtk::Grid
 		@btnQuitter.signal_connect('clicked') {	Gtk.main_quit }
 	end
 
-	# Initialise le bouton pour profil (lance le menu profil) :
-	# 	ajoute une variable d'instance @btnProfil
+	# Initialise le bouton de retour au menu pricipal (choix des modes de jeu ) :
+	# 	ajoute une variable d'instance @btnRetour
 	# 	initialise sont comportement
-	def initBoutonProfil
-		@btnProfil = creerBouton(Gtk::Label.new("Profil"),"white","ultrabold","x-large")
-		@btnProfil.signal_connect("clicked") do
-			lancementProfil
-		end
+	def initBoutonRetour
+		@btnRetour = CustomButton.new("Retour")
+		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
 	end
 
+	def initWindow
+		puts "Initialisation des HUD"
+		@@winX = @fenetre.size.fetch(0)
+		@@winY = @fenetre.size.fetch(1)
 
-	# Modifie le titre de la fenetre
-	def setTitre(str)
-		@fenetre.set_title(str)
+		true
 	end
-
-
-	def ajoutFondEcran
-		@fond = Gtk::Image.new( pixbuf: updateFondEcran(@@winX, @@winY))
-		self.attach(@fond,0,0,1,1)
-		@fond.set_visible(true)
-	end
-
-	def updateFondEcran(width, height)
-			return GdkPixbuf::Pixbuf.new( :file => "../img/fond2.png",\
-																		:width=>width,:height=>height)
-	end
-
-	# TODO virer ce truc et implémenter CustomLabel intégralement
-	def styleLabel(label,couleur,style,size,contenu)
-		label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
-end
-
-	# TODO inverser style et size pour respecter CustomLabel
-	def creerBouton(label,couleur,style,size)
-		bouton = Gtk::Button.new
-		self.styleLabel(label,couleur,style,size,label.text)
-		bouton.add(label)
-		bouton.set_relief(Gtk::ReliefStyle::NONE)
-		return bouton
-	end
-
-	# def initBoutonProfil
-	# @btnProfil = creerBouton(Gtk::Label.new("Profil"),"white","ultrabold","x-large")
-	# @btnProfil.signal_connect("clicked") do
-	#  lancementProfil
-	# end
 
 	def resizeWindow(width, height)
 		@fenetre.set_resizable(true)
@@ -204,4 +163,18 @@ end
 		@fenetre.set_resizable(false)
 	end
 
+	# Modifie le titre de la fenetre
+	def setTitre(str)
+		@fenetre.set_title(str)
+	end
+
+	# TODO virer ce truc et implémenter CustomLabel intégralement
+	# def styleLabel(label,couleur,style,size,contenu)
+	# 	label.set_markup("<span foreground='"+ couleur + "' weight= '"+ style + "' size='"+ size + "' >"+contenu+"</span>")
+	# end
+
+	def updateFondEcran(width, height)
+			return GdkPixbuf::Pixbuf.new( :file => "../img/fond2.png",\
+																		:width=>width,:height=>height)
+	end
 end

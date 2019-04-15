@@ -9,38 +9,38 @@ class CustomLabel < Gtk::Label
 		self.update
 	end
 
-	# Modifie le texte du label
-	# - return self
-	def set_text(str)
-		super(str)
-		self.update 
-	end
-
 	# Modifie la couleur du label
 	# - return self
 	def set_color(c)
 		@couleur = c
-		self.update 
+		self.update
 	end
-
+	alias :color= :set_color
 
 	# Modifie la taille du label
 	# - return self
 	def set_size(size)
 		self.size=size
-		self.update 
+		self.update
 	end
+
+	# Modifie le texte du label
+	# - return self
+	def set_text(str)
+		super(str)
+		self.update
+	end
+	alias  :text= :set_text
 
 	# Met à jour l'affichage du label
 	# - return self
-	def update 
+	def update
 		set_markup("<span foreground='"+self.couleur+"' weight='"+self.weight+"'size='"\
 							 +self.size+"'>"+self.text+"</span>")
 		self
 	end
-	
-	protected
-	
+
+protected
 	attr_accessor :couleur, :size, :weight
-	
+
 end
