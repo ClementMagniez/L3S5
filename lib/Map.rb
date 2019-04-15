@@ -28,6 +28,6 @@ class Map < ActiveRecord::Base
 	# l'objet appelé.
 	#
 	def to_s
-		return "Map n°#{id} : Hashcode = #{hash_name}, Taille = #{taille}, difficulté : #{difficulte}"
+		return "Map n°#{id} : Hashcode = #{hash_name}, difficulté : #{difficulte}"
 	end
 end

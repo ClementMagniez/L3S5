@@ -10,6 +10,7 @@ class Hud < Gtk::Grid
 	@@initblock=false
 	@@difficulte = nil
 	@@mode = nil
+	@@scoreTotal = 0
 
 	def initialize(window,fenetrePrecedente=nil)
 		super()

@@ -137,6 +137,10 @@ class HudJeu < Hud
 
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
+		# Rajout du calcul du score pour la fin de la partie
+		@grille.score.recupererTemps(self.getTime)
+		@@scoreTotal += self.grille.score.calculerScoreFinal
+
 		self.lancementFinDeJeu
 	end
 
@@ -199,8 +203,11 @@ class HudJeu < Hud
 				0.upto(@tailleGrille-1) { |k|
 					if @grille[k][i].statutVisible.isVide?
 						@grille[k][i].cycle(@grille)
-						# Méthode d'actualisation du score ici
-						
+
+
+						# Méthode d'actualisation du score
+						self.reloadScore
+
 
 						@gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
 					end
@@ -222,7 +229,11 @@ class HudJeu < Hud
 				0.upto(@tailleGrille-1) { |k|
 					if @grille[i][k].statutVisible.isVide?
 						@grille[i][k].cycle(@grille)
-						# Méthode d'actualisation du score ici
+
+						# Méthode d'actualisation du score
+						self.initScore
+
+
 						@gridJeu.get_child_at(k+1,i+1).image=scaleImage(@grille[i][k].affichage)
 		#				 @gridJeu.get_child_at(k+1,i+1).set_image(scaleImage(i,k))
 
@@ -381,7 +392,11 @@ class HudJeu < Hud
 	def initScore
 		@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
 	end
-	# Méthode d'actualisation du score ici
+
+	# Méthode d'actualisation du score
+	def reloadScore
+		# ???
+	end
 
 	# Initialise le timer :
 	# 	ajoute une variable d'instance @lblTime, le label associé au timer.

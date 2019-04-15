@@ -33,7 +33,6 @@ class CaseVide < Case
 		end
 
 		self.updateNbTents(grille, :'isVide?')
-
 		super(grille)
 		self
 	end
@@ -42,19 +41,15 @@ class CaseVide < Case
 
 		self.statutVisible.cancel
 
-		if self.statutVisible.isGazon? # le statut vient de devenir "gazon"
+		if self.statutVisible.isGazon? # le statut vient de repasser à "gazon"
 			grille.score.recupererPoints(-5)
-		elsif self.statutVisible.isTente? # le statut vient de devenir "tente"
+		elsif self.statutVisible.isTente? # le statut vient de repasser à "tente"
 			grille.score.recupererPoints(10)
-		elsif self.statutVisible.send(afterTent) # le statut était "tente"
+		elsif self.statutVisible.isVide? # le statut vient de repasser à "vide"
 			grille.score.recupererPoints(-1)
 		end
 
-
-
 		self.updateNbTents(grille, :'isGazon?')
-
-
 		self
 	end
 
@@ -65,10 +60,8 @@ class CaseVide < Case
 	# vient après :TENTE dans le cycle ; permet de différencier cancel et cycle
 	# - return true si la grille est complète, false sinon
 	def updateNbTents(grille, afterTent)
-		i=
-		j=
 		puts grille.score
-
+		
 		if grille.varTentesLigne[self.x]==0 && grille.varTentesCol[self.y]==0
 			return grille.estComplete?
 		end

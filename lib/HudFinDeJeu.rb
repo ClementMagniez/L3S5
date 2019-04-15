@@ -12,11 +12,9 @@ class HudFinDeJeu < Hud
 		@lblAide = Gtk::Label.new
 		# @lblAide.use_markup = true
 		# @lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
-		@fenetrePrecedente.grille.score.recupererTemps(@fenetrePrecedente.getTime)
-		scoreObtenu = @fenetrePrecedente.grille.score.calculerScoreFinal()
-		lblScore = CustomLabel.new("Score = " + scoreObtenu.to_s)
+		lblScore = CustomLabel.new("Score = " + @@scoreTotal.to_s)
 		session = Connexion.new
-		#session.enregistrerScore(session.id,nomMode,grille,scoreObtenu)
+		session.enregistrerScore(session.id,[@@mode,@@nom,@@difficulte],@@scoreTotal)
 
 
 		initBoutonRecommencer

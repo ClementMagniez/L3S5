@@ -89,15 +89,14 @@ class Connexion
 	# * +nomMap+ - Le nom de la grille jouée
 	# * +score+ - Le montant du score obtenu à la fin de la partie
 	#
-	def enregistrerScore(idJoueur,nomMode,grille,score)
+	def enregistrerScore(idJoueur,tabGrille,score)
 		# Chercher si la grille courante possède déjà une entrée dans la BDD ou pas ; agir en conséquence
 		reqMap = Map.find_by(nomMap: grille[0])
 		if(reqMap == nil)
 			# Insertion d'un nouveau champ dans la table Map - voir si on importe un objet grille dans les paramètres
 			insertMap = Map.new(
-				hash_name: grille[0],
-				taille: grille[1],
-				difficulte: grille[2]
+				hash_name: tabGrille[1],
+				difficulte: tabGrille[2]
 			);
 			insertMap.save
 			reqMap = Map.find_by(nomMap: grille[0])
@@ -105,7 +104,7 @@ class Connexion
 
 		reqScore = Score.new(
 			montantScore: score,
-			modeJeu: nomMode,
+			modeJeu: tabGrille[0],
 			dateObtention: Time.now.split(" ").at(0)
 		);
 		reqScore.profil_id = idJoueur

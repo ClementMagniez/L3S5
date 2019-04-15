@@ -22,7 +22,7 @@ if(!File.file?("lib/DAEDT.sqlite3"))
 		end
 
 	  create_table :maps do |c|
-	    c.string :taille
+	    c.string :hash_name
 	    c.string :difficulte
 	  end
 
