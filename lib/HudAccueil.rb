@@ -101,6 +101,8 @@ private
 				@@winY=f['resolution']['height']
 				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
+				# S'assure que le répertoire est sain
+				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
 			else
 				@lblErr.text = "Echec : connexion impossible !"
 				puts "Connexion : connexion impossible !"
