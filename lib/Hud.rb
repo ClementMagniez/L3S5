@@ -35,7 +35,7 @@ class Hud < Gtk::Grid
 		@sizeGridWin = 20
 		@fenetrePrecedente = fenetrePrecedente
 
-		initBoutonRetour
+
 
 	end
 
