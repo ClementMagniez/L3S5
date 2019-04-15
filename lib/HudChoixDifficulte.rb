@@ -25,19 +25,10 @@ class HudChoixDifficulte < Hud
  		# Définit la fonction de lancement utilisée selon le symbole fourni
 		@mode="lancement"+mode.to_s.capitalize
 
-		self.initBoutonsDifficulte
-		self.initBoutonRetour
-		self.initBoutonProfil
-	
-		debutMilieu = (@sizeGridWin/2)-1
+		initBoutonsDifficulte
+		initBoutonRetour
+		initBoutonProfil
 
-		# self.attach(@btnFacile,debutMilieu, debutMilieu-1, 1, 1)
-		# self.attach(@btnMoyen,debutMilieu, debutMilieu, 1, 1)
-		# self.attach(@btnDifficile,debutMilieu, debutMilieu+1, 1, 1)
-		#
-		# self.attach(@btnOptions, 1, @sizeGridWin, 1, 1)
-		# self.attach(@btnRetour, @sizeGridWin-1, @sizeGridWin-1, 1, 1)
-		# self.attach(@btnProfil, @sizeGridWin -1 , 1, 1, 1)
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			@btnProfil.halign = Gtk::Align::END
 		vBox.add(@btnProfil)
@@ -66,12 +57,14 @@ class HudChoixDifficulte < Hud
 		ajoutFondEcran
 	end
 
+private
+
 	# Crée et instancie les boutons de choix de la difficulté
 	# Return self
 	def initBoutonsDifficulte
-		@btnFacile = creerBouton(Gtk::Label.new("Facile"),"white","ultrabold","x-large")
-		@btnMoyen = creerBouton(Gtk::Label.new("Moyen"),"white","ultrabold","x-large")
-		@btnDifficile = creerBouton(Gtk::Label.new("Difficile"),"white","ultrabold","x-large")
+		@btnFacile = CustomButton.new("Facile")
+		@btnMoyen = CustomButton.new("Moyen")
+		@btnDifficile = CustomButton.new("Difficile")
 
 		@btnFacile.signal_connect('clicked') do
 			@@difficulte = "Facile"
@@ -90,6 +83,6 @@ class HudChoixDifficulte < Hud
 		self
 	end
 
-	protected
-		attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
+protected
+	attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
 end

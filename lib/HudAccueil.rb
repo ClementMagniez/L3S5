@@ -5,7 +5,6 @@ require_relative "Connexion.rb"
 class HudAccueil < Hud
 	def initialize(window)
 		super(window)
-		# varX, varY = 0, 0
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 		@entryMotDePasse.set_visibility(false)
@@ -55,9 +54,6 @@ class HudAccueil < Hud
 			hBox.vexpand = true
 			hBox.hexpand = true
 			hBox.homogeneous = true
-				@btnOptions.valign = Gtk::Align::END
-				@btnOptions.halign = Gtk::Align::START
-			hBox.add(@btnOptions)
 				@btnQuitter.valign = Gtk::Align::END
 				@btnQuitter.halign = Gtk::Align::END
 			hBox.add(@btnQuitter)
@@ -70,8 +66,13 @@ class HudAccueil < Hud
 	end
 
 
+private
+
+	# Initialise le bouton de connection
+	# 	ajoute une variable d'instance @btnConnecter
+	# 	initialise sont comportement
 	def initBoutonConnecter
-		@btnConnecter = Gtk::Button.new :label => "Se connecter"
+		@btnConnecter = CustomButton.new("Se connecter")
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
 			session = Connexion.new
@@ -92,8 +93,11 @@ class HudAccueil < Hud
 		}
 	end
 
+	# Initialise le bouton d'Inscription
+	# 	ajoute une variable d'instance @btnInscrire
+	# 	initialise sont comportement
 	def initBoutonInscription
-		@btnInscrire = Gtk::Button.new :label => "S'inscrire"
+		@btnInscrire = CustomButton.new("S'inscrire")
 		@btnInscrire.signal_connect('clicked') do
 			self.lancementInscription
 		end

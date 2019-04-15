@@ -10,11 +10,15 @@ class HudTutoriel < HudJeu
 
 		super(window,grille)
 		self.setTitre("Tutoriel")
+		@@difficulte="Facile"
+		@lblTime.set_visible(false)
 	end
 
+private
 
 	# Redéfinition de la méthode aide de HudJeu
 	def aide
+		puts "HudTutoriel::aide"
 		@caseSurbrillanceList = Array.new
 		tableau = @aide.cycle("tuto")
 		puts(tableau)

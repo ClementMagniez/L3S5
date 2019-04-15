@@ -3,14 +3,10 @@ class HudPresentationTutoriel < Hud
 		super(window)
 		@grille=grille
 
-
 		initBoutonRegle
 		initBoutonContinuer
 
 
-		# self.attach(styleLabel(Gtk::Label.new,"white","ultrabold","x-large","Bienvenue dans le mode tutoriel !"),0,0,1,1)
-		# self.attach(@btnContinuer,(@sizeGridWin/4)*2,(@sizeGridWin/4)*3,1,1)
-		# self.attach(@btnRegle,@sizeGridWin/4,(@sizeGridWin/4)*3,1,1)
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			lbl = CustomLabel.new("Bienvenue dans le mode tutoriel !")
 			lbl.vexpand = true
@@ -28,17 +24,19 @@ class HudPresentationTutoriel < Hud
 		ajoutFondEcran
 	end
 
-	def initBoutonRegle
-		@btnRegle = Gtk::Button.new(label: "Regle")
-		@btnRegle.signal_connect('clicked') do
-			lancementHudRegle
+private
+
+	def initBoutonContinuer
+		@btnContinuer = CustomButton.new("Continuer")
+		@btnContinuer.signal_connect('clicked') do
+			 lancementTutoriel(@grille)
 		end
 	end
 
-	def initBoutonContinuer
-		@btnContinuer = Gtk::Button.new(label: "Continuer")
-		@btnContinuer.signal_connect('clicked') do
-			 lancementTutoriel(@grille)
+	def initBoutonRegle
+		@btnRegle = CustomButton.new("Regle")
+		@btnRegle.signal_connect('clicked') do
+			lancementHudRegle
 		end
 	end
 end

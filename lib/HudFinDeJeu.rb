@@ -1,6 +1,4 @@
 class HudFinDeJeu < Hud
-	#@btnRecommencer
-	#@btnModeDeJeu
 
 	# Nouvelle instance de fin de jeu
 	# 	window : La Fenetre contenant le HudFinDeJeu
@@ -9,58 +7,54 @@ class HudFinDeJeu < Hud
 		super(window)
 		varX, varY = 2, 2
 		@fenetrePrecedente = fenetrePrecedente
-		@lblAide = Gtk::Label.new
-		# @lblAide.use_markup = true
-		# @lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
+		tpsMin = fenetrePrecedente.timer / 60
+		tpsSec = fenetrePrecedente.timer % 60
+		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
 		lblScore = CustomLabel.new("Votre score : 0")
-		# lblScore = Gtk::Label.new("Score = " + fenetrePrecedente.grille.calculerScoreFinal)
 
 
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 
-		# self.attach(@lblAide,0,0,1,1)
-		# self.attach(lblScore, varX, varY, 1, 1)
-		# self.attach(@btnRecommencer,varX+1, varY+1, 1, 1)
-		# self.attach(@btnModeDeJeu, varX+1, varY+2, 1, 1)
+
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			lblTxt = CustomLabel.new("Bravo, vous avez fini !")
 			lblTxt.vexpand = true
 		vBox.add(lblTxt)
+			lblTemps.vexpand = true
+		vBox.add(lblTemps)
 			lblScore.vexpand = true
 		vBox.add(lblScore)
-			@btnRecommencer.hexpand = false
-			@btnRecommencer.halign = Gtk::Align::CENTER
-		vBox.add(@btnRecommencer)
-			@btnModeDeJeu.vexpand = true
-			@btnModeDeJeu.hexpand = false
-			@btnModeDeJeu.halign = Gtk::Align::CENTER
-			@btnModeDeJeu.valign = Gtk::Align::START
-		vBox.add(@btnModeDeJeu)
+			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			vBox2.vexpand = true
+			vBox2.hexpand = false
+			vBox2.valign = Gtk::Align::CENTER
+			vBox2.halign = Gtk::Align::CENTER
+			vBox2.add(@btnRecommencer)
+			vBox2.add(@btnModeDeJeu)
+		vBox.add(vBox2)
 
 		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
 	end
 
-	def initBoutonRecommencer
-		@btnRecommencer = creerBouton(Gtk::Label.new("Recommencer"),"white","ultrabold","x-large")
-		@btnRecommencer.signal_connect('clicked') {
-			@fenetrePrecedente.reset
-			#@fenetrePrecedente.raz
-			@fenetre.changerWidget(self,@fenetrePrecedente)
-		}
-
-	end
+private
 
 	def initBoutonChangerModeDeJeu
-		@btnModeDeJeu = creerBouton(Gtk::Label.new("Retour au menu"),"white","ultrabold","x-large")
+		@btnModeDeJeu = CustomButton.new("Retour au menu")
 		@btnModeDeJeu.signal_connect('clicked'){
 			self.lancementModeJeu
 		}
 
 	end
 
+	def initBoutonRecommencer
+		@btnRecommencer = CustomButton.new("Recommencer")
+		@btnRecommencer.signal_connect('clicked') {
+			@fenetrePrecedente.reset
+			@fenetre.changerWidget(self,@fenetrePrecedente)
+		}
 
-
+	end
 end
