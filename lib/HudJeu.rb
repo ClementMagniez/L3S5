@@ -59,13 +59,7 @@ class HudJeu < Hud
 				vBox2.add(@btnSauvegarde)
 			hBox.add(vBox2)
 		vBox.add(hBox)
-			@gridLblAide.halign = Gtk::Align::CENTER
-			@gridLblAide.attach(@lblAide, 0, 0, 1, 1)
-				image = Gtk::Image.new( :file => "../img/gris.png")
-
-				image.pixbuf = image.pixbuf.scale((@@winX/3),(@@winY/15))
-			@gridLblAide.attach(image, 0, 0, 1, 1)
-		vBox.add(@gridLblAide)
+		vBox.add(@lblAide)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -156,7 +150,7 @@ class HudJeu < Hud
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
 		return 'large' if @@winY>700
-		return @grille.length < 9 ? "large" : (@grille.length < 12 ?  "medium" : "small")
+		return @grille.length < 9 ? "large" : (@grille.length < 12 ?  "medium" : "xx-small")
 		# return @grille.length>=12 || @@winY<700 ? "small" : "x-large"
 	end
 
@@ -303,6 +297,7 @@ protected
 		self
 	end
 
+
 	# Initialise la grille de jeu :
 	# 	ajoute une variable d'instance @gridJeu : la grille de jeu avec laquelle le joueur interagira
 	#
@@ -342,10 +337,16 @@ protected
 	def initBoutonAide
 		@lblAide = CustomLabel.new
 		@lblAide.color = "white"
+		@lblAide.set_background("#000000", 70)
 		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide
 		}
+	end
+
+	def initBoutonOptions
+
+		super(:rescaleGrille)
 	end
 
 	# Initialise le bouton d'annulation :
@@ -482,7 +483,23 @@ protected
 	def jeuTermine
 		self.lancementFinDeJeu
 	end
-
+	
+	
+	# Redimensionne les widgets ; permet de réagir à un changement de résolution
+	def rescaleGrille
+		@grille.grille.each do |row|
+			row.each do |cell|
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
+			end
+		end
+		1.upto(@grille.length) do |i|
+			@gridJeu.get_child_at(0,i).set_size(self.getIndiceSize)
+			@gridJeu.get_child_at(i,0).set_size(self.getIndiceSize)
+		end
+		@btnOptions.image.pixbuf=@btnOptions.image.pixbuf.scale(@@winX/20, @@winX/20)
+		self
+	end
+	
 	# A partir du fichier en path _string_, crée une Gtk::Image
 	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu sans forcer
 	# la redimension de la fenêtre
