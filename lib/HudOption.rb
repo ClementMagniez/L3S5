@@ -8,9 +8,14 @@ class HudOption < Hud
 		super()
 
 		self.setTitre("Options")
+		configFile=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+		
+
 		initBoutonRetour(traitement)
+		initChoixScore
+		initBoutonSauvegarderChoixScore(configFile)
 		initMenuResolution
-		initBoutonSauvegarderResolution
+		initBoutonSauvegarderResolution(configFile)
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
@@ -18,6 +23,11 @@ class HudOption < Hud
 			hBox.add(@menuResolution)
 		vBox.add(hBox)
 		vBox.add(@btnSauvegardeResolution)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(CustomLabel.new("Enregistrer les scores : "))
+			@group.each { |btn| hBox.add(btn) }
+		vBox.add(hBox)
+		vBox.add(@btnChoixScore)
 		vBox.add(@btnRetour)
 		vBox.valign = Gtk::Align::CENTER
 		vBox.halign = Gtk::Align::CENTER
@@ -76,19 +86,47 @@ private
 		end
 	end
 
-	# Crée un bouton enregistrant la résolution choisie dans un fichier ini
+	# Crée un bouton enregistrant laésolution choisie dans un fichier ini
 	# et appliquant le changement à l'application active
-	def initBoutonSauvegarderResolution
+	def initBoutonSauvegarderResolution(configFile)
 		@btnSauvegardeResolution=CustomButton.new("Appliquer")
 		@btnSauvegardeResolution.signal_connect('clicked') do
-			f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+			configFile=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
 			@@winX=@resolution.split('*')[0].to_i
 			@@winY=@resolution.split('*')[1].to_i
-			f['resolution']={'width' => @@winX,
+			configFile['resolution']={'width' => @@winX,
 											 'height'=> @@winY}
-			f.write
+			configFile.write
 			self.resizeWindow(@@winX,
 												@@winY)
 		end
 	end
+	
+	# Génère les deux radiobuttons "oui"/"non" permettant de choisir si on
+	# enregistre les scores
+	# - return self
+	def initChoixScore
+		rYesButton=Gtk::RadioButton.new(label: "Oui")	
+		@group=rYesButton.group
+		rNoButton=Gtk::RadioButton.new(group: @group, label: "Non")
+		@group << rNoButton # bizarrement nécessaire car @group, contrairement
+												# à ce qu'affirme la doc, ne se met pas à jour
+		@group.each do |btn|
+			btn.signal_connect('clicked') { @bChoixScore=btn.label }
+		end		
+		self
+	end
+
+	# Génère le bouton récupérant le choix de initChoixScore et l'écrivant dans
+	# le .ini
+	# - return self
+	def initBoutonSauvegarderChoixScore(configFile)
+		@btnChoixScore=CustomButton.new("Appliquer")
+		@btnChoixScore.signal_connect('clicked') do
+			configFile['misc']={'score'=>@bChoixScore}
+			configFile.write
+		end
+		self
+	end
+	
 end

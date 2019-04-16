@@ -178,7 +178,7 @@ class HudJeu < Hud
 	# Réinitialise la grille et les affichages
 	# - return self
 	def reset
-		@grille.grille.each do |line|
+		@grille.each do |line|
 			line.each do |cell|
 				cell.reset
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
@@ -318,7 +318,7 @@ protected
 		self.initIndicesLignes
 
 		# positionne les cases de la grille
-		@grille.grille.each do |line|
+		@grille.each do |line|
 			line.each do |cell|
 				button = CustomEventBox.new
 				button.set_border_width(1)
@@ -497,7 +497,7 @@ protected
 
 	# Redimensionne les widgets ; permet de réagir à un changement de résolution
 	def rescaleGrille
-		@grille.grille.each do |row|
+		@grille.each do |row|
 			row.each do |cell|
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
 			end
