@@ -58,7 +58,12 @@ class HudJeu < Hud
 				vBox2.add(@btnSauvegarde)
 			hBox.add(vBox2)
 		vBox.add(hBox)
-		vBox.add(@lblAide)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.halign = Gtk::Align::CENTER
+			hBox.valign = Gtk::Align::CENTER
+			hBox.vexpand = true
+			hBox.add(@lblAide)
+		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -337,6 +342,7 @@ protected
 	def initBoutonAide
 		@lblAide = CustomLabel.new
 		@lblAide.color = "white"
+		@lblAide.wrap=true
 		@lblAide.set_background("#000000", 70)
 		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
@@ -497,8 +503,7 @@ protected
 	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
-		tailleGrille = @grille.length
-		imgSize = @@winY / (tailleGrille*1.4)
+		imgSize = @@winY / (@grille.length*1.4)
 		imgSize*=0.75
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 		return image
