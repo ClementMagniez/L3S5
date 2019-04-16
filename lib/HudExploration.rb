@@ -6,4 +6,5 @@ class HudExploration < HudJeu
 		super(window,grille)
 		self.setTitre("Partie exploration")
 	end
+
 end

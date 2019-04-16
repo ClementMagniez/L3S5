@@ -10,10 +10,40 @@ class HudTutoriel < HudJeu
 		@tutoriel = true
 
 
-		afficherAideTutoriel
+		afficherAide
 		@btnAide.sensitive = false
 	@btnPause.sensitive = false
 		@lblTime.set_visible(false)
+	end
+	
+	def initIndice(i, isRow) 
+		super { self.afficherAide }
+		end
+	
+	def chargementGrille
+		super { self.afficherAide }
+	end
+
+	def reset
+		super
+		self.afficherAide
+	end
+
+	# Affiche l'aide pour le mode Tutoriel
+	def afficherAide
+
+		super("tuto") do |tableau|
+		
+			#Met une liste de case en surbrillance
+			listCase = tableau.at(LISTCASES)
+			if listCase != nil
+				while not listCase.empty?
+					caseAide = listCase.pop
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage('../img/Subr.png'))
+					@caseSurbrillanceList.push(caseAide)
+				end
+			end
+		end
 	end
 
 end
