@@ -14,6 +14,7 @@ class HudModeDeJeu < Hud
 	def initialize
 		super()
  		self.setTitre("Choix du mode de jeu")
+		@lblErr = CustomLabel.new("", "red")
 
 		initBoutonAventure
 		initBoutonChargerSauvegarde
@@ -31,6 +32,7 @@ class HudModeDeJeu < Hud
 			hBox.add(@btnRegle)
 			hBox.add(@btnProfil)
 		vBox.add(hBox)
+		vBox.add(@lblErr)
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.halign = Gtk::Align::CENTER
 				@btnSauvegarde.valign = Gtk::Align::CENTER
@@ -77,7 +79,7 @@ private
 		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde")
 		@btnSauvegarde.signal_connect('clicked') do
 			if !File.exist?("../saves/"+@@name+".txt")
-				self.setDesc("Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !")
+				@lblErr.text = "Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !"
 			else
 				File.open("../saves/"+@@name+".txt", 'r') do |f|
 					dataLoaded=Marshal.load(f)

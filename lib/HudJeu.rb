@@ -420,7 +420,7 @@ protected
 		@btnSauvegarde = CustomButton.new("Sauvegarder")
 		@btnSauvegarde.signal_connect('clicked') do
 			File.open("../saves/"+@@name+".txt", "w+", 0644) do |f|
-				f.write( Marshal.dump([@grille,@@mode,@@difficulte]))
+				f.write(Marshal.dump([@grille,@@mode,@@difficulte]))
 			end
 		end
 
