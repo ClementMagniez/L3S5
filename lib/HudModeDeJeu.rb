@@ -15,17 +15,22 @@ class HudModeDeJeu < Hud
 		super(window)
  		self.setTitre("Choix du mode de jeu")
 
-		initBoutonChargerSauvegarde
-		initBoutonTuto
 		initBoutonAventure
-		initBoutonRapide
+		initBoutonChargerSauvegarde
 		initBoutonExplo
 		initBoutonProfil
 		initBoutonQuitter
+		initBoutonRapide
+		initBoutonRegle
+		initBoutonTuto
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-			@btnProfil.halign = Gtk::Align::END
-		vBox.add(@btnProfil)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.homogeneous = true
+			hBox.halign = Gtk::Align::END
+			hBox.add(@btnRegle)
+			hBox.add(@btnProfil)
+		vBox.add(hBox)
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.halign = Gtk::Align::CENTER
 				@btnSauvegarde.valign = Gtk::Align::CENTER

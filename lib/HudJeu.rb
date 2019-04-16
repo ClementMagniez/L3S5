@@ -122,7 +122,7 @@ class HudJeu < Hud
 #######################################################################
 
 	end
-	
+
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
 			@lblIndiceSubr.color = "white"
@@ -192,7 +192,7 @@ protected
 
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
 	# dans @lblAide ; peut mettre en surbrillance (changement de couleur) une case ou un indice
-	# - typeAide : par défaut "rapide", indique le mode de jeu 
+	# - typeAide : par défaut "rapide", indique le mode de jeu
 	# (donc le degré de précision de l'aide) voulu
 	# - return self
 
@@ -215,11 +215,11 @@ protected
 		 @lblAide.set_text(tableau.at(MESSAGE))
 
 	 	 if @@winY<1100
-		 	 @lblAide.set_size('xx-large')  
+		 	 @lblAide.set_size('xx-large')
 	 	 elsif @@winY<800
-		 	 @lblAide.set_size('large')  
+		 	 @lblAide.set_size('large')
 	 	 elsif @@winY<600
-		 	 @lblAide.set_size('small')  
+		 	 @lblAide.set_size('small')
 		end
 
 		#Met un indice de colonne ou ligne en surbrillance
@@ -244,13 +244,13 @@ protected
 	def initIndicesColonnes
 		self.initIndices(false)
 	end
-	
+
 	# @see initIndices : initialise le nombre de tentes sur chaque ligne
 	# - return self
 	def initIndicesLignes
 		self.initIndices(true)
 	end
-	
+
 	# @see initIndice : initialise le nombre de tentes sur l'ensemble des lignes
 	# ou colonnes selon isRow
 	# - isRow : true => initialise les lignes, false => initialise les colonnes
@@ -261,11 +261,11 @@ protected
 		end
 		self
 	end
-	
+
 	# Remplit programmatiquement une cellule vide de gazon et met à jour l'affichage ;
 	# utilisé par le signal handler de HudJeu#initIndice
 	# - i,k : position de la cellule
-	# - return self 
+	# - return self
 	def fillCellGrid(i,k)
 		if @grille[i][k].statutVisible.isVide?
 			@grille[i][k].cycle(@grille)
@@ -275,10 +275,10 @@ protected
 		self
 	end
 
-	# Crée un bouton indiquant le nombre de tentes sur la ligne/colonne _i_, 
+	# Crée un bouton indiquant le nombre de tentes sur la ligne/colonne _i_,
 	# l'attache à la grille de jeu et permet de remplir toute la ligne/colonne
 	# de gazon en cliquant dessus
-	# 
+	#
 	# Peut accepter un block, exécuté dans le signal handler du bouton
 	# - i : indice du bouton sur la tente/colonne, tel que i<@ŋrille.length
 	# - isRow : true => initialise les lignes, false => initialise les colonnes
@@ -287,7 +287,7 @@ protected
 		btnIndice = CustomButton.new
 		btnIndice.label = labelIndice(i, isRow ? :varTentesLigne : :varTentesCol)
 		btnIndice.set_relief(Gtk::ReliefStyle::NONE)
-		
+
 		posX=(isRow ? 0 : i+1)
 		posY=i+1-posX
 
@@ -295,7 +295,7 @@ protected
 		#Quand on clique dessus, met toutes les cases vides à gazon
 		btnIndice.signal_connect("clicked") do
 			(@grille.length).times do |k|
-				isRow ?  self.fillCellGrid(i,k) : self.fillCellGrid(k,i) 
+				isRow ?  self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
 			end
 			self.desurbrillanceIndice
 			yield	if block_given?
@@ -325,7 +325,7 @@ protected
 						desurbrillanceIndice
 						self.jeuTermine		if @grille.estValide
 					end
-					
+
 					# Note : important de ne yield qu'après les appels à desurbrillanceFoo
 					# sans quoi le tutoriel voit ses indices effacés instantanément
 					yield if block_given?
@@ -379,16 +379,6 @@ protected
 			@btnReset.sensitive = !@pause
 			@btnCancel.sensitive = !@pause
 			@btnRemplissage.sensitive = !@pause
-		}
-	end
-
-	# Initialise le bouton des règles de jeu :
-	# 	ajoute une variable d'instance @btnRegle
-	# 	initialise sont comportement
-	def initBoutonRegle
-		@btnRegle = CustomButton.new("?", "pink")
-		@btnRegle.signal_connect('clicked'){
-			lancementHudRegle
 		}
 	end
 

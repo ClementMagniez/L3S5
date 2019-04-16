@@ -12,7 +12,7 @@ class Hud < Gtk::Grid
 	@@initblock=false
 	@@difficulte = nil
 	@@mode = nil
-	
+
 	def initialize(window,fenetrePrecedente=nil)
 		super()
 		@fenetrePrecedente = fenetrePrecedente
@@ -139,6 +139,16 @@ protected
 			else
 				Gtk.main_quit
 			end
+		}
+	end
+
+	# Initialise le bouton des règles de jeu :
+	# 	ajoute une variable d'instance @btnRegle
+	# 	initialise sont comportement
+	def initBoutonRegle
+		@btnRegle = CustomButton.new("?", "pink")
+		@btnRegle.signal_connect('clicked'){
+			self.lancementHudRegle
 		}
 	end
 
