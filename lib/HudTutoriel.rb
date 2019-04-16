@@ -5,53 +5,43 @@ class HudTutoriel < HudJeu
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
 	def initialize (window,grille)
-#		window.set_hexpand(false)
-#		window.set_vexpand(false)
-
 		super(window,grille)
 		self.setTitre("Tutoriel")
-		@@difficulte="Facile"
+
+		afficherAide
+		@btnAide.sensitive = false
+		@btnPause.sensitive = false
 		@lblTime.set_visible(false)
 	end
-
-private
-
-	# Redéfinition de la méthode aide de HudJeu
-	def aide
-		puts "HudTutoriel::aide"
-		@caseSurbrillanceList = Array.new
-		tableau = @aide.cycle("tuto")
-		puts(tableau)
-		premAide = tableau.at(0)
-		puts(tableau.at(0))
-		puts(premAide)
-
-		if premAide != nil then
-				@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(scaleImage(premAide.affichageSubr))
-				# puts(" X :" + premAide.x.to_s + " Y :" +premAide.y.to_s )
-				@caseSurbrillanceList.push(premAide)
-
-	#		while not premAide.empty?
-			#	caseAide = premAide
-
-		#		@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).set_image(scaleImage( caseAide.getCase.affichageSubr))
-			#	@caseSurbrillanceList.push(caseAide)
-		#	end
+	
+	def initIndice(i, isRow) 
+		super { self.afficherAide }
 		end
+	
+	def chargementGrille
+		super { self.afficherAide }
+	end
 
-		@lblAide.use_markup = true
-		styleLabel(@lblAide,'white','ultrabold','x-large',tableau.at(1))
+	def reset
+		super
+		self.afficherAide
+	end
 
-		indice = tableau.at(3)
+	# Affiche l'aide pour le mode Tutoriel
+	def afficherAide
 
-		if tableau.at(2) != nil
-			if tableau.at(2) == false
-				lblIndice = @gridJeu.get_child_at(0,indice).child
-			else
-				lblIndice = @gridJeu.get_child_at(indice,0).child
+		super("tuto") do |tableau|
+		
+			#Met une liste de case en surbrillance
+			listCase = tableau.at(LISTCASES)
+			if listCase != nil
+				while not listCase.empty?
+					caseAide = listCase.pop
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage('../img/Subr.png'))
+					@caseSurbrillanceList.push(caseAide)
+				end
 			end
-			styleLabel(lblIndice,'red','ultrabold','x-large',lblIndice.text)
-			@lblIndiceSubr = lblIndice
 		end
 	end
+
 end

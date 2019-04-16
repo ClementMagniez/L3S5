@@ -26,7 +26,7 @@ class HudRapide < HudJeu
 		@btnAide.signal_connect("clicked") do
 			@timer -= @@malus
 		end
-	end
+end
 
 	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non 
 	# le temps écoulé	

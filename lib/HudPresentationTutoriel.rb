@@ -8,7 +8,7 @@ class HudPresentationTutoriel < Hud
 
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-			lbl = CustomLabel.new("Bienvenue dans le mode tutoriel !")
+			lbl = CustomLabel.new("Bienvenue dans le mode tutoriel, \ncliquez sur sur \"Continuer\" si vous voulez tester une grille \nou cliquez sur \"Règles\" pour lire les règles avant de jouer !")
 			lbl.vexpand = true
 		vBox.add(lbl)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
@@ -34,7 +34,7 @@ private
 	end
 
 	def initBoutonRegle
-		@btnRegle = CustomButton.new("Regle")
+		@btnRegle = CustomButton.new("Règles")
 		@btnRegle.signal_connect('clicked') do
 			lancementHudRegle
 		end
