@@ -14,6 +14,6 @@ require "active_record"
 #
 ActiveRecord::Base.establish_connection(
 	:adapter	=>	"sqlite3",
-	:database	=>	"DAEDT.sqlite3",
+	:database	=>	"lib/DAEDT.sqlite3",
 	:timeout	=>	5000
 );

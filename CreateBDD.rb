@@ -13,7 +13,9 @@
 # Lorsque le fichier est exécuté, il crée les trois tables nécessaires au stockage des données du joueur actuel,
 # des grilles qu'il a complété et des scores qu'il a obtenu.
 #
-if(!File.file?("DAEDT.sqlite3"))
+require_relative "lib/connectSqlite3.rb"
+
+if(!File.file?("lib/DAEDT.sqlite3"))
 	ActiveRecord::Schema.define do
 		create_table :profils do |c|
 			c.string :pseudonyme
