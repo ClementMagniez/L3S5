@@ -6,7 +6,6 @@ class HudOption < Hud
 
 	def initialize(traitement=nil)
 		super()
-		varX, varY = 2, 2
 
 		self.setTitre("Options")
 		initBoutonRetour(traitement)
