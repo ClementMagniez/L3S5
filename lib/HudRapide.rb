@@ -16,6 +16,7 @@ class HudRapide < HudJeu
 		super(window,grille)
 		self.setTitre("Partie rapide")
 
+		# malus de temps (en seconde) lors d'une demande d'aide
 		@@malus = 15
 	end
 

@@ -39,7 +39,7 @@ class HudFinDeJeu < Hud
 		ajoutFondEcran
 
 		if finTuto
-			# On ne doit pas voir les score à la fin du tuto
+			# On ne doit pas voir les scores à la fin du tuto
 			lblScore.destroy
 		end
 	end

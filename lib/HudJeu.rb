@@ -11,7 +11,7 @@ class HudJeu < Hud
 		super(window)
 		@align = Gtk::Align.new(1)
 		@aide = Aide.new(grille)
-
+		@gridLblAide = Gtk::Grid.new
 		@gridJeu = Gtk::Grid.new
 		@gridJeu.row_homogeneous = true
 		@gridJeu.column_homogeneous = true
@@ -56,13 +56,12 @@ class HudJeu < Hud
 				vBox2.add(@btnSauvegarde)
 			hBox.add(vBox2)
 		vBox.add(hBox)
-			gridLblAide = Gtk::Grid.new
-			gridLblAide.halign = Gtk::Align::CENTER
-			gridLblAide.attach(@lblAide, 0, 0, 1, 1)
+			@gridLblAide.halign = Gtk::Align::CENTER
+			@gridLblAide.attach(@lblAide, 0, 0, 1, 1)
 				image = Gtk::Image.new( :file => "../img/gris.png")
 				image.pixbuf = image.pixbuf.scale((@@winX/2),(@@winY/10))
-			gridLblAide.attach(image, 0, 0, 1, 1)
-		vBox.add(gridLblAide)
+			@gridLblAide.attach(image, 0, 0, 1, 1)
+		vBox.add(@gridLblAide)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -127,8 +126,7 @@ class HudJeu < Hud
 		end
 		@grille.raz
 		self.resetTimer
-		@btnPause.text = @pause ? "Jouer	" : "Pause"
-
+		@btnPause.text = @pause ? "Jouer" : "Pause"
 	end
 
 protected

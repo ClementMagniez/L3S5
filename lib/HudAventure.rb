@@ -7,6 +7,10 @@ class HudAventure < HudJeu
 
 		@@NbPartie += 1
 		@varBoutonEnPlus=1
+
+		@btnAide.destroy
+		@gridLblAide.destroy
+		@btnRetour.text = "Abandonner"
 	end
 
 	# Redéfinie la méthode jeuTermine de HudJeu.
