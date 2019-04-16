@@ -12,8 +12,10 @@ require "active_record"
 #
 # Le nom de la base de données est l'abréviation du nom du jeu (Des Arbres Et Des Tentes).
 #
+nomBDD = (File.file?("DAEDT.sqlite3")) ? "DAEDT.sqlite3" : "lib/DAEDT.sqlite3"
+
 ActiveRecord::Base.establish_connection(
 	:adapter	=>	"sqlite3",
-	:database	=>	"lib/DAEDT.sqlite3",
+	:database	=>	nomBDD,
 	:timeout	=>	5000
 );
