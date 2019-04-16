@@ -112,7 +112,8 @@ protected
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
 		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
-		@btnOptions.set_image(engrenage) {
+		@btnOptions.set_image(engrenage)
+		@btnOptions.signal_connect("clicked") {
 			@@hudPrecedent = self
 			@@fenetre.changerWidget(HudOption.new(traitements))
 		}

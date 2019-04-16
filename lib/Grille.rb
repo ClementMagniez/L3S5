@@ -7,7 +7,7 @@ require_relative 'Pile'
 # Parse le fichier de génération des grilles et l'implémente
 # comme grille de jeu
 class Grille
-
+	include Enumerable
 	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille,
 						  :estValide, :stack
 
@@ -26,7 +26,7 @@ class Grille
 		end
 
 		# ligne dans le fichier tirée aléatoirement
-		n = Random.rand(Range.new((size-6)*100+1, (size-5)*100-1))	
+		n = Random.rand(Range.new((size-6)*100+1, (size-5)*100-1))
 		result=nil # TODO - hideux, à remplacer
 		filePath = "../grilles.txt"
 
@@ -79,8 +79,12 @@ class Grille
 		end
 		self.estValide=res
 	end
-	
-	# Fonction de (ré)initialisation : déclare @varTentesCol, @varTentesLigne, 
+
+	def each
+		self.grille.each {|y| yield y}
+	end
+
+	# Fonction de (ré)initialisation : déclare @varTentesCol, @varTentesLigne,
 	# met @estValide à false et vide @stack
 	def raz
 		self.estValide = false

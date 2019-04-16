@@ -482,8 +482,6 @@ protected
 
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
-		puts "fin de jeu " + self.to_s
-		puts "timer = " + parseTimer
 		self.lancementFinDeJeu(self)
 	end
 

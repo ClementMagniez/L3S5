@@ -120,8 +120,7 @@ private
 	# le .ini
 	# - return self
 	def initBoutonSauvegarderChoixScore(configFile)
-		@btnChoixScore=CustomButton.new("Appliquer")
-		@btnChoixScore.signal_connect('clicked') do
+		@btnChoixScore=CustomButton.new("Appliquer") do
 			configFile['misc']={'score'=>@bChoixScore}
 			configFile.write
 		end
