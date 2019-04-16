@@ -31,7 +31,7 @@ class Fenetre < Gtk::Window
 		Gtk.main
 	end
 
-	def changerWidget(ancien,nouveau)
+	def changerWidget(nouveau)
 		# self.remove(ancien).add(nouveau)
 		self.remove(self.child).add(nouveau)
 		self.show_all

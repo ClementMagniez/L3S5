@@ -35,57 +35,65 @@ protected
 
 	# TODO factoriser les lancementX
 	def lancementAccueil
-		@fenetre.changerWidget(self,HudAccueil.new(@fenetre))
+		@fenetre.changerWidget(HudAccueil.new(@fenetre))
 	end
 
 
 	def lancementAventure(grille)
-		@fenetre.changerWidget(self,HudAventure.new(@fenetre,grille))
+		@fenetre.changerWidget(HudAventure.new(@fenetre,grille))
 	end
 
 	def lancementTutoriel(grille)
-		@fenetre.changerWidget(self,HudTutoriel.new(@fenetre,grille))
+		@fenetre.changerWidget(HudTutoriel.new(@fenetre,grille))
 	end
 
 
 	def lancementRapide(grille)
-		@fenetre.changerWidget(self,HudRapide.new(@fenetre,grille))
+		@fenetre.changerWidget(HudRapide.new(@fenetre,grille))
 	end
 
 
 	def lancementExplo(grille)
-		@fenetre.changerWidget(self,HudExploration.new(@fenetre,grille))
+		@fenetre.changerWidget(HudExploration.new(@fenetre,grille))
 	end
 
 	def lancementModeJeu
-		@fenetre.changerWidget(self, HudModeDeJeu.new(@fenetre))
+		@fenetre.changerWidget(HudModeDeJeu.new(@fenetre))
 	end
 
 	def lancementChoixDifficulte(mode)
 		@@mode = mode
-		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode,self))
+		@fenetre.changerWidget(HudChoixDifficulte.new(@fenetre,mode,self))
 	end
 
 	# Lance le menu de fin de jeu
 	def lancementFinDeJeu(finTuto=false)
-		@fenetre.changerWidget(self, HudFinDeJeu.new(@fenetre, self, finTuto))
+		@fenetre.changerWidget(HudFinDeJeu.new(@fenetre, self, finTuto))
 	end
 
 	def lancementInscription
-		@fenetre.changerWidget(self, HudInscription.new(@fenetre))
+		@fenetre.changerWidget(HudInscription.new(@fenetre))
 	end
 
 	def lancementHudRegle
-		@fenetre.changerWidget(self, HudRegle.new(@fenetre,self))
+		@fenetre.changerWidget(HudRegle.new(@fenetre,self))
 	end
 
 	def lancementHudPresentationTutoriel(grille)
-		@fenetre.changerWidget(self, HudPresentationTutoriel.new(@fenetre,grille))
+		@fenetre.changerWidget(HudPresentationTutoriel.new(@fenetre,grille))
 
 	end
 
 	def lancementProfil
-		@fenetre.changerWidget(self, HudProfil.new(@fenetre))
+		@fenetre.changerWidget(HudProfil.new(@fenetre))
+	end
+
+	def lancementHudPrecedent
+		if @fenetrePrecedente == nil
+			puts "ATTENTION : tentative de retour à hud précédent hors @fenetrePrecedente = nil"
+		else
+			@fenetre.changerWidget(@fenetrePrecedente)
+		end
 	end
 
 	# TODO inverser style et size pour respecter CustomLabel
@@ -108,7 +116,7 @@ protected
 		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
-			 @fenetre.changerWidget(self,HudOption.new(@fenetre,self))
+			 @fenetre.changerWidget(HudOption.new(@fenetre,self))
 		}
 	end
 

@@ -50,6 +50,6 @@ class HudRegle < Hud
 	end
 
 	def initBoutonRetour
-		super { @fenetre.changerWidget(self, @fenetrePrecedente) }
+		super { self.lancementHudPrecedent }
 	end
 end

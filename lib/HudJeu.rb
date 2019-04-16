@@ -456,7 +456,7 @@ protected
 	# Rend lisible le temps écoulé @timer et renvoie le String calculé
 	# - return un String contenant un temps mm:ss
 	def parseTimer
-		[@timer/60, @timer%60].map { |t| t.to_s.rjust(2,'0') }.join(':')
+		[@timer/60, @timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
 	end
 
 	# Réinitialise le timer à 0

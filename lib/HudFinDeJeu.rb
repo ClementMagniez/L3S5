@@ -4,9 +4,10 @@ class HudFinDeJeu < Hud
 	# 	window : La Fenetre contenant le HudFinDeJeu
 	# 	fenetrePrecedente : Le HudJeu qui appel ce constructeur, permet de recommencer une meme partie
 	def initialize(window, fenetrePrecedente, finTuto=false)
-		super(window)
+		super(window,fenetrePrecedente)
 		varX, varY = 2, 2
-		@fenetrePrecedente = fenetrePrecedente
+		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
+		fenetrePrecedente.reset
 		tpsMin = fenetrePrecedente.timer / 60
 		tpsSec = fenetrePrecedente.timer % 60
 		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
@@ -57,8 +58,7 @@ private
 	def initBoutonRecommencer
 		@btnRecommencer = CustomButton.new("Recommencer")
 		@btnRecommencer.signal_connect('clicked') {
-			@fenetrePrecedente.reset
-			@fenetre.changerWidget(self,@fenetrePrecedente)
+			self.lancementHudPrecedent
 		}
 
 	end

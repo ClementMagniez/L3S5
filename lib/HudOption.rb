@@ -51,7 +51,7 @@ private
 
 	# Le bouton retour lance desormais la fenetre précédent et plus HudModeDeJeu
 	def initBoutonRetour
-		super { @fenetre.changerWidget(self,@fenetrePrecedente) }
+		super { self.lancementHudPrecedent }
 	end
 
 	def initMenuResolution
