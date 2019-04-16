@@ -11,7 +11,7 @@ class HudFinDeJeu < Hud
 		tpsSec = fenetrePrecedente.timer % 60
 		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
 		lblScore = CustomLabel.new("Score final = " + @@scoreTotal.to_s)
-		@@joueur.enregistrerScore(@@joueur.id,["nomGrille",@@difficulte,@@mode,@@scoreTotal])
+		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])
 
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu

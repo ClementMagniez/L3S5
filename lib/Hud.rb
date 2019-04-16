@@ -1,5 +1,6 @@
 require 'gtk3'
 require_relative 'Grille'
+require_relative "Connexion.rb"
 require_relative 'CustomLabel'
 require_relative 'CustomButton'
 require_relative 'CustomEventBox'
@@ -10,7 +11,7 @@ require_relative 'CustomEventBox'
 class Hud < Gtk::Grid
 	@@initblock=false
 	@@difficulte = nil
-	@@joueur = nil
+	@@joueur = Connexion.new
 	@@mode = nil
 	@@scoreTotal = 0
 

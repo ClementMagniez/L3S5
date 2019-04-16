@@ -1,8 +1,3 @@
-require_relative "connectSqlite3.rb"
-require_relative "Profil.rb"
-require_relative "Connexion.rb"
-require_relative "Hud.rb" # À retirer lorsque le test pour l'ID sera satisfaisant
-
 class HudAccueil < Hud
 	def initialize(window)
 		super(window)
@@ -19,6 +14,10 @@ class HudAccueil < Hud
 		initBoutonConnecter
 		initBoutonQuitter
 
+		# Rend le mot de passe entré invisible
+		@entryMotDePasse.set_visibility(false)
+
+		@lblErreur = Gtk::Label.new("Connectez-vous !")
 
 		width = 150
 
@@ -76,12 +75,10 @@ private
 		@btnConnecter = CustomButton.new("Se connecter")
 		@btnConnecter.signal_connect("clicked") {
 			# Vérification de l'existence du profil dans la BDD
-			@@joueur = Connexion.new
-
 			if @entryIdentifiant.text.empty? || @entryMotDePasse.text.empty?
-				@lblErreur.set_label("Veuillez renseigner tous les champs.")
-			elsif(@@joueur.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == -1)
-				@lblErreur.set_label("Identifiant ou mot de passe incorrect.")
+				@lblErreur.set_text("Veuillez renseigner tous les champs.")
+			elsif(@@joueur.seConnecter(@entryIdentifiant.text(), @entryMotDePasse.text()) == false)
+				@lblErreur.set_text("Identifiant ou mot de passe incorrect.")
 			else
 				f=IniFile.load("../config/#{@@joueur.login}.ini", encoding: 'UTF-8')
 				@@winX=f['resolution']['width']

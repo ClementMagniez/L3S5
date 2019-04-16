@@ -7,7 +7,7 @@
 require "active_record"
 require "openssl"
 require_relative "connectSqlite3.rb"
-require_relative "Score.rb"
+require_relative "ScoreBDD.rb"
 require_relative "Profil.rb"
 
 
@@ -84,34 +84,19 @@ class Connexion
 	# === Paramètres
 	#
 	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
-	# * +nomMode+ - Le nom du mode de jeu
-	# * +nomMap+ - Le nom de la grille jouée
-	# * +score+ - Le montant du score obtenu à la fin de la partie
+	# * +infoGrille+ - Le tableau contenant les informations de la partie jouée :
+	# 	+0+ - Le nom du mode joué
+	# 	+1+ - Le nom de la difficulté jouée
+	# 	+2+ - Le montant du score obtenu à la fin de la partie
 	#
 	def enregistrerScore(idJoueur,infoGrille)
 		reqScore = Score.new(
-			montantScore: infoGrille[3],
-			modeJeu: infoGrille[2],
+			modeJeu: infoGrille[0],
+			difficulte: infoGrille[1],
+			montantScore: infoGrille[2],
 			dateObtention: Time.now.to_s.split(" ").at(0).to_s
 		);
 		reqScore.profil_id = idJoueur
-		reqScore.map_id = nil
-
-		if(infoGrille[2] == "Rapide" || infoGrille[2] == "Exploration")
-			# Cherche si la grille courante possède déjà une entrée dans la BDD ou pas
-			reqMap = Map.find_by(nomMap: infoGrille[0])
-
-			if(reqMap == nil)
-				# Insertion d'un nouveau champ dans la table Map
-				insertMap = Map.new(
-					hash_name: infoGrille[0],
-					difficulte: infoGrille[1]
-				);
-				insertMap.save
-				reqMap = Map.find_by(nomMap: infoGrille[0])
-				reqScore.map_id = reqMap.id
-			end
-		end
 		reqScore.save
 	end
 
@@ -128,7 +113,7 @@ class Connexion
 		reqScore = Score.find_by(id: idJoueur)
 
 		if(reqScore != nil)
-			reqScore.order("modeJeu, dateObtention, montantScore DESC")
+			reqScore.sort_by("modeJeu, dateObtention, montantScore DESC")
 		end
 		return reqScore
 	end

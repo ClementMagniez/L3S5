@@ -1,4 +1,4 @@
-# Cette classe fait a peut pres les memes choses que HudInscription
+# Cette classe fait à peu près les mêmes choses que HudInscription
 require 'inifile'
 
 class HudProfil < Hud
@@ -13,6 +13,8 @@ class HudProfil < Hud
 		initBoutonRetourMenu
 		initBoutonSauvegarderLogin
 		initChampScore
+
+		puts "ID : #{@@joueur.id}, login : #{@@joueur.login}"
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
