@@ -9,7 +9,7 @@ require_relative 'CustomEventBox'
 # à la connexion, instancie les éléments communs aux menus et permet le passage
 # de l'un à l'autre
 class Hud < Gtk::Grid
-	@@initblock=false
+	@@initblock = false
 	@@difficulte = nil
 	@@joueur = Connexion.new
 	@@mode = nil
@@ -144,7 +144,7 @@ protected
 
 	# Initialise le bouton de retour au menu pricipal (choix des modes de jeu ) :
 	# 	ajoute une variable d'instance @btnRetour
-	# 	initialise sont comportement
+	# 	initialise son comportement
 	def initBoutonRetour
 		@btnRetour = CustomButton.new("Retour")
 		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
@@ -153,12 +153,16 @@ protected
 	# Initialise la liste des scores selon l'écran qui fera appel :
 	# 	- Écran de fin de partie -> Affiche tous les scores enregistrés pour le mode courant (score enregisté en surbrillance)
 	# 	- Écran de profil -> Un bouton par mode, possibilité de supprimer les scores du joueur courant
-	def initChampScore(modeJeu,ecranProfil)
+	#
+	# +infoGrille+ => Le tableau contenant les informations de la partie jouée :
+	# 	+0+ - Le nom du mode joué
+	# 	+1+ - Le nom de la difficulté jouée
+	def initChampScore(ecranProfil,infoGrille)
 		@champScores = Gtk::ScrolledWindow.new
 		@champScores.set_min_content_height(100)
+		listeScores = @@joueur.rechercherScore(ecranProfil,infoGrille)
 
 		if(ecranProfil) # S'il s'agit de HudProfil
-			listeScores = @@joueur.rechercherScore(modeJeu,ecranProfil)
 
 			if(listeScores != nil)
 				btnAventure = CustomButton.new("Aventure")
@@ -197,10 +201,11 @@ protected
 			# Sinon, il s'agit de HudFinDeJeu
 			if(listeScores != nil)
 				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				# Rajouter une condition pour mettre la ligne du nouveau score en surbrillance
 				listeScores.each do |score|
-					puts "#{score}"
-					boxChamp.add(Gtk::Label.new(score))
+					lblScore = (score.montantScore == @@scoreTotal && score.profil_id == @@joueur.id) ?
+						CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}") :
+						Gtk::Label.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
+					boxChamp.add(lblScore)
 				end
 				@champScores.add(boxChamp)
 			end

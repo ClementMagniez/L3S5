@@ -101,12 +101,17 @@ class Connexion
 	#
 	# Cette méthode permet de sortir tous les scores contenues dans la base de données.
 	#
-	# === Paramètre
+	# === Paramètres
 	#
-	# * +modeJeu+ - La chaîne de caractères indiquant le mode de jeu voulu
+	# * +ecranProfil+ - Le booléen indiquant le hud courant
+	# * +infoGrille+ - Le tableau contenant les informations de la partie jouée :
+	# 	+0+ - Le nom du mode joué
+	# 	+1+ - Le nom de la difficulté jouée
 	#
-	def rechercherScore(modeJeu,ecranProfil)
-		research = (ecranProfil) ? Score.find_by(modeJeu: modeJeu, profil_id: @id) : Score.find_by(modeJeu: modeJeu)
+	def rechercherScore(ecranProfil,infoGrille)
+		research = (ecranProfil) ?
+			Score.where(modeJeu: infoGrille[0], profil_id: @id) : # HudProfil
+			Score.includes(:profil).where(modeJeu: infoGrille[0], difficulte: infoGrille[1]) # HudFinDeJeu
 		return (research != nil) ? research.order(montantScore: :desc) : nil
 	end
 
@@ -124,7 +129,4 @@ class Connexion
 	end
 end
 
-scores = Score.where(profil_id: 1).order(montantScore: :desc)
-scores.each do |s|
-	puts s.montantScore
-end
+puts Score.all

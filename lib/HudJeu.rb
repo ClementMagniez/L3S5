@@ -135,12 +135,6 @@ class HudJeu < Hud
 		@btnPause.text = @pause ? "Jouer	" : "Pause"
 	end
 
-	def getTime
-		if @timer != nil
-			return @timer
-		end
-	end
-
 	# Met à jour l'affichage du score avec une valeur modifiée
 	def reloadScore
 		@lblScore.set_text("Score : " + @grille.score.getValeur.to_s)
@@ -378,7 +372,6 @@ class HudJeu < Hud
 	# - start : par défaut 0, le temps de départ du timer
 	# - return self
 	def initTimer(start=0)
-
 		@timer = start
 		@lblTime = CustomLabel.new(self.parseTimer, "white")
 		self.startTimer
@@ -424,9 +417,10 @@ class HudJeu < Hud
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
 		# Rajout du calcul du score pour la fin de la partie
-		@grille.score.recupererTemps(self.getTime)
-		@@scoreTotal += self.grille.score.calculerScoreFinal
-
+		@grille.score.recupererTemps(self.timer)
+		scoreFinal = self.grille.score.calculerScoreFinal
+		@@scoreTotal = (@@mode == "aventure") ? @@scoreTotal + scoreFinal : scoreFinal
+		
 		self.lancementFinDeJeu
 	end
 

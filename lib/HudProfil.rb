@@ -12,7 +12,7 @@ class HudProfil < Hud
 
 		initBoutonRetourMenu
 		initBoutonSauvegarderLogin
-		initChampScore("Chrono",true)
+		initChampScore(true,["rapide",nil])
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
