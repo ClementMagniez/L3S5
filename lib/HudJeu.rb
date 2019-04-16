@@ -122,7 +122,7 @@ class HudJeu < Hud
 #######################################################################
 
 	end
-
+	
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
 			@lblIndiceSubr.color = "white"
@@ -171,7 +171,8 @@ class HudJeu < Hud
 													 "white",self.getIndiceSize,'ultrabold')
 	end
 
-	# Réinitialise la grille
+	# Réinitialise la grille et les affichages
+	# - return self
 	def reset
 		@grille.grille.each do |line|
 			line.each do |cell|
@@ -182,8 +183,8 @@ class HudJeu < Hud
 		@grille.raz
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer" : "Pause"
-		@lblAide.text="" 
 		desurbrillanceIndice
+		self
 	end
 
 protected
@@ -465,7 +466,7 @@ protected
 	# Rend lisible le temps écoulé @timer et renvoie le String calculé
 	# - return un String contenant un temps mm:ss
 	def parseTimer
-		[@timer/60, @timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
+		[@timer/60, @timer%60].map { |t| t.to_s.rjust(2,'0') }.join(':')
 	end
 
 	# Réinitialise le timer à 0

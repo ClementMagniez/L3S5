@@ -12,6 +12,8 @@ class Hud < Gtk::Grid
 	@@initblock=false
 	@@difficulte = nil
 	@@mode = nil
+	
+	attr_reader :fond
 
 	def initialize(window,fenetrePrecedente=nil)
 		super()
@@ -19,9 +21,13 @@ class Hud < Gtk::Grid
 		@fenetre = window
 		@fenetre.signal_connect('check-resize') do |window|
 			if window.size[0]!=@@winX && window.size[1]!=@@winY
-				 puts (window.size[0].to_s + "," + window.size[1].to_s)
-				 self.remove(@fond) if @fond !=nil
-				ajoutFondEcran
+#				 puts (window.size[0].to_s + "," + window.size[1].to_s)
+#				 self.destroy(@fond) if @fond !=nil
+				self.ajoutFondEcran
+#				
+
+#			 	fenetrePrecedente.destroy(fenetrePrecedente.fond) if fenetrePrecedente!=nil && fenetrePrecedente.fond !=nil
+		#		fenetrePrecedente.ajoutFondEcran if fenetrePrecedente!=nil
 			end
 		end
 		# Hacky façon de n'exécuter initWindow qu'une fois
