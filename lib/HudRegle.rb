@@ -3,9 +3,8 @@ class HudRegle < Hud
 	#Génère les règles
 	# - window : la fenêtre principale de l'application
 	# - fenetrePrecedente : la fenêtre précédente pour pouvoir y retourner
-	def initialize (window,fenetrePrecedente)
-		super(window,fenetrePrecedente)
-
+	def initialize(traitements)
+		super()
 
 		lblRegle = CustomLabel.new(" But du jeu : Dans un camping, seuls les arbres sont dessinés.\n Plantez les tentes, sachant que : \n
 			Règle n°1 : \n
@@ -17,38 +16,46 @@ class HudRegle < Hud
 			Règle n°4 : \n
 			Le nombre de places est limité : les chiffres en haut et à\n gauche indiquent le nombre de tentes dans chaque travée.","white")
 
-			lblRegle.set_size('xx-large')  if @@winY<1100
-			lblRegle.set_size('large')  if @@winY<800
-			lblRegle.set_size('small')  if @@winY<600
+		lblRegle.set_size('xx-large')  if @@winY<1100
+		lblRegle.set_size('large')  if @@winY<800
+		lblRegle.set_size('small')  if @@winY<600
 
 
-		 image = Gtk::Image.new( :file => "../img/gris.png")
+		image = Gtk::Image.new( :file => "../img/gris.png")
 		 #Scale de l'image
-		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY/@sizeGridWin)*(@sizeGridWin-2)	)  if @@winY>600
-		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY/@sizeGridWin)*(@sizeGridWin-2)	) if @@winY<600
+		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	)  if @@winY>600
+		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	) if @@winY<600
 
-		initBoutonRetour
+		initBoutonRetour(traitements)
 
-	 	lblRegle.hexpand = true
 
-			grid = Gtk::Grid.new
 
-			grid.attach(lblRegle,0,0,1,1)
-			grid.attach(image,0,0,1,1)
-			image.hexpand = true
-				image.vexpand = true
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			grid = Gtk::Grid.new
+				lblRegle.hexpand = true
+			grid.attach(lblRegle,0,0,1,1)
+				image.hexpand = true
+				image.vexpand = true
+			grid.attach(image,0,0,1,1)
 		vBox.add(grid)
-			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.vexpand = true
-			hBox.valign = Gtk::Align::CENTER
-			hBox.halign = Gtk::Align::CENTER
-			hBox.homogeneous = true
-			hBox.add(@btnRetour)
-		vBox.add(hBox)
+			@btnRetour.vexpand = true
+			@btnRetour.halign = Gtk::Align::CENTER
+			@btnRetour.valign = Gtk::Align::CENTER
+		vBox.add(@btnRetour)
 
-	self.attach(vBox, 0, 0, 1, 1)
+		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
+	end
+
+	def initBoutonRetour(listToDo)
+		super() do
+			self.lancementHudPrecedent
+			if listToDo != nil
+				listToDo.each do |traitement|
+					@@hudPrecedent.send(traitement)
+				end
+			end
+		end
 	end
 end

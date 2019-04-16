@@ -4,22 +4,20 @@ class HudTutoriel < HudJeu
 	# Génère le menu de jeu
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
-	def initialize (window,grille)
-		super(window,grille)
+	def initialize (grille,timer=0)
+		super(grille,timer)
 		self.setTitre("Tutoriel")
-
-		afficherAide
+		@@difficulte="Facile"
 		@btnAide.sensitive = false
 		@btnPause.sensitive = false
-		@lblTime.set_visible(false)
+		@lblTimer.set_visible(false)
+		self.afficherAide
 	end
-	
-	def initIndice(i, isRow) 
-		super { self.afficherAide }
-		end
-	
-	def chargementGrille
-		super { self.afficherAide }
+
+	# Surcharge de la méthode jeuTermine de HudJeu
+	# pour que le menu de fin de jeu n'affiche pas certains éléments
+	def jeuTermine
+		self.lancementFinDeJeu(true)
 	end
 
 	def reset
@@ -27,11 +25,21 @@ class HudTutoriel < HudJeu
 		self.afficherAide
 	end
 
+protected
+
+	def initIndice(i, isRow)
+		super { self.afficherAide }
+		end
+
+	def chargementGrille
+		super { self.afficherAide }
+	end
+
+
 	# Affiche l'aide pour le mode Tutoriel
 	def afficherAide
 
 		super("tuto") do |tableau|
-		
 			#Met une liste de case en surbrillance
 			listCase = tableau.at(LISTCASES)
 			if listCase != nil

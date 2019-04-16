@@ -6,16 +6,18 @@ class HudRapide < HudJeu
 	TEMPS_MOYEN=TEMPS_FACILE*2/3
 	TEMPS_DIFFICILE=TEMPS_MOYEN/2
 
-	def initialize(window,grille)
+	def initialize(grille,timer=-1)
 		case grille.length
 			when 6..8 then @temps=TEMPS_FACILE
 			when 9..12 then @temps=TEMPS_MOYEN
 			when 13..16 then @temps=TEMPS_DIFFICILE
 		end
-
-		super(window,grille)
+		if timer != -1
+			@temps = timer
+		end
+		super(grille,@temps)
 		self.setTitre("Partie rapide")
-
+		# malus de temps (en seconde) lors d'une demande d'aide
 		@@malus = 15
 	end
 
@@ -25,11 +27,12 @@ class HudRapide < HudJeu
 		super
 		@btnAide.signal_connect("clicked") do
 			@timer -= @@malus
+			@@malus *= 1.2
 		end
 end
 
-	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non 
-	# le temps écoulé	
+	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non
+	# le temps écoulé
 	def timer
 		return @temps-@timer
 	end
@@ -52,12 +55,17 @@ end
 
 	# Surcharge la méthode d'initialisation du timer,
 	# l'affichage de celui-ci se fait en compte à rebours
-	def initTimer
-		super(@temps)
+	def initTimer(timer=@temps)
+		super(timer)
 	end
 
 	def increaseTimer
-		super(:-)
+		buff=super(:-)
+		if self.timer>=@temps
+			self.jeuTermine
+			return false
+		end
+		buff
 	end
 
 	def resetTimer

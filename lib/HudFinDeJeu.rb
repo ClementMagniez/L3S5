@@ -3,14 +3,12 @@ class HudFinDeJeu < Hud
 	# Nouvelle instance de fin de jeu
 	# 	window : La Fenetre contenant le HudFinDeJeu
 	# 	fenetrePrecedente : Le HudJeu qui appel ce constructeur, permet de recommencer une meme partie
-	def initialize(window, fenetrePrecedente)
-		super(window)
-		varX, varY = 2, 2
-		@fenetrePrecedente = fenetrePrecedente
-		tpsMin = fenetrePrecedente.timer / 60
-		tpsSec = fenetrePrecedente.timer % 60
-		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
+	def initialize(finTuto=false)
+		super()
+		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : 0")
+		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
+		@@hudPrecedent.reset
 
 
 		initBoutonRecommencer
@@ -18,7 +16,7 @@ class HudFinDeJeu < Hud
 
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-			lblTxt = CustomLabel.new("Bravo, vous avez fini !")
+			lblTxt = CustomLabel.new("Partie terminée !")
 			lblTxt.vexpand = true
 		vBox.add(lblTxt)
 			lblTemps.vexpand = true
@@ -37,6 +35,11 @@ class HudFinDeJeu < Hud
 		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
+
+		if finTuto
+			# On ne doit pas voir les scores à la fin du tuto
+			lblScore.destroy
+		end
 	end
 
 private
@@ -52,8 +55,7 @@ private
 	def initBoutonRecommencer
 		@btnRecommencer = CustomButton.new("Recommencer")
 		@btnRecommencer.signal_connect('clicked') {
-			@fenetrePrecedente.reset
-			@fenetre.changerWidget(self,@fenetrePrecedente)
+			self.lancementHudPrecedent
 		}
 
 	end

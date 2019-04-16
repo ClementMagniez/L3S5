@@ -10,22 +10,20 @@ class HudJeu < Hud
 	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
-	def initialize(window,grille)
-		super(window)
-		@align = Gtk::Align.new(1)
+	def initialize(grille,timerStart=0)
+		super()
 		@aide = Aide.new(grille)
-
+		# Le label d'aide est placé dans une Gtk::Grid afin de pouvoir y attacher une image de fond
 		@gridJeu = Gtk::Grid.new
 		@gridJeu.row_homogeneous = true
 		@gridJeu.column_homogeneous = true
 		@grille = grille
-		@tailleGrille = @grille.length
+		# Un indices de ligne ou colonne est mis en valeur,
+		# cet attribut référencie l'indice afin de ne plus mettre en valeur l'indice en question
+		@lblIndiceSubr = nil
 		@pause=false
-		# @sizeGridJeu = 10
-		# @varFinPlaceGrid = @sizeGridWin/4 + @sizeGridJeu
-		# @varDebutPlaceGrid = @sizeGridWin/4
 
-		self.initTimer
+		self.initTimer(timerStart)
 		self.initBoutonRegle
 		self.chargementGrille
 		self.initBoutonAide
@@ -35,13 +33,14 @@ class HudJeu < Hud
 		self.initBoutonRemplissage
 		self.initBoutonSauvegarde
 		self.initBoutonRetour
+		@btnRetour.text = "Abandonner"
 
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-				@lblTime.hexpand = true
-				@lblTime.halign = Gtk::Align::CENTER
-			hBox.add(@lblTime)
+				@lblTimer.hexpand = true
+				@lblTimer.halign = Gtk::Align::CENTER
+			hBox.add(@lblTimer)
 			hBox.add(@btnRegle)
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
@@ -59,13 +58,12 @@ class HudJeu < Hud
 				vBox2.add(@btnSauvegarde)
 			hBox.add(vBox2)
 		vBox.add(hBox)
-			gridLblAide = Gtk::Grid.new
-			gridLblAide.halign = Gtk::Align::CENTER
-			gridLblAide.attach(@lblAide, 0, 0, 1, 1)
-				image = Gtk::Image.new( :file => "../img/gris.png")
-				image.pixbuf = image.pixbuf.scale((@@winX/2),(@@winY/10))
-			gridLblAide.attach(image, 0, 0, 1, 1)
-		vBox.add(gridLblAide)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.halign = Gtk::Align::CENTER
+			hBox.valign = Gtk::Align::CENTER
+			hBox.vexpand = true
+			hBox.add(@lblAide)
+		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -81,6 +79,46 @@ class HudJeu < Hud
 		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
+
+
+# Disposition alternative où lblAide est dans la même vbox que gridJeu
+# et est donc strictement en dessous
+# pour l'instant dysfonctionnel car les labels d'aide étendent trop la box
+# TODO
+#######################################################################
+#		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+#			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+#				@lblTime.hexpand = true
+#				@lblTime.halign = Gtk::Align::CENTER
+#			hBox.add(@lblTime)
+#			hBox.add(@btnRegle)
+#		vBox.add(hBox)
+#			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+#			hBox.halign = Gtk::Align::CENTER
+#			hBox.valign = Gtk::Align::CENTER
+#			hBox.vexpand = true
+#				vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+#				vBox2.valign = Gtk::Align::CENTER
+#				vBox2.add(@gridJeu)
+#					gridLblAide = Gtk::Grid.new
+#					gridLblAide.halign = Gtk::Align::CENTER
+#					gridLblAide.attach(@lblAide, 0, 0, 1, 1)
+#						image = Gtk::Image.new( :file => "../img/gris.png")
+#						image.pixbuf = image.pixbuf.scale((@@winX/3),(@@winY/15))
+#					gridLblAide.attach(image, 0, 0, 1, 1)
+#				vBox2.add(gridLblAide)
+#			hBox.add(vBox2)
+#				vBox3 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+#				vBox3.valign = Gtk::Align::CENTER
+#				vBox3.add(@btnAide)
+#				vBox3.add(@btnPause)
+#				vBox3.add(@btnReset)
+#				vBox3.add(@btnCancel)
+#				vBox3.add(@btnRemplissage)
+#				vBox3.add(@btnSauvegarde)
+#			hBox.add(vBox3)
+#######################################################################
+
 	end
 
 	def desurbrillanceIndice
@@ -90,18 +128,25 @@ class HudJeu < Hud
 		end
 	end
 
+
  def initBoutonRetour
 	 @btnRetour = CustomButton.new("Retour")
  		@btnRetour.signal_connect("clicked") {self.lancementModeJeu }
  end
 
+	# =======================
+	# TODO
+	# est-ce vraiment utile ???
+	# @caseSurbrillanceList n'est utilisé nulle part ailleurs, je suppose donc que cette méthode ne sert à rien...
+	# Ca a le mérite d'avoir une utilité en tuto
+	# =======================
+
 	def desurbrillanceCase
 		if @caseSurbrillanceList != nil
 			while not @caseSurbrillanceList.empty?
 				caseSubr = @caseSurbrillanceList.shift
-				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
-				# 					scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
-				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).replace(scaleImage(@grille[caseSubr.x][caseSubr.y].affichage))
+				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).\
+				replace(scaleImage(@grille[caseSubr.x][caseSubr.y].affichage))
 			end
 		end
 	end
@@ -109,7 +154,7 @@ class HudJeu < Hud
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
 		return 'large' if @@winY>700
-		return @grille.length < 9 ? "large" : (@grille.length < 12 ?  "medium" : "small")
+		return @grille.length < 9 ? "large" : (@grille.length < 12 ?  "medium" : "x-small")
 		# return @grille.length>=12 || @@winY<700 ? "small" : "x-large"
 	end
 
@@ -124,20 +169,27 @@ class HudJeu < Hud
 													 "white",self.getIndiceSize,'ultrabold')
 	end
 
-	# Réinitialise la grille
+	# Rend lisible le temps écoulé @timer et renvoie le String calculé
+	# - return un String contenant un temps mm:ss
+	def parseTimer
+		[@timer/60, @timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
+	end
+
+	# Réinitialise la grille et les affichages
+	# - return self
 	def reset
 		@grille.grille.each do |line|
 			line.each do |cell|
 				cell.reset
-				#puts (@gridJeu.get_child_at(j,i).class.to_s + i.to_s + j.to_s)
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
 			end
 		end
 		@grille.raz
 		self.resetTimer
-		@btnPause.text = @pause ? "Jouer	" : "Pause"
-		@lblAide.text="" 
+		@btnPause.text = @pause ? "Jouer" : "Pause"
+		@lblAide.text=""
 		desurbrillanceIndice
+		self
 	end
 
 protected
@@ -145,7 +197,7 @@ protected
 
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
 	# dans @lblAide ; peut mettre en surbrillance (changement de couleur) une case ou un indice
-	# - typeAide : par défaut "rapide", indique le mode de jeu 
+	# - typeAide : par défaut "rapide", indique le mode de jeu
 	# (donc le degré de précision de l'aide) voulu
 	# - return self
 
@@ -167,12 +219,12 @@ protected
 		#Affiche le message d'aide
 		 @lblAide.set_text(tableau.at(MESSAGE))
 
-	 	 if @@winY<1100
-		 	 @lblAide.set_size('xx-large')  
-	 	 elsif @@winY<800
-		 	 @lblAide.set_size('large')  
-	 	 elsif @@winY<600
-		 	 @lblAide.set_size('small')  
+	 	 if @@winY>800
+		 	 @lblAide.set_size('xx-large')
+	 	 elsif @@winY>600
+		 	 @lblAide.set_size('large')
+	 	 elsif @@winY>400
+		 	 @lblAide.set_size('medium')
 		end
 
 		#Met un indice de colonne ou ligne en surbrillance
@@ -183,7 +235,7 @@ protected
 			else
 				lblIndice = @gridJeu.get_child_at(indice,0).child
 			end
-
+			# Un indice des lignes ou colonnes est mis en valeur : en rouge
 			lblIndice.color = "red"
 			# On garde une référence sur le label de la ligne ou colonne mise en évidence
 			@lblIndiceSubr = lblIndice
@@ -197,28 +249,28 @@ protected
 	def initIndicesColonnes
 		self.initIndices(false)
 	end
-	
+
 	# @see initIndices : initialise le nombre de tentes sur chaque ligne
 	# - return self
 	def initIndicesLignes
 		self.initIndices(true)
 	end
-	
+
 	# @see initIndice : initialise le nombre de tentes sur l'ensemble des lignes
 	# ou colonnes selon isRow
 	# - isRow : true => initialise les lignes, false => initialise les colonnes
 	# - return self
 	def initIndices(isRow)
-		(@tailleGrille).times do |i|
+		(@grille.length).times do |i|
 			self.initIndice(i,isRow)
 		end
 		self
 	end
-	
+
 	# Remplit programmatiquement une cellule vide de gazon et met à jour l'affichage ;
 	# utilisé par le signal handler de HudJeu#initIndice
 	# - i,k : position de la cellule
-	# - return self 
+	# - return self
 	def fillCellGrid(i,k)
 		if @grille[i][k].statutVisible.isVide?
 			@grille[i][k].cycle(@grille)
@@ -228,10 +280,10 @@ protected
 		self
 	end
 
-	# Crée un bouton indiquant le nombre de tentes sur la ligne/colonne _i_, 
+	# Crée un bouton indiquant le nombre de tentes sur la ligne/colonne _i_,
 	# l'attache à la grille de jeu et permet de remplir toute la ligne/colonne
 	# de gazon en cliquant dessus
-	# 
+	#
 	# Peut accepter un block, exécuté dans le signal handler du bouton
 	# - i : indice du bouton sur la tente/colonne, tel que i<@ŋrille.length
 	# - isRow : true => initialise les lignes, false => initialise les colonnes
@@ -240,15 +292,15 @@ protected
 		btnIndice = CustomButton.new
 		btnIndice.label = labelIndice(i, isRow ? :varTentesLigne : :varTentesCol)
 		btnIndice.set_relief(Gtk::ReliefStyle::NONE)
-		
+
 		posX=(isRow ? 0 : i+1)
 		posY=i+1-posX
 
 		@gridJeu.attach(btnIndice,posX,posY,1,1)
 		#Quand on clique dessus, met toutes les cases vides à gazon
 		btnIndice.signal_connect("clicked") do
-			(@tailleGrille).times do |k|
-				isRow ?  self.fillCellGrid(i,k) : self.fillCellGrid(k,i) 
+			(@grille.length).times do |k|
+				isRow ?  self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
 			end
 			self.desurbrillanceIndice
 			yield	if block_given?
@@ -256,12 +308,12 @@ protected
 		self
 	end
 
+
 	# Initialise la grille de jeu :
 	# 	ajoute une variable d'instance @gridJeu : la grille de jeu avec laquelle le joueur interagira
 	#
  	# Peut accepter un block, exécuté dans le signal handler de la case
 	def chargementGrille
-
 		self.initIndicesColonnes
 		self.initIndicesLignes
 
@@ -279,7 +331,7 @@ protected
 						desurbrillanceIndice
 						self.jeuTermine		if @grille.estValide
 					end
-					
+
 					# Note : important de ne yield qu'après les appels à desurbrillanceFoo
 					# sans quoi le tutoriel voit ses indices effacés instantanément
 					yield if block_given?
@@ -296,9 +348,17 @@ protected
 	def initBoutonAide
 		@lblAide = CustomLabel.new
 		@lblAide.color = "white"
+		@lblAide.set_background("#000000", 40)
 		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide
+		}
+	end
+
+	def initBoutonOptions
+		super([:rescaleGrille,:pause])
+		@btnOptions.signal_connect("clicked") {
+			self.pause
 		}
 	end
 
@@ -310,8 +370,6 @@ protected
 		@btnCancel.signal_connect('clicked'){
 			cell = @grille.cancel
 			if cell != nil
-				# @gridJeu.get_child_at(cell.y+1,cell.x+1)\
-				# .set_image(scaleImage(cell.affichage))
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
 			end
 		}
@@ -323,28 +381,14 @@ protected
 	def initBoutonPause
 		@btnPause = CustomButton.new("Pause")
 		@btnPause.signal_connect('clicked'){
-			if @pause
-				self.startTimer
-				@btnPause.set_text("Pause")
-			else
-				@btnPause.set_text("Jouer")
-			end
-			@pause = !@pause
-			@gridJeu.sensitive = !@pause
-			@btnAide.sensitive = !@pause
-			@btnReset.sensitive = !@pause
-			@btnCancel.sensitive = !@pause
-			@btnRemplissage.sensitive = !@pause
+			self.pause
 		}
 	end
 
-	# Initialise le bouton des règles de jeu :
-	# 	ajoute une variable d'instance @btnRegle
-	# 	initialise sont comportement
 	def initBoutonRegle
-		@btnRegle = CustomButton.new("?", "pink")
-		@btnRegle.signal_connect('clicked'){
-			lancementHudRegle
+		super([:pause])
+		@btnRegle.signal_connect("clicked") {
+			self.pause
 		}
 	end
 
@@ -359,7 +403,6 @@ protected
 				caseRemp = liste.pop
 				if caseRemp.statutVisible.isVide?
 					caseRemp.cycle(@grille)
-					# @gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).set_image(scaleImage(caseRemp.affichage))
 					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).replace(scaleImage(caseRemp.affichage))
 				end
 			end
@@ -373,7 +416,6 @@ protected
 		@btnReset = CustomButton.new("Reset")
 		@btnReset.signal_connect("clicked") {
 			reset
-
 		}
 	end
 
@@ -383,23 +425,36 @@ protected
 	def initBoutonSauvegarde
 		@btnSauvegarde = CustomButton.new("Sauvegarder")
 		@btnSauvegarde.signal_connect('clicked') do
-			Dir.mkdir("saves")	unless Dir.exist?("saves")
-			File.open("saves/"+@@name+".txt", "w+", 0644) do |f|
-				f.write( Marshal.dump([@grille,@@mode,@@difficulte]))
+			File.open("../saves/"+@@name+".txt", "w+", 0644) do |f|
+				f.write(Marshal.dump([@grille,@@mode,@@difficulte,@timer]))
 			end
 		end
 
 	end
 
-	# Initialise le timer ; ajoute une variable d'instance @lblTime, le label associé au timer.
+	# Initialise le timer ; ajoute une variable d'instance @lblTimer, le label associé au timer.
 	# - start : par défaut 0, le temps de départ du timer
 	# - return self
 	def initTimer(start=0)
-
 		@timer = start
-		@lblTime = CustomLabel.new(self.parseTimer, "white")
+		@lblTimer = CustomLabel.new(self.parseTimer, "white")
 		self.startTimer
 		self
+	end
+
+	def pause
+		if @pause
+			self.startTimer
+			@btnPause.set_text("Pause")
+		else
+			@btnPause.set_text("Jouer")
+		end
+		@pause = !@pause
+		@gridJeu.sensitive = !@pause
+		@btnAide.sensitive = !@pause
+		@btnReset.sensitive = !@pause
+		@btnCancel.sensitive = !@pause
+		@btnRemplissage.sensitive = !@pause
 	end
 
 	# Lance le décompte du temps
@@ -410,7 +465,7 @@ protected
 		end
 		self
 	end
-	# Incrémente le timer et met @lblTime à jour
+	# Incrémente le timer et met @lblTimer à jour
 	# - modeCalcul : symbole { :+, +- } déterminant si le timer est croissant
 	# ou décroissant - par défaut croissant
 	# - return !@pause
@@ -419,14 +474,8 @@ protected
 
 
 		@timer=@timer.send(modeCalcul, 1)
-		@lblTime.text=self.parseTimer
+		@lblTimer.text=self.parseTimer
 		return true
-	end
-
-	# Rend lisible le temps écoulé @timer et renvoie le String calculé
-	# - return un String contenant un temps mm:ss
-	def parseTimer
-		[@timer/60, @timer%60].map { |t| t.to_s.rjust(2,'0') }.join(':')
 	end
 
 	# Réinitialise le timer à 0
@@ -434,13 +483,31 @@ protected
 	# - return self
 	def resetTimer(start=0)
 		@timer=start
-		@lblTime.text=self.parseTimer
+		@lblTimer.text=self.parseTimer
 		self
 	end
 
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
-		self.lancementFinDeJeu
+		puts "fin de jeu " + self.to_s
+		puts "timer = " + parseTimer
+		self.lancementFinDeJeu(self)
+	end
+
+
+	# Redimensionne les widgets ; permet de réagir à un changement de résolution
+	def rescaleGrille
+		@grille.grille.each do |row|
+			row.each do |cell|
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
+			end
+		end
+		1.upto(@grille.length) do |i|
+			@gridJeu.get_child_at(0,i).set_size(self.getIndiceSize)
+			@gridJeu.get_child_at(i,0).set_size(self.getIndiceSize)
+		end
+		@btnOptions.image.pixbuf=@btnOptions.image.pixbuf.scale(@@winX/20, @@winX/20)
+		self
 	end
 
 	# A partir du fichier en path _string_, crée une Gtk::Image
@@ -450,8 +517,7 @@ protected
 	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
-
-		imgSize = @@winY / (@tailleGrille*1.4)
+		imgSize = @@winY / (@grille.length*1.4)
 		imgSize*=0.75
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
 		return image

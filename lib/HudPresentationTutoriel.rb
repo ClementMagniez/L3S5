@@ -1,6 +1,6 @@
 class HudPresentationTutoriel < Hud
-	def initialize (window,grille)
-		super(window)
+	def initialize (grille)
+		super()
 		@grille=grille
 
 		initBoutonRegle
