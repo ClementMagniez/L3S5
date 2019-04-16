@@ -4,15 +4,15 @@ class HudOption < Hud
 	# @fenetrePrecedente
 	# @fullscreen
 
-	def initialize
+	def initialize(traitement=nil)
 		super()
 		varX, varY = 2, 2
 
 		self.setTitre("Options")
-		initBoutonRetour
+		initBoutonRetour(traitement)
 		initMenuResolution
 		initBoutonSauvegarderResolution
-		initBoutonRetour
+		initBoutonRetour(traitement)
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
@@ -49,11 +49,15 @@ private
 #		}
 #	end
 
-	# Le bouton retour lance desormais la fenetre précédent et plus HudModeDeJeu
-	def initBoutonRetour
-		super { self.lancementHudPrecedent }
+	# Surcharge le bouton retour pour renvoyer à la fenêtre précédente ;
+	# exécute traitement sur la fenêtre précédente
+	def initBoutonRetour(traitement)
+		super() do
+			self.lancementHudPrecedent
+			@fenetrePrecedente.send(traitement) if traitement!=nil
+		end
 	end
-
+	# Crée un dropdown menu proposant quelques résolutions 16:9 possibles
 	def initMenuResolution
 
 		@menuResolution = Gtk::ComboBoxText	.new
@@ -70,6 +74,8 @@ private
 		end
 	end
 
+	# Crée un bouton enregistrant la résolution choisie dans un fichier ini
+	# et appliquant le changement à l'application active
 	def initBoutonSauvegarderResolution
 		@btnSauvegardeResolution=CustomButton.new("Appliquer")
 		@btnSauvegardeResolution.signal_connect('clicked') do

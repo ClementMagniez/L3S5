@@ -108,9 +108,11 @@ protected
 
 
 	# Initialise le bouton des options :
-	# 	ajoute une variable d'instance @btnOptions
-	# 	initialise sont comportement
-	def initBoutonOptions
+	# 	ajoute une variable d'instance @btnOptions ;
+	# 	initialise son comportement
+	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @fenetrePrecedente
+	# ; permet par exemple de redimensionner un menu de jeu en le rechargeant
+	def initBoutonOptions(traitement=nil)
 		@btnOptions = Gtk::Button.new
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')

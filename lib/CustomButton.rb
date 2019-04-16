@@ -30,4 +30,14 @@ class CustomButton < Gtk::Button
 		self
 	end
 	alias :text= :set_text
+	
+	# Redimensionne le texte de self puis self selon la nouvelle taille du texte
+	# - return self
+	def set_size(size)
+		self.child.set_size(size)
+		dimensions=self.child.size_request
+		self.set_size_request(dimensions[0], dimensions[1])
+		self
+	end
+	alias :size= :set_size
 end

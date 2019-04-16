@@ -6,7 +6,8 @@ class HudAventure < HudJeu
 		self.setTitre("Aventure")
 		@@NbPartie += 1
 		@btnAide.destroy
-		@gridLblAide.destroy
+		self.initBoutonAide
+		
 	end
 
 	# Redéfinie la méthode jeuTermine de HudJeu.

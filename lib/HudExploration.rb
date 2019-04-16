@@ -12,12 +12,6 @@ class HudExploration < HudJeu
 		@nbAides = 0
 	end
 
-	# @see HudJeu#reset ; de plus, efface l'aide
-	def reset
-		super
-		@lblAide.text=""
-	end
-
 	def initBoutonAide
 		super
 		@btnAide.signal_connect("clicked") {
