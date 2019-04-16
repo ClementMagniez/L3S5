@@ -5,13 +5,10 @@ class HudFinDeJeu < Hud
 	# 	fenetrePrecedente : Le HudJeu qui appel ce constructeur, permet de recommencer une meme partie
 	def initialize(finTuto=false)
 		super()
-		varX, varY = 2, 2
+		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
+		lblScore = CustomLabel.new("Votre score : 0")
 		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
 		@@hudPrecedent.reset
-		tpsMin = @@hudPrecedent.timer / 60
-		tpsSec = @@hudPrecedent.timer % 60
-		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
-		lblScore = CustomLabel.new("Votre score : 0")
 
 
 		initBoutonRecommencer
@@ -19,7 +16,7 @@ class HudFinDeJeu < Hud
 
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-			lblTxt = CustomLabel.new("Bravo, vous avez fini !")
+			lblTxt = CustomLabel.new("Partie terminée !")
 			lblTxt.vexpand = true
 		vBox.add(lblTxt)
 			lblTemps.vexpand = true

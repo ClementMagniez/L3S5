@@ -169,6 +169,12 @@ class HudJeu < Hud
 													 "white",self.getIndiceSize,'ultrabold')
 	end
 
+	# Rend lisible le temps écoulé @timer et renvoie le String calculé
+	# - return un String contenant un temps mm:ss
+	def parseTimer
+		[@timer/60, @timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
+	end
+
 	# Réinitialise la grille et les affichages
 	# - return self
 	def reset
@@ -472,12 +478,6 @@ protected
 		return true
 	end
 
-	# Rend lisible le temps écoulé @timer et renvoie le String calculé
-	# - return un String contenant un temps mm:ss
-	def parseTimer
-		[@timer/60, @timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
-	end
-
 	# Réinitialise le timer à 0
 	# - start : par défaut 0, le temps de départ du timer
 	# - return self
@@ -489,6 +489,8 @@ protected
 
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
+		puts "fin de jeu " + self.to_s
+		puts "timer = " + parseTimer
 		self.lancementFinDeJeu(self)
 	end
 

@@ -67,8 +67,8 @@ protected
 	end
 
 	# Lance le menu de fin de jeu
-	def lancementFinDeJeu(fenetrePrecedente, finTuto=false)
-		@@hudPrecedent = fenetrePrecedente
+	def lancementFinDeJeu(finTuto=false)
+		@@hudPrecedent = self
 		@@fenetre.changerWidget(HudFinDeJeu.new(finTuto))
 	end
 
