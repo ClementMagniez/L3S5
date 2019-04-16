@@ -20,6 +20,11 @@ class HudTutoriel < HudJeu
 		self.lancementFinDeJeu(true)
 	end
 
+	def reset
+		super
+		self.afficherAide
+	end
+	
 protected
 
 	def initIndice(i, isRow)
@@ -30,10 +35,6 @@ protected
 		super { self.afficherAide }
 	end
 
-	def reset
-		super
-		self.afficherAide
-	end
 
 	# Affiche l'aide pour le mode Tutoriel
 	def afficherAide

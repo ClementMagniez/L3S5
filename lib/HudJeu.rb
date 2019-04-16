@@ -213,12 +213,12 @@ protected
 		#Affiche le message d'aide
 		 @lblAide.set_text(tableau.at(MESSAGE))
 
-	 	 if @@winY<1100
+	 	 if @@winY>800
 		 	 @lblAide.set_size('xx-large')
-	 	 elsif @@winY<800
+	 	 elsif @@winY>600
 		 	 @lblAide.set_size('large')
-	 	 elsif @@winY<600
-		 	 @lblAide.set_size('small')
+	 	 elsif @@winY>400
+		 	 @lblAide.set_size('medium')
 		end
 
 		#Met un indice de colonne ou ligne en surbrillance
@@ -342,8 +342,7 @@ protected
 	def initBoutonAide
 		@lblAide = CustomLabel.new
 		@lblAide.color = "white"
-		@lblAide.wrap=true
-		@lblAide.set_background("#000000", 70)
+		@lblAide.set_background("#000000", 40)
 		@btnAide = CustomButton.new("Aide")
 		@btnAide.signal_connect("clicked") {
 			self.afficherAide

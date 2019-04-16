@@ -40,7 +40,6 @@ class Connexion
 			return 0
 			#On propose à l'utilisateur de créer un compte ou de tenter une nouvelle identification
 		else 															#si le login est présent dans la base de données
-			puts "-----> CONNECTE <-----"								#l'utilisateur est connecté
 			@login = login
 			return 1
 		end

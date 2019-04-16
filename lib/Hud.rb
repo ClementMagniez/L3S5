@@ -120,7 +120,7 @@ protected
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
 			@@hudPrecedent = self
-			@@fenetre.changerWidget(HudOption.new)
+			@@fenetre.changerWidget(HudOption.new(traitement))
 		}
 	end
 
