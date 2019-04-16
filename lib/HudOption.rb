@@ -53,11 +53,10 @@ private
 	# exécute traitement sur la fenêtre précédente
 	def initBoutonRetour(traitement)
 		super() do 
-			@fenetre.changerWidget(self,@fenetrePrecedente)
+			self.lancementHudPrecedent
 			@fenetrePrecedente.send(traitement) if traitement!=nil
 		end
 	end
-
 	# Crée un dropdown menu proposant quelques résolutions 16:9 possibles
 	def initMenuResolution
 

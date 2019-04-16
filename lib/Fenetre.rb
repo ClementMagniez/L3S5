@@ -24,15 +24,16 @@ class Fenetre < Gtk::Window
 		@fullscreen = false
 		self.set_default_size(480,270)
 		self.set_resizable(false)
-    self.window_position=Gtk::WindowPosition::CENTER	
+    self.window_position=Gtk::WindowPosition::CENTER
     self.signal_connect('destroy') { Gtk.main_quit }
 		self.add(HudAccueil.new(self))
 		self.show_all
 		Gtk.main
 	end
 
-	def changerWidget(ancien,nouveau)
-		self.remove(ancien).add(nouveau)
+	def changerWidget(nouveau)
+		# self.remove(ancien).add(nouveau)
+		self.remove(self.child).add(nouveau)
 		self.show_all
 		return self
 	end

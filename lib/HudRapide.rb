@@ -28,11 +28,6 @@ class HudRapide < HudJeu
 			@@malus *= 1.2
 		end
 end
-	# @see HudJeu#reset ; de plus, efface l'aide
-	def reset
-		@lblAide.text=""
-		super
-	end
 	
 	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non
 	# le temps écoulé
