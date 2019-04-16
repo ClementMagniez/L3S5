@@ -11,8 +11,8 @@ class HudModeDeJeu < Hud
 	# Instancie le menu de sélection
 	#
 	# Paramètre : window - la Fenetre de l'application
-	def initialize(window)
-		super(window)
+	def initialize
+		super()
  		self.setTitre("Choix du mode de jeu")
 
 		initBoutonAventure

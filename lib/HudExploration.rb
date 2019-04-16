@@ -2,8 +2,8 @@ require_relative "HudJeu"
 
 class HudExploration < HudJeu
 
-	def initialize(window,grille)
-		super(window,grille)
+	def initialize(grille)
+		super(grille)
 		self.setTitre("Partie exploration")
 		# nombre d'aide demandé par l'utilisateur
 		# Si ce nombre d'aide est trop élevé, les aides ne sont plus disponibles
@@ -11,13 +11,13 @@ class HudExploration < HudJeu
 		# nbAideMax = tailleGrille
 		@nbAides = 0
 	end
-	
+
 	# @see HudJeu#reset ; de plus, efface l'aide
 	def reset
 		super
 		@lblAide.text=""
 	end
-	
+
 	def initBoutonAide
 		super
 		@btnAide.signal_connect("clicked") {

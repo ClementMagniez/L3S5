@@ -10,8 +10,8 @@ class HudJeu < Hud
 	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
-	def initialize(window,grille)
-		super(window)
+	def initialize(grille)
+		super()
 		@aide = Aide.new(grille)
 		# Le label d'aide est placé dans une Gtk::Grid afin de pouvoir y attacher une image de fond
 		@gridLblAide = Gtk::Grid.new
@@ -470,7 +470,7 @@ protected
 
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
-		self.lancementFinDeJeu
+		self.lancementFinDeJeu(self)
 	end
 
 	# A partir du fichier en path _string_, crée une Gtk::Image

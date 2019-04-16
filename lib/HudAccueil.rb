@@ -4,7 +4,8 @@ require_relative "Connexion.rb"
 
 class HudAccueil < Hud
 	def initialize(window)
-		super(window)
+		@@fenetre = window
+		super()
 		@lblErr = CustomLabel.new
 		@lblErr.color = 'red'
 		@entryIdentifiant = Gtk::Entry.new

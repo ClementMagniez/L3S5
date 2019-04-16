@@ -17,8 +17,8 @@ class HudChoixDifficulte < Hud
 	# Paramètres :
 	# - window : la Fenetre de l'application
 	# - mode : un symbole ∈ { :rapide, :explo, :aventure } - détermine quel mode de jeu est lancé
-	def initialize(window, mode, fenetrePrecedente)
-		super(window,fenetrePrecedente)
+	def initialize(mode)
+		super()
 
  		self.setTitre("Choix de la difficulté - mode #{mode.to_s}")
  		@@mode=mode
@@ -67,7 +67,7 @@ private
 		@btnDifficile = CustomButton.new("Difficile")
 
 		@btnFacile.signal_connect('clicked') do
-			# TODO à améliorer 
+			# TODO à améliorer
 			@@difficulte = "Facile"
 			self.send(@mode, Grille.new(TAILLE_FACILE))
 		end

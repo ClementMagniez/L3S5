@@ -2,8 +2,8 @@
 require 'inifile'
 
 class HudProfil < Hud
-	def initialize(window)
-		super(window)
+	def initialize
+		super()
 		self.setTitre("Profil")
 		@lblErreur = CustomLabel.new
 		@lblErreur.color = 'red'

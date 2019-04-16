@@ -3,9 +3,8 @@ class HudRegle < Hud
 	#Génère les règles
 	# - window : la fenêtre principale de l'application
 	# - fenetrePrecedente : la fenêtre précédente pour pouvoir y retourner
-	def initialize (window,fenetrePrecedente)
-		super(window,fenetrePrecedente)
-
+	def initialize
+		super()
 
 		lblRegle = CustomLabel.new(" But du jeu : Dans un camping, seuls les arbres sont dessinés.\n Plantez les tentes, sachant que : \n
 			Règle n°1 : \n

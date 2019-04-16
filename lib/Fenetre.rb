@@ -24,8 +24,8 @@ class Fenetre < Gtk::Window
 		@fullscreen = false
 		self.set_default_size(480,270)
 		self.set_resizable(false)
-    self.window_position=Gtk::WindowPosition::CENTER
-    self.signal_connect('destroy') { Gtk.main_quit }
+		self.window_position=Gtk::WindowPosition::CENTER
+		self.signal_connect('destroy') { Gtk.main_quit }
 		self.add(HudAccueil.new(self))
 		self.show_all
 		Gtk.main
@@ -38,19 +38,19 @@ class Fenetre < Gtk::Window
 		return self
 	end
 
-	def isFullscreen?
-		return @fullscreen
-	end
-
-	def fullscreen
-		super
-		@fullscreen = true
-		return self
-	end
-
-	def unfullscreen
-		super
-		@fullscreen = false
-		return self
-	end
+	# def isFullscreen?
+	# 	return @fullscreen
+	# end
+	#
+	# def fullscreen
+	# 	super
+	# 	@fullscreen = true
+	# 	return self
+	# end
+	#
+	# def unfullscreen
+	# 	super
+	# 	@fullscreen = false
+	# 	return self
+	# end
 end

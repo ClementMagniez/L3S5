@@ -5,8 +5,8 @@ require_relative "Connexion.rb"
 
 class HudInscription < Hud
 
-	def initialize(fenetre)
-		super(fenetre)
+	def initialize
+		super()
 		self.setTitre("Inscription")
 		@entId = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new

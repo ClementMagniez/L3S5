@@ -12,12 +12,12 @@ class Hud < Gtk::Grid
 	@@initblock=false
 	@@difficulte = nil
 	@@mode = nil
+	@@fenetre = nil
+	@@hudPrecedent = nil
 
-	def initialize(window,fenetrePrecedente=nil)
+	def initialize
 		super()
-		@fenetrePrecedente = fenetrePrecedente
-		@fenetre = window
-		@fenetre.signal_connect('check-resize') do |window|
+		@@fenetre.signal_connect('check-resize') do |window|
 			if window.size[0]!=@@winX && window.size[1]!=@@winY
 				@fond.destroy if @fond !=nil
 				self.ajoutFondEcran
@@ -35,64 +35,65 @@ protected
 
 	# TODO factoriser les lancementX
 	def lancementAccueil
-		@fenetre.changerWidget(HudAccueil.new(@fenetre))
+		@@fenetre.changerWidget(HudAccueil.new(@@fenetre))
 	end
 
 
 	def lancementAventure(grille)
-		@fenetre.changerWidget(HudAventure.new(@fenetre,grille))
+		@@fenetre.changerWidget(HudAventure.new(grille))
 	end
 
 	def lancementTutoriel(grille)
-		@fenetre.changerWidget(HudTutoriel.new(@fenetre,grille))
+		@@fenetre.changerWidget(HudTutoriel.new(grille))
 	end
 
 
 	def lancementRapide(grille)
-		@fenetre.changerWidget(HudRapide.new(@fenetre,grille))
+		@@fenetre.changerWidget(HudRapide.new(grille))
 	end
 
 
 	def lancementExplo(grille)
-		@fenetre.changerWidget(HudExploration.new(@fenetre,grille))
+		@@fenetre.changerWidget(HudExploration.new(grille))
 	end
 
 	def lancementModeJeu
-		@fenetre.changerWidget(HudModeDeJeu.new(@fenetre))
+		@@fenetre.changerWidget(HudModeDeJeu.new)
 	end
 
 	def lancementChoixDifficulte(mode)
 		@@mode = mode
-		@fenetre.changerWidget(HudChoixDifficulte.new(@fenetre,mode,self))
+		@@fenetre.changerWidget(HudChoixDifficulte.new(mode))
 	end
 
 	# Lance le menu de fin de jeu
-	def lancementFinDeJeu(finTuto=false)
-		@fenetre.changerWidget(HudFinDeJeu.new(@fenetre, self, finTuto))
+	def lancementFinDeJeu(fenetrePrecedente, finTuto=false)
+		@@hudPrecedent = fenetrePrecedente
+		@@fenetre.changerWidget(HudFinDeJeu.new(finTuto))
 	end
 
 	def lancementInscription
-		@fenetre.changerWidget(HudInscription.new(@fenetre))
+		@@fenetre.changerWidget(HudInscription.new)
 	end
 
-	def lancementHudRegle
-		@fenetre.changerWidget(HudRegle.new(@fenetre,self))
+	def lancementHudRegle(fenetrePrecedente)
+		@@hudPrecedent = fenetrePrecedente
+		@@fenetre.changerWidget(HudRegle.new)
 	end
 
 	def lancementHudPresentationTutoriel(grille)
-		@fenetre.changerWidget(HudPresentationTutoriel.new(@fenetre,grille))
-
+		@@fenetre.changerWidget(HudPresentationTutoriel.new(grille))
 	end
 
 	def lancementProfil
-		@fenetre.changerWidget(HudProfil.new(@fenetre))
+		@@fenetre.changerWidget(HudProfil.new)
 	end
 
 	def lancementHudPrecedent
-		if @fenetrePrecedente == nil
+		if @@hudPrecedent == nil
 			puts "ATTENTION : tentative de retour à hud précédent hors @fenetrePrecedente = nil"
 		else
-			@fenetre.changerWidget(@fenetrePrecedente)
+			@@fenetre.changerWidget(@@hudPrecedent)
 		end
 	end
 
@@ -116,7 +117,8 @@ protected
 		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
-			 @fenetre.changerWidget(HudOption.new(@fenetre,self))
+			@@hudPrecedent = self
+			@@fenetre.changerWidget(HudOption.new)
 		}
 	end
 
@@ -156,7 +158,7 @@ protected
 	def initBoutonRegle
 		@btnRegle = CustomButton.new("?", "pink")
 		@btnRegle.signal_connect('clicked'){
-			self.lancementHudRegle
+			self.lancementHudRegle(self)
 		}
 	end
 
@@ -177,21 +179,21 @@ protected
 	# TODO : vraiment utile ?
 
 	def initWindow
-		@@winX = @fenetre.size.fetch(0)
-		@@winY = @fenetre.size.fetch(1)
+		@@winX = @@fenetre.size.fetch(0)
+		@@winY = @@fenetre.size.fetch(1)
 
 		true
 	end
 
 	def resizeWindow(width, height)
-		@fenetre.set_resizable(true)
-		@fenetre.resize(width,height)
-		@fenetre.set_resizable(false)
+		@@fenetre.set_resizable(true)
+		@@fenetre.resize(width,height)
+		@@fenetre.set_resizable(false)
 	end
 
 	# Modifie le titre de la fenetre
 	def setTitre(str)
-		@fenetre.set_title(str)
+		@@fenetre.set_title(str)
 	end
 
 	def ajoutFondEcran

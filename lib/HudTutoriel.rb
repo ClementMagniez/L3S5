@@ -4,8 +4,8 @@ class HudTutoriel < HudJeu
 	# Génère le menu de jeu
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
-	def initialize (window,grille)
-		super(window,grille)
+	def initialize (grille)
+		super(grille)
 		self.setTitre("Tutoriel")
 		@@difficulte="Facile"
 		@btnAide.sensitive = false
@@ -21,11 +21,11 @@ class HudTutoriel < HudJeu
 	end
 
 protected
-	
-	def initIndice(i, isRow) 
+
+	def initIndice(i, isRow)
 		super { self.afficherAide }
 		end
-	
+
 	def chargementGrille
 		super { self.afficherAide }
 	end

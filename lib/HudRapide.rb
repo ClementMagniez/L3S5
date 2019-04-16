@@ -6,13 +6,13 @@ class HudRapide < HudJeu
 	TEMPS_MOYEN=TEMPS_FACILE*2/3
 	TEMPS_DIFFICILE=TEMPS_MOYEN/2
 
-	def initialize(window,grille)
+	def initialize(grille)
 		case grille.length
 			when 6..8 then @temps=TEMPS_FACILE
 			when 9..12 then @temps=TEMPS_MOYEN
 			when 13..16 then @temps=TEMPS_DIFFICILE
 		end
-		super(window,grille)
+		super(grille)
 		self.setTitre("Partie rapide")
 		# malus de temps (en seconde) lors d'une demande d'aide
 		@@malus = 15
@@ -33,7 +33,7 @@ end
 		@lblAide.text=""
 		super
 	end
-	
+
 	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non
 	# le temps écoulé
 	def timer

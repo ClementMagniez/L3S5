@@ -4,8 +4,8 @@ class HudOption < Hud
 	# @fenetrePrecedente
 	# @fullscreen
 
-	def initialize(window,fenetrePrecedente)
-		super(window,fenetrePrecedente)
+	def initialize
+		super()
 		varX, varY = 2, 2
 
 		self.setTitre("Options")
