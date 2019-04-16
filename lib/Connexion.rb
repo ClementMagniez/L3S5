@@ -7,7 +7,6 @@
 require "active_record"
 require "openssl"
 require_relative "connectSqlite3.rb"
-require_relative "Map.rb"
 require_relative "Score.rb"
 require_relative "Profil.rb"
 

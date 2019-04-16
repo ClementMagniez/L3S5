@@ -5,7 +5,7 @@
 #
 # Ce fichier a pour rôle de créer les tables de la base de données de l'application.
 #
-require_relative "connectSqlite3.rb"
+require_relative "lib/connectSqlite3.rb"
 
 ##
 #
@@ -21,17 +21,12 @@ if(!File.file?("lib/DAEDT.sqlite3"))
 			c.string :mdpEncrypted
 		end
 
-	  create_table :maps do |c|
-	    c.string :hash_name
-	    c.string :difficulte
-	  end
-
 	  create_table :scores do |c|
-	  	c.integer :montantScore
 	  	c.string :modeJeu
+	    c.string :difficulte
+		  c.integer :montantScore
 	  	c.date :dateObtention
 	    c.references :profil
-	    c.references :map
 	  end
 	end
 end
