@@ -12,9 +12,7 @@ class HudProfil < Hud
 
 		initBoutonRetourMenu
 		initBoutonSauvegarderLogin
-		initChampScore
-
-		puts "ID : #{@@joueur.id}, login : #{@@joueur.login}"
+		initChampScore("Chrono",true)
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
@@ -37,24 +35,6 @@ class HudProfil < Hud
 		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
-	end
-
-	def initChampScore
-		# Liste des scores récupérés dans la BDD
-		listeScores = @@joueur.rechercherScore(@@joueur.id)
-
-		if(listeScores != nil)
-			@champScores = Gtk::ScrolledWindow.new
-			@champScores.set_min_content_height(100)
-				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-					0.upto(listeScores.size()) do |i|
-						boxChamp.add(Gtk::Label.new(listeScores.at(i)))
-					end
-				@champScores.add(boxChamp)
-		else
-			@champScores = Gtk::Label.new("Aucun score trouvé")
-		end
-		@champScores.set_visible(true)
 	end
 
 private

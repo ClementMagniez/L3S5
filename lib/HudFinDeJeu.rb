@@ -11,8 +11,10 @@ class HudFinDeJeu < Hud
 		tpsSec = fenetrePrecedente.timer % 60
 		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
 		lblScore = CustomLabel.new("Score final = " + @@scoreTotal.to_s)
+		lblTableauScores = CustomLabel.new("Tableau à afficher")
 		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])
 
+		initChampScore(@@mode,false)
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 
@@ -23,7 +25,7 @@ class HudFinDeJeu < Hud
 			lblTemps.vexpand = true
 		vBox.add(lblTemps)
 			lblScore.vexpand = true
-		vBox.add(lblScore)
+		vBox.add(@champScores)
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.vexpand = true
 			vBox2.hexpand = false

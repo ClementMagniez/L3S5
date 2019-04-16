@@ -150,6 +150,66 @@ protected
 		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
 	end
 
+	# Initialise la liste des scores selon l'écran qui fera appel :
+	# 	- Écran de fin de partie -> Affiche tous les scores enregistrés pour le mode courant (score enregisté en surbrillance)
+	# 	- Écran de profil -> Un bouton par mode, possibilité de supprimer les scores du joueur courant
+	def initChampScore(modeJeu,ecranProfil)
+		@champScores = Gtk::ScrolledWindow.new
+		@champScores.set_min_content_height(100)
+
+		if(ecranProfil) # S'il s'agit de HudProfil
+			listeScores = @@joueur.rechercherScore(modeJeu,ecranProfil)
+
+			if(listeScores != nil)
+				btnAventure = CustomButton.new("Aventure")
+				btnAventure.signal_connect("clicked") {
+					# Recharge la liste avec les scores du mode éponyme
+				}
+
+				btnExploration = CustomButton.new("Exploration")
+				btnExploration.signal_connect("clicked") {
+					# Recharge la liste avec les scores du mode éponyme
+				}
+
+				btnChrono = CustomButton.new("Chrono")
+				btnChrono.signal_connect("clicked") {
+					# Recharge la liste avec les scores du mode éponyme
+				}
+
+				# À inclure dans la boucle de listeScores
+				btnSuppScore = CustomButton.new("X")
+				btnSuppScore.signal_connect("clicked") {
+					# @@joueur.supprimerScore()
+					# Recharge la liste avec les scores du mode éponyme
+				}
+
+				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+				listeScores.each do |i|
+					boxChamp.add(Gtk::Label.new(i))
+				end
+
+				# Rajouter les boutons dans une hbox
+				@champScores.add(boxChamp)
+			else
+				@champScores = Gtk::Label.new("Aucun score trouvé pour ce mode")
+			end
+		else
+			# Sinon, il s'agit de HudFinDeJeu
+			if(listeScores != nil)
+				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+				# Rajouter une condition pour mettre la ligne du nouveau score en surbrillance
+				listeScores.each do |score|
+					puts "#{score}"
+					boxChamp.add(Gtk::Label.new(score))
+				end
+				@champScores.add(boxChamp)
+			end
+		end
+		# Fin condition(ecranProfil)
+		@champScores.set_visible(true)
+	end
+	# Fin méthode
+
 	def initWindow
 		puts "Initialisation des HUD"
 		@@winX = @fenetre.size.fetch(0)

@@ -68,10 +68,6 @@ class Connexion
 	def deconnexion()
 		@id = nil
 		@login = nil
-
-		puts "----> Déconnecté <----"
-
-		return nil
 	end
 
 	##
@@ -90,14 +86,14 @@ class Connexion
 	# 	+2+ - Le montant du score obtenu à la fin de la partie
 	#
 	def enregistrerScore(idJoueur,infoGrille)
-		reqScore = Score.new(
+		reqScore = Score.create(
 			modeJeu: infoGrille[0],
 			difficulte: infoGrille[1],
 			montantScore: infoGrille[2],
-			dateObtention: Time.now.to_s.split(" ").at(0).to_s
+			dateObtention: Time.now.to_s.split(" ").at(0).to_s,
+			profil_id: idJoueur
 		);
-		reqScore.profil_id = idJoueur
-		reqScore.save
+		puts "Score enregistré dans la BDD !"
 	end
 
 	##
@@ -107,27 +103,28 @@ class Connexion
 	#
 	# === Paramètre
 	#
-	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
+	# * +modeJeu+ - La chaîne de caractères indiquant le mode de jeu voulu
 	#
-	def rechercherScore(idJoueur)
-		reqScore = Score.find_by(id: idJoueur)
-
-		if(reqScore != nil)
-			reqScore.sort_by("modeJeu, dateObtention, montantScore DESC")
-		end
-		return reqScore
+	def rechercherScore(modeJeu,ecranProfil)
+		research = (ecranProfil) ? Score.find_by(modeJeu: modeJeu, profil_id: @id) : Score.find_by(modeJeu: modeJeu)
+		return (research != nil) ? research.order(montantScore: :desc) : nil
 	end
 
 	##
-	# == rechercherScore(1)
+	# == supprimerScore(1)
 	#
-	# Cette méthode permet de sortir tous les scores contenues dans la base de données.
+	# Cette méthode permet de supprimer un score contenu dans la base de données.
 	#
 	# === Paramètre
 	#
-	# * +idJoueur+ - L'identifiant numérique du joueur connecté à l'application
+	# * +idScore+ - L'identifiant numérique du score à supprimer
 	#
 	def supprimerScore(idScore)
 		Score.find_by(id: idScore).destroy
 	end
+end
+
+scores = Score.where(profil_id: 1).order(montantScore: :desc)
+scores.each do |s|
+	puts s.montantScore
 end

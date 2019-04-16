@@ -14,12 +14,12 @@ require "active_record"
 # entre les tables *Map* et *Profil*, car un score concerne obligatoirement un joueur et une grille.
 #
 class Score < ActiveRecord::Base
-	# Un score appartient à un profil de joueur
+	# Un score appartient à un profil de joueur.
 	belongs_to :profil
 
-	# @id, @montantScore, @modeJeu, @dateObtention, @joueur_id, @grille_id - L'identifiant du score, un
-	# entier strictement positif, une chaine de caractères indiquant le mode de jeu où le score a été
-	# obtenu, la date où le score a été obtenu, l'identifiant d'un joueur, l'identifiant d'une map
+	# id, montantScore, modeJeu, difficulte, dateObtention, profil_id - L'identifiant du score, un entier
+	# strictement positif, une chaine de caractères indiquant le mode de jeu où le score a été obtenu,
+	# la date où le score a été obtenu, l'identifiant du profil d'un joueur
 
 	##
 	# == to_s
@@ -28,6 +28,6 @@ class Score < ActiveRecord::Base
 	# l'objet appelé.
 	#
 	def to_s
-		return "\##{id} => mode \"#{modeJeu}\", difficulté \"#{difficulte}\" : #{montantScore}, obtenu le #{dateObtention}, par le joueur #{joueur_id}."
+		return "\##{id} => mode \"#{modeJeu}\", difficulté \"#{difficulte}\" : #{montantScore}, obtenu le #{dateObtention}, par le joueur #{profil_id}."
 	end
 end

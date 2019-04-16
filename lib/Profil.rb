@@ -14,7 +14,7 @@ require "active_record"
 # *Map* grâce à une table intermédiaire nommée *Score*.
 #
 class Profil < ActiveRecord::Base
-	# Un joueur possède plusieurs scores (un par grille de jeu)
+	# Un profil de joueur peut posséder plusieurs scores par mode de jeu.
 	has_many :scores
 
 	# @id, @pseudonyme, @mdpEncrypted - L'identifiant du joueur, une chaîne de caractères représentant
