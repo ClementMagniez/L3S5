@@ -7,12 +7,10 @@ class HudTutoriel < HudJeu
 	def initialize (window,grille)
 		super(window,grille)
 		self.setTitre("Tutoriel")
-		@tutoriel = true
-
 
 		afficherAide
 		@btnAide.sensitive = false
-	@btnPause.sensitive = false
+		@btnPause.sensitive = false
 		@lblTime.set_visible(false)
 	end
 	
