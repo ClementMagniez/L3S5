@@ -13,21 +13,14 @@ class Hud < Gtk::Grid
 	@@difficulte = nil
 	@@mode = nil
 	
-	attr_reader :fond
-
 	def initialize(window,fenetrePrecedente=nil)
 		super()
 		@fenetrePrecedente = fenetrePrecedente
 		@fenetre = window
 		@fenetre.signal_connect('check-resize') do |window|
 			if window.size[0]!=@@winX && window.size[1]!=@@winY
-#				 puts (window.size[0].to_s + "," + window.size[1].to_s)
-#				 self.destroy(@fond) if @fond !=nil
+				@fond.destroy if @fond !=nil
 				self.ajoutFondEcran
-#				
-
-#			 	fenetrePrecedente.destroy(fenetrePrecedente.fond) if fenetrePrecedente!=nil && fenetrePrecedente.fond !=nil
-		#		fenetrePrecedente.ajoutFondEcran if fenetrePrecedente!=nil
 			end
 		end
 		# Hacky façon de n'exécuter initWindow qu'une fois
@@ -104,11 +97,6 @@ protected
 	# 	return bouton
 	# end
 
-	def ajoutFondEcran
-		fond = Gtk::Image.new( pixbuf: updateFondEcran(@@winX, @@winY))
-		self.attach(fond,0,0,1,1)
-		fond.set_visible(true)
-	end
 
 	# Initialise le bouton des options :
 	# 	ajoute une variable d'instance @btnOptions
@@ -188,6 +176,11 @@ protected
 		@fenetre.set_title(str)
 	end
 
+	def ajoutFondEcran
+		@fond = Gtk::Image.new( pixbuf: updateFondEcran(@@winX, @@winY))
+		self.attach(@fond,0,0,1,1)
+		@fond.set_visible(true)
+	end
 	def updateFondEcran(width, height)
 			return GdkPixbuf::Pixbuf.new( :file => "../img/fond2.png",\
 																		:width=>width,:height=>height)
