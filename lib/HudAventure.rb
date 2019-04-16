@@ -1,13 +1,13 @@
 class HudAventure < HudJeu
 	@@NbPartie = 0
 
-	def initialize(grille)
-		super(grille)
+	def initialize(grille,timer=0)
+		super(grille,timer)
 		self.setTitre("Aventure")
 		@@NbPartie += 1
 		@btnAide.destroy
 		self.initBoutonAide
-		
+
 	end
 
 	# Redéfinie la méthode jeuTermine de HudJeu.

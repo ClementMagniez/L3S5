@@ -2,8 +2,8 @@ require_relative "HudJeu"
 
 class HudExploration < HudJeu
 
-	def initialize(grille)
-		super(grille)
+	def initialize(grille,timer=0)
+		super(grille,timer)
 		self.setTitre("Partie exploration")
 		# nombre d'aide demandé par l'utilisateur
 		# Si ce nombre d'aide est trop élevé, les aides ne sont plus disponibles

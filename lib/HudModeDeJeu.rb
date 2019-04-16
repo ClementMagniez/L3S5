@@ -86,11 +86,12 @@ private
 					grille=dataLoaded[0]
 					@@mode=dataLoaded[1]
 					@@difficulte=dataLoaded[2]
+					timer=dataLoaded[3]
 					case @@mode
-						when :explo then lancementExplo(grille)
-						when :rapide then lancementRapide(grille)
-						when :tutoriel then lancementTutoriel(grille)
-						when :aventure then lancementAventure(grille)
+					when :explo then lancementExplo(grille,timer)
+					when :rapide then lancementRapide(grille,timer)
+						when :tutoriel then lancementTutoriel(grille,timer)
+						when :aventure then lancementAventure(grille,timer)
 					end
 				end
 			end

@@ -39,22 +39,22 @@ protected
 	end
 
 
-	def lancementAventure(grille)
-		@@fenetre.changerWidget(HudAventure.new(grille))
+	def lancementAventure(grille,timer=0)
+		@@fenetre.changerWidget(HudAventure.new(grille,timer))
 	end
 
-	def lancementTutoriel(grille)
-		@@fenetre.changerWidget(HudTutoriel.new(grille))
-	end
-
-
-	def lancementRapide(grille)
-		@@fenetre.changerWidget(HudRapide.new(grille))
+	def lancementTutoriel(grille,timer=0)
+		@@fenetre.changerWidget(HudTutoriel.new(grille,timer))
 	end
 
 
-	def lancementExplo(grille)
-		@@fenetre.changerWidget(HudExploration.new(grille))
+	def lancementRapide(grille,timer=0)
+		@@fenetre.changerWidget(HudRapide.new(grille,timer))
+	end
+
+
+	def lancementExplo(grille,timer=0)
+		@@fenetre.changerWidget(HudExploration.new(grille,timer))
 	end
 
 	def lancementModeJeu

@@ -10,7 +10,7 @@ class HudJeu < Hud
 	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
-	def initialize(grille)
+	def initialize(grille,timerStart=0)
 		super()
 		@aide = Aide.new(grille)
 		# Le label d'aide est placé dans une Gtk::Grid afin de pouvoir y attacher une image de fond
@@ -23,7 +23,7 @@ class HudJeu < Hud
 		@lblIndiceSubr = nil
 		@pause=false
 
-		self.initTimer
+		self.initTimer(timerStart)
 		self.initBoutonRegle
 		self.chargementGrille
 		self.initBoutonAide
@@ -420,7 +420,7 @@ protected
 		@btnSauvegarde = CustomButton.new("Sauvegarder")
 		@btnSauvegarde.signal_connect('clicked') do
 			File.open("../saves/"+@@name+".txt", "w+", 0644) do |f|
-				f.write(Marshal.dump([@grille,@@mode,@@difficulte]))
+				f.write(Marshal.dump([@grille,@@mode,@@difficulte,@timer]))
 			end
 		end
 
