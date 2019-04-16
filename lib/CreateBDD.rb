@@ -5,7 +5,6 @@
 #
 # Ce fichier a pour rôle de créer les tables de la base de données de l'application.
 #
-require_relative "lib/connectSqlite3.rb"
 
 ##
 #

@@ -7,7 +7,7 @@
 require "active_record"
 require "openssl"
 require_relative "connectSqlite3.rb"
-require_relative "../CreateBDD.rb"
+require_relative "CreateBDD.rb"
 require_relative "Profil.rb"
 require_relative "ScoreBDD.rb"
 
