@@ -80,7 +80,6 @@ class ScorePartie
   # initialisées et modifiées depuis la création de l'objet.
   #
   def calculerScoreFinal
-		puts self
     # FACILE
     if(@taille < 9 && @nbAidesUsees > 1)
       nbMalus = @nbAidesUsees - 1
@@ -94,10 +93,23 @@ class ScorePartie
     else
       nbMalus = 0
     end
-
     scoreFinal = @valeur - @valeur * (@malus * nbMalus)
-    scoreFinal /= (@modeChrono) ? (@tempsDeJeu / 100.0) : @tempsDeJeu
-		
+
+		if(@modeChrono)
+			coefTemps = @tempsDeJeu / 100.0
+		else
+			if(@tempsDeJeu >= 1 && @tempsDeJeu <= 9)
+				coefTemps = (10 - @tempsDeJeu)
+			elsif(@tempsDeJeu >= 10 && @tempsDeJeu <= 99)
+				coefTemps = (100 - @tempsDeJeu) * 0.01
+			elsif(@tempsDeJeu >= 100 && @tempsDeJeu <= 899)
+				coefTemps = (1000 - @tempsDeJeu) * 0.001
+			elsif(@tempsDeJeu >= 900)
+				coefTemps = 0
+			end
+		end
+    scoreFinal = (@modeChrono) ? scoreFinal / coefTemps : scoreFinal * coefTemps
+
     return scoreFinal.to_i * @bonus
   end
 

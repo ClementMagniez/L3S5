@@ -16,7 +16,6 @@ class HudFinDeJeu < Hud
 		@@scoreTotal = 0
 
 		initChampScore(false,[@@mode,@@difficulte])
-		# initChampScore
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 
@@ -43,26 +42,6 @@ class HudFinDeJeu < Hud
 	end
 
 private
-
-# def initChampScore
-	# @champScores = Gtk::ScrolledWindow.new
-	# @champScores.set_min_content_height(100)
-	# listeScores = @@joueur.rechercherScore(false,[@@mode,@@difficulte])
-
-	# if(listeScores != nil)
-		# boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-		# Rajouter une condition pour mettre la ligne du nouveau score en surbrillance
-		# listeScores.each do |score|
-			# lblScore = (score.montantScore == @@scoreTotal && score.profil_id == @@joueur.id) ?
-				# CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}") :
-				# Gtk::Label.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
-			# boxChamp.add(lblScore)
-		# end
-		# @champScores.add(boxChamp)
-	# end
-	# @champScores.set_visible(true)
-# end
-# Fin méthode
 
 	def initBoutonChangerModeDeJeu
 		@btnModeDeJeu = CustomButton.new("Retour au menu")

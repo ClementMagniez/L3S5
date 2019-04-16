@@ -128,5 +128,3 @@ class Connexion
 		Score.find_by(id: idScore).destroy
 	end
 end
-
-puts Score.all
