@@ -48,7 +48,7 @@ protected
 	end
 
 
-	def lancementRapide(grille,timer=0)
+	def lancementRapide(grille,timer=-1)
 		@@fenetre.changerWidget(HudRapide.new(grille,timer))
 	end
 
