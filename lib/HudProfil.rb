@@ -38,6 +38,29 @@ class HudProfil < Hud
 	end
 
 private
+	def initBoutonsChampScore
+		@btnAventure = CustomButton.new("Aventure")
+		@btnAventure.signal_connect("clicked") {
+			# Recharge la liste avec les scores du mode éponyme
+		}
+
+		@btnExploration = CustomButton.new("Exploration")
+		@btnExploration.signal_connect("clicked") {
+			# Recharge la liste avec les scores du mode éponyme
+		}
+
+		@btnChrono = CustomButton.new("Chrono")
+		@btnChrono.signal_connect("clicked") {
+			# Recharge la liste avec les scores du mode éponyme
+		}
+
+		# À inclure dans la boucle de listeScores
+		@btnSuppScore = CustomButton.new("X")
+		@btnSuppScore.signal_connect("clicked") {
+			# @@joueur.supprimerScore()
+			# Recharge la liste avec les scores du mode éponyme
+		}
+	end
 
 	def initBoutonRetourMenu
 		@btnRetour = CustomButton.new("Retour")

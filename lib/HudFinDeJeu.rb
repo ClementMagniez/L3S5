@@ -13,11 +13,12 @@ class HudFinDeJeu < Hud
 		lblScore = CustomLabel.new("Score final = " + @@scoreTotal.to_s)
 		lblTableauScores = CustomLabel.new("Tableau à afficher")
 		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])
-		@@scoreTotal = 0
 
 		initChampScore(false,[@@mode,@@difficulte])
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
+
+		@@scoreTotal = 0 # À placer après le champ des scores pour avoir la surbrillance de la ligne du score obtenu
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			lblTxt = CustomLabel.new("Bravo, vous avez fini !")

@@ -7,8 +7,9 @@
 require "active_record"
 require "openssl"
 require_relative "connectSqlite3.rb"
-require_relative "ScoreBDD.rb"
+require_relative "../CreateBDD.rb"
 require_relative "Profil.rb"
+require_relative "ScoreBDD.rb"
 
 
 class Connexion
@@ -125,6 +126,7 @@ class Connexion
 	# * +idScore+ - L'identifiant numérique du score à supprimer
 	#
 	def supprimerScore(idScore)
-		Score.find_by(id: idScore).destroy
+		Score.destroy(id: idScore)
 	end
 end
+puts Score.all

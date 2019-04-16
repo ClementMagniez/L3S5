@@ -163,39 +163,19 @@ protected
 		listeScores = @@joueur.rechercherScore(ecranProfil,infoGrille)
 
 		if(ecranProfil) # S'il s'agit de HudProfil
-
 			if(listeScores != nil)
-				btnAventure = CustomButton.new("Aventure")
-				btnAventure.signal_connect("clicked") {
-					# Recharge la liste avec les scores du mode éponyme
-				}
-
-				btnExploration = CustomButton.new("Exploration")
-				btnExploration.signal_connect("clicked") {
-					# Recharge la liste avec les scores du mode éponyme
-				}
-
-				btnChrono = CustomButton.new("Chrono")
-				btnChrono.signal_connect("clicked") {
-					# Recharge la liste avec les scores du mode éponyme
-				}
-
-				# À inclure dans la boucle de listeScores
-				btnSuppScore = CustomButton.new("X")
-				btnSuppScore.signal_connect("clicked") {
-					# @@joueur.supprimerScore()
-					# Recharge la liste avec les scores du mode éponyme
-				}
-
 				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				listeScores.each do |i|
-					boxChamp.add(Gtk::Label.new(i))
+				btnSupprScore = CustomButton.new("X")
+				listeScores.each do |score|
+					boxChamp.add(CustomLabel.new("#{score.montantScore} | #{score.dateObtention}"))
+					btnSupprScore.signal_connect("clicked") {
+						@@joueur.supprimerScore(score.id)
+					}
+					boxChamp.add(btnSupprScore)
 				end
-
-				# Rajouter les boutons dans une hbox
 				@champScores.add(boxChamp)
 			else
-				@champScores = Gtk::Label.new("Aucun score trouvé pour ce mode")
+				@champScores = CustomLabel.new("Aucun score trouvé pour ce mode !")
 			end
 		else
 			# Sinon, il s'agit de HudFinDeJeu
