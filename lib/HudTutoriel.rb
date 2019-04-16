@@ -8,7 +8,7 @@ class HudTutoriel < HudJeu
 		super(window,grille)
 		self.setTitre("Tutoriel")
 		@@difficulte="Facile"
-		@lblTime.set_visible(false)
+		@lblTimer.set_visible(false)
 	end
 
 	# Surcharge de la méthode jeuTermine de HudJeu
@@ -20,8 +20,7 @@ class HudTutoriel < HudJeu
 private
 
 	# Redéfinition de la méthode aide de HudJeu
-	def aide
-		puts "HudTutoriel::aide"
+	def afficherAide
 		@caseSurbrillanceList = Array.new
 		tableau = @aide.cycle("tuto")
 		puts(tableau)

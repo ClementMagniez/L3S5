@@ -9,6 +9,7 @@ class HudOption < Hud
 		varX, varY = 2, 2
 		@fenetrePrecedente = fenetrePrecedente
 		self.setTitre("Options")
+
 		initBoutonRetour
 		initMenuResolution
 		initBoutonSauvegarderResolution
@@ -49,11 +50,9 @@ private
 #		}
 #	end
 
+	# Le bouton retour lance desormais la fenetre précédent et plus HudModeDeJeu
 	def initBoutonRetour
-		@btnRetour = CustomButton.new("Retour")
-		@btnRetour.signal_connect("clicked") {
-				@fenetre.changerWidget(self,@fenetrePrecedente)
-		}
+		super { @fenetre.changerWidget(self,@fenetrePrecedente) }
 	end
 
 
@@ -65,7 +64,7 @@ private
 		@menuResolution.append_text("1280*720")
 		@menuResolution.append_text("896*504")
 		@menuResolution.active=0;
-		@menuResolution.set_visible(true)
+		# @menuResolution.set_visible(true)
 		@resolution=@menuResolution.active_text
 
 		@menuResolution.signal_connect('changed') do

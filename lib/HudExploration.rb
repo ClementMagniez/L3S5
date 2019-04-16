@@ -16,7 +16,7 @@ class HudExploration < HudJeu
 		super
 		@btnAide.signal_connect("clicked") {
 			@nbAides += 1
-			if @nbAides > @tailleGrille
+			if @nbAides > @grille.length
 				@btnAide.sensitive = false
 				@lblAide.text = "Nombre maximal d'aide demandé !"
 			end

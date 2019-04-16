@@ -19,9 +19,8 @@ class Hud < Gtk::Grid
 		@fenetre = window
 		@fenetre.signal_connect('check-resize') do |window|
 			if window.size[0]!=@@winX && window.size[1]!=@@winY
-				puts (window.size[0].to_s + "," + window.size[1].to_s)
-
-				self.remove(@fond) if @fond !=nil
+				# puts (window.size[0].to_s + "," + window.size[1].to_s)
+				# self.remove(@fond) if @fond !=nil
 				ajoutFondEcran
 			end
 		end
@@ -99,9 +98,9 @@ protected
 	# end
 
 	def ajoutFondEcran
-		@fond = Gtk::Image.new( pixbuf: updateFondEcran(@@winX, @@winY))
-		self.attach(@fond,0,0,1,1)
-		@fond.set_visible(true)
+		fond = Gtk::Image.new( pixbuf: updateFondEcran(@@winX, @@winY))
+		self.attach(fond,0,0,1,1)
+		fond.set_visible(true)
 	end
 
 	# Initialise le bouton des options :
@@ -139,11 +138,11 @@ protected
 		quitter.pixbuf = quitter.pixbuf.scale(@@winX/20,@@winX/20)	if quitter.pixbuf != nil
 		@btnQuitter.set_image(quitter)
 		@btnQuitter.signal_connect('clicked') {
-		if block_given?
-			yield
-		else
-			Gtk.main_quit
-		end
+			if block_given?
+				yield
+			else
+				Gtk.main_quit
+			end
 		}
 	end
 
@@ -152,7 +151,13 @@ protected
 	# 	initialise sont comportement
 	def initBoutonRetour
 		@btnRetour = CustomButton.new("Retour")
-		@btnRetour.signal_connect("clicked") { self.lancementModeJeu }
+		@btnRetour.signal_connect("clicked") {
+			if block_given?
+				yield
+			else
+				self.lancementModeJeu
+			end
+		}
 	end
 
 	# TODO : vraiment utile ?
