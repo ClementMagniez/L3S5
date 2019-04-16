@@ -21,7 +21,6 @@ require_relative 'HudRegle'
 class Fenetre < Gtk::Window
 	def initialize
 		super()
-		@fullscreen = false
 		self.set_default_size(480,270)
 		self.set_resizable(false)
 		self.window_position=Gtk::WindowPosition::CENTER
@@ -32,25 +31,8 @@ class Fenetre < Gtk::Window
 	end
 
 	def changerWidget(nouveau)
-		# self.remove(ancien).add(nouveau)
 		self.remove(self.child).add(nouveau)
 		self.show_all
 		return self
 	end
-
-	# def isFullscreen?
-	# 	return @fullscreen
-	# end
-	#
-	# def fullscreen
-	# 	super
-	# 	@fullscreen = true
-	# 	return self
-	# end
-	#
-	# def unfullscreen
-	# 	super
-	# 	@fullscreen = false
-	# 	return self
-	# end
 end

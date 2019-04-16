@@ -48,11 +48,15 @@ private
 #	end
 
 	# Surcharge le bouton retour pour renvoyer à la fenêtre précédente ;
-	# exécute traitement sur la fenêtre précédente
-	def initBoutonRetour(traitement)
+	# exécute les traitements sur la fenêtre précédente
+	def initBoutonRetour(listToDo)
 		super() do
 			self.lancementHudPrecedent
-			@@hudPrecedent.send(traitement) if traitement!=nil
+			if listToDo != nil
+				listToDo.each do |traitement|
+					@@hudPrecedent.send(traitement)
+				end
+			end
 		end
 	end
 	# Crée un dropdown menu proposant quelques résolutions 16:9 possibles

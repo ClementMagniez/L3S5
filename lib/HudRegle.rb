@@ -3,7 +3,7 @@ class HudRegle < Hud
 	#Génère les règles
 	# - window : la fenêtre principale de l'application
 	# - fenetrePrecedente : la fenêtre précédente pour pouvoir y retourner
-	def initialize
+	def initialize(traitements)
 		super()
 
 		lblRegle = CustomLabel.new(" But du jeu : Dans un camping, seuls les arbres sont dessinés.\n Plantez les tentes, sachant que : \n
@@ -26,7 +26,7 @@ class HudRegle < Hud
 		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	)  if @@winY>600
 		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	) if @@winY<600
 
-		initBoutonRetour
+		initBoutonRetour(traitements)
 
 
 
@@ -48,7 +48,14 @@ class HudRegle < Hud
 		ajoutFondEcran
 	end
 
-	def initBoutonRetour
-		super { self.lancementHudPrecedent }
+	def initBoutonRetour(listToDo)
+		super() do
+			self.lancementHudPrecedent
+			if listToDo != nil
+				listToDo.each do |traitement|
+					@@hudPrecedent.send(traitement)
+				end
+			end
+		end
 	end
 end

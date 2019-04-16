@@ -76,11 +76,6 @@ protected
 		@@fenetre.changerWidget(HudInscription.new)
 	end
 
-	def lancementHudRegle(fenetrePrecedente)
-		@@hudPrecedent = fenetrePrecedente
-		@@fenetre.changerWidget(HudRegle.new)
-	end
-
 	def lancementHudPresentationTutoriel(grille)
 		@@fenetre.changerWidget(HudPresentationTutoriel.new(grille))
 	end
@@ -112,7 +107,7 @@ protected
 	# 	initialise son comportement
 	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @fenetrePrecedente
 	# ; permet par exemple de redimensionner un menu de jeu en le rechargeant
-	def initBoutonOptions(traitement=nil)
+	def initBoutonOptions(traitements=nil)
 		@btnOptions = Gtk::Button.new
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
@@ -120,7 +115,7 @@ protected
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
 			@@hudPrecedent = self
-			@@fenetre.changerWidget(HudOption.new(traitement))
+			@@fenetre.changerWidget(HudOption.new(traitements))
 		}
 	end
 
@@ -157,10 +152,11 @@ protected
 	# Initialise le bouton des règles de jeu :
 	# 	ajoute une variable d'instance @btnRegle
 	# 	initialise sont comportement
-	def initBoutonRegle
+	def initBoutonRegle(traitements=nil)
 		@btnRegle = CustomButton.new("?", "pink")
 		@btnRegle.signal_connect('clicked'){
-			self.lancementHudRegle(self)
+			@@hudPrecedent = self
+			@@fenetre.changerWidget(HudRegle.new(traitements))
 		}
 	end
 

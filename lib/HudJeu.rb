@@ -351,7 +351,10 @@ protected
 	end
 
 	def initBoutonOptions
-		super(:rescaleGrille)
+		super([:rescaleGrille,:pause])
+		@btnOptions.signal_connect("clicked") {
+			self.pause
+		}
 	end
 
 	# Initialise le bouton d'annulation :
@@ -373,18 +376,14 @@ protected
 	def initBoutonPause
 		@btnPause = CustomButton.new("Pause")
 		@btnPause.signal_connect('clicked'){
-			if @pause
-				self.startTimer
-				@btnPause.set_text("Pause")
-			else
-				@btnPause.set_text("Jouer")
-			end
-			@pause = !@pause
-			@gridJeu.sensitive = !@pause
-			@btnAide.sensitive = !@pause
-			@btnReset.sensitive = !@pause
-			@btnCancel.sensitive = !@pause
-			@btnRemplissage.sensitive = !@pause
+			self.pause
+		}
+	end
+
+	def initBoutonRegle
+		super([:pause])
+		@btnRegle.signal_connect("clicked") {
+			self.pause
 		}
 	end
 
@@ -436,6 +435,21 @@ protected
 		@lblTimer = CustomLabel.new(self.parseTimer, "white")
 		self.startTimer
 		self
+	end
+
+	def pause
+		if @pause
+			self.startTimer
+			@btnPause.set_text("Pause")
+		else
+			@btnPause.set_text("Jouer")
+		end
+		@pause = !@pause
+		@gridJeu.sensitive = !@pause
+		@btnAide.sensitive = !@pause
+		@btnReset.sensitive = !@pause
+		@btnCancel.sensitive = !@pause
+		@btnRemplissage.sensitive = !@pause
 	end
 
 	# Lance le décompte du temps
