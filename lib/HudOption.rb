@@ -12,7 +12,6 @@ class HudOption < Hud
 		initBoutonRetour(traitement)
 		initMenuResolution
 		initBoutonSauvegarderResolution
-		initBoutonRetour(traitement)
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
@@ -54,7 +53,7 @@ private
 	def initBoutonRetour(traitement)
 		super() do
 			self.lancementHudPrecedent
-			@fenetrePrecedente.send(traitement) if traitement!=nil
+			@@hudPrecedent.send(traitement) if traitement!=nil
 		end
 	end
 	# Crée un dropdown menu proposant quelques résolutions 16:9 possibles

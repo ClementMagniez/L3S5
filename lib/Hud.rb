@@ -91,7 +91,7 @@ protected
 
 	def lancementHudPrecedent
 		if @@hudPrecedent == nil
-			puts "ATTENTION : tentative de retour à hud précédent hors @fenetrePrecedente = nil"
+			puts "ATTENTION : tentative de retour à hud précédent hors @@hudPrecedent = nil"
 		else
 			@@fenetre.changerWidget(@@hudPrecedent)
 		end

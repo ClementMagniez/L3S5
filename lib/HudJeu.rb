@@ -351,7 +351,6 @@ protected
 	end
 
 	def initBoutonOptions
-
 		super(:rescaleGrille)
 	end
 
@@ -479,8 +478,8 @@ protected
 	def jeuTermine
 		self.lancementFinDeJeu(self)
 	end
-	
-	
+
+
 	# Redimensionne les widgets ; permet de réagir à un changement de résolution
 	def rescaleGrille
 		@grille.grille.each do |row|
@@ -495,7 +494,7 @@ protected
 		@btnOptions.image.pixbuf=@btnOptions.image.pixbuf.scale(@@winX/20, @@winX/20)
 		self
 	end
-	
+
 	# A partir du fichier en path _string_, crée une Gtk::Image
 	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu sans forcer
 	# la redimension de la fenêtre
