@@ -4,9 +4,9 @@ class HudAventure < HudJeu
 	def initialize(window,grille)
 		super(window,grille)
 		self.setTitre("Aventure")
-
 		@@NbPartie += 1
-		@varBoutonEnPlus=1
+		@btnAide.destroy
+		@gridLblAide.destroy
 	end
 
 	# Redéfinie la méthode jeuTermine de HudJeu.

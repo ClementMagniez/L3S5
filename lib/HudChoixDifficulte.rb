@@ -67,6 +67,7 @@ private
 		@btnDifficile = CustomButton.new("Difficile")
 
 		@btnFacile.signal_connect('clicked') do
+			# TODO à améliorer 
 			@@difficulte = "Facile"
 			self.send(@mode, Grille.new(TAILLE_FACILE))
 		end

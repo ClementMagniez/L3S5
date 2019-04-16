@@ -90,11 +90,8 @@ private
 		end
 	end
 
-	# Créé et initialise le bouton de retour
+	# Le bouton retour lance le menu connexion (HudAccueil) est non plus le menu pricipal (HudModeDeJeu)
 	def initBoutonRetour
-		@btnRetour = CustomButton.new("Retour")
-		@btnRetour.signal_connect("clicked") do
-			self.lancementAccueil
-		end
+		super { self.lancementAccueil }
 	end
 end

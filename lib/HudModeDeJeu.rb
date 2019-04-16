@@ -69,8 +69,6 @@ private
 	# Crée et connecte le bouton de chargement d'une sauvegarde
 	# Return self
 	def initBoutonChargerSauvegarde
-
-		@btnSauvegarde = CustomButton.new("Charger une sauvegarde")
 		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde")
 		@btnSauvegarde.signal_connect('clicked') do
 			if !File.exist?("../saves/"+@@name+".txt")
@@ -123,9 +121,9 @@ private
 		end
 		self
 	end
-	
-	
-	# Ecrase Hud#initBoutonQuitter pour rediriger vers l'écran de connexion	
+
+
+	# Ecrase Hud#initBoutonQuitter pour rediriger vers l'écran de connexion
 	def initBoutonQuitter
 		super {	self.lancementAccueil }
 	end

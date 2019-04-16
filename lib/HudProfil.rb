@@ -11,7 +11,7 @@ class HudProfil < Hud
 		@entMdp = Gtk::Entry.new
 		@entMdp.set_visibility(false)
 
-		initBoutonRetourMenu
+		initBoutonRetour
 		initBoutonSauvegarderLogin
 		initChampScore
 
@@ -41,14 +41,6 @@ class HudProfil < Hud
 
 
 private
-
-	def initBoutonRetourMenu
-		@btnRetour = CustomButton.new("Retour")
-		@btnRetour.signal_connect("clicked") do
-			lancementModeJeu
-		end
-	end
-
 	def initBoutonSauvegarderLogin
 		@btnSauvegarde = CustomButton.new("Sauvegarder les modifications")
 		@btnSauvegarde.signal_connect("clicked") do
