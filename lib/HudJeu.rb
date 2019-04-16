@@ -1,7 +1,10 @@
 require_relative 'Hud'
+require_relative 'AidesConstantes'
+
 
 # Classe abstraite permettant de créer un écran de jeu
 class HudJeu < Hud
+	include AidesConstantes
 	attr_reader :grille, :timer
 
 	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
@@ -21,16 +24,16 @@ class HudJeu < Hud
 		@lblIndiceSubr = nil
 		@pause=false
 
-		initTimer
-		initBoutonRegle
-		chargementGrille
-		initBoutonAide
-		initBoutonPause
-		initBoutonReset
-		initBoutonCancel
-		initBoutonRemplissage
-		initBoutonSauvegarde
-		initBoutonRetour
+		self.initTimer
+		self.initBoutonRegle
+		self.chargementGrille
+		self.initBoutonAide
+		self.initBoutonPause
+		self.initBoutonReset
+		self.initBoutonCancel
+		self.initBoutonRemplissage
+		self.initBoutonSauvegarde
+		self.initBoutonRetour
 		@btnRetour.text = "Abandonner"
 
 
@@ -61,7 +64,7 @@ class HudJeu < Hud
 				image = Gtk::Image.new( :file => "../img/gris.png")
 
 				image.pixbuf = image.pixbuf.scale((@@winX/3),(@@winY/15))
-			gridLblAide.attach(image, 0, 0, 1, 1)
+			@gridLblAide.attach(image, 0, 0, 1, 1)
 		vBox.add(@gridLblAide)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
@@ -128,19 +131,24 @@ class HudJeu < Hud
 	end
 
 
+ def initBoutonRetour
+	 @btnRetour = CustomButton.new("Retour")
+ 		@btnRetour.signal_connect("clicked") {self.lancementModeJeu }
+ end
+
 	# =======================
 	# TODO
 	# est-ce vraiment utile ???
 	# @caseSurbrillanceList n'est utilisé nulle part ailleurs, je suppose donc que cette méthode ne sert à rien...
 	# Ca a le mérite d'avoir une utilité en tuto
 	# =======================
+
 	def desurbrillanceCase
 		if @caseSurbrillanceList != nil
-			while not @caseSurbrillanceList.empty? # TODO chercher autre chose
+			while not @caseSurbrillanceList.empty?
 				caseSubr = @caseSurbrillanceList.shift
-				# @gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).image=\
-				# 					scaleImage(@grille[caseSubr.x][caseSubr.y].affichage)
-				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).replace(scaleImage(@grille[caseSubr.x][caseSubr.y].affichage))
+				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).\
+				replace(scaleImage(@grille[caseSubr.x][caseSubr.y].affichage))
 			end
 		end
 	end
@@ -174,27 +182,49 @@ class HudJeu < Hud
 		@grille.raz
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer" : "Pause"
+		@lblAide.text="" 
+		desurbrillanceIndice
 	end
 
 protected
 
+
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
 	# dans @lblAide ; peut mettre en surbrillance (changement de couleur) une case ou un indice
+	# - typeAide : par défaut "rapide", indique le mode de jeu 
+	# (donc le degré de précision de l'aide) voulu
 	# - return self
-	def afficherAide
-		taille = @grille.length
 
-		tableau = @aide.cycle("rapide")
-		caseAide = tableau.at(0)
+	def afficherAide(typeAide="rapide")
+		# TODO afficher l'image de fond en la mettant dans une grid avec le label
+#		image = Gtk::Image.new( :file => "../img/gris.png")
+#		image.pixbuf = image.pixbuf.scale((@@winX/2.5),(@@winY/@sizeGridWin)*2)
+		# self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
+		@caseSurbrillanceList = Array.new
+		#Met une case en surbrillance
+		tableau=@aide.cycle(typeAide)
+		caseAide = tableau.at(CASE)
+
 		if caseAide != nil
-			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage(caseAide.affichageSubr))
+			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).\
+			replace(scaleImage(caseAide.affichageSubr))
+			@caseSurbrillanceList.push(caseAide)
 		end
-		 @lblAide.set_text(tableau.at(1))
+		#Affiche le message d'aide
+		 @lblAide.set_text(tableau.at(MESSAGE))
 
-		indice = tableau.at(3)
+	 	 if @@winY<1100
+		 	 @lblAide.set_size('xx-large')  
+	 	 elsif @@winY<800
+		 	 @lblAide.set_size('large')  
+	 	 elsif @@winY<600
+		 	 @lblAide.set_size('small')  
+		end
 
-		if tableau.at(2) != nil
-			if tableau.at(2) == false
+		#Met un indice de colonne ou ligne en surbrillance
+		indice = tableau.at(INDICE_LIG_COL)
+		if tableau.at(BOOL_LIG_COL) != nil
+			if tableau.at(BOOL_LIG_COL) == false
 				lblIndice = @gridJeu.get_child_at(0,indice).child
 			else
 				lblIndice = @gridJeu.get_child_at(indice,0).child
@@ -205,45 +235,80 @@ protected
 			@lblIndiceSubr = lblIndice
 		end
 
+		yield(tableau) if block_given?
+	end
+
+	# @see initIndices : initialise le nombre de tentes sur chaque colonne
+	# - return self
+	def initIndicesColonnes
+		self.initIndices(false)
+	end
+	
+	# @see initIndices : initialise le nombre de tentes sur chaque ligne
+	# - return self
+	def initIndicesLignes
+		self.initIndices(true)
+	end
+	
+	# @see initIndice : initialise le nombre de tentes sur l'ensemble des lignes
+	# ou colonnes selon isRow
+	# - isRow : true => initialise les lignes, false => initialise les colonnes
+	# - return self
+	def initIndices(isRow)
+		(@grille.length).times do |i|
+			self.initIndice(i,isRow)
+		end
+		self
+	end
+	
+	# Remplit programmatiquement une cellule vide de gazon et met à jour l'affichage ;
+	# utilisé par le signal handler de HudJeu#initIndice
+	# - i,k : position de la cellule
+	# - return self 
+	def fillCellGrid(i,k)
+		if @grille[i][k].statutVisible.isVide?
+			@grille[i][k].cycle(@grille)
+			# @gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
+			@gridJeu.get_child_at(k+1,i+1).replace(scaleImage(@grille[i][k].affichage))
+		end
+		self
+	end
+
+	# Crée un bouton indiquant le nombre de tentes sur la ligne/colonne _i_, 
+	# l'attache à la grille de jeu et permet de remplir toute la ligne/colonne
+	# de gazon en cliquant dessus
+	# 
+	# Peut accepter un block, exécuté dans le signal handler du bouton
+	# - i : indice du bouton sur la tente/colonne, tel que i<@ŋrille.length
+	# - isRow : true => initialise les lignes, false => initialise les colonnes
+	# return self
+	def initIndice(i,isRow)
+		btnIndice = CustomButton.new
+		btnIndice.label = labelIndice(i, isRow ? :varTentesLigne : :varTentesCol)
+		btnIndice.set_relief(Gtk::ReliefStyle::NONE)
+		
+		posX=(isRow ? 0 : i+1)
+		posY=i+1-posX
+
+		@gridJeu.attach(btnIndice,posX,posY,1,1)
+		#Quand on clique dessus, met toutes les cases vides à gazon
+		btnIndice.signal_connect("clicked") do
+			(@grille.length).times do |k|
+				isRow ?  self.fillCellGrid(i,k) : self.fillCellGrid(k,i) 
+			end
+			self.desurbrillanceIndice
+			yield	if block_given?
+		end
+		self
 	end
 
 	# Initialise la grille de jeu :
 	# 	ajoute une variable d'instance @gridJeu : la grille de jeu avec laquelle le joueur interagira
+	#
+ 	# Peut accepter un block, exécuté dans le signal handler de la case
 	def chargementGrille
-		tailleGrille = @grille.length
-		# TODO - Ruby-fier ce loop
-		0.upto(tailleGrille-1) { |i|
-			# ici les indices des colonnes (nb tentes sur chaque colonne)
-			btnIndiceCol = CustomButton.new
-			btnIndiceCol.label = labelIndice(i,:varTentesCol)
-			btnIndiceCol.set_relief(Gtk::ReliefStyle::NONE)
-			@gridJeu.attach(btnIndiceCol,i+1,0,1,1)
-			#Quand on clique dessus, met toutes les cases vides à gazon
-			btnIndiceCol.signal_connect("clicked") {
-				0.upto(tailleGrille-1) { |k|
-					if @grille[k][i].statutVisible.isVide?
-						@grille[k][i].cycle(@grille)
-						@gridJeu.get_child_at(i+1,k+1).replace(scaleImage(@grille[k][i].affichage))
-					end
-				}
-				desurbrillanceIndice
-			}
-#			 ici les indices des lignes (nb tentes sur chaque ligne)
-			btnIndiceLig = CustomButton.new
-			btnIndiceLig.label = labelIndice(i,:varTentesLigne)
-			btnIndiceLig.set_relief(Gtk::ReliefStyle::NONE)
-			@gridJeu.attach(btnIndiceLig,0,i+1,1,1)
-#			Quand on clique dessus, met toutes les cases vides à gazon
-			btnIndiceLig.signal_connect("clicked") {
-				0.upto(tailleGrille-1) { |k|
-					if @grille[i][k].statutVisible.isVide?
-						@grille[i][k].cycle(@grille)
-						@gridJeu.get_child_at(k+1,i+1).replace(scaleImage(@grille[i][k].affichage))
-					end
-				}
-				desurbrillanceIndice
-			}
-		}
+		self.initIndicesColonnes
+		self.initIndicesLignes
 
 		# positionne les cases de la grille
 		@grille.grille.each do |line|
@@ -259,6 +324,10 @@ protected
 						desurbrillanceIndice
 						self.jeuTermine		if @grille.estValide
 					end
+					
+					# Note : important de ne yield qu'après les appels à desurbrillanceFoo
+					# sans quoi le tutoriel voit ses indices effacés instantanément
+					yield if block_given?
 				end
 				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
 			end
@@ -317,6 +386,9 @@ protected
 	# 	initialise sont comportement
 	def initBoutonRegle
 		@btnRegle = CustomButton.new("?", "pink")
+		@btnRegle.signal_connect('clicked'){
+			lancementHudRegle
+		}
 	end
 
 	# Initialise le bouton de remplisssage des cases triviales, les cases non adjascentes à un arbre :
@@ -342,16 +414,7 @@ protected
 	def initBoutonReset
 		@btnReset = CustomButton.new("Reset")
 		@btnReset.signal_connect("clicked") {
-			self.reset
-			@lblAide.text = ""
-			self.resetTimer
-			# if @t != nil
-			# 	self.resetTimer
-			# 	if @pause
-			# 		@btnPause.set_label("Pause")
-			# 	end
-			# end
-			desurbrillanceIndice
+			reset
 		}
 	end
 
@@ -430,8 +493,9 @@ protected
 		imgSize = @@winY / (tailleGrille*1.4)
 		imgSize*=0.75
 		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
-
 		return image
+
 	end
+
 
 end

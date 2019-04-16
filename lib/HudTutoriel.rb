@@ -8,7 +8,10 @@ class HudTutoriel < HudJeu
 		super(window,grille)
 		self.setTitre("Tutoriel")
 		@@difficulte="Facile"
+		@btnAide.sensitive = false
+		@btnPause.sensitive = false
 		@lblTimer.set_visible(false)
+		self.afficherAide
 	end
 
 	# Surcharge de la méthode jeuTermine de HudJeu
@@ -17,34 +20,35 @@ class HudTutoriel < HudJeu
 		self.lancementFinDeJeu(true)
 	end
 
-private
-
-	# Redéfinition de la méthode aide de HudJeu
-	def afficherAide
-		@caseSurbrillanceList = Array.new
-		tableau = @aide.cycle("tuto")
-		puts(tableau)
-		premAide = tableau.at(0)
-		puts(tableau.at(0))
-		puts(premAide)
-
-		if premAide != nil then
-				@gridJeu.get_child_at(premAide.y+1,premAide.x+1).set_image(scaleImage(premAide.affichageSubr))
-				@caseSurbrillanceList.push(premAide)
+protected
+	
+	def initIndice(i, isRow) 
+		super { self.afficherAide }
 		end
+	
+	def chargementGrille
+		super { self.afficherAide }
+	end
 
-		@lblAide.text = tableau.at(1).to_s
+	def reset
+		super
+		self.afficherAide
+	end
 
-		indice = tableau.at(3)
+	# Affiche l'aide pour le mode Tutoriel
+	def afficherAide
 
-		if tableau.at(2) != nil
-			if tableau.at(2) == false
-				lblIndice = @gridJeu.get_child_at(0,indice).child
-			else
-				lblIndice = @gridJeu.get_child_at(indice,0).child
+		super("tuto") do |tableau|
+			#Met une liste de case en surbrillance
+			listCase = tableau.at(LISTCASES)
+			if listCase != nil
+				while not listCase.empty?
+					caseAide = listCase.pop
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage('../img/Subr.png'))
+					@caseSurbrillanceList.push(caseAide)
+				end
 			end
-			lblIndice.color = 'red'
-			@lblIndiceSubr = lblIndice
 		end
 	end
+
 end

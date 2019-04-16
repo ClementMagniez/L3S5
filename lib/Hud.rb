@@ -13,14 +13,14 @@ class Hud < Gtk::Grid
 	@@difficulte = nil
 	@@mode = nil
 
-	def initialize(window)
+	def initialize(window,fenetrePrecedente=nil)
 		super()
-
+		@fenetrePrecedente = fenetrePrecedente
 		@fenetre = window
 		@fenetre.signal_connect('check-resize') do |window|
 			if window.size[0]!=@@winX && window.size[1]!=@@winY
-				# puts (window.size[0].to_s + "," + window.size[1].to_s)
-				# self.remove(@fond) if @fond !=nil
+				 puts (window.size[0].to_s + "," + window.size[1].to_s)
+				 self.remove(@fond) if @fond !=nil
 				ajoutFondEcran
 			end
 		end
@@ -29,6 +29,7 @@ class Hud < Gtk::Grid
 		setTitre("Des Tentes et des Arbres")
 
 		initBoutonOptions
+
 	end
 
 protected
@@ -63,7 +64,7 @@ protected
 
 	def lancementChoixDifficulte(mode)
 		@@mode = mode
-		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode))
+		@fenetre.changerWidget(self, HudChoixDifficulte.new(@fenetre,mode,self))
 	end
 
 	# Lance le menu de fin de jeu
@@ -76,7 +77,7 @@ protected
 	end
 
 	def lancementHudRegle
-		@fenetre.changerWidget(self, HudRegle.new(@fenetre))
+		@fenetre.changerWidget(self, HudRegle.new(@fenetre,self))
 	end
 
 	def lancementHudPresentationTutoriel(grille)
@@ -113,9 +114,10 @@ protected
 		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
-				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
+			 @fenetre.changerWidget(self,HudOption.new(@fenetre,self))
 		}
 	end
+
 
 	# Initialise le bouton pour profil (lance le menu profil) :
 	# 	ajoute une variable d'instance @btnProfil
@@ -161,6 +163,7 @@ protected
 	end
 
 	# TODO : vraiment utile ?
+
 	def initWindow
 		@@winX = @fenetre.size.fetch(0)
 		@@winY = @fenetre.size.fetch(1)

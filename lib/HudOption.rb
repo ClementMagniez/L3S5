@@ -5,15 +5,14 @@ class HudOption < Hud
 	# @fullscreen
 
 	def initialize(window,fenetrePrecedente)
-		super(window)
+		super(window,fenetrePrecedente)
 		varX, varY = 2, 2
-		@fenetrePrecedente = fenetrePrecedente
-		self.setTitre("Options")
 
+		self.setTitre("Options")
 		initBoutonRetour
 		initMenuResolution
 		initBoutonSauvegarderResolution
-
+		initBoutonRetour
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
@@ -54,7 +53,6 @@ private
 	def initBoutonRetour
 		super { @fenetre.changerWidget(self,@fenetrePrecedente) }
 	end
-
 
 	def initMenuResolution
 

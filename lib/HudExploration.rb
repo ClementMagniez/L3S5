@@ -22,4 +22,5 @@ class HudExploration < HudJeu
 			end
 		}
 	end
+
 end

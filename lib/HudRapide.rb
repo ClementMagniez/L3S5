@@ -27,7 +27,7 @@ class HudRapide < HudJeu
 			self.jeuTermine		if @timer <= 0
 			@@malus *= 1.2
 		end
-	end
+end
 
 	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non
 	# le temps écoulé
