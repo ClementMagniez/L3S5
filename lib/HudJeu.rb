@@ -130,8 +130,7 @@ class HudJeu < Hud
 
 
  def initBoutonRetour
-	 @btnRetour = CustomButton.new("Retour")
- 		@btnRetour.signal_connect("clicked") {self.lancementModeJeu }
+	 @btnRetour = CustomButton.new("Retour") {self.lancementModeJeu }
  end
 
 	# =======================
@@ -289,7 +288,14 @@ protected
 	# - isRow : true => initialise les lignes, false => initialise les colonnes
 	# return self
 	def initIndice(i,isRow)
-		btnIndice = CustomButton.new
+		#Quand on clique dessus, met toutes les cases vides à gazon
+		btnIndice = CustomButton.new do
+			(@grille.length).times do |k|
+				isRow ?  self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
+			end
+			self.desurbrillanceIndice
+			yield	if block_given?
+		end
 		btnIndice.label = labelIndice(i, isRow ? :varTentesLigne : :varTentesCol)
 		btnIndice.set_relief(Gtk::ReliefStyle::NONE)
 
@@ -297,14 +303,7 @@ protected
 		posY=i+1-posX
 
 		@gridJeu.attach(btnIndice,posX,posY,1,1)
-		#Quand on clique dessus, met toutes les cases vides à gazon
-		btnIndice.signal_connect("clicked") do
-			(@grille.length).times do |k|
-				isRow ?  self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
-			end
-			self.desurbrillanceIndice
-			yield	if block_given?
-		end
+
 		self
 	end
 
@@ -323,7 +322,7 @@ protected
 				button = CustomEventBox.new
 				button.set_border_width(1)
 				button.add(scaleImage(cell.affichage))
-				button.signal_connect("button-release-event") do
+				button.signal_connect('button-release-event') do
 					unless @pause
 						cell.cycle(@grille)
 						button.replace(scaleImage(cell.affichage))
@@ -349,8 +348,7 @@ protected
 		@lblAide = CustomLabel.new
 		@lblAide.color = "white"
 		@lblAide.set_background("#000000", 40)
-		@btnAide = CustomButton.new("Aide")
-		@btnAide.signal_connect("clicked") {
+		@btnAide = CustomButton.new("Aide") {
 			self.afficherAide
 		}
 	end
@@ -366,8 +364,7 @@ protected
 	# 	ajoute une variable d'instance @btnCancel
 	# 	initialise sont comportement
 	def initBoutonCancel
-		@btnCancel = CustomButton.new("Annuler")
-		@btnCancel.signal_connect('clicked'){
+		@btnCancel = CustomButton.new("Annuler") {
 			cell = @grille.cancel
 			if cell != nil
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
@@ -379,8 +376,7 @@ protected
 	# 	ajoute une variable d'instance @btnPause
 	# 	initialise sont comportement
 	def initBoutonPause
-		@btnPause = CustomButton.new("Pause")
-		@btnPause.signal_connect('clicked'){
+		@btnPause = CustomButton.new("Pause") {
 			self.pause
 		}
 	end
@@ -396,8 +392,7 @@ protected
 	# 	ajoute une variable d'instance @btnRemplissage
 	# 	initialise sont comportement
 	def initBoutonRemplissage
-		@btnRemplissage = CustomButton.new("Remplir")
-		@btnRemplissage.signal_connect('clicked') {
+		@btnRemplissage = CustomButton.new("Remplir") {
 			liste = @aide.listeCasesGazon
 			while not liste.empty?
 				caseRemp = liste.pop
@@ -413,8 +408,7 @@ protected
 	# 	ajoute une variable d'instance @btnReset
 	# 	initialise sont comportement
 	def initBoutonReset
-		@btnReset = CustomButton.new("Reset")
-		@btnReset.signal_connect("clicked") {
+		@btnReset = CustomButton.new("Reset") {
 			reset
 		}
 	end
@@ -423,8 +417,7 @@ protected
 	# 	ajoute une variable d'instance @btnSauvegarde
 	# 	initialise sont comportement
 	def initBoutonSauvegarde
-		@btnSauvegarde = CustomButton.new("Sauvegarder")
-		@btnSauvegarde.signal_connect('clicked') do
+		@btnSauvegarde = CustomButton.new("Sauvegarder") do
 			File.open("../saves/"+@@name+".txt", "w+", 0644) do |f|
 				f.write(Marshal.dump([@grille,@@mode,@@difficulte,@timer]))
 			end

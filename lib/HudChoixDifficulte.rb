@@ -62,22 +62,18 @@ private
 	# Crée et instancie les boutons de choix de la difficulté
 	# Return self
 	def initBoutonsDifficulte
-		@btnFacile = CustomButton.new("Facile")
-		@btnMoyen = CustomButton.new("Moyen")
-		@btnDifficile = CustomButton.new("Difficile")
-
-		@btnFacile.signal_connect('clicked') do
+		@btnFacile = CustomButton.new("Facile") do
 			# TODO à améliorer
 			@@difficulte = "Facile"
 			self.send(@mode, Grille.new(TAILLE_FACILE))
 		end
 
-		@btnMoyen.signal_connect('clicked') do
+		@btnMoyen = CustomButton.new("Moyen") do
 			@@difficulte = "Moyen"
 			self.send(@mode, Grille.new(TAILLE_MOYEN))
 		end
 
-		@btnDifficile.signal_connect('clicked') do
+		@btnDifficile = CustomButton.new("Difficile") do
 			@@difficulte = "Difficile"
 			self.send(@mode, Grille.new(TAILLE_DIFFICILE))
 		end

@@ -27,15 +27,13 @@ class HudPresentationTutoriel < Hud
 private
 
 	def initBoutonContinuer
-		@btnContinuer = CustomButton.new("Continuer")
-		@btnContinuer.signal_connect('clicked') do
+		@btnContinuer = CustomButton.new("Continuer") do
 			 lancementTutoriel(@grille)
 		end
 	end
 
 	def initBoutonRegle
-		@btnRegle = CustomButton.new("Règles")
-		@btnRegle.signal_connect('clicked') do
+		@btnRegle = CustomButton.new("Règles") do
 			lancementHudRegle
 		end
 	end

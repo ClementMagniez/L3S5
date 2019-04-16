@@ -77,8 +77,7 @@ private
 	# 	ajoute une variable d'instance @btnConnecter
 	# 	initialise sont comportement
 	def initBoutonConnecter
-		@btnConnecter = CustomButton.new("Se connecter")
-		@btnConnecter.signal_connect("clicked") {
+		@btnConnecter = CustomButton.new("Se connecter") {
 			# Vérification de l'existence du profil dans la BDD
 			session = Connexion.new
 			strId = @entryIdentifiant.text.tr("^[a-z][A-Z][0-9]\s_-", "")
@@ -115,8 +114,7 @@ private
 	# 	ajoute une variable d'instance @btnInscrire
 	# 	initialise sont comportement
 	def initBoutonInscription
-		@btnInscrire = CustomButton.new("S'inscrire")
-		@btnInscrire.signal_connect('clicked') do
+		@btnInscrire = CustomButton.new("S'inscrire") do
 			self.lancementInscription
 		end
 	end

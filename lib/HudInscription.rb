@@ -47,8 +47,7 @@ private
 	#Créé et initialise le bouton s'enregistrer
 	def initBoutonEnregistrement
 		#Bouton : Enregistrer
-		@btnEnr = CustomButton.new("S'enregistrer")
-		@btnEnr.signal_connect("clicked") do
+		@btnEnr = CustomButton.new("S'enregistrer") do
 			session = Connexion.new
 			id = @entId.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			mdp = @entMdp.text

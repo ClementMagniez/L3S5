@@ -79,8 +79,7 @@ private
 	# Crée un bouton enregistrant la résolution choisie dans un fichier ini
 	# et appliquant le changement à l'application active
 	def initBoutonSauvegarderResolution
-		@btnSauvegardeResolution=CustomButton.new("Appliquer")
-		@btnSauvegardeResolution.signal_connect('clicked') do
+		@btnSauvegardeResolution=CustomButton.new("Appliquer") do
 			f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
 			@@winX=@resolution.split('*')[0].to_i
 			@@winY=@resolution.split('*')[1].to_i

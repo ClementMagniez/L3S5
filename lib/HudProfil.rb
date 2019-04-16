@@ -42,8 +42,7 @@ class HudProfil < Hud
 
 private
 	def initBoutonSauvegarderLogin
-		@btnSauvegarde = CustomButton.new("Sauvegarder les modifications")
-		@btnSauvegarde.signal_connect("clicked") do
+		@btnSauvegarde = CustomButton.new("Sauvegarder les modifications") do
 			strNom = @entNom.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = @entMdp.text
 			@lblErreur.color = 'red'

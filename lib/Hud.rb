@@ -112,8 +112,7 @@ protected
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
 		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
-		@btnOptions.set_image(engrenage)
-		@btnOptions.signal_connect("clicked") {
+		@btnOptions.set_image(engrenage) {
 			@@hudPrecedent = self
 			@@fenetre.changerWidget(HudOption.new(traitements))
 		}
@@ -124,8 +123,7 @@ protected
 	# 	ajoute une variable d'instance @btnProfil
 	# 	initialise sont comportement
 	def initBoutonProfil
-		@btnProfil = CustomButton.new("Profil")
-		@btnProfil.signal_connect("clicked") do
+		@btnProfil = CustomButton.new("Profil") do
 			lancementProfil
 		end
 	end
@@ -153,8 +151,7 @@ protected
 	# 	ajoute une variable d'instance @btnRegle
 	# 	initialise sont comportement
 	def initBoutonRegle(traitements=nil)
-		@btnRegle = CustomButton.new("?", "pink")
-		@btnRegle.signal_connect('clicked'){
+		@btnRegle = CustomButton.new("?", "pink") {
 			@@hudPrecedent = self
 			@@fenetre.changerWidget(HudRegle.new(traitements))
 		}
@@ -164,8 +161,7 @@ protected
 	# 	ajoute une variable d'instance @btnRetour
 	# 	initialise sont comportement
 	def initBoutonRetour
-		@btnRetour = CustomButton.new("Retour")
-		@btnRetour.signal_connect("clicked") {
+		@btnRetour = CustomButton.new("Retour") {
 			if block_given?
 				yield
 			else

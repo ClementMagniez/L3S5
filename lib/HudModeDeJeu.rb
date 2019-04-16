@@ -66,8 +66,7 @@ private
 	# Crée et connecte le bouton de lancement du mode aventure
 	# Return self
 	def initBoutonAventure
-		@btnAventure = CustomButton.new("Mode Aventure")
-		@btnAventure.signal_connect('clicked') do
+		@btnAventure = CustomButton.new("Mode Aventure") do
 			lancementChoixDifficulte(:aventure)
 		end
 		self
@@ -76,8 +75,7 @@ private
 	# Crée et connecte le bouton de chargement d'une sauvegarde
 	# Return self
 	def initBoutonChargerSauvegarde
-		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde")
-		@btnSauvegarde.signal_connect('clicked') do
+		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde") do
 			if !File.exist?("../saves/"+@@name+".txt")
 				@lblErr.text = "Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !"
 			else
@@ -102,8 +100,7 @@ private
 	# Crée et connecte le bouton de lancement du mode explo
 	# Return self
 	def initBoutonExplo
-		@btnExplo = CustomButton.new("Mode Exploration")
-		@btnExplo.signal_connect('clicked') do
+		@btnExplo = CustomButton.new("Mode Exploration") do
 			lancementChoixDifficulte(:explo)
 		end
 		self
@@ -111,8 +108,7 @@ private
 
 	# Crée et connecte le bouton de lancement du mode chrono
 	def initBoutonRapide
-		@btnChrono = CustomButton.new("Mode Chrono")
-		@btnChrono.signal_connect('clicked') do
+		@btnChrono = CustomButton.new("Mode Chrono") do
 			lancementChoixDifficulte(:rapide)
 		end
 		self
@@ -121,8 +117,7 @@ private
 	# Crée et connecte le bouton de lancement du tutoriel
 	# Return self
 	def initBoutonTuto
-		@btnTutoriel = CustomButton.new("Tutoriel")
-		@btnTutoriel.signal_connect('clicked') do
+		@btnTutoriel = CustomButton.new("Tutoriel") do
 			puts "Lancement du mode tutoriel"
 			#Niveau le plus facile : 6
 			 lancementHudPresentationTutoriel(Grille.new(HudChoixDifficulte::TAILLE_FACILE))
