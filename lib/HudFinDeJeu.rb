@@ -45,16 +45,14 @@ class HudFinDeJeu < Hud
 private
 
 	def initBoutonChangerModeDeJeu
-		@btnModeDeJeu = CustomButton.new("Retour au menu")
-		@btnModeDeJeu.signal_connect('clicked'){
+		@btnModeDeJeu = CustomButton.new("Retour au menu") {
 			self.lancementModeJeu
 		}
 
 	end
 
 	def initBoutonRecommencer
-		@btnRecommencer = CustomButton.new("Recommencer")
-		@btnRecommencer.signal_connect('clicked') {
+		@btnRecommencer = CustomButton.new("Recommencer") {
 			self.lancementHudPrecedent
 		}
 

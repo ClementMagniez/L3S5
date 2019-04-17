@@ -4,7 +4,6 @@ class HudExploration < HudJeu
 
 	def initialize(grille,timer=0)
 		super(grille,timer)
-		self.setTitre("Partie exploration")
 		# nombre d'aide demandé par l'utilisateur
 		# Si ce nombre d'aide est trop élevé, les aides ne sont plus disponibles
 		# Le maximum d'aide est proportionnel à la taille de la grille

@@ -7,22 +7,22 @@ class StatutVide < Statut
 	# VIDE -> GAZON -> TENTE à chaque interaction
 	CYCLE=[:VIDE, :GAZON, :TENTE].freeze
 
-	
+
 	# Return true si le statut est "vide", false sinon
 	def isVide?
 		self.statut==:VIDE
 	end
-	
+
 	# Return true si le statut est "gazon", false sinon
 	def isGazon?
 		self.statut==:GAZON
 	end
-	
+
 	# Return true si le statut est "tente", false sinon
 	def isTente?
 		self.statut==:TENTE
 	end
-	
+
 	# Cf. Statut#cycle ; utilise la constante StatutVide#CYCLE
 	# return self
 
@@ -52,7 +52,7 @@ class StatutVide < Statut
 			when :TENTE then 'T'
 		end
 	end
-	
 
-	
+
+
 end

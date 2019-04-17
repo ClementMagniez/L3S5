@@ -1,10 +1,12 @@
 class HudPresentationTutoriel < Hud
-	def initialize (grille)
+	def initialize(grille)
 		super()
+		@@mode = :tutoriel
 		@grille=grille
 
 		initBoutonRegle
 		initBoutonContinuer
+		@btnRegle.set_text("Règles").set_color("black")
 
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
@@ -27,16 +29,14 @@ class HudPresentationTutoriel < Hud
 private
 
 	def initBoutonContinuer
-		@btnContinuer = CustomButton.new("Continuer")
-		@btnContinuer.signal_connect('clicked') do
+		@btnContinuer = CustomButton.new("Continuer") do
 			 lancementTutoriel(@grille)
 		end
 	end
 
-	def initBoutonRegle
-		@btnRegle = CustomButton.new("Règles")
-		@btnRegle.signal_connect('clicked') do
-			lancementHudRegle
-		end
-	end
+	# def initBoutonRegle
+	# 	@btnRegle = CustomButton.new("Règles") do
+	# 		lancementHudRegle
+	# 	end
+	# end
 end

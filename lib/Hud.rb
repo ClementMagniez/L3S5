@@ -53,7 +53,7 @@ protected
 	end
 
 
-	def lancementExplo(grille,timer=0)
+	def lancementExploration(grille,timer=0)
 		@@fenetre.changerWidget(HudExploration.new(grille,timer))
 	end
 
@@ -92,20 +92,10 @@ protected
 		end
 	end
 
-	# TODO inverser style et size pour respecter CustomLabel
-	# def creerBouton(label,couleur,style,size)
-	# 	bouton = Gtk::Button.new
-	# 	self.styleLabel(label,couleur,style,size,label.text)
-	# 	bouton.add(label)
-	# 	bouton.set_relief(Gtk::ReliefStyle::NONE)
-	# 	return bouton
-	# end
-
-
 	# Initialise le bouton des options :
 	# 	ajoute une variable d'instance @btnOptions ;
 	# 	initialise son comportement
-	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @fenetrePrecedente
+	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @hudPrecedent lors du clique sur le bouton retoure du hud
 	# ; permet par exemple de redimensionner un menu de jeu en le rechargeant
 	def initBoutonOptions(traitements=nil)
 		@btnOptions = Gtk::Button.new
@@ -124,8 +114,7 @@ protected
 	# 	ajoute une variable d'instance @btnProfil
 	# 	initialise sont comportement
 	def initBoutonProfil
-		@btnProfil = CustomButton.new("Profil")
-		@btnProfil.signal_connect("clicked") do
+		@btnProfil = CustomButton.new("Profil") do
 			lancementProfil
 		end
 	end
@@ -152,9 +141,9 @@ protected
 	# Initialise le bouton des règles de jeu :
 	# 	ajoute une variable d'instance @btnRegle
 	# 	initialise sont comportement
+	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @hudPrecedent lors du clique sur le bouton retoure du hud
 	def initBoutonRegle(traitements=nil)
-		@btnRegle = CustomButton.new("?", "pink")
-		@btnRegle.signal_connect('clicked'){
+		@btnRegle = CustomButton.new("?", "pink") {
 			@@hudPrecedent = self
 			@@fenetre.changerWidget(HudRegle.new(traitements))
 		}
@@ -164,8 +153,7 @@ protected
 	# 	ajoute une variable d'instance @btnRetour
 	# 	initialise sont comportement
 	def initBoutonRetour
-		@btnRetour = CustomButton.new("Retour")
-		@btnRetour.signal_connect("clicked") {
+		@btnRetour = CustomButton.new("Retour") {
 			if block_given?
 				yield
 			else

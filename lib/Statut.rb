@@ -9,7 +9,7 @@ class Statut
 	def initialize(statut)
 		@statut=statut
 	end
-	
+
 	# Return true si this.statut et _statut.statut_ sont égaux
 	def ==(statut)
 		self.statut==statut.statut
@@ -18,9 +18,9 @@ class Statut
 	def isVide?
 		return false
 	end
-	
+
 	# Cycle d'un cran sur array
-	# return self 
+	# return self
 	def cycle(array)
 		decalageCycle(1, array)
 	end
@@ -39,7 +39,7 @@ class Statut
 	# .statut dans array
 	# return self
 	def decalageCycle(offset, array)
-		self.statut=array[(array.index(self.statut)+offset)%array.length]	
+		self.statut=array[(array.index(self.statut)+offset)%array.length]
 		self
 	end
 	attr_accessor :statut, :statutVisible

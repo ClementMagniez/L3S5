@@ -21,6 +21,8 @@ class HudAccueil < Hud
 		initBoutonConnecter
 		initBoutonQuitter
 
+		# Rend le mot de passe entré invisible
+		@entryMotDePasse.set_visibility(false)
 
 		width = 150
 
@@ -77,8 +79,7 @@ private
 	# 	ajoute une variable d'instance @btnConnecter
 	# 	initialise sont comportement
 	def initBoutonConnecter
-		@btnConnecter = CustomButton.new("Se connecter")
-		@btnConnecter.signal_connect("clicked") {
+		@btnConnecter = CustomButton.new("Se connecter") {
 			# Vérification de l'existence du profil dans la BDD
 			session = Connexion.new
 			strId = @entryIdentifiant.text.tr("^[a-z][A-Z][0-9]\s_-", "")
@@ -95,18 +96,24 @@ private
 			elsif strMdp.empty?
 				@lblErr.text = "Le mot de passe ne peut être vide !"
 				puts "Connexion : Le mot de passe ne peut être vide !"
-			elsif(session.seConnecter(strId, strMdp) == 1)
+			elsif(session.seConnecter(strId, strMdp) == -1)
+				@lblErr.text = "Echec : connexion impossible !"
+				puts "Connexion : connexion impossible !"
+			else
+				# S'assure que le répertoire est sain
+				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
+				Dir.mkdir("../config")	unless Dir.exist?("../config")
 				@@name=strId
+				unless File.exist?("../config/#{@@name}.ini")
+					f=IniFile.new(filename:"../config/#{@@name}.ini", encoding: 'UTF-8')
+					f['resolution']={'width' => 1280, 'height'=> 720}
+					f.write
+				end
 				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
 				@@winX=f['resolution']['width']
 				@@winY=f['resolution']['height']
 				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
-				# S'assure que le répertoire est sain
-				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
-			else
-				@lblErr.text = "Echec : connexion impossible !"
-				puts "Connexion : connexion impossible !"
 			end
 		}
 	end
@@ -115,8 +122,7 @@ private
 	# 	ajoute une variable d'instance @btnInscrire
 	# 	initialise sont comportement
 	def initBoutonInscription
-		@btnInscrire = CustomButton.new("S'inscrire")
-		@btnInscrire.signal_connect('clicked') do
+		@btnInscrire = CustomButton.new("S'inscrire") do
 			self.lancementInscription
 		end
 	end

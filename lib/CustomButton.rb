@@ -4,12 +4,18 @@ class CustomButton < Gtk::Button
 		super()
 #		self.set_relief(Gtk::ReliefStyle::NONE)
 		self.add(CustomLabel.new(str,couleur,size,weight))
+
+		if block_given?
+			signal_connect("clicked") {
+				yield
+			}
+		end
 	end
 
 	# Modifie la couleur du bouton
 	# - return self
 	def set_color(c)
-		label.set_color(c)
+		self.child.set_color(c)
 		self
 	end
 	alias :color= :set_color
@@ -30,7 +36,7 @@ class CustomButton < Gtk::Button
 		self
 	end
 	alias :text= :set_text
-	
+
 	# Redimensionne le texte de self puis self selon la nouvelle taille du texte
 	# - return self
 	def set_size(size)

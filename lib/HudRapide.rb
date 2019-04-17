@@ -16,7 +16,6 @@ class HudRapide < HudJeu
 			@temps = timer
 		end
 		super(grille,@temps)
-		self.setTitre("Partie rapide")
 		# malus de temps (en seconde) lors d'une demande d'aide
 		@@malus = 15
 	end
@@ -29,7 +28,7 @@ class HudRapide < HudJeu
 			@timer -= @@malus
 			@@malus *= 1.2
 		end
-end
+	end
 
 	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non
 	# le temps écoulé

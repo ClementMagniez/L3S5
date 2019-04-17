@@ -13,7 +13,7 @@ class HudModeDeJeu < Hud
 	# Paramètre : window - la Fenetre de l'application
 	def initialize
 		super()
- 		self.setTitre("Choix du mode de jeu")
+ 		self.setTitre
 		@lblErr = CustomLabel.new("", "red")
 
 		initBoutonAventure
@@ -61,13 +61,18 @@ class HudModeDeJeu < Hud
 		ajoutFondEcran
 	end
 
+	# Surcharge le setter du titre de la fentre afin qu'il affiche toujours le meme message
+	# 	- str Le parametre est rendu inutil
+	def setTitre(str=nil)
+		super("#{@@name} - Choix du mode de jeu")
+	end
+
 private
 
 	# Crée et connecte le bouton de lancement du mode aventure
 	# Return self
 	def initBoutonAventure
-		@btnAventure = CustomButton.new("Mode Aventure")
-		@btnAventure.signal_connect('clicked') do
+		@btnAventure = CustomButton.new("Mode Aventure") do
 			lancementChoixDifficulte(:aventure)
 		end
 		self
@@ -76,23 +81,26 @@ private
 	# Crée et connecte le bouton de chargement d'une sauvegarde
 	# Return self
 	def initBoutonChargerSauvegarde
-		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde")
-		@btnSauvegarde.signal_connect('clicked') do
+		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde") do
 			if !File.exist?("../saves/"+@@name+".txt")
-				@lblErr.text = "Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !"
+				@lblErr.text = "Vous n'avez pas encore de sauvegarde d'enregistrée !"
 			else
-				File.open("../saves/"+@@name+".txt", 'r') do |f|
-					dataLoaded=Marshal.load(f)
-					grille=dataLoaded[0]
-					@@mode=dataLoaded[1]
-					@@difficulte=dataLoaded[2]
-					timer=dataLoaded[3]
-					case @@mode
-						when :explo then lancementExplo(grille,timer)
-						when :rapide then lancementRapide(grille,timer)
-						when :tutoriel then lancementTutoriel(grille,timer)
-						when :aventure then lancementAventure(grille,timer)
+				begin
+					File.open("../saves/"+@@name+".txt", 'r') do |f|
+						dataLoaded=Marshal.load(f)
+						grille=dataLoaded[0]
+						@@mode=dataLoaded[1]
+						@@difficulte=dataLoaded[2]
+						timer=dataLoaded[3]
+						case @@mode
+							when :rapide then lancementRapide(grille,timer)
+							when :tutoriel then lancementTutoriel(grille,timer)
+							when :aventure then lancementAventure(grille,timer)
+							when :exploration then lancementExplo(grille,timer)
+						end
 					end
+				rescue
+					@lblErr.text="La sauvegarde est corrompue"
 				end
 			end
 		end
@@ -102,34 +110,38 @@ private
 	# Crée et connecte le bouton de lancement du mode explo
 	# Return self
 	def initBoutonExplo
-		@btnExplo = CustomButton.new("Mode Exploration")
-		@btnExplo.signal_connect('clicked') do
-			lancementChoixDifficulte(:explo)
+		@btnExplo = CustomButton.new("Mode Exploration") do
+			lancementChoixDifficulte(:exploration)
 		end
 		self
 	end
 
+	def initBoutonOptions
+		super([:setTitre])
+	end
+
 	# Crée et connecte le bouton de lancement du mode chrono
 	def initBoutonRapide
-		@btnChrono = CustomButton.new("Mode Chrono")
-		@btnChrono.signal_connect('clicked') do
+		@btnChrono = CustomButton.new("Mode Chrono") do
 			lancementChoixDifficulte(:rapide)
 		end
 		self
 	end
 
+	def initBoutonRegle
+		super([:setTitre])
+	end
+
 	# Crée et connecte le bouton de lancement du tutoriel
 	# Return self
 	def initBoutonTuto
-		@btnTutoriel = CustomButton.new("Tutoriel")
-		@btnTutoriel.signal_connect('clicked') do
+		@btnTutoriel = CustomButton.new("Tutoriel") do
 			puts "Lancement du mode tutoriel"
 			#Niveau le plus facile : 6
 			 lancementHudPresentationTutoriel(Grille.new(HudChoixDifficulte::TAILLE_FACILE))
 		end
 		self
 	end
-
 
 	# Ecrase Hud#initBoutonQuitter pour rediriger vers l'écran de connexion
 	def initBoutonQuitter

@@ -51,8 +51,8 @@ class CustomLabel < Gtk::Label
 		background=@background ? "background='#{@background}'" : ''
 		bgalpha=@bgalpha ? "bgalpha='#{@bgalpha}%'" : ''
 
-		set_markup("<span #{background} #{bgalpha} foreground='"+self.couleur+"' weight='"+self.weight+"'size='"\
-							 +self.size+"'>"+self.text+"</span>")
+		set_markup("<span #{background} #{bgalpha} foreground='#{self.couleur}' weight='#{self.weight}'"+"
+							 size='#{self.size}'>#{self.text}</span>")
 		self
 	end
 
