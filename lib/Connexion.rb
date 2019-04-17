@@ -108,11 +108,16 @@ class Connexion
 	# 	+0+ - Le nom du mode joué
 	# 	+1+ - Le nom de la difficulté jouée
 	#
-	def rechercherScore(ecranProfil,infoGrille)
-		research = (ecranProfil) ?
-			Score.where(modeJeu: infoGrille[0], profil_id: @id) : # HudProfil
-			Score.includes(:profil).where(modeJeu: infoGrille[0], difficulte: infoGrille[1]) # HudFinDeJeu
-		return (research != nil) ? research.order(montantScore: :desc) : nil
+	# def rechercherScore(ecranProfil,infoGrille)
+	# 	research = (ecranProfil) ?
+	# 		Score.where(modeJeu: infoGrille[0], profil_id: @id) : # HudProfil
+	# 		Score.includes(:profil).where(modeJeu: infoGrille[0], difficulte: infoGrille[1]) # HudFinDeJeu
+	# 	return (research != nil) ? research.order(montantScore: :desc) : nil
+	# end
+
+	def rechercherScores(mode,difficulte=nil)
+		return Score.includes(:profil).where(modeJeu: mode, difficulte: difficulte).order(montantScore: :desc)		if difficulte != nil
+		return Score.where(modeJeu: mode, profil_id: @id).order(montantScore: :desc)
 	end
 
 	##
