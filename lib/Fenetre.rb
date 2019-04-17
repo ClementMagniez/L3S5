@@ -2,6 +2,7 @@ require 'gtk3'
 
 # TODO génériciser ce truc
 
+require_relative 'Stylizable'
 require_relative 'Hud'
 require_relative 'HudAccueil'
 require_relative 'HudOption'
@@ -19,13 +20,12 @@ require_relative 'HudPresentationTutoriel'
 require_relative 'HudRegle'
 
 class Fenetre < Gtk::Window
+
 	def initialize
 		super()
 
-		css=Gtk::CssProvider.new
-		css.load(path: "../css/style.css")
 		self.name="mainWindow"
-		self.style_context.add_provider(css)
+		self.style_context.add_provider(Stylizable::getStyle)
 		self.set_default_size(480,270)
 		self.window_position=Gtk::WindowPosition::CENTER
 		self.signal_connect('destroy') { Gtk.main_quit }

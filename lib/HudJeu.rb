@@ -298,7 +298,7 @@ class HudJeu < Hud
 	# return self
 	def initIndice(i,isRow)
 		#Quand on clique dessus, met toutes les cases vides à gazon
-		btnIndice = CustomButton.new do
+		btnIndice = CustomButton.new(nom: "caseJeu") do
 			(@grille.length).times do |k|
 				isRow ?	self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
 			end
@@ -329,6 +329,7 @@ class HudJeu < Hud
 		@grille.each do |line|
 			line.each do |cell|
 				button = CustomEventBox.new
+
 				button.set_border_width(1)
 				button.add(scaleImage(cell.affichage))
 				button.signal_connect('button-release-event') do

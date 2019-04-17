@@ -1,37 +1,39 @@
 # Gtk::Label de couleur parametrable (par défaut noire), gras et de taille plus importante que les Gtk::Label de base
 class CustomLabel < Gtk::Label
-	def initialize(str="", couleur="black", size="x-large", weight="bold", background=nil, bgalpha=nil)
+	def initialize(str="", couleur="black", size="x-large", weight="bold", background=nil, bgalpha=nil, nom ="label")
 		super(str)
+		self.style_context.add_provider(Stylizable::getStyle)
+		self.name="label"
 		self.use_markup = true
 		@couleur=couleur
 		@size=size
 		@weight=weight
 		@background=background
 		@bgalpha=bgalpha
-		self.update
+#		self.update
 	end
 
 
 	# Modifie la couleur du label
 	# - return self
 	def set_color(c)
-		@couleur = c
-		self.update
+#		@couleur = c
+#		self.update
 	end
 	alias :color= :set_color
 
 	# Modifie la taille du label
 	# - return self
 	def set_size(size)
-		self.size=size
-		self.update
+#		self.size=size
+#		self.update
 	end
 
 	# Modifie le texte du label
 	# - return self
 	def set_text(str)
 		super(str)
-		self.update
+#		self.update
 	end
 	alias  :text= :set_text
 
@@ -40,9 +42,9 @@ class CustomLabel < Gtk::Label
 	# - alpha : transparence du surlignage, 0 (invisible) à 100 (opaque)
 	# - return self
 	def set_background(bg, alpha)
-		@background=bg
-		@bgalpha=alpha
-		self.update
+#		@background=bg
+#		@bgalpha=alpha
+#		self.update
 	end
 	alias :background= :set_background
 	# Met à jour l'affichage du label

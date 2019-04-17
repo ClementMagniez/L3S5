@@ -3,7 +3,9 @@ class HudAccueil < Hud
 		@@fenetre = window
 		super()
 		@lblErr = CustomLabel.new
-		@lblErr.color = 'red'
+		
+		@lblErr.name="lblErreur"
+		
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 		@entryMotDePasse.set_visibility(false)
