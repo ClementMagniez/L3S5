@@ -75,8 +75,8 @@ class Grille
 	end
 
 	# Méthode de convénience simplifiant le parcours de la matrice @grille
-	def each
-		self.grille.each
+	def each(&block)
+		self.grille.each(&block)
 	end
 
 	# Fonction de (ré)initialisation : déclare @varTentesCol, @varTentesLigne,
