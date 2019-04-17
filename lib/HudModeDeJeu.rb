@@ -58,7 +58,6 @@ class HudModeDeJeu < Hud
 		vBox.add(hBox)
 
 		self.attach(vBox, 0, 0, 1, 1)
-		ajoutFondEcran
 	end
 
 	# Surcharge le setter du titre de la fentre afin qu'il affiche toujours le meme message

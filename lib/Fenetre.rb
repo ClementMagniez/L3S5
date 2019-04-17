@@ -21,6 +21,11 @@ require_relative 'HudRegle'
 class Fenetre < Gtk::Window
 	def initialize
 		super()
+
+		css=Gtk::CssProvider.new
+		css.load(path: "../css/style.css")
+		self.name="mainWindow"
+		self.style_context.add_provider(css)
 		self.set_default_size(480,270)
 		self.set_resizable(false)
 		self.window_position=Gtk::WindowPosition::CENTER

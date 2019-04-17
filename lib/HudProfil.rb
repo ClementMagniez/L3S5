@@ -59,7 +59,6 @@ class HudProfil < Hud
 
 		self.attach(vBox, 0, 0, 1, 1)
 
-		ajoutFondEcran
 	end
 	
 private
@@ -102,7 +101,6 @@ private
 	end
 	
 	def initBoutonsChampScore
-<<<<<<< HEAD
 		@btnAventure = CustomButton.new("Aventure") do
 			@@joueur.mode = :aventure
 			refreshChampScore

@@ -6,3 +6,4 @@ require_relative 'Fenetre'
 require_relative 'CreateBDD'
 
 fen = Fenetre.new
+

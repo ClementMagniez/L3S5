@@ -40,7 +40,6 @@ class HudFinDeJeu < Hud
 
 		self.attach(vBox, 0, 0, 1, 1)
 
-		ajoutFondEcran
 
 		if finTuto
 			# On ne doit pas voir les scores à la fin du tuto

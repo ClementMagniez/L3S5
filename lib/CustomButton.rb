@@ -4,6 +4,7 @@ class CustomButton < Gtk::Button
 		super()
 #		self.set_relief(Gtk::ReliefStyle::NONE)
 		self.add(CustomLabel.new(str,couleur,size,weight))
+	#	self.set_name("button")
 
 		if block_given?
 			signal_connect("clicked") {

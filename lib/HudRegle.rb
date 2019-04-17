@@ -44,8 +44,6 @@ class HudRegle < Hud
 		vBox.add(@btnRetour)
 
 		self.attach(vBox, 0, 0, 1, 1)
-
-		ajoutFondEcran
 	end
 
 	def initBoutonRetour(listToDo)

@@ -80,7 +80,6 @@ class HudJeu < Hud
 
 		self.attach(vBox, 0, 0, 1, 1)
 
-		ajoutFondEcran
 
 
 # Disposition alternative où lblAide est dans la même vbox que gridJeu

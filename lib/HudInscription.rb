@@ -37,7 +37,6 @@ class HudInscription < Hud
 
 		self.attach(vBox, 0, 0, 1, 1)
 
-		ajoutFondEcran
 	end
 
 private
