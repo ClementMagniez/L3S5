@@ -85,18 +85,22 @@ private
 			if !File.exist?("../saves/"+@@name+".txt")
 				@lblErr.text = "Vous n'avez pas encore de sauvegarde d'enregistrée !"
 			else
-				File.open("../saves/"+@@name+".txt", 'r') do |f|
-					dataLoaded=Marshal.load(f)
-					grille=dataLoaded[0]
-					@@mode=dataLoaded[1]
-					@@difficulte=dataLoaded[2]
-					timer=dataLoaded[3]
-					case @@mode
-						when :rapide then lancementRapide(grille,timer)
-						when :tutoriel then lancementTutoriel(grille,timer)
-						when :aventure then lancementAventure(grille,timer)
-						when :exploration then lancementExplo(grille,timer)
+				begin
+					File.open("../saves/"+@@name+".txt", 'r') do |f|
+						dataLoaded=Marshal.load(f)
+						grille=dataLoaded[0]
+						@@mode=dataLoaded[1]
+						@@difficulte=dataLoaded[2]
+						timer=dataLoaded[3]
+						case @@mode
+							when :rapide then lancementRapide(grille,timer)
+							when :tutoriel then lancementTutoriel(grille,timer)
+							when :aventure then lancementAventure(grille,timer)
+							when :exploration then lancementExplo(grille,timer)
+						end
 					end
+				rescue
+					@lblErr.text="La sauvegarde est corrompue"
 				end
 			end
 		end
