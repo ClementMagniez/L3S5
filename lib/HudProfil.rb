@@ -12,7 +12,6 @@ class HudProfil < Hud
 
 		initBoutonRetourMenu
 		initBoutonSauvegarderLogin
-		initChampScore(true,["rapide",nil])
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
@@ -26,7 +25,13 @@ class HudProfil < Hud
 			hBox.add(CustomLabel.new("Nouveau mot de passe"))
 			hBox.add(@entMdp)
 		vBox.add(hBox)
-		vBox.add(@champScores)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.homogeneous = true
+			initBoutonsChampScore(vBox)
+			hBox.add(@btnAventure)
+			hBox.add(@btnExploration)
+			hBox.add(@btnChrono)
+		vBox.add(hBox)
 		vBox.add(@btnSauvegarde)
 		vBox.add(@btnRetour)
 		vBox.valign = Gtk::Align::CENTER
@@ -38,27 +43,23 @@ class HudProfil < Hud
 	end
 
 private
-	def initBoutonsChampScore
+	def initBoutonsChampScore(container)
 		@btnAventure = CustomButton.new("Aventure")
 		@btnAventure.signal_connect("clicked") {
-			# Recharge la liste avec les scores du mode éponyme
+			initChampScore(true,["aventure",nil])
+			container.add(@champScores)
 		}
 
 		@btnExploration = CustomButton.new("Exploration")
 		@btnExploration.signal_connect("clicked") {
-			# Recharge la liste avec les scores du mode éponyme
+			initChampScore(true,["explo",nil])
+			container.add(@champScores)
 		}
 
-		@btnChrono = CustomButton.new("Chrono")
+		@btnChrono = CustomButton.new("Contre-la-montre")
 		@btnChrono.signal_connect("clicked") {
-			# Recharge la liste avec les scores du mode éponyme
-		}
-
-		# À inclure dans la boucle de listeScores
-		@btnSuppScore = CustomButton.new("X")
-		@btnSuppScore.signal_connect("clicked") {
-			# @@joueur.supprimerScore()
-			# Recharge la liste avec les scores du mode éponyme
+			initChampScore(true,["rapide",nil])
+			container.add(@champScores)
 		}
 	end
 

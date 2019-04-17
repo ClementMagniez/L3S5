@@ -161,17 +161,12 @@ protected
 		@champScores = Gtk::ScrolledWindow.new
 		@champScores.set_min_content_height(100)
 		listeScores = @@joueur.rechercherScore(ecranProfil,infoGrille)
-
+		
 		if(ecranProfil) # S'il s'agit de HudProfil
 			if(listeScores != nil)
 				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				btnSupprScore = CustomButton.new("X")
 				listeScores.each do |score|
 					boxChamp.add(CustomLabel.new("#{score.montantScore} | #{score.dateObtention}"))
-					btnSupprScore.signal_connect("clicked") {
-						@@joueur.supprimerScore(score.id)
-					}
-					boxChamp.add(btnSupprScore)
 				end
 				@champScores.add(boxChamp)
 			else

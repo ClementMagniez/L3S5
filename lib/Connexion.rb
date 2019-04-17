@@ -128,4 +128,4 @@ class Connexion
 		Score.destroy(id: idScore)
 	end
 end
-puts Score.where(profil_id: 1)
+puts Score.where(modeJeu: "rapide", profil_id: 1)
