@@ -5,6 +5,7 @@ class HudPresentationTutoriel < Hud
 		@grille=grille
 
 		initBoutonRegle
+		initBoutonRetour
 		initBoutonContinuer
 		@btnRegle.set_text("Règles").set_color("black")
 
@@ -20,6 +21,11 @@ class HudPresentationTutoriel < Hud
 			hBox.homogeneous = true
 			hBox.add(@btnRegle)
 			hBox.add(@btnContinuer)
+				hbox2=Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+				hbox2.valign=Gtk::Align::CENTER
+				hbox2.halign=Gtk::Align::END
+				hbox2.add(@btnRetour)
+			hBox.add(hbox2)
 		vBox.add(hBox)
 
 		self.attach(vBox, 0, 0, 1, 1)
