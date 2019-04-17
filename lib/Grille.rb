@@ -50,12 +50,6 @@ class Grille
 		self.raz
 	end
 
-
-	# Renvoie la taille n de la matrice n*n composant la grille de jeu
-	def length
-		return @grille.length
-	end
-
 	# Annule le dernier coup de l'utilisateur sur la grille
 	# return la cellule où ce coup a été joué, ou nil s'il n'y en a pas
 	def cancel
@@ -108,6 +102,16 @@ class Grille
 
 	def [](val)
 		self.grille.fetch(val)
+	end
+
+	# Méthode each permettant de simplifier @grille.grille => @grille
+	def each(&block)
+    	self.grille.each(&block)
+	end
+
+	# Renvoie la taille n de la matrice n*n composant la grille de jeu
+	def length
+		self.grille.length
 	end
 
 	private
