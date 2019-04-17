@@ -6,6 +6,7 @@ class HudPresentationTutoriel < Hud
 
 		initBoutonRegle
 		initBoutonContinuer
+		@btnRegle.set_text("Règles").set_color("black")
 
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
@@ -33,9 +34,9 @@ private
 		end
 	end
 
-	def initBoutonRegle
-		@btnRegle = CustomButton.new("Règles") do
-			lancementHudRegle
-		end
-	end
+	# def initBoutonRegle
+	# 	@btnRegle = CustomButton.new("Règles") do
+	# 		lancementHudRegle
+	# 	end
+	# end
 end

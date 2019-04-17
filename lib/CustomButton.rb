@@ -15,7 +15,7 @@ class CustomButton < Gtk::Button
 	# Modifie la couleur du bouton
 	# - return self
 	def set_color(c)
-		label.set_color(c)
+		self.child.set_color(c)
 		self
 	end
 	alias :color= :set_color
