@@ -18,7 +18,8 @@ class HudJeu < Hud
 		@gridJeu.row_homogeneous = true
 		@gridJeu.column_homogeneous = true
 		@grille = grille
-		@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
+		@lblScore = CustomLabel.new
+		self.reloadScore
 		# Un indices de ligne ou colonne est mis en valeur,
 		# cet attribut référencie l'indice afin de ne plus mettre en valeur l'indice en question
 		@lblIndiceSubr = nil
@@ -508,7 +509,7 @@ class HudJeu < Hud
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
 		@grille.score.recupererTemps(self.timer)
-		scoreFinal = self.grille.score.calculerScoreFinal
+		scoreFinal = @grille.score.calculerScoreFinal
 		@@joueur.score = scoreFinal
 		self.lancementFinDeJeu
 	end

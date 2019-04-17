@@ -53,6 +53,7 @@ class Connexion
 		else 															#si le login est présent dans la base de données
 			@id = reqProfil.id
 			@login = login
+			@score = 0
 			return true
 		end
 	end
@@ -107,7 +108,8 @@ class Connexion
 			dateObtention: Time.now.to_s.split(" ").at(0).to_s,
 			profil_id: id
 		);
-		puts "Score enregistré dans la BDD !"
+		# puts "Score enregistré dans la BDD !"
+		return Score.last.id
 	end
 
 	##

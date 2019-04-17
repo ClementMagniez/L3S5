@@ -8,12 +8,11 @@ class HudFinDeJeu < Hud
 		finTuto = @@joueur.mode == :tutoriel
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
-		@@joueur.enregistrerScore	unless finTuto
-		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
-		# @@hudPrecedent.reset
 
-
-		initChampScore
+		unless finTuto
+			@id = @@joueur.enregistrerScore
+			initChampScore
+		end
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 		@champScores.set_min_content_height(200)
@@ -72,7 +71,7 @@ private
 		listeScores.each do |score|
 			lblScore = CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
 			# Le nouveau score du joueur est mis en évidence
-			lblScore.color = (score.montantScore == @@joueur.score && score.profil_id == @@joueur.id) ? "blue" : 'white'
+			lblScore.color = (score.id == @id) ? "blue" : 'white'
 			boxChamp.add(lblScore)
 		end
 		@champScores.add(boxChamp)
