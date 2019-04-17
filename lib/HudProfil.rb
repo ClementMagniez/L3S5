@@ -19,7 +19,7 @@ class HudProfil < Hud
 		@sortDown=true
 
 		initBoutonRetour
-		
+
 		initBoutonsChampScore
 		initChampScore
 #		initBoutonsTriScore
@@ -47,7 +47,7 @@ class HudProfil < Hud
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
-		
+
 
 			hBox.add(initBoutonTri("Score", :montantScore))
 			hBox.add(initBoutonTri("Date", :dateObtention))
@@ -61,29 +61,29 @@ class HudProfil < Hud
 
 		ajoutFondEcran
 	end
-	
+
 private
 
-	# Génère une Box contenant une liste des scores sous forme de CustomLabel, 
+	# Génère une Box contenant une liste des scores sous forme de CustomLabel,
 	# indiquant leur valeur et la date d'enregistrement
-	# ; la liste est triée selon _sortCriteria_ et ascendante/descendante selon 
+	# ; la liste est triée selon _sortCriteria_ et ascendante/descendante selon
 	# _sortDown_ avant d'être intégrée à @champScores.
 	# - sortCriteria : symbole d'une méthode de Score, typiquement :montantScore
 	# ou :dateObtention ; par défaut :montantScore
-	# - sortDown : booléen, true => afficher une liste décroissante, 
+	# - sortDown : booléen, true => afficher une liste décroissante,
 	# false => croissante ; par défaut true, affichant les derniers/meilleurs scores
 	# - return self
 	def refreshChampScore(sortCriteria=:montantScore, sortDown=true)
 		@champScores.remove(@champScores.child)		 if @champScores.child != nil
 		listeScores = @@joueur.rechercherScores(@@joueur.mode.to_s)
-	 
+
 		# trie la liste en ordre ascendant selon le critère donné
 		arr = listeScores.sort do |a, b|
 				a.send(sortCriteria) <=> b.send(sortCriteria)
 		end
 		# inverse si on la veut descendante
 		arr.reverse! if sortDown
-	 
+
 		unless listeScores.empty?
 			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			arr.each do |score|
@@ -100,9 +100,8 @@ private
 		@champScores.show_all
 		self
 	end
-	
+
 	def initBoutonsChampScore
-<<<<<<< HEAD
 		@btnAventure = CustomButton.new("Aventure") do
 			@@joueur.mode = :aventure
 			refreshChampScore
@@ -168,7 +167,7 @@ private
 		btnSauvegarde
 	end
 
-	# Initie @champScores et génère une liste des scores 
+	# Initie @champScores et génère une liste des scores
 	# - return self
 	def initChampScore
 		@champScores = Gtk::ScrolledWindow.new
@@ -190,7 +189,7 @@ private
 		btn.set_relief(Gtk::ReliefStyle::NONE)
 		btn
 	end
-	
-	
-	
+
+
+
 end
