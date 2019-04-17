@@ -186,6 +186,7 @@ class HudJeu < Hud
 			end
 		end
 		@grille.raz
+		@grille.score.reset
 		self.reloadScore
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer" : "Pause"

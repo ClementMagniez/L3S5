@@ -59,7 +59,6 @@ private
 	def initBoutonRecommencer
 		@btnRecommencer = CustomButton.new("Recommencer") {
 			# TODO : A faire dans HudJeu.reset
-			@@hudPrecedent.grille.score.reset
 			@@hudPrecedent.reloadScore
 			self.lancementHudPrecedent
 		}
