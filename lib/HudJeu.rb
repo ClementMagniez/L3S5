@@ -436,7 +436,7 @@ class HudJeu < Hud
 	# 	initialise son comportement
 	def initBoutonSauvegarde
 		@btnSauvegarde = CustomButton.new("Sauvegarder") do
-			File.open("../saves/"+@@name+".txt", "w+", 0644) do |f|
+			File.open("../saves/"+@@joueur.login+".txt", "w+", 0644) do |f|
 				f.write(Marshal.dump([@grille,@@mode,@@difficulte,@timer]))
 			end
 		end

@@ -8,7 +8,7 @@ require_relative "Profil.rb"
 class HudProfil < Hud
 	def initialize
 		super()
-		self.setTitre("#{@@name} - Profil")
+		self.setTitre("#{@@joueur.login} - Profil")
 		@lblErreur = CustomLabel.new
 		@lblErreur.color = 'red'
 		@entNom = Gtk::Entry.new
@@ -109,7 +109,7 @@ private
 				puts "Vous devez remplir au moins un champ !"
 				@lblErreur.text = "Vous devez remplir au moins un champ !"
 			else
-				user = Profil.find_by(pseudonyme: @@name)
+				user = Profil.find_by(pseudonyme: @@joueur.login)
 				unless strMdp.empty?
 					# Enregistrement du mot de passe crypté
 					user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)
@@ -123,10 +123,10 @@ private
 					else
 						user.pseudonyme = strNom
 						user.save
-						puts "renommage des fichiers"
-						File.rename("../config/#{@@name}.ini", "../config/#{strNom}.ini")
-						File.rename("../saves/#{@@name}.txt", "../saves/#{strNom}.txt")		if File.exist?("../saves/#{@@name}.txt")
-						@@name = strNom
+						File.rename("../config/#{@@joueur.login}.ini", "../config/#{strNom}.ini")
+						File.rename("../saves/#{@@joueur.login}.txt", "../saves/#{strNom}.txt")		if File.exist?("../saves/#{@@joueur.login}.txt")
+						@@joueur.login = strNom
+						self.setTitre("#{@@joueur.login} - Profil")
 					end
 				end
 				puts "Modifications enregistrées !"

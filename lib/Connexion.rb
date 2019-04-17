@@ -18,6 +18,7 @@ class Connexion
 	# 	@login contient le login de l'utilisateur connecté
 
 	attr_reader :id, :login
+	attr_writer :login
 
 	# Méthode permettant de modifier les informations liées à une session, lors de la
 	# connexion d'un nouvel utilisateur par exemple.
@@ -25,10 +26,10 @@ class Connexion
 	# Paramètres :
 	#	- unLogin : le login de l'utilisateur connecté
 	#def modifierSession(unID, unLogin)
-	def modifierSession(unID,unLogin)
-		@id = unID
-		@login = unLogin
-	end
+	# def modifierSession(unID,unLogin)
+	# 	@id = unID
+	# 	@login = unLogin
+	# end
 
 	# Méthode permettant à un utilisateur de tenter de se connecter.
 	#

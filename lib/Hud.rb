@@ -12,7 +12,7 @@ class Hud < Gtk::Grid
 	@@initblock = false
 	@@difficulte = nil
 	@@joueur = Connexion.new
-	@@name = ""
+	# @@name = ""
 	@@mode = nil
 	@@fenetre = nil
 	@@hudPrecedent = nil

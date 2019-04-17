@@ -99,13 +99,12 @@ private
 				# S'assure que le répertoire est sain
 				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
 				Dir.mkdir("../config")	unless Dir.exist?("../config")
-				@@name=strId
-				unless File.exist?("../config/#{@@name}.ini")
-					f=IniFile.new(filename:"../config/#{@@name}.ini", encoding: 'UTF-8')
+				unless File.exist?("../config/#{strId}.ini")
+					f=IniFile.new(filename:"../config/#{strId}.ini", encoding: 'UTF-8')
 					f['resolution']={'width' => 1280, 'height'=> 720}
 					f.write
 				end
-				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+				f=IniFile.load("../config/#{strId}.ini", encoding: 'UTF-8')
 				@@winX=f['resolution']['width']
 				@@winY=f['resolution']['height']
 				self.resizeWindow(@@winX, @@winY)
