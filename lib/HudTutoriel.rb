@@ -7,17 +7,11 @@ class HudTutoriel < HudJeu
 	def initialize(grille,timer=0)
 		super(grille,timer)
 		self.setTitre("Tutoriel")
-		@@difficulte="Facile"
+		@@joueur.difficulte="Facile"
 		@btnAide.sensitive = false
 		@btnPause.sensitive = false
 		@lblTimer.set_visible(false)
 		self.afficherAide
-	end
-
-	# Surcharge de la méthode jeuTermine de HudJeu
-	# pour que le menu de fin de jeu n'affiche pas certains éléments
-	def jeuTermine
-		self.lancementFinDeJeu(true)
 	end
 
 	def reset

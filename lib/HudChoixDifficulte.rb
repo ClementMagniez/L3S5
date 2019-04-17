@@ -16,12 +16,12 @@ class HudChoixDifficulte < Hud
 	#
 	# Paramètres :
 	# - window : la Fenetre de l'application
-	# - mode : un symbole ∈ { :rapide, :explo, :aventure } - détermine quel mode de jeu est lancé
+	# - mode : un symbole ∈ { :rapide, :exploration, :aventure } - détermine quel mode de jeu est lancé
 	def initialize(mode)
 		super()
 
  		self.setTitre("Choix de la difficulté - mode #{mode.to_s}")
- 		@@mode=mode
+ 		@@joueur.mode=mode
  		# Définit la fonction de lancement utilisée selon le symbole fourni
 		@mode="lancement"+mode.to_s.capitalize
 
@@ -64,17 +64,17 @@ private
 	def initBoutonsDifficulte
 		@btnFacile = CustomButton.new("Facile") do
 			# TODO à améliorer
-			@@difficulte = "Facile"
+			@@joueur.difficulte = "Facile"
 			self.send(@mode, Grille.new(TAILLE_FACILE))
 		end
 
 		@btnMoyen = CustomButton.new("Moyen") do
-			@@difficulte = "Moyen"
+			@@joueur.difficulte = "Moyen"
 			self.send(@mode, Grille.new(TAILLE_MOYEN))
 		end
 
 		@btnDifficile = CustomButton.new("Difficile") do
-			@@difficulte = "Difficile"
+			@@joueur.difficulte = "Difficile"
 			self.send(@mode, Grille.new(TAILLE_DIFFICILE))
 		end
 		self

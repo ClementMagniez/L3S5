@@ -64,7 +64,7 @@ class HudModeDeJeu < Hud
 	# Surcharge le setter du titre de la fentre afin qu'il affiche toujours le meme message
 	# 	- str Le parametre est rendu inutil
 	def setTitre(str=nil)
-		super("#{@@name} - Choix du mode de jeu")
+		super("#{@@joueur.login} - Choix du mode de jeu")
 	end
 
 private
@@ -82,17 +82,17 @@ private
 	# Return self
 	def initBoutonChargerSauvegarde
 		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde") do
-			if !File.exist?("../saves/"+@@name+".txt")
+			if !File.exist?("../saves/"+@@joueur.login+".txt")
 				@lblErr.text = "Vous n'avez pas encore de sauvegarde d'enregistrée !"
 			else
 				begin
-					File.open("../saves/"+@@name+".txt", 'r') do |f|
+					File.open("../saves/"+@@joueur.login+".txt", 'r') do |f|
 						dataLoaded=Marshal.load(f)
 						grille=dataLoaded[0]
-						@@mode=dataLoaded[1]
-						@@difficulte=dataLoaded[2]
+						@@joueur.mode=dataLoaded[1]
+						@@joueur.difficulte=dataLoaded[2]
 						timer=dataLoaded[3]
-						case @@mode
+						case @@joueur.mode
 							when :rapide then lancementRapide(grille,timer)
 							when :tutoriel then lancementTutoriel(grille,timer)
 							when :aventure then lancementAventure(grille,timer)

@@ -10,13 +10,9 @@ require_relative 'CustomEventBox'
 # de l'un à l'autre
 class Hud < Gtk::Grid
 	@@initblock = false
-	@@difficulte = nil
 	@@joueur = Connexion.new
-	@@name = ""
-	@@mode = nil
 	@@fenetre = nil
 	@@hudPrecedent = nil
-	@@scoreTotal = 0
 
 	def initialize
 		super()
@@ -64,14 +60,14 @@ protected
 	end
 
 	def lancementChoixDifficulte(mode)
-		@@mode = mode
+		@@joueur.mode = mode
 		@@fenetre.changerWidget(HudChoixDifficulte.new(mode))
 	end
 
 	# Lance le menu de fin de jeu
-	def lancementFinDeJeu(finTuto=false)
+	def lancementFinDeJeu()
 		@@hudPrecedent = self
-		@@fenetre.changerWidget(HudFinDeJeu.new(finTuto))
+		@@fenetre.changerWidget(HudFinDeJeu.new)
 	end
 
 	def lancementInscription

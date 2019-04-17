@@ -6,8 +6,8 @@ class HudOption < Hud
 
 	def initialize(traitement=nil)
 		super()
-		self.setTitre("#{@@name} - Options")
-		configFile=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+		self.setTitre("#{@@joueur.login} - Options")
+		configFile=IniFile.load("../config/#{@@joueur.login}.ini", encoding: 'UTF-8')
 
 
 		initBoutonRetour(traitement)
@@ -89,7 +89,7 @@ private
 	# et appliquant le changement à l'application active
 	def initBoutonSauvegarderResolution(configFile)
 		@btnSauvegardeResolution=CustomButton.new("Appliquer") do
-			configFile=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
+			configFile=IniFile.load("../config/#{@@joueur.login}.ini", encoding: 'UTF-8')
 			@@winX=@resolution.split('*')[0].to_i
 			@@winY=@resolution.split('*')[1].to_i
 			configFile['resolution']={'width' => @@winX,

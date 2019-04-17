@@ -8,14 +8,13 @@ require_relative "Profil.rb"
 class HudProfil < Hud
 	def initialize
 		super()
-		self.setTitre("#{@@name} - Profil")
+		self.setTitre("#{@@joueur.login} - Profil")
 		@lblErreur = CustomLabel.new
 		@lblErreur.color = 'red'
 		entNom = Gtk::Entry.new
 		entMdp = Gtk::Entry.new
 		entMdp.set_visibility(false)
-		@@mode = :aventure
-
+		@@joueur.mode = :aventure
 		@sortCriteria= :montantScore
 		@sortDown=true
 
@@ -76,7 +75,7 @@ private
 	# - return self
 	def refreshChampScore(sortCriteria=:montantScore, sortDown=true)
 		@champScores.remove(@champScores.child)		 if @champScores.child != nil
-		listeScores = @@joueur.rechercherScores(@@mode.to_s)
+		listeScores = @@joueur.rechercherScores(@@joueur.mode.to_s)
 	 
 		# trie la liste en ordre ascendant selon le critère donné
 		arr = listeScores.sort do |a, b|
@@ -103,18 +102,19 @@ private
 	end
 	
 	def initBoutonsChampScore
+<<<<<<< HEAD
 		@btnAventure = CustomButton.new("Aventure") do
-			@@mode = :aventure
+			@@joueur.mode = :aventure
 			refreshChampScore
 		end
 
 		@btnExploration = CustomButton.new("Exploration") do
-			@@mode = :explo
+			@@joueur.mode = :explo
 			refreshChampScore
 		end
 
 		@btnChrono = CustomButton.new("Contre-la-montre") do
-			@@mode = :rapide
+			@@joueur.mode = :rapide
 			refreshChampScore
 		end
 	end
@@ -141,7 +141,7 @@ private
 			elsif(strNom.empty? && strMdp.empty?)
 				@lblErreur.text = "Vous devez remplir au moins un champ !"
 			else
-				user = Profil.find_by(pseudonyme: @@name)
+				user = Profil.find_by(pseudonyme: @@joueur.login)
 				unless strMdp.empty?
 					# Enregistrement du mot de passe crypté
 					user.mdpEncrypted = strMdp.crypt(strMdp)
@@ -155,10 +155,10 @@ private
 					else
 						user.pseudonyme = strNom
 						user.save
-						puts "renommage des fichiers"
-						File.rename("../config/#{@@name}.ini", "../config/#{strNom}.ini")
-						File.rename("../saves/#{@@name}.txt", "../saves/#{strNom}.txt")		if File.exist?("../saves/#{@@name}.txt")
-						@@name = strNom
+						File.rename("../config/#{@@joueur.login}.ini", "../config/#{strNom}.ini")
+						File.rename("../saves/#{@@joueur.login}.txt", "../saves/#{strNom}.txt")		if File.exist?("../saves/#{@@joueur.login}.txt")
+						@@joueur.login = strNom
+						self.setTitre("#{@@joueur.login} - Profil")
 					end
 				end
 				@lblErreur.color = 'green'
