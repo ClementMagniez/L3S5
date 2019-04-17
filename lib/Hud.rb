@@ -53,7 +53,7 @@ protected
 	end
 
 
-	def lancementExplo(grille,timer=0)
+	def lancementExploration(grille,timer=0)
 		@@fenetre.changerWidget(HudExploration.new(grille,timer))
 	end
 
@@ -91,16 +91,6 @@ protected
 			@@fenetre.changerWidget(@@hudPrecedent)
 		end
 	end
-
-	# TODO inverser style et size pour respecter CustomLabel
-	# def creerBouton(label,couleur,style,size)
-	# 	bouton = Gtk::Button.new
-	# 	self.styleLabel(label,couleur,style,size,label.text)
-	# 	bouton.add(label)
-	# 	bouton.set_relief(Gtk::ReliefStyle::NONE)
-	# 	return bouton
-	# end
-
 
 	# Initialise le bouton des options :
 	# 	ajoute une variable d'instance @btnOptions ;

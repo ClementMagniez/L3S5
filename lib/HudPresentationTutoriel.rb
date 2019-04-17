@@ -1,6 +1,7 @@
 class HudPresentationTutoriel < Hud
 	def initialize (grille)
 		super()
+		@@mode = :tutoriel
 		@grille=grille
 
 		initBoutonRegle

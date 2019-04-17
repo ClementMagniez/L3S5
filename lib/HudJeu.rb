@@ -12,6 +12,7 @@ class HudJeu < Hud
 	# - grille : une Grille de jeu
 	def initialize(grille,timerStart=0)
 		super()
+		self.setTitre("Partie #{@@mode.to_s.capitalize}")
 		@aide = Aide.new(grille)
 		# Le label d'aide est placé dans une Gtk::Grid afin de pouvoir y attacher une image de fond
 		@gridJeu = Gtk::Grid.new
@@ -357,6 +358,8 @@ protected
 		super([:rescaleGrille,:pause])
 		@btnOptions.signal_connect("clicked") {
 			self.pause
+			self.setTitre("Partie #{@@mode.to_s.capitalize} - Options")
+			self.setTitre("#{@@mode.to_s.capitalize} - Options")		if @@mode == :tutoriel
 		}
 	end
 
@@ -385,6 +388,8 @@ protected
 		super([:pause])
 		@btnRegle.signal_connect("clicked") {
 			self.pause
+			self.setTitre("Partie #{@@mode.to_s.capitalize} - Règles")
+			self.setTitre("#{@@mode.to_s.capitalize} - Règles")		if @@mode == :tutoriel
 		}
 	end
 
@@ -439,8 +444,10 @@ protected
 		if @pause
 			self.startTimer
 			@btnPause.set_text("Pause")
+			self.setTitre("Partie #{@@mode.to_s.capitalize}")
 		else
 			@btnPause.set_text("Jouer")
+			self.setTitre("Partie #{@@mode.to_s.capitalize} - Pause")
 		end
 		@pause = !@pause
 		@gridJeu.sensitive = !@pause

@@ -3,7 +3,6 @@ class HudAventure < HudJeu
 
 	def initialize(grille,timer=0)
 		super(grille,timer)
-		self.setTitre("Aventure")
 		@@NbPartie += 1
 		@btnAide.destroy
 		self.initBoutonAide

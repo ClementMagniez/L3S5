@@ -86,10 +86,10 @@ private
 					@@difficulte=dataLoaded[2]
 					timer=dataLoaded[3]
 					case @@mode
-						when :explo then lancementExplo(grille,timer)
 						when :rapide then lancementRapide(grille,timer)
 						when :tutoriel then lancementTutoriel(grille,timer)
 						when :aventure then lancementAventure(grille,timer)
+						when :exploration then lancementExplo(grille,timer)
 					end
 				end
 			end
@@ -101,7 +101,7 @@ private
 	# Return self
 	def initBoutonExplo
 		@btnExplo = CustomButton.new("Mode Exploration") do
-			lancementChoixDifficulte(:explo)
+			lancementChoixDifficulte(:exploration)
 		end
 		self
 	end
