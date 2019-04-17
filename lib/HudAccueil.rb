@@ -82,19 +82,14 @@ private
 			strMdp = @entryMotDePasse.text
 			if strId != @entryIdentifiant.text
 				@lblErr.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
-				puts "Connexion : Caractère(s) non autorisé(s)"
 			elsif strId.length > 32
 				@lblErr.text = "Identifiant trop long (> 32) !"
-				puts "Connexion : L'identifiant trop long !"
 			elsif strId.empty?
 				@lblErr.text = "L'identifiant ne peut être vide !"
-				puts "Connexion : L'identifiant ne peut être vide !"
 			elsif strMdp.empty?
 				@lblErr.text = "Le mot de passe ne peut être vide !"
-				puts "Connexion : Le mot de passe ne peut être vide !"
 			elsif(@@joueur.seConnecter(strId, strMdp) == false)
 				@lblErr.text = "Echec : connexion impossible !"
-				puts "Connexion : connexion impossible !"
 			else
 				# S'assure que le répertoire est sain
 				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
