@@ -11,7 +11,7 @@ class HudJeu < Hud
 	# - grille : une Grille de jeu
 	def initialize(grille,timerStart=0)
 		super()
-		self.setTitre("Partie #{@@mode.to_s.capitalize}")
+		self.setTitre("Partie #{@@joueur.mode.to_s.capitalize}")
 		@aide = Aide.new(grille)
 		# Le label d'aide est placé dans une Gtk::Grid afin de pouvoir y attacher une image de fond
 		@gridJeu = Gtk::Grid.new
@@ -368,8 +368,8 @@ class HudJeu < Hud
 		super([:rescaleGrille,:pause])
 		@btnOptions.signal_connect("clicked") {
 			self.pause
-			self.setTitre("Partie #{@@mode.to_s.capitalize} - Options")
-			self.setTitre("#{@@mode.to_s.capitalize} - Options")		if @@mode == :tutoriel
+			self.setTitre("Partie #{@@joueur.mode.to_s.capitalize} - Options")
+			self.setTitre("#{@@joueur.mode.to_s.capitalize} - Options")		if @@joueur.mode == :tutoriel
 		}
 	end
 
@@ -399,8 +399,8 @@ class HudJeu < Hud
 		super([:pause])
 		@btnRegle.signal_connect("clicked") {
 			self.pause
-			self.setTitre("Partie #{@@mode.to_s.capitalize} - Règles")
-			self.setTitre("#{@@mode.to_s.capitalize} - Règles")		if @@mode == :tutoriel
+			self.setTitre("Partie #{@@joueur.mode.to_s.capitalize} - Règles")
+			self.setTitre("#{@@joueur.mode.to_s.capitalize} - Règles")		if @@joueur.mode == :tutoriel
 		}
 	end
 
@@ -437,7 +437,7 @@ class HudJeu < Hud
 	def initBoutonSauvegarde
 		@btnSauvegarde = CustomButton.new("Sauvegarder") do
 			File.open("../saves/"+@@joueur.login+".txt", "w+", 0644) do |f|
-				f.write(Marshal.dump([@grille,@@mode,@@joueur.difficulte,@timer]))
+				f.write(Marshal.dump([@grille,@@joueur.mode,@@joueur.difficulte,@timer]))
 			end
 		end
 	end
@@ -462,10 +462,10 @@ class HudJeu < Hud
 		if @pause
 			self.startTimer
 			@btnPause.set_text("Pause")
-			self.setTitre("Partie #{@@mode.to_s.capitalize}")
+			self.setTitre("Partie #{@@joueur.mode.to_s.capitalize}")
 		else
 			@btnPause.set_text("Jouer")
-			self.setTitre("Partie #{@@mode.to_s.capitalize} - Pause")
+			self.setTitre("Partie #{@@joueur.mode.to_s.capitalize} - Pause")
 		end
 		@pause = !@pause
 		@gridJeu.sensitive = !@pause
@@ -509,7 +509,7 @@ class HudJeu < Hud
 	def jeuTermine
 		@grille.score.recupererTemps(self.timer)
 		scoreFinal = self.grille.score.calculerScoreFinal
-		@@scoreTotal = (@@mode == :aventure) ? @@scoreTotal + scoreFinal : scoreFinal
+		@@joueur.score = scoreFinal
 		self.lancementFinDeJeu
 	end
 

@@ -10,13 +10,10 @@ require_relative 'CustomEventBox'
 # de l'un à l'autre
 class Hud < Gtk::Grid
 	@@initblock = false
-	# @@difficulte = nil
 	@@joueur = Connexion.new
-	# @@name = ""
-	@@mode = nil
 	@@fenetre = nil
 	@@hudPrecedent = nil
-	@@scoreTotal = 0
+	# @@scoreTotal = 0
 
 	def initialize
 		super()
@@ -64,7 +61,7 @@ protected
 	end
 
 	def lancementChoixDifficulte(mode)
-		@@mode = mode
+		@@joueur.mode = mode
 		@@fenetre.changerWidget(HudChoixDifficulte.new(mode))
 	end
 

@@ -14,7 +14,7 @@ class HudProfil < Hud
 		@entNom = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
 		@entMdp.set_visibility(false)
-		@@mode = :aventure
+		@@joueur.mode = :aventure
 
 		initBoutonRetour
 		initBoutonSauvegarderLogin
@@ -53,7 +53,7 @@ class HudProfil < Hud
 
 	def refreshChampScore
 		@champScores.remove(@champScores.child)		if @champScores.child != nil
-		listeScores = @@joueur.rechercherScores(@@mode.to_s)
+		listeScores = @@joueur.rechercherScores(@@joueur.mode.to_s)
 		unless listeScores.empty?
 			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			listeScores.each do |score|
@@ -70,19 +70,19 @@ private
 	def initBoutonsChampScore
 		@btnAventure = CustomButton.new("Aventure")
 		@btnAventure.signal_connect("clicked") do
-			@@mode = :aventure
+			@@joueur.mode = :aventure
 			self.refreshChampScore
 		end
 
 		@btnExploration = CustomButton.new("Exploration")
 		@btnExploration.signal_connect("clicked") do
-			@@mode = :explo
+			@@joueur.mode = :exploration
 			self.refreshChampScore
 		end
 
 		@btnChrono = CustomButton.new("Contre-la-montre")
 		@btnChrono.signal_connect("clicked") do
-			@@mode = :rapide
+			@@joueur.mode = :rapide
 			self.refreshChampScore
 		end
 	end

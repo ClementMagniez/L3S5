@@ -89,10 +89,10 @@ private
 					File.open("../saves/"+@@joueur.login+".txt", 'r') do |f|
 						dataLoaded=Marshal.load(f)
 						grille=dataLoaded[0]
-						@@mode=dataLoaded[1]
+						@@joueur.mode=dataLoaded[1]
 						@@joueur.difficulte=dataLoaded[2]
 						timer=dataLoaded[3]
-						case @@mode
+						case @@joueur.mode
 							when :rapide then lancementRapide(grille,timer)
 							when :tutoriel then lancementTutoriel(grille,timer)
 							when :aventure then lancementAventure(grille,timer)

@@ -5,11 +5,10 @@ class HudFinDeJeu < Hud
 	# 	fenetrePrecedente : Le HudJeu qui appel ce constructeur, permet de recommencer une meme partie
 	def initialize()
 		super()
-		finTuto = @@mode == :tutoriel
+		finTuto = @@joueur.mode == :tutoriel
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
-		lblScore = CustomLabel.new("Votre score : #{@@scoreTotal.to_i.to_s}")
-		# @@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])	unless finTuto
-		@@joueur.enregistrerScore(@@joueur.id,[@@mode,nil,@@scoreTotal])	unless finTuto
+		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
+		@@joueur.enregistrerScore	unless finTuto
 		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
 		# @@hudPrecedent.reset
 
@@ -68,11 +67,12 @@ private
 
 	def initChampScore
 		@champScores = Gtk::ScrolledWindow.new
-		listeScores = @@joueur.rechercherScores(@@mode.to_s,@@joueur.difficulte)
+		listeScores = @@joueur.rechercherScores(@@joueur.mode.to_s,@@joueur.difficulte)
 		boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		listeScores.each do |score|
 			lblScore = CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
-			lblScore.color = (score.montantScore == @@scoreTotal && score.profil_id == @@joueur.id) ? "blue" : 'white'
+			# Le nouveau score du joueur est mis en évidence
+			lblScore.color = (score.montantScore == @@joueur.score && score.profil_id == @@joueur.id) ? "blue" : 'white'
 			boxChamp.add(lblScore)
 		end
 		@champScores.add(boxChamp)
