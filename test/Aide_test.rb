@@ -105,7 +105,6 @@ class TestAide < Test::Unit::TestCase
 		# Dans cette grille, il n'y a qu'une seule ligne qui est à 0 tente
 		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(:VIDE)
 
 	    assert(aide.resteQueGazonLigne != @@sansSucces, "Il n'y a plus de ligne ou il ne reste que du gazon a placer")
 

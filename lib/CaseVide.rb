@@ -46,8 +46,6 @@ class CaseVide < Case
 	# vient après :TENTE dans le cycle ; permet de différencier cancel et cycle
 	# - return true si la grille est complète, false sinon
 	def updateNbTents(grille, afterTent)
-		i=
-		j=
 
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[self.x]-=1

@@ -154,7 +154,7 @@ class HudJeu < Hud
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
 		return 'large' if @@winY>700
-		return @grille.length < 9 ? "large" : (@grille.length < 12 ?  "medium" : "x-small")
+		return @grille.length < 9 ? "large" : (@grille.length < 12 ?	"medium" : "x-small")
 		# return @grille.length>=12 || @@winY<700 ? "small" : "x-large"
 	end
 
@@ -219,13 +219,13 @@ protected
 		#Affiche le message d'aide
 		 @lblAide.set_text(tableau.at(MESSAGE))
 
-	 	 if @@winY>800
-		 	 @lblAide.set_size('xx-large')
-	 	 elsif @@winY>600
-		 	 @lblAide.set_size('large')
-	 	 elsif @@winY>400
-		 	 @lblAide.set_size('medium')
-		end
+	 		if @@winY>800
+		 		@lblAide.set_size('xx-large')
+			elsif @@winY>600
+				@lblAide.set_size('large')
+			elsif @@winY>400
+				@lblAide.set_size('medium')
+			end
 
 		#Met un indice de colonne ou ligne en surbrillance
 		indice = tableau.at(INDICE_LIG_COL)
@@ -292,7 +292,7 @@ protected
 		#Quand on clique dessus, met toutes les cases vides à gazon
 		btnIndice = CustomButton.new do
 			(@grille.length).times do |k|
-				isRow ?  self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
+				isRow ?	self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
 			end
 			self.desurbrillanceIndice
 			yield	if block_given?

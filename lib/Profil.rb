@@ -8,7 +8,6 @@
 #
 require "active_record"
 require_relative "connectSqlite3.rb"
-require_relative "Connexion.rb"
 
 ##
 # = Classe *Profil*

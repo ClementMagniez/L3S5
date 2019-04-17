@@ -74,8 +74,9 @@ class Grille
 		self.estValide=res
 	end
 
+	# Méthode de convénience simplifiant le parcours de la matrice @grille
 	def each
-		self.grille.each {|y| yield y}
+		self.grille.each
 	end
 
 	# Fonction de (ré)initialisation : déclare @varTentesCol, @varTentesLigne,
@@ -102,11 +103,6 @@ class Grille
 
 	def [](val)
 		self.grille.fetch(val)
-	end
-
-	# Méthode each permettant de simplifier @grille.grille => @grille
-	def each(&block)
-    	self.grille.each(&block)
 	end
 
 	# Renvoie la taille n de la matrice n*n composant la grille de jeu

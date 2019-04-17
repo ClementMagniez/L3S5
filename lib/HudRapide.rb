@@ -28,7 +28,7 @@ class HudRapide < HudJeu
 			@timer -= @@malus
 			@@malus *= 1.2
 		end
-end
+	end
 
 	# Redéfinit l'accesseur HudJeu#timer pour afficher le temps restant et non
 	# le temps écoulé

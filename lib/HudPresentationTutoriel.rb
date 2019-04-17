@@ -1,5 +1,5 @@
 class HudPresentationTutoriel < Hud
-	def initialize (grille)
+	def initialize(grille)
 		super()
 		@@mode = :tutoriel
 		@grille=grille
