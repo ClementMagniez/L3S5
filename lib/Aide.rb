@@ -19,7 +19,7 @@ class Aide
   #   @newStatutTente permet de comparer une case avec un statut tente
   #   @newStatutGazon permet de comparer une case avec un statut gazon
   #   @sansSucces ce que l'on renvoie si l'on ne rencontre aucune possibilité d'aide
-  
+
   ##
   # Méthode d'initialisation de la classe Aide
   #
@@ -117,7 +117,7 @@ class Aide
   end
 
   ##
-  # Méthode permettant d'obtenir la premiere case vide adjacente à une tente, 
+  # Méthode permettant d'obtenir la premiere case vide adjacente à une tente,
   # il s'agit donc de gazon
   def impossibleTenteAdjacente
     @grille.each_with_index do | ligne, i |
@@ -218,13 +218,13 @@ class Aide
   end
 
   ##
-  # Méthode qui renvoie la premiere case qui n'est pas a cote d'un arbre, 
+  # Méthode qui renvoie la premiere case qui n'est pas a cote d'un arbre,
   # il s'agit donc de gazon
   def casePasACoteArbre
     puts "J'essaye mais je passe pas ..."
     @grille.each_with_index do | ligne, i |
       ligne.each_with_index do | cases, j |
-        puts "valeur de i " + i.to_s + " valeur de j " + j.to_s 
+        puts "valeur de i " + i.to_s + " valeur de j " + j.to_s
         ok = true
         # Si la case est une caseVide
         if (cases.statutVisible == @newStatutVide)
@@ -260,7 +260,7 @@ class Aide
   end
 
   ##
-  # Méthode qui renvoie la premiere case où il n'existe qu'une seule 
+  # Méthode qui renvoie la premiere case où il n'existe qu'une seule
   # possibilité pour un arbre d'avoir une tente
   def uniquePossibiliteArbre
     @grille.each_with_index do | ligne, i |
@@ -283,7 +283,7 @@ class Aide
   end
 
   ##
-  # Méthode qui renvoie la premiere case où tous les arbres autour de 
+  # Méthode qui renvoie la premiere case où tous les arbres autour de
   # la case possèdent leur tente, donc la case contient du gazon
   def arbreAutourCasePossedeTente
     arbreAssocieTente(:VIDE)

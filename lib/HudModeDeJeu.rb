@@ -77,7 +77,7 @@ private
 	def initBoutonChargerSauvegarde
 		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde") do
 			if !File.exist?("../saves/"+@@name+".txt")
-				@lblErr.text = "Le fichier de sauvegarde \"" + @@name + "\" n'existe pas !"
+				@lblErr.text = "Vous n'avez pas encore de sauvegarde d'enregistrée !"
 			else
 				File.open("../saves/"+@@name+".txt", 'r') do |f|
 					dataLoaded=Marshal.load(f)

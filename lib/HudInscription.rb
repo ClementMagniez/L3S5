@@ -1,6 +1,4 @@
 require "rubygems"
-#require_relative "connectSqlite3.rb"
-#require_relative "Profil.rb"
 require_relative "Connexion.rb"
 
 class HudInscription < Hud
@@ -48,7 +46,6 @@ private
 	def initBoutonEnregistrement
 		#Bouton : Enregistrer
 		@btnEnr = CustomButton.new("S'enregistrer") do
-			session = Connexion.new
 			id = @entId.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			mdp = @entMdp.text
 			if id != @entId.text
@@ -64,9 +61,10 @@ private
 				@lblErreur.text = "Le mot de passe ne peut être vide !"
 				puts "Insription : Le mot de passe ne peut être vide !"
 			else
+				session = Connexion.new
 				mdp = session.crypterMdp(mdp)
 				if Profil.find_by(pseudonyme: id) != nil
-					@lblErreur.set_text("Cet identifiant existe déjà.")
+					@lblErreur.text = "Cet identifiant existe déjà !"
 				else
 					user = Profil.new(
 						pseudonyme: id,
@@ -79,8 +77,7 @@ private
 
 					# Résolution par défaut - option paresseuse, pourrait dépendre
 					# de la taille de la fenêtre
-					f['resolution']={'width' => 1280,
-													 'height'=> 720}
+					f['resolution']={'width' => 1280, 'height'=> 720}
 					f.write
 
 					self.lancementAccueil
