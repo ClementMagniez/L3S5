@@ -8,7 +8,7 @@ class CaseGazon < CaseVide
 	def initialize(i,j)
 		super(:GAZON,i,j)
 	end
-	
+
 	# Return false si le statut visible de self est :TENTE, true sinon
 	def estValide?
 		!self.statutVisible.isTente?

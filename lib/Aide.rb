@@ -15,6 +15,7 @@ class Aide
     @newStatutTente = StatutVide.new(:TENTE)
     @newStatutGazon = StatutVide.new(:GAZON)
     @sansSucces = [nil, nil, nil, nil, false, nil]
+
   end
 
   # permet d'avoir la liste des 4 cases adjacentes à la case passé en argument (dessus, dessous, à gauche et à droite)
@@ -48,6 +49,7 @@ class Aide
     end
     return listeCases
   end
+
 
   # renvoie le nombre d'erreur qu'il y a dans la grille (lorsque la case est VIDE, ce n'est pas une erreur)
   def nbCasesIncorrect
@@ -86,7 +88,7 @@ class Aide
         if cases.statutVisible == @newStatutVide
           # On prend connaissance pour les 8 cases adjacentes
           self.liste8Cases(cases).each do |uneCase|
-            return [cases, "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon", nil, nil, true, nil] if uneCase.statutVisible == @newStatutTente
+            return [cases, "Les tentes ne peuvent pas se toucher,\n donc la case en surbrillance est du gazon", nil, nil, true, nil] if uneCase.statutVisible == @newStatutTente
           end
         end # Fin if
       end
@@ -142,15 +144,15 @@ class Aide
 
       if col
         if gazonOuTente==:GAZON
-          return [nil, "Il ne reste que du gazon à placer sur la colonne en surbrillance", true, i+1, true, nil] if nbCasesTente == @grille.tentesCol[i] && nbCasesVide != 0
+          return [nil, "Il ne reste que du gazon à placer\n sur la colonne en surbrillance", true, i+1, true, nil] if nbCasesTente == @grille.tentesCol[i] && nbCasesVide != 0
         elsif gazonOuTente==:TENTE
-          return [nil, "Il ne reste que des tentes à placer sur la colonne en surbrillance", true, i+1, true, nil] if nbCasesVide == @grille.tentesCol[i]-nbCasesTente && nbCasesVide != 0
+          return [nil, "Il ne reste que des tentes à placer\n sur la colonne en surbrillance", true, i+1, true, nil] if nbCasesVide == @grille.tentesCol[i]-nbCasesTente && nbCasesVide != 0
         end
       else
         if gazonOuTente==:GAZON
-          return [nil, "Il ne reste que du gazon à placer sur la ligne en surbrillance", false, i+1, true, nil] if nbCasesTente == @grille.tentesLigne[i] && nbCasesVide != 0
+          return [nil, "Il ne reste que du gazon à placer\n sur la ligne en surbrillance", false, i+1, true, nil] if nbCasesTente == @grille.tentesLigne[i] && nbCasesVide != 0
         elsif gazonOuTente==:TENTE
-          return [nil, "Il ne reste que des tentes à placer sur la ligne en surbrillance", false, i+1, true, nil] if nbCasesVide == @grille.tentesLigne[i]-nbCasesTente && nbCasesVide != 0
+          return [nil, "Il ne reste que des tentes à placer\n sur la ligne en surbrillance", false, i+1, true, nil] if nbCasesVide == @grille.tentesLigne[i]-nbCasesTente && nbCasesVide != 0
         end
       end
 
@@ -215,7 +217,7 @@ class Aide
             nbCasesVide += 1 if uneCase.statutVisible == @newStatutVide
             nbCasesTente += 1 if uneCase.statutVisible == @newStatutTente
           end
-          return [cases, "Il n'y a qu'une seule possibilité de placer une tente pour l'arbre en surbrillance", nil, nil, true, nil] if nbCasesVide == 1 && nbCasesTente == 0
+          return [cases, "Il n'y a qu'une seule possibilité de placer\n une tente pour l'arbre en surbrillance", nil, nil, true, nil] if nbCasesVide == 1 && nbCasesTente == 0
         end
       end
     end
@@ -238,7 +240,6 @@ class Aide
   # * 'arbre' - cf. caseArbreAssocieTente
   # * 'vide' - cf. arbreAutourCasePossedeTente
   def arbreAssocieTente(arbreOuVide)
-
 
     grille=@grille.grille
     hashArbreTente = Hash.new
@@ -353,7 +354,7 @@ class Aide
               end
               isOk = 0 if nbCasesVide != 0
             end # Fin while
-            return [cases, "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes", nil, nil, true, nil] if isOk == 1
+            return [cases, "La case en surbrillance est forcement du gazon\n puisque tous les arbres autours ont leurs tentes", nil, nil, true, nil] if isOk == 1
           end
         end
       end # Fin each
@@ -396,11 +397,6 @@ class Aide
           nbCaseVideSucc = 0
         end
       end # Fin each j
-      if nbCaseVideSucc != 0
-        for k in 1..nbCaseVideSucc
-          hashGroupeCase[listeCase.shift] = nbCaseVideSucc
-        end
-      end
       if nbCaseVideSucc != 0
         for k in 1..nbCaseVideSucc
           hashGroupeCase[listeCase.shift] = nbCaseVideSucc
@@ -459,13 +455,13 @@ class Aide
 
       if nbTentePoss == nombreTentes-nbCasesTente
         if ! tabCaseEnTente.empty?
-          return [tabCaseEnTente.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est une tente", false, i+1, true, nil]
+          return [tabCaseEnTente.shift, "D'après les dispositions de la ligne en surbrillance,\n la case en surbrillance est une tente", false, i+1, true, nil]
         elsif ! tabCaseEnGazon1.empty?
-          return [tabCaseEnGazon1.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est du gazon", false, i+1, true, nil]
+          return [tabCaseEnGazon1.shift, "D'après les dispositions de la ligne en surbrillance,\n la case en surbrillance est du gazon", false, i+1, true, nil]
         end
       elsif nbTentePoss == nombreTentes-nbCasesTente+1
         if ! tabCaseEnGazon2.empty?
-          return [tabCaseEnGazon2.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est du gazon", false, i+1, true, nil]
+          return [tabCaseEnGazon2.shift, "D'après les dispositions de la ligne en surbrillance,\n la case en surbrillance est du gazon", false, i+1, true, nil]
         end
       end
     end # Fin each i
@@ -476,15 +472,11 @@ class Aide
   # intervient seulement si aucune aide précédente n'a eu de succès
   def aucuneAide
     return [nil, "Aucune aide disponible. Il faut jouer au hasard (demander à Jacoboni).", nil, nil, true, nil]
-  end
 
-  def aucuneAide
-    return @foncReturn.replace([1, 0])
   end
 
   # permet de faire le cycle des aides (ne pas modifier l'ordre sous peine d'être maudit par l'auteur de ce document)
   def cycle(tutoOuRapide)
-
     # liste des aides (l'ordre est important, première -> ... -> dernière)
     listeDesAides = [:impossibleTenteAdjacente, :resteQueTentesLigne, :resteQueTentesColonne, :resteQueGazonLigne, :resteQueGazonColonne, :casePasACoteArbre, :uniquePossibiliteArbre, :dispositionPossibleLigne, :dispositionPossibleColonne, :caseArbreAssocieTente, :arbreAutourCasePossedeTente, :aucuneAide]
 

@@ -1,115 +1,90 @@
-# Cette classe fait a peu pres les memes choses que HudInscription
+# Cette classe fait à peu près les mêmes choses que HudInscription
 require 'inifile'
-require "rubygems"
-require "digest/sha1"
-require_relative "connectSqlite3.rb"
-require_relative "Profil.rb"
 
 class HudProfil < Hud
-
 	def initialize(window)
 		super(window)
 		self.setTitre("Profil")
+		@lblErreur = CustomLabel.new
 		@entNom = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
-
-		initChampScore
-		initBoutonSauvegarderLogin
-		initBoutonRetourMenu
-
-		# Rend le mot de passe entré invisible
 		@entMdp.set_visibility(false)
 
-		# Affichage de l'identifiant de l'utilisateur connecté
-		#@lblLogin = Gtk::Label.new($login)
+		initBoutonRetourMenu
+		initBoutonSauvegarderLogin
 
-		#self.attach(@lblLogin, 0, -1, 2, 1)
-		self.attach(Gtk::Label.new("Compte"), 4, 0, 2, 1)
-		self.attach(@lblDescription, 4, 1, 2, 1)
-		self.attach(Gtk::Label.new("Nouveau nom"), 4, 2, 1, 1)
-		self.attach(@entNom, 5, 2, 1, 1)
-		self.attach(Gtk::Label.new("Nouveau mot de passe"), 4, 3, 1, 1)
-		self.attach(@entMdp, 5, 3, 1, 1)
-		self.attach(@btnSauvegardeeLogin, 4, 4, 2, 1)
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+		vBox.add(@lblErreur)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.homogeneous = true
+			hBox.add(CustomLabel.new("Nouveau nom"))
+			hBox.add(@entNom)
+		vBox.add(hBox)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.homogeneous = true
+			hBox.add(CustomLabel.new("Nouveau mot de passe"))
+			hBox.add(@entMdp)
+		vBox.add(hBox)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.homogeneous = true
+			initBoutonsChampScore(vBox)
+			hBox.add(@btnAventure)
+			hBox.add(@btnExploration)
+			hBox.add(@btnChrono)
+		vBox.add(hBox)
+		vBox.add(@btnSauvegarde)
+		vBox.add(@btnRetour)
+		vBox.valign = Gtk::Align::CENTER
+		vBox.halign = Gtk::Align::CENTER
 
-#		self.attach(@champScores, 0, 4, 2, 4)
-
-		self.attach(@btnRetour, 1, 11, 1, 1)
+		self.attach(vBox, 0, 0, 1, 1)
 
 		ajoutFondEcran
 	end
 
-	def initChampScore
-		@champScores = Gtk::ScrolledWindow.new
-		@champScores.set_min_content_height(100)
-			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				0.upto(10) do |i|
-					boxChamp.add(Gtk::Label.new("choix " + i.to_s))
-				end
-			@champScores.add(boxChamp)
-		@champScores.set_visible(true)
-	end
+private
+	def initBoutonsChampScore(container)
+		@btnAventure = CustomButton.new("Aventure")
+		@btnAventure.signal_connect("clicked") {
+			initChampScore(true,["aventure",nil])
+			container.add(@champScores)
+		}
 
-	def initBoutonSauvegarderLogin
-		@btnSauvegardeeLogin = Gtk::Button.new label: "Sauvegarder les modifications"
-		@btnSauvegardeeLogin.signal_connect("clicked") {
-			strNom = @entNom.text
-			strMdp = @entMdp.text
+		@btnExploration = CustomButton.new("Exploration")
+		@btnExploration.signal_connect("clicked") {
+			initChampScore(true,["explo",nil])
+			container.add(@champScores)
+		}
 
-			user = Profil.find_by(pseudonyme: $login)
-
-			# Si aucun des champs n'est renseigné
-			if strNom.empty? && strMdp.empty?
-				self.setDesc("Vous devez remplir au moins un champ")
-			# Si seul le champ "mot de passe" est renseigné
-			elsif(strNom.empty?)
-				# Enregistrement du mot de passe crypté
-				user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)
-				user.save
-				self.setDesc("Modifications enregistrées !")
-			# Si seul le champ "identifiant" est renseigné
-			elsif(strMdp.empty?)
-				# Si l'identifiant est déjà présent dans la base de données
-				if Profil.find_by(pseudonyme: strNom) != nil
-					self.setDesc("Cet identifiant existe déjà.")
-				else
-					user.pseudonyme = @entNom.text
-					user.save
-
-					# Modification de l'affichage de l'identifiant de l'utilisateur connecté
-					#$login = strNom
-					#@lblLogin.set_label($login)
-
-					self.setDesc("Modifications enregistrées !")
-				end
-			# Si les deux champs sont renseignés
-			else
-				# Si l'identifiant est déjà présent dans la base de données
-				if Profil.find_by(pseudonyme: strNom) != nil
-					self.setDesc("Cet identifiant existe déjà.")
-				else
-					# Modification des informations concernant l'utilisateur dans la base de données
-					user.pseudonyme = strNom
-					user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)
-					user.save
-
-					# Modification de l'affichage de l'identifiant de l'utilisateur connecté
-					#$login = strNom
-					#@lblLogin.set_label($login)
-
-					self.setDesc("Modifications enregistrées !")
-				end
-			end
+		@btnChrono = CustomButton.new("Contre-la-montre")
+		@btnChrono.signal_connect("clicked") {
+			initChampScore(true,["rapide",nil])
+			container.add(@champScores)
 		}
 	end
 
 	def initBoutonRetourMenu
-		@btnRetour = Gtk::Button.new label: "Retour"
-		@btnRetour.signal_connect("clicked") {
+		@btnRetour = CustomButton.new("Retour")
+		@btnRetour.signal_connect("clicked") do
 			lancementModeJeu
-		}
+		end
 	end
 
-	#				width=@menuResolution.split(*)[0].to_i
-	#			height=@menuResolution.split(*)[1].to_i
+	def initBoutonSauvegarderLogin
+		@btnSauvegarde = CustomButton.new("Sauvegarder les modifications")
+		@btnSauvegarde.signal_connect("clicked") do
+			strNom = @entNom.text
+			strMdp = @entMdp.text
+			if(strNom.empty?)
+				puts "Le nom ne peut etre vide !"
+				@lblErreur.text = "Le nom ne peut etre vide !"
+			elsif(strMdp.empty?)
+				puts "Le mot de passe ne peut etre vide !"
+				@lblErreur.text = "Le mot de passe ne peut etre vide !"
+			else
+				puts "Sauvegarde dans la base !"
+				@lblErreur.text = "Sauvegarde dans la base !"
+			end
+		end
+	end
 end

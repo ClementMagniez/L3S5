@@ -1,4 +1,3 @@
-
 require_relative 'Case'
 require_relative 'StatutArbre'
 

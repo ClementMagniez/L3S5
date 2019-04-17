@@ -1,6 +1,4 @@
 class HudFinDeJeu < Hud
-	#@btnRecommencer
-	#@btnModeDeJeu
 
 	# Nouvelle instance de fin de jeu
 	# 	window : La Fenetre contenant le HudFinDeJeu
@@ -9,43 +7,59 @@ class HudFinDeJeu < Hud
 		super(window)
 		varX, varY = 2, 2
 		@fenetrePrecedente = fenetrePrecedente
-		@lblAide = Gtk::Label.new
-		@lblAide.use_markup = true
-		@lblAide.set_markup ("<span foreground='black' weight='ultrabold' size='x-large' > Bravo vous avez fini ! !</span>");
-		# lblScore = Gtk::Label.new("Score = 0")
-		fenetrePrecedente.grille.score.recupererTemps(fenetrePrecedente.getTime)
-		lblScore = Gtk::Label.new("Score = " + fenetrePrecedente.grille.score.calculerScoreFinal.to_s)
+		tpsMin = fenetrePrecedente.timer / 60
+		tpsSec = fenetrePrecedente.timer % 60
+		lblTemps = CustomLabel.new("Votre temps : " + tpsMin.to_i.to_s + ":" + (tpsSec > 10 ? "" : "0") + tpsSec.to_i.to_s)
+		lblScore = CustomLabel.new("Score final = " + @@scoreTotal.to_s)
+		lblTableauScores = CustomLabel.new("Tableau à afficher")
+		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])
 
+		initChampScore(false,[@@mode,@@difficulte])
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 
-		self.attach(@lblAide,0,0,1,1)
-		self.attach(lblScore, varX, varY, 1, 1)
-		self.attach(@btnRecommencer,varX+1, varY+1, 1, 1)
-		self.attach(@btnModeDeJeu, varX+1, varY+2, 1, 1)
+		@@scoreTotal = 0 # À placer après le champ des scores pour avoir la surbrillance de la ligne du score obtenu
+
+		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			lblTxt = CustomLabel.new("Bravo, vous avez fini !")
+			lblTxt.vexpand = true
+		vBox.add(lblTxt)
+			lblTemps.vexpand = true
+		vBox.add(lblTemps)
+			lblScore.vexpand = true
+		vBox.add(@champScores)
+			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			vBox2.vexpand = true
+			vBox2.hexpand = false
+			vBox2.valign = Gtk::Align::CENTER
+			vBox2.halign = Gtk::Align::CENTER
+			vBox2.add(@btnRecommencer)
+			vBox2.add(@btnModeDeJeu)
+		vBox.add(vBox2)
+
+		self.attach(vBox, 0, 0, 1, 1)
+
 		ajoutFondEcran
 	end
 
-	def initBoutonRecommencer
-		@btnRecommencer = Gtk::Button.new
-		styleBouton(@btnRecommencer,Gtk::Label.new("Recommencer"),"white","ultrabold","x-large")
-		@btnRecommencer.signal_connect('clicked') {
-			@fenetrePrecedente.reset
-			#@fenetrePrecedente.raz
-			@fenetre.changerWidget(self,@fenetrePrecedente)
-		}
-
-	end
+private
 
 	def initBoutonChangerModeDeJeu
-		@btnModeDeJeu = Gtk::Button.new
-		styleBouton(@btnModeDeJeu,Gtk::Label.new("Changer de grille"),"white","ultrabold","x-large")
+		@btnModeDeJeu = CustomButton.new("Retour au menu")
 		@btnModeDeJeu.signal_connect('clicked'){
 			self.lancementModeJeu
 		}
 
 	end
 
+	def initBoutonRecommencer
+		@btnRecommencer = CustomButton.new("Recommencer")
+		@btnRecommencer.signal_connect('clicked') {
+			@fenetrePrecedente.reset
+			@fenetrePrecedente.grille.score.reset
+			@fenetrePrecedente.reloadScore
+			@fenetre.changerWidget(self,@fenetrePrecedente)
+		}
 
-
+	end
 end

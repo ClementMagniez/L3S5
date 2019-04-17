@@ -13,8 +13,10 @@ require_relative "HudInscription"
 require_relative 'HudTutoriel'
 require_relative 'HudFinDeJeu'
 require_relative 'HudProfil'
-require_relative 'HudExploration'	
+require_relative 'HudExploration'
 require_relative 'HudChoixDifficulte'
+require_relative 'HudPresentationTutoriel'
+require_relative 'HudRegle'
 
 class Fenetre < Gtk::Window
 	def initialize
@@ -22,7 +24,7 @@ class Fenetre < Gtk::Window
 		@fullscreen = false
 		self.set_default_size(480,270)
 		self.set_resizable(false)
-    self.window_position=Gtk::WindowPosition::CENTER	
+    self.window_position=Gtk::WindowPosition::CENTER
     self.signal_connect('destroy') { Gtk.main_quit }
 		self.add(HudAccueil.new(self))
 		self.show_all

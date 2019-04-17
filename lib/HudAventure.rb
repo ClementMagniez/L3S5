@@ -1,25 +1,21 @@
 class HudAventure < HudJeu
+	@@NbPartie = 0
+
 	def initialize(window,grille)
 		super(window,grille)
-
 		self.setTitre("Aventure")
-		initBoutonTimer
-		initBoutonPause
-		initBoutonReset
 
+		@@NbPartie += 1
 		@varBoutonEnPlus=1
-		self.attach(@gridJeu,@varDebutPlaceGrid, @varDebutPlaceGrid-2,@sizeGridJeu,@sizeGridJeu+5)
 
-		self.attach(@lblTime,@varDebutPlaceGrid,0,@sizeGridJeu,4)
-
-		self.attach(@btnPause,@varFinPlaceGrid-1,@varDebutPlaceGrid-2,4,2)
-
-		ajoutFondEcran
+		# @btnAide.set_visible(true)
+		# @btnAide.sensitive = false
+		# @lblAide.visible = false
 	end
 
-
-	# Lance une nouvelle grille plus grande en mode aventure
+	# Redéfinie la méthode jeuTermine de HudJeu.
+	# La méthode va maintenant lancer une autre grille (toujours en mode aventure) de plus en plus grande
 	def jeuTermine
-		lancementAventure(Grille.new(@tailleGrille+1))
+		lancementAventure(Grille.new(@tailleGrille+(@@NbPartie % 5 == 0 ? 1 : 0).to_i))
 	end
 end
