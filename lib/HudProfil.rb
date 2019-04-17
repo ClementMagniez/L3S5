@@ -11,15 +11,19 @@ class HudProfil < Hud
 		self.setTitre("#{@@name} - Profil")
 		@lblErreur = CustomLabel.new
 		@lblErreur.color = 'red'
-		@entNom = Gtk::Entry.new
-		@entMdp = Gtk::Entry.new
-		@entMdp.set_visibility(false)
+		entNom = Gtk::Entry.new
+		entMdp = Gtk::Entry.new
+		entMdp.set_visibility(false)
 		@@mode = :aventure
 
+		@sortCriteria= :montantScore
+		@sortDown=true
+
 		initBoutonRetour
-		initBoutonSauvegarderLogin
+		
 		initBoutonsChampScore
 		initChampScore
+#		initBoutonsTriScore
 		@champScores.set_min_content_height(150)
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
@@ -27,21 +31,29 @@ class HudProfil < Hud
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.add(CustomLabel.new("Nouveau nom"))
-			hBox.add(@entNom)
+			hBox.add(entNom)
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.add(CustomLabel.new("Nouveau mot de passe"))
-			hBox.add(@entMdp)
+			hBox.add(entMdp)
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.add(@btnAventure)
 			hBox.add(@btnExploration)
 			hBox.add(@btnChrono)
+		vBox.add(initBoutonSauvegarderLogin(entNom, entMdp))
+		vBox.add(CustomLabel.new("Vos scores"))
+		vBox.add(hBox)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.homogeneous = true
+		
+
+			hBox.add(initBoutonTri("Score", :montantScore))
+			hBox.add(initBoutonTri("Date", :dateObtention))
 		vBox.add(hBox)
 		vBox.add(@champScores)
-		vBox.add(@btnSauvegarde)
 		vBox.add(@btnRetour)
 		vBox.valign = Gtk::Align::CENTER
 		vBox.halign = Gtk::Align::CENTER
@@ -50,76 +62,96 @@ class HudProfil < Hud
 
 		ajoutFondEcran
 	end
+	
+private
 
-	def refreshChampScore
-		@champScores.remove(@champScores.child)		if @champScores.child != nil
+	# Génère une Box contenant une liste des scores sous forme de CustomLabel, 
+	# indiquant leur valeur et la date d'enregistrement
+	# ; la liste est triée selon _sortCriteria_ et ascendante/descendante selon 
+	# _sortDown_ avant d'être intégrée à @champScores.
+	# - sortCriteria : symbole d'une méthode de Score, typiquement :montantScore
+	# ou :dateObtention ; par défaut :montantScore
+	# - sortDown : booléen, true => afficher une liste décroissante, 
+	# false => croissante ; par défaut true, affichant les derniers/meilleurs scores
+	# - return self
+	def refreshChampScore(sortCriteria=:montantScore, sortDown=true)
+		@champScores.remove(@champScores.child)		 if @champScores.child != nil
 		listeScores = @@joueur.rechercherScores(@@mode.to_s)
+	 
+		# trie la liste en ordre ascendant selon le critère donné
+		arr = listeScores.sort do |a, b|
+				a.send(sortCriteria) <=> b.send(sortCriteria)
+		end
+		# inverse si on la veut descendante
+		arr.reverse! if sortDown
+	 
 		unless listeScores.empty?
 			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-			listeScores.each do |score|
-				boxChamp.add(CustomLabel.new("#{score.montantScore} | #{score.dateObtention}"))
+			arr.each do |score|
+				# /!\ Le whitespace ASCII typique n'est apparemment pas reconnu par
+				# rjust ; il s'agit ici d'un whitespace U+2000, à ne pas remplacer
+				# naïvement
+				boxChamp.add(CustomLabel.new("#{score.montantScore.to_s.rjust(4,' ')}"+" "*25	+
+																		 "#{score.dateObtention}"))
 			end
 			@champScores.add(boxChamp)
 		else
 			@champScores.add(CustomLabel.new("Aucun score trouvé pour ce mode !"))
 		end
 		@champScores.show_all
+		self
 	end
-
-private
+	
 	def initBoutonsChampScore
-		@btnAventure = CustomButton.new("Aventure")
-		@btnAventure.signal_connect("clicked") do
+		@btnAventure = CustomButton.new("Aventure") do
 			@@mode = :aventure
-			self.refreshChampScore
+			refreshChampScore
 		end
 
-		@btnExploration = CustomButton.new("Exploration")
-		@btnExploration.signal_connect("clicked") do
+		@btnExploration = CustomButton.new("Exploration") do
 			@@mode = :explo
-			self.refreshChampScore
+			refreshChampScore
 		end
 
-		@btnChrono = CustomButton.new("Contre-la-montre")
-		@btnChrono.signal_connect("clicked") do
+		@btnChrono = CustomButton.new("Contre-la-montre") do
 			@@mode = :rapide
-			self.refreshChampScore
+			refreshChampScore
 		end
 	end
 
 	def initBoutonRetourMenu
-		@btnRetour = CustomButton.new("Retour")
-		@btnRetour.signal_connect("clicked") do
+		@btnRetour = CustomButton.new("Retour") do
 			lancementModeJeu
 		end
 	end
 
-	def initBoutonSauvegarderLogin
-		@btnSauvegarde = CustomButton.new("Sauvegarder les modifications") do
-			strNom = @entNom.text.tr("^[a-z][A-Z][0-9]\s_-", "")
-			strMdp = @entMdp.text
+	# Crée un bouton permettant d'enregistrer les modifications du login/mot de passe
+	# et le renvoie
+	# - entNom, entMdp : deux Gtk::Entry contenant les données utilisée
+	# - return un CustomButton
+	def initBoutonSauvegarderLogin(entNom, entMdp)
+		btnSauvegarde = CustomButton.new("Sauvegarder les modifications") do
+			strNom = entNom.text.tr("^[a-z][A-Z][0-9]\s_-", "")
+			strMdp = entMdp.text
 			@lblErreur.color = 'red'
-			if strNom != @entNom.text
+			if strNom != entNom.text
 				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
-				puts "Insription : Caractère(s) non autorisé(s)"
 			elsif strNom.length > 32
 				@lblErr.text = "Identifiant trop long (> 32) !"
-				puts "Connexion : L'identifiant trop long !"
 			elsif(strNom.empty? && strMdp.empty?)
-				puts "Vous devez remplir au moins un champ !"
 				@lblErreur.text = "Vous devez remplir au moins un champ !"
 			else
 				user = Profil.find_by(pseudonyme: @@name)
 				unless strMdp.empty?
 					# Enregistrement du mot de passe crypté
-					user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)
+					user.mdpEncrypted = strMdp.crypt(strMdp)
 					user.save
 				end
 				unless strNom.empty?
 					# Enregistrement du pseudo
 					# Si l'identifiant est déjà présent dans la base de données
 					if Profil.find_by(pseudonyme: strNom) != nil
-						self.setDesc("Cet identifiant existe déjà.")
+						@lblErreur.text="Cet identifiant existe déjà."
 					else
 						user.pseudonyme = strNom
 						user.save
@@ -129,15 +161,36 @@ private
 						@@name = strNom
 					end
 				end
-				puts "Modifications enregistrées !"
 				@lblErreur.color = 'green'
 				@lblErreur.text = "Modifications enregistrées !"
 			end
 		end
+		btnSauvegarde
 	end
 
+	# Initie @champScores et génère une liste des scores 
+	# - return self
 	def initChampScore
 		@champScores = Gtk::ScrolledWindow.new
-		self.refreshChampScore
+		refreshChampScore
+		self
 	end
+
+
+	# Crée un CustomButton permettant de trier la liste des scores
+	# - label : contenu du CustomButton
+	# - sortCriteria : symbole de la méthode de tri (@see HudProfil#refreshChampScore)
+	# - return un CustomButton sans relief
+	def initBoutonTri(label, sortCriteria)
+		sortDown=true
+		btn=CustomButton.new(label) do
+			sortDown=!sortDown
+			refreshChampScore(sortCriteria, sortDown)
+		end
+		btn.set_relief(Gtk::ReliefStyle::NONE)
+		btn
+	end
+	
+	
+	
 end
