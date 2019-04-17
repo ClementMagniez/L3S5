@@ -99,7 +99,6 @@ private
 			strNom = @entNom.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = @entMdp.text
 			@lblErreur.color = 'red'
-			user = Profil.find_by(pseudonyme: @@name)
 			if strNom != @entNom.text
 				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
 				puts "Insription : Caractère(s) non autorisé(s)"
@@ -110,6 +109,7 @@ private
 				puts "Vous devez remplir au moins un champ !"
 				@lblErreur.text = "Vous devez remplir au moins un champ !"
 			else
+				user = Profil.find_by(pseudonyme: @@name)
 				unless strMdp.empty?
 					# Enregistrement du mot de passe crypté
 					user.mdpEncrypted = Digest::SHA1.hexdigest(strMdp)

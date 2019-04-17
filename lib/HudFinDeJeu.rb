@@ -7,9 +7,9 @@ class HudFinDeJeu < Hud
 		super()
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : #{@@scoreTotal.to_s}")
+		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])
 		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
 		@@hudPrecedent.reset
-		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])
 
 
 		initChampScore

@@ -77,7 +77,7 @@ private
 	def initBoutonConnecter
 		@btnConnecter = CustomButton.new("Se connecter") {
 			# Vérification de l'existence du profil dans la BDD
-			session = Connexion.new
+			# session = Connexion.new
 			strId = @entryIdentifiant.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = @entryMotDePasse.text
 			if strId != @entryIdentifiant.text
@@ -92,7 +92,7 @@ private
 			elsif strMdp.empty?
 				@lblErr.text = "Le mot de passe ne peut être vide !"
 				puts "Connexion : Le mot de passe ne peut être vide !"
-			elsif(session.seConnecter(strId, strMdp) == -1)
+			elsif(@@joueur.seConnecter(strId, strMdp) == false)
 				@lblErr.text = "Echec : connexion impossible !"
 				puts "Connexion : connexion impossible !"
 			else
