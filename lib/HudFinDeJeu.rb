@@ -3,10 +3,11 @@ class HudFinDeJeu < Hud
 	# Nouvelle instance de fin de jeu
 	# 	window : La Fenetre contenant le HudFinDeJeu
 	# 	fenetrePrecedente : Le HudJeu qui appel ce constructeur, permet de recommencer une meme partie
-	def initialize(finTuto=false)
+	def initialize()
 		super()
+		finTuto = @@mode == :tutoriel
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
-		lblScore = CustomLabel.new("Votre score : #{@@scoreTotal.to_s}")
+		lblScore = CustomLabel.new("Votre score : #{@@scoreTotal.to_i.to_s}")
 		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])	unless finTuto
 		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
 		# @@hudPrecedent.reset

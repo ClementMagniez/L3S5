@@ -14,12 +14,6 @@ class HudTutoriel < HudJeu
 		self.afficherAide
 	end
 
-	# Surcharge de la méthode jeuTermine de HudJeu
-	# pour que le menu de fin de jeu n'affiche pas certains éléments
-	def jeuTermine
-		self.lancementFinDeJeu(true)
-	end
-
 	def reset
 		super
 		self.afficherAide
