@@ -13,7 +13,6 @@ class Hud < Gtk::Grid
 	@@joueur = Connexion.new
 	@@fenetre = nil
 	@@hudPrecedent = nil
-	# @@scoreTotal = 0
 
 	def initialize
 		super()

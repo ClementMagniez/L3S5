@@ -119,7 +119,7 @@ private
 					# Enregistrement du pseudo
 					# Si l'identifiant est déjà présent dans la base de données
 					if Profil.find_by(pseudonyme: strNom) != nil
-						self.setDesc("Cet identifiant existe déjà.")
+						@lblErreur.text = "Cet identifiant existe déjà !"
 					else
 						user.pseudonyme = strNom
 						user.save
