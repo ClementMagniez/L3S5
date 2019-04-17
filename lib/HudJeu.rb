@@ -509,8 +509,8 @@ class HudJeu < Hud
 	def jeuTermine
 		@grille.score.recupererTemps(self.timer)
 		scoreFinal = self.grille.score.calculerScoreFinal
-		@@scoreTotal = (@@mode == "aventure") ? @@scoreTotal + scoreFinal : scoreFinal
-		self.lancementFinDeJeu(self)
+		@@scoreTotal = (@@mode == :aventure) ? @@scoreTotal + scoreFinal : scoreFinal
+		self.lancementFinDeJeu(false)
 	end
 
 
