@@ -7,9 +7,9 @@ class HudFinDeJeu < Hud
 		super()
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : #{@@scoreTotal.to_s}")
-		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])
+		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])	unless finTuto
 		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
-		@@hudPrecedent.reset
+		# @@hudPrecedent.reset
 
 
 		initChampScore
@@ -17,7 +17,7 @@ class HudFinDeJeu < Hud
 		initBoutonChangerModeDeJeu
 		@champScores.set_min_content_height(200)
 
-		@scorePartie = 0 # À placer après le champ des scores pour avoir la surbrillance de la ligne du score obtenu
+		# @scorePartie = 0 # À placer après le champ des scores pour avoir la surbrillance de la ligne du score obtenu
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			lblTxt = CustomLabel.new("Partie terminée !")
@@ -44,6 +44,7 @@ class HudFinDeJeu < Hud
 		if finTuto
 			# On ne doit pas voir les scores à la fin du tuto
 			lblScore.destroy
+			@champScores.destroy
 		end
 	end
 
@@ -58,6 +59,7 @@ private
 
 	def initBoutonRecommencer
 		@btnRecommencer = CustomButton.new("Recommencer") {
+			@@hudPrecedent.reset
 			self.lancementHudPrecedent
 		}
 	end

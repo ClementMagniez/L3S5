@@ -221,10 +221,8 @@ class Aide
 	# Méthode qui renvoie la premiere case qui n'est pas a cote d'un arbre,
 	# il s'agit donc de gazon
 	def casePasACoteArbre
-		puts "J'essaye mais je passe pas ..."
 		@grille.each_with_index do | ligne, i |
 			ligne.each_with_index do | cases, j |
-				puts "valeur de i " + i.to_s + " valeur de j " + j.to_s
 				ok = true
 				# Si la case est une caseVide
 				if (cases.statutVisible == @newStatutVide)
