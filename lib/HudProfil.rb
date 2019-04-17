@@ -9,9 +9,13 @@ class HudProfil < Hud
 		@entNom = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
 		@entMdp.set_visibility(false)
+		@@mode = :aventure
 
 		initBoutonRetourMenu
 		initBoutonSauvegarderLogin
+		initBoutonsChampScore
+		initChampScore
+		@champScores.set_min_content_height(150)
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)
@@ -27,11 +31,11 @@ class HudProfil < Hud
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
-			initBoutonsChampScore(vBox)
 			hBox.add(@btnAventure)
 			hBox.add(@btnExploration)
 			hBox.add(@btnChrono)
 		vBox.add(hBox)
+		vBox.add(@champScores)
 		vBox.add(@btnSauvegarde)
 		vBox.add(@btnRetour)
 		vBox.valign = Gtk::Align::CENTER
@@ -42,25 +46,40 @@ class HudProfil < Hud
 		ajoutFondEcran
 	end
 
+	def refreshChampScore
+		@champScores.remove(@champScores.child)		if @champScores.child != nil
+		listeScores = @@joueur.rechercherScores(@@mode.to_s)
+		unless listeScores.empty?
+			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+			listeScores.each do |score|
+				boxChamp.add(CustomLabel.new("#{score.montantScore} | #{score.dateObtention}"))
+			end
+			@champScores.add(boxChamp)
+		else
+			@champScores.add(CustomLabel.new("Aucun score trouvé pour ce mode !"))
+		end
+		@champScores.show_all
+	end
+
 private
-	def initBoutonsChampScore(container)
+	def initBoutonsChampScore
 		@btnAventure = CustomButton.new("Aventure")
-		@btnAventure.signal_connect("clicked") {
-			initChampScore(true,["aventure",nil])
-			container.add(@champScores)
-		}
+		@btnAventure.signal_connect("clicked") do
+			@@mode = :aventure
+			self.refreshChampScore
+		end
 
 		@btnExploration = CustomButton.new("Exploration")
-		@btnExploration.signal_connect("clicked") {
-			initChampScore(true,["explo",nil])
-			container.add(@champScores)
-		}
+		@btnExploration.signal_connect("clicked") do
+			@@mode = :explo
+			self.refreshChampScore
+		end
 
 		@btnChrono = CustomButton.new("Contre-la-montre")
-		@btnChrono.signal_connect("clicked") {
-			initChampScore(true,["rapide",nil])
-			container.add(@champScores)
-		}
+		@btnChrono.signal_connect("clicked") do
+			@@mode = :rapide
+			self.refreshChampScore
+		end
 	end
 
 	def initBoutonRetourMenu
@@ -86,5 +105,10 @@ private
 				@lblErreur.text = "Sauvegarde dans la base !"
 			end
 		end
+	end
+
+	def initChampScore
+		@champScores = Gtk::ScrolledWindow.new
+		self.refreshChampScore
 	end
 end

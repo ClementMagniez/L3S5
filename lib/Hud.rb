@@ -157,37 +157,37 @@ protected
 	# +infoGrille+ => Le tableau contenant les informations de la partie jouée :
 	# 	+0+ - Le nom du mode joué
 	# 	+1+ - Le nom de la difficulté jouée
-	def initChampScore(ecranProfil,infoGrille)
-		@champScores = Gtk::ScrolledWindow.new
-		@champScores.set_min_content_height(100)
-		listeScores = @@joueur.rechercherScore(ecranProfil,infoGrille)
-
-		if(ecranProfil) # S'il s'agit de HudProfil
-			if(listeScores != nil)
-				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				listeScores.each do |score|
-					boxChamp.add(CustomLabel.new("#{score.montantScore} | #{score.dateObtention}"))
-				end
-				@champScores.add(boxChamp)
-			else
-				@champScores = CustomLabel.new("Aucun score trouvé pour ce mode !")
-			end
-		else
-			# Sinon, il s'agit de HudFinDeJeu
-			if(listeScores != nil)
-				boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				listeScores.each do |score|
-					lblScore = (score.montantScore == @@scoreTotal && score.profil_id == @@joueur.id) ?
-						CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}") :
-						Gtk::Label.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
-					boxChamp.add(lblScore)
-				end
-				@champScores.add(boxChamp)
-			end
-		end
-		# Fin condition(ecranProfil)
-		@champScores.set_visible(true)
-	end
+	# def initChampScore(ecranProfil,infoGrille)
+	# 	@champScores = Gtk::ScrolledWindow.new
+	# 	@champScores.set_min_content_height(100)
+	# 	listeScores = @@joueur.rechercherScore(ecranProfil,infoGrille)
+	#
+	# 	if(ecranProfil) # S'il s'agit de HudProfil
+	# 		if(listeScores != nil)
+	# 			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+	# 			listeScores.each do |score|
+	# 				boxChamp.add(CustomLabel.new("#{score.montantScore} | #{score.dateObtention}"))
+	# 			end
+	# 			@champScores.add(boxChamp)
+	# 		else
+	# 			@champScores = CustomLabel.new("Aucun score trouvé pour ce mode !")
+	# 		end
+	# 	else
+	# 		# Sinon, il s'agit de HudFinDeJeu
+	# 		if(listeScores != nil)
+	# 			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+	# 			listeScores.each do |score|
+	# 				lblScore = (score.montantScore == @@scoreTotal && score.profil_id == @@joueur.id) ?
+	# 					CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}") :
+	# 					Gtk::Label.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
+	# 				boxChamp.add(lblScore)
+	# 			end
+	# 			@champScores.add(boxChamp)
+	# 		end
+	# 	end
+	# 	# Fin condition(ecranProfil)
+	# 	@champScores.set_visible(true)
+	# end
 	# Fin méthode
 
 	def initWindow
