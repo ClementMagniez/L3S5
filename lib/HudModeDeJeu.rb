@@ -90,7 +90,7 @@ private
 						dataLoaded=Marshal.load(f)
 						grille=dataLoaded[0]
 						@@mode=dataLoaded[1]
-						@@difficulte=dataLoaded[2]
+						@@joueur.difficulte=dataLoaded[2]
 						timer=dataLoaded[3]
 						case @@mode
 							when :rapide then lancementRapide(grille,timer)

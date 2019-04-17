@@ -10,7 +10,7 @@ require_relative 'CustomEventBox'
 # de l'un à l'autre
 class Hud < Gtk::Grid
 	@@initblock = false
-	@@difficulte = nil
+	# @@difficulte = nil
 	@@joueur = Connexion.new
 	# @@name = ""
 	@@mode = nil

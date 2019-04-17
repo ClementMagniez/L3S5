@@ -16,9 +16,10 @@ class Connexion
 	# Variables d'instance :
 	# 	@id contient l'ID de l'utilisateur connecté
 	# 	@login contient le login de l'utilisateur connecté
+	# 	@difficulte contient la difficulte de la grille jouée par l'utilisateur
 
-	attr_reader :id, :login
-	attr_writer :login
+	attr_reader :id, :login, :difficulte, :mode
+	attr_writer :login, :difficulte, :mode
 
 	# Méthode permettant de modifier les informations liées à une session, lors de la
 	# connexion d'un nouvel utilisateur par exemple.
@@ -100,7 +101,7 @@ class Connexion
 	def enregistrerScore(idJoueur,infoGrille)
 		reqScore = Score.create(
 			modeJeu: infoGrille[0],
-			difficulte: infoGrille[1],
+			difficulte: difficulte,# infoGrille[1],
 			montantScore: infoGrille[2],
 			dateObtention: Time.now.to_s.split(" ").at(0).to_s,
 			profil_id: idJoueur

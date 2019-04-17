@@ -7,7 +7,7 @@ class HudTutoriel < HudJeu
 	def initialize(grille,timer=0)
 		super(grille,timer)
 		self.setTitre("Tutoriel")
-		@@difficulte="Facile"
+		@@joueur.difficulte="Facile"
 		@btnAide.sensitive = false
 		@btnPause.sensitive = false
 		@lblTimer.set_visible(false)
