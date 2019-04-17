@@ -1,7 +1,6 @@
 require_relative 'Hud'
 require_relative 'AidesConstantes'
 
-
 # Classe abstraite permettant de créer un écran de jeu
 class HudJeu < Hud
 	include AidesConstantes
@@ -19,6 +18,7 @@ class HudJeu < Hud
 		@gridJeu.row_homogeneous = true
 		@gridJeu.column_homogeneous = true
 		@grille = grille
+		@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
 		# Un indices de ligne ou colonne est mis en valeur,
 		# cet attribut référencie l'indice afin de ne plus mettre en valeur l'indice en question
 		@lblIndiceSubr = nil
@@ -39,6 +39,7 @@ class HudJeu < Hud
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(@lblScore)
 				@lblTimer.hexpand = true
 				@lblTimer.halign = Gtk::Align::CENTER
 			hBox.add(@lblTimer)
@@ -185,6 +186,7 @@ class HudJeu < Hud
 			end
 		end
 		@grille.raz
+		self.reloadScore
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer" : "Pause"
 		@lblAide.text=""
@@ -192,7 +194,12 @@ class HudJeu < Hud
 		self
 	end
 
-protected
+	# Met à jour l'affichage du score avec une valeur modifiée
+	def reloadScore
+		@lblScore.set_text("Score : " + @grille.score.getValeur.to_s)
+	end
+
+	protected
 
 
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
@@ -326,6 +333,7 @@ protected
 				button.signal_connect('button-release-event') do
 					unless @pause
 						cell.cycle(@grille)
+						self.reloadScore
 						button.replace(scaleImage(cell.affichage))
 						desurbrillanceCase
 						desurbrillanceIndice
@@ -350,6 +358,7 @@ protected
 		@lblAide.color = "white"
 		@lblAide.set_background("#000000", 40)
 		@btnAide = CustomButton.new("Aide") {
+			@grille.score.appelerAssistant
 			self.afficherAide
 		}
 	end
@@ -372,6 +381,7 @@ protected
 			if cell != nil
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
 			end
+			self.reloadScore
 		}
 	end
 
@@ -403,6 +413,7 @@ protected
 				caseRemp = liste.pop
 				if caseRemp.statutVisible.isVide?
 					caseRemp.cycle(@grille)
+					self.reloadScore
 					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).replace(scaleImage(caseRemp.affichage))
 				end
 			end
@@ -414,21 +425,27 @@ protected
 	# 	initialise sont comportement
 	def initBoutonReset
 		@btnReset = CustomButton.new("Reset") {
-			reset
+			@grille.score.reset
+			self.reset
 		}
 	end
 
 	# Initialise le bouton de sauvegarde :
 	# 	ajoute une variable d'instance @btnSauvegarde
-	# 	initialise sont comportement
+	# 	initialise son comportement
 	def initBoutonSauvegarde
 		@btnSauvegarde = CustomButton.new("Sauvegarder") do
 			File.open("../saves/"+@@name+".txt", "w+", 0644) do |f|
 				f.write(Marshal.dump([@grille,@@mode,@@difficulte,@timer]))
 			end
 		end
-
 	end
+
+	# Initialise l'affichage du score :
+	# 	récupère la valeur actuelle de l'objet "ScorePartie"
+	# def initScore
+	# 	@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
+	# end
 
 	# Initialise le timer ; ajoute une variable d'instance @lblTimer, le label associé au timer.
 	# - start : par défaut 0, le temps de départ du timer
@@ -489,6 +506,9 @@ protected
 
 	# Méthode invoquée a la fin du jeu
 	def jeuTermine
+		@grille.score.recupererTemps(self.timer)
+		scoreFinal = self.grille.score.calculerScoreFinal
+		@@scoreTotal = (@@mode == "aventure") ? @@scoreTotal + scoreFinal : scoreFinal
 		self.lancementFinDeJeu(self)
 	end
 

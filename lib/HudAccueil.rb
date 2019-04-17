@@ -1,7 +1,3 @@
-require_relative "connectSqlite3.rb"
-require_relative "Profil.rb"
-require_relative "Connexion.rb"
-
 class HudAccueil < Hud
 	def initialize(window)
 		@@fenetre = window

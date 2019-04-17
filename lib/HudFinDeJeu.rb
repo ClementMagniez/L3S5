@@ -6,14 +6,18 @@ class HudFinDeJeu < Hud
 	def initialize(finTuto=false)
 		super()
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
-		lblScore = CustomLabel.new("Votre score : 0")
+		lblScore = CustomLabel.new("Votre score : #{@@scoreTotal.to_s}")
 		# Si le joueur souhaite recommencer sa partie, le hud est deja reset
 		@@hudPrecedent.reset
+		@@joueur.enregistrerScore(@@joueur.id,[@@mode,@@difficulte,@@scoreTotal])
 
 
+		initChampScore
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
+		@champScores.set_min_content_height(200)
 
+		@scorePartie = 0 # À placer après le champ des scores pour avoir la surbrillance de la ligne du score obtenu
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			lblTxt = CustomLabel.new("Partie terminée !")
@@ -23,6 +27,7 @@ class HudFinDeJeu < Hud
 		vBox.add(lblTemps)
 			lblScore.vexpand = true
 		vBox.add(lblScore)
+		vBox.add(@champScores)
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.vexpand = true
 			vBox2.hexpand = false
@@ -53,8 +58,22 @@ private
 
 	def initBoutonRecommencer
 		@btnRecommencer = CustomButton.new("Recommencer") {
+			# TODO : A faire dans HudJeu.reset
+			@hudPrecedent.grille.score.reset
+			@hudPrecedent.reloadScore
 			self.lancementHudPrecedent
 		}
+	end
 
+	def initChampScore
+		@champScores = Gtk::ScrolledWindow.new
+		listeScores = @@joueur.rechercherScores(@@mode.to_s,@@difficulte)
+		boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+		listeScores.each do |score|
+			lblScore = CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
+			lblScore.color = (score.montantScore == @@scoreTotal && score.profil_id == @@joueur.id) ? "blue" : 'white'
+			boxChamp.add(lblScore)
+		end
+		@champScores.add(boxChamp)
 	end
 end

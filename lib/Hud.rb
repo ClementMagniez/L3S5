@@ -1,5 +1,6 @@
 require 'gtk3'
 require_relative 'Grille'
+require_relative "Connexion.rb"
 require_relative 'CustomLabel'
 require_relative 'CustomButton'
 require_relative 'CustomEventBox'
@@ -8,12 +9,14 @@ require_relative 'CustomEventBox'
 # à la connexion, instancie les éléments communs aux menus et permet le passage
 # de l'un à l'autre
 class Hud < Gtk::Grid
-	@@name=""
-	@@initblock=false
+	@@initblock = false
 	@@difficulte = nil
+	@@joueur = Connexion.new
+	@@name = ""
 	@@mode = nil
 	@@fenetre = nil
 	@@hudPrecedent = nil
+	@@scoreTotal = 0
 
 	def initialize
 		super()
@@ -28,7 +31,6 @@ class Hud < Gtk::Grid
 		setTitre("Des Tentes et des Arbres")
 
 		initBoutonOptions
-
 	end
 
 protected
@@ -109,7 +111,6 @@ protected
 		}
 	end
 
-
 	# Initialise le bouton pour profil (lance le menu profil) :
 	# 	ajoute une variable d'instance @btnProfil
 	# 	initialise sont comportement
@@ -151,7 +152,7 @@ protected
 
 	# Initialise le bouton de retour au menu pricipal (choix des modes de jeu ) :
 	# 	ajoute une variable d'instance @btnRetour
-	# 	initialise sont comportement
+	# 	initialise son comportement
 	def initBoutonRetour
 		@btnRetour = CustomButton.new("Retour") {
 			if block_given?

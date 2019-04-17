@@ -24,8 +24,15 @@ class CaseVide < Case
 	def cycle(grille)
 		self.statutVisible.cycle
 
-		self.updateNbTents(grille, :'isVide?')
+		if self.statutVisible.isGazon? # le statut vient de devenir "gazon"
+			grille.score.recupererPoints(1)
+		elsif self.statutVisible.isTente? # le statut vient de devenir "tente"
+			grille.score.recupererPoints(5)
+		elsif self.statutVisible.isVide? # le statut vient de devenir "vide"
+			grille.score.recupererPoints(-10)
+		end
 
+		self.updateNbTents(grille, :'isVide?')
 		super(grille)
 		self
 	end
@@ -36,6 +43,15 @@ class CaseVide < Case
 		self.updateNbTents(grille, :'isGazon?')
 
 
+		if self.statutVisible.isGazon? # le statut vient de repasser à "gazon"
+			grille.score.recupererPoints(-5)
+		elsif self.statutVisible.isTente? # le statut vient de repasser à "tente"
+			grille.score.recupererPoints(10)
+		elsif self.statutVisible.isVide? # le statut vient de repasser à "vide"
+			grille.score.recupererPoints(-1)
+		end
+
+		self.updateNbTents(grille, :'isGazon?')
 		self
 	end
 
