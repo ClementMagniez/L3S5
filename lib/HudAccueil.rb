@@ -40,7 +40,7 @@ class HudAccueil < Hud
 		vBox.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
-			hBox.homogeneous = true
+			#hBox.homogeneous = true
 				lbl = CustomLabel.new("Mot de passe")
 				lbl.width_request = width
 			hBox.add(lbl)
