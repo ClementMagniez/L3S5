@@ -95,7 +95,7 @@ protected
 	# Initialise le bouton des options :
 	# 	ajoute une variable d'instance @btnOptions ;
 	# 	initialise son comportement
-	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @fenetrePrecedente
+	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @hudPrecedent lors du clique sur le bouton retoure du hud
 	# ; permet par exemple de redimensionner un menu de jeu en le rechargeant
 	def initBoutonOptions(traitements=nil)
 		@btnOptions = Gtk::Button.new
@@ -141,6 +141,7 @@ protected
 	# Initialise le bouton des règles de jeu :
 	# 	ajoute une variable d'instance @btnRegle
 	# 	initialise sont comportement
+	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @hudPrecedent lors du clique sur le bouton retoure du hud
 	def initBoutonRegle(traitements=nil)
 		@btnRegle = CustomButton.new("?", "pink") {
 			@@hudPrecedent = self

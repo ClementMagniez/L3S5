@@ -6,7 +6,7 @@ class HudOption < Hud
 
 	def initialize(traitement=nil)
 		super()
-		self.setTitre("Options")
+		self.setTitre("#{@@name} - Options")
 		configFile=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
 
 

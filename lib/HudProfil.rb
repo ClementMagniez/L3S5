@@ -8,7 +8,7 @@ require_relative "Profil.rb"
 class HudProfil < Hud
 	def initialize
 		super()
-		self.setTitre("Profil")
+		self.setTitre("#{@@name} - Profil")
 		@lblErreur = CustomLabel.new
 		@lblErreur.color = 'red'
 		@entNom = Gtk::Entry.new

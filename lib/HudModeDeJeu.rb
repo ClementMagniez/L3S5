@@ -13,7 +13,7 @@ class HudModeDeJeu < Hud
 	# Paramètre : window - la Fenetre de l'application
 	def initialize
 		super()
- 		self.setTitre("Choix du mode de jeu")
+ 		self.setTitre
 		@lblErr = CustomLabel.new("", "red")
 
 		initBoutonAventure
@@ -61,6 +61,12 @@ class HudModeDeJeu < Hud
 		ajoutFondEcran
 	end
 
+	# Surcharge le setter du titre de la fentre afin qu'il affiche toujours le meme message
+	# 	- str Le parametre est rendu inutil
+	def setTitre(str=nil)
+		super("#{@@name} - Choix du mode de jeu")
+	end
+
 private
 
 	# Crée et connecte le bouton de lancement du mode aventure
@@ -106,12 +112,20 @@ private
 		self
 	end
 
+	def initBoutonOptions
+		super([:setTitre])
+	end
+
 	# Crée et connecte le bouton de lancement du mode chrono
 	def initBoutonRapide
 		@btnChrono = CustomButton.new("Mode Chrono") do
 			lancementChoixDifficulte(:rapide)
 		end
 		self
+	end
+
+	def initBoutonRegle
+		super([:setTitre])
 	end
 
 	# Crée et connecte le bouton de lancement du tutoriel
@@ -124,7 +138,6 @@ private
 		end
 		self
 	end
-
 
 	# Ecrase Hud#initBoutonQuitter pour rediriger vers l'écran de connexion
 	def initBoutonQuitter
