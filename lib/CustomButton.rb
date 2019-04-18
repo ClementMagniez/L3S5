@@ -3,10 +3,10 @@ class CustomButton < Gtk::Button
 	def initialize(str="", nom="button", labelNom="label")
 		super()
 
-		self.style_context.add_provider(Stylizable::getStyle, Gtk::StyleProvider::PRIORITY_SETTINGS)
+		self.style_context.add_provider(Stylizable::getStyle, Gtk::StyleProvider::PRIORITY_APPLICATION)
 		self.add(CustomLabel.new(str,labelNom))
 		self.set_name(nom)
-		
+
 
 
 		if block_given?
