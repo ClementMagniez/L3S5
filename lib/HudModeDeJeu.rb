@@ -68,6 +68,8 @@ class HudModeDeJeu < Hud
 
 private
 
+
+
 	# Crée et connecte le bouton de lancement du mode aventure
 	# Return self
 	def initBoutonAventure
@@ -144,7 +146,7 @@ private
 
 	# Ecrase Hud#initBoutonQuitter pour rediriger vers l'écran de connexion
 	def initBoutonQuitter
-		super {	self.lancementAccueil }
+		super { @@fenetre.resize(480,270);	self.lancementAccueil }
 	end
 protected
 	attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy

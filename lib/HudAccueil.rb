@@ -3,7 +3,9 @@ require_relative 'Config'
 class HudAccueil < Hud
 	def initialize(window)
 		@@fenetre = window
+#		window.resize(480,270)
 		window.set_resizable(false)
+		
 		super()
 		@lblErr = CustomLabel.new("","lblErr")
 		
