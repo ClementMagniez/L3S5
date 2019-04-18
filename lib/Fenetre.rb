@@ -25,7 +25,7 @@ class Fenetre < Gtk::Window
 		super()
 
 		self.name="mainWindow"
-		self.style_context.add_provider(Stylizable::getStyle)
+		self.style_context.add_provider(Stylizable::getStyle, Gtk::StyleProvider::PRIORITY_APPLICATION)
 		self.set_default_size(480,270)
 		self.window_position=Gtk::WindowPosition::CENTER
 		self.signal_connect('destroy') { Gtk.main_quit }
