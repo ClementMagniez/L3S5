@@ -40,6 +40,7 @@ class Config
 	def writeEnregistrementScore(choix)
 		self.file['misc']={'score'=>choix}
 		self.file.write
+		self
 	end
 	
 	def [](val)
