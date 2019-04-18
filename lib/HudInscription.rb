@@ -73,7 +73,8 @@ private
 					
 					# Création du fichier ini par défaut
 					f=Config.new(id).writeResolution(1280,720)\
-													.writeEnregistrementScore("Oui")
+													.writeEnregistrementScore("Oui")\
+													.writePosition(0,0)
 
 					self.lancementAccueil
 				end
