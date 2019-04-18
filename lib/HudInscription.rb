@@ -70,13 +70,10 @@ private
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-
-					f=IniFile.new(filename:"../config/#{id}.ini", encoding: 'UTF-8')
-
-					# Résolution par défaut - option paresseuse, pourrait dépendre
-					# de la taille de la fenêtre
-					f['resolution']={'width' => 1280, 'height'=> 720}
-					f.write
+					
+					# Création du fichier ini par défaut
+					f=Config.new(id).writeResolution(1280,720)\
+													.writeEnregistrementScore("Oui")
 
 					self.lancementAccueil
 				end

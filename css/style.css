@@ -41,7 +41,7 @@
 #lblIndice {
 	color: white;
 	font-size: medium;
-  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;
+/*  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;*/
 }
 /* Label par défaut blanc */
 
@@ -51,11 +51,18 @@
 }
 /* Label d'information */
 
-#lblErreur {
+#lblErr {
 	color: red;
 	font-weight: bold;
 }
 
+
+#lblRegles {
+	color: white;
+	font-weight: bold;
+	background-image: url("../img/gris.png");
+	opacity: 0.8;
+}
 /* Affichage des scores - inachevé */
 
 #champScores {

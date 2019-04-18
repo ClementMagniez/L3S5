@@ -9,21 +9,19 @@ class HudOption < Hud
 	def initialize(traitement=nil)
 		super()
 		self.setTitre("#{@@joueur.login} - Options")
-		configFile=IniFile.load("../config/#{@@joueur.login}.ini", encoding: 'UTF-8')
-
 
 		initBoutonRetour(traitement)
 		initChoixScore
-		initBoutonSauvegarderChoixScore(configFile)
+		initBoutonSauvegarderChoixScore
 		initMenuResolution
-		initBoutonSauvegarderResolution(configFile)
+		initBoutonSauvegarderResolution
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Résolution (16:9) : "))
-#			hBox.add(@menuResolution)
+			hBox.add(@menuResolution)
 		vBox.add(hBox)
-#		vBox.add(@btnSauvegardeResolution)
+		vBox.add(@btnSauvegardeResolution)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Enregistrer les scores : "))
 			@group.each { |btn| hBox.add(btn) }
@@ -85,18 +83,15 @@ private
 		end
 	end
 
-	# Crée un bouton enregistrant laésolution choisie dans un fichier ini
+	# Crée un bouton enregistrant la résolution choisie dans @@config
 	# et appliquant le changement à l'application active
-	def initBoutonSauvegarderResolution(configFile)
+	def initBoutonSauvegarderResolution
 		@btnSauvegardeResolution=CustomButton.new("Appliquer") do
-			configFile=IniFile.load("../config/#{@@joueur.login}.ini", encoding: 'UTF-8')
-			@@winX=@resolution.split('*')[0].to_i
-			@@winY=@resolution.split('*')[1].to_i
-			configFile['resolution']={'width' => @@winX,
-											 'height'=> @@winY}
-			configFile.write
-			self.resizeWindow(@@winX,
-												@@winY)
+			winX=@resolution.split('*')[0].to_i
+			winY=@resolution.split('*')[1].to_i
+
+			@@config.writeResolution(winX,winY)
+			@@fenetre.resize(winX,winY)
 		end
 	end
 
@@ -118,10 +113,9 @@ private
 	# Génère le bouton récupérant le choix de initChoixScore et l'écrivant dans
 	# le .ini
 	# - return self
-	def initBoutonSauvegarderChoixScore(configFile)
+	def initBoutonSauvegarderChoixScore
 		@btnChoixScore=CustomButton.new("Appliquer") do
-			configFile['misc']={'score'=>@bChoixScore}
-			configFile.write
+			@@config.writeEnregistrementScore(@bChoixScore)
 		end
 		self
 	end

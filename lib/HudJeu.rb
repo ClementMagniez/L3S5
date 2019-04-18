@@ -125,7 +125,7 @@ class HudJeu < Hud
 
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
-			@lblIndiceSubr.color = "white"
+			@lblIndiceSubr.name = "lblIndice"
 			@lblIndiceSubr = nil
 		end
 	end
@@ -241,7 +241,7 @@ class HudJeu < Hud
 				lblIndice = @gridJeu.get_child_at(indice,0).child
 			end
 			# Un indice des lignes ou colonnes est mis en valeur : en rouge
-			lblIndice.color = "red"
+			lblIndice.name = "lblErr"
 			# On garde une référence sur le label de la ligne ou colonne mise en évidence
 			@lblIndiceSubr = lblIndice
 		end

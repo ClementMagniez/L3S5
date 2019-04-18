@@ -14,26 +14,18 @@ class HudRegle < Hud
 			Règle n°3 : \n
 			Si un arbre accueille une tente, il est \"occupé\" et aucune \nnouvelle tente ne peut s'y installer. Cependant, une tente \ndéjà associée à un arbre peut en côtoyer un autre. \n
 			Règle n°4 : \n
-			Le nombre de places est limité : les chiffres en haut et à\n gauche indiquent le nombre de tentes dans chaque travée.","white")
+			Le nombre de places est limité : les chiffres en haut et à\n gauche indiquent le nombre de tentes dans chaque travée.", "lblRegles")
 
-		image = Gtk::Image.new( :file => "../img/gris.png")
-		 #Scale de l'image
-#		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	)  if @@winY>600
-#		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	) if @@winY<600
 
 		initBoutonRetour(traitements)
 
 
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-			grid = Gtk::Grid.new
 				lblRegle.hexpand = true
-			grid.attach(lblRegle,0,0,1,1)
-				image.hexpand = true
-				image.vexpand = true
-			grid.attach(image,0,0,1,1)
-		vBox.add(grid)
-			@btnRetour.vexpand = true
+				lblRegle.vexpand = true
+
+		vBox.add(lblRegle)
 			@btnRetour.halign = Gtk::Align::CENTER
 			@btnRetour.valign = Gtk::Align::CENTER
 		vBox.add(@btnRetour)

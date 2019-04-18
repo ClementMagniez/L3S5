@@ -11,10 +11,13 @@ require_relative 'CustomEventBox'
 class Hud < Gtk::Grid
 	@@joueur = Connexion.new
 	@@fenetre = nil
+	@@config=nil
 	@@hudPrecedent = nil
 
 	def initialize
 		super()
+
+		@@fenetre.signal_connect('destroy') { @@fenetre.exit(@@config) }
 
 		# Hacky façon de n'exécuter initWindow qu'une fois
 
@@ -118,7 +121,7 @@ protected
 			if block_given?
 				yield
 			else
-				Gtk.main_quit
+				@@fenetre.exit(@@config)
 			end
 		}
 		quitter = Gtk::Image.new(:file => '../img/quitter.png')

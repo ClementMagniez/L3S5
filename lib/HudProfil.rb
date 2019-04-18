@@ -129,7 +129,7 @@ private
 		btnSauvegarde = CustomButton.new("Sauvegarder les modifications") do
 			strNom = entNom.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = entMdp.text
-			@lblErreur.color = 'red'
+			@lblErreur.name = 'lblErr'
 			if strNom != entNom.text
 				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
 			elsif strNom.length > 32
@@ -157,7 +157,7 @@ private
 						self.setTitre("#{@@joueur.login} - Profil")
 					end
 				end
-				@lblErreur.color = 'green'
+				@lblErreur.name = 'lblInfo'
 				@lblErreur.text = "Modifications enregistrées !"
 			end
 		end

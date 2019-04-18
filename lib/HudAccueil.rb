@@ -1,8 +1,11 @@
+require_relative 'Config'
+
 class HudAccueil < Hud
 	def initialize(window)
 		@@fenetre = window
+		window.set_resizable(false)
 		super()
-		@lblErr = CustomLabel.new("","lblErreur")
+		@lblErr = CustomLabel.new("","lblErr")
 		
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
@@ -90,12 +93,21 @@ private
 			elsif(@@joueur.seConnecter(strId, strMdp) == false)
 				@lblErr.text = "Echec : connexion impossible !"
 			else
+				@@fenetre.set_resizable(true)
 				# S'assure que le répertoire est sain
 				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
 				Dir.mkdir("../config")	unless Dir.exist?("../config")
+				
 				unless File.exist?("../config/#{strId}.ini")
-					f=IniFile.new(filename:"../config/#{strId}.ini", encoding: 'UTF-8')
+					File.write("../config/#{strId}.ini", "")
 				end
+				@@config=Config.new(strId)
+				@@fenetre.window_position=Gtk::WindowPosition::NONE
+				@@fenetre.resize(@@config['resolution']['width'], 
+												 @@config['resolution']['height'])
+				@@fenetre.move(@@config['position']['x'], 
+												 @@config['position']['y'])
+
 				self.lancementModeJeu
 			end
 		}

@@ -11,11 +11,11 @@ class HudFinDeJeu < Hud
 
 		unless finTuto
 			@id = @@joueur.enregistrerScore
-			initChampScore
 		end
+		initChampScore
+		@champScores.set_min_content_height(200)
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
-		@champScores.set_min_content_height(200)
 
 		# @scorePartie = 0 # À placer après le champ des scores pour avoir la surbrillance de la ligne du score obtenu
 
@@ -27,7 +27,7 @@ class HudFinDeJeu < Hud
 		vBox.add(lblTemps)
 			lblScore.vexpand = true
 		vBox.add(lblScore)
-		vBox.add(@champScores)
+		vBox.add(@champScores) if @champScores
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.vexpand = true
 			vBox2.hexpand = false

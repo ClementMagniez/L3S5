@@ -25,10 +25,17 @@ class Fenetre < Gtk::Window
 		super()
 
 		self.name="mainWindow"
-		self.style_context.add_provider(Stylizable::getStyle)
+		self.style_context.add_provider(Stylizable::getStyle, Gtk::StyleProvider::PRIORITY_APPLICATION)
 		self.set_default_size(480,270)
 		self.window_position=Gtk::WindowPosition::CENTER
-		self.signal_connect('destroy') { Gtk.main_quit }
+		
+		self.signal_connect('configure-event') {
+			@width=self.size[0]
+			@height=self.size[1]
+			@x=self.position[0]
+			@y=self.position[1]
+			false # exécute le handler par défaut
+		}
 		self.add(HudAccueil.new(self))
 		self.show_all
 		Gtk.main
@@ -38,5 +45,14 @@ class Fenetre < Gtk::Window
 		self.remove(self.child).add(nouveau)
 		self.show_all
 		return self
+	end
+	
+	# Wrapper de Gtk.main_quit ; rentre les 
+	def exit(config)
+		unless config==nil
+			config.writeResolution(@width, @height)
+			config.writePosition(@x, @y)
+		end
+		Gtk.main_quit
 	end
 end
