@@ -8,14 +8,14 @@ require_relative 'CustomEventBox'
 # Superclasse abstraite de tous les menus de l'application : enregistre le nom du joueur
 # à la connexion, instancie les éléments communs aux menus et permet le passage
 # de l'un à l'autre
-class Hud < Gtk::Grid
+class Hud < Gtk::Box
 	@@joueur = Connexion.new
 	@@fenetre = nil
 	@@config=nil
 	@@hudPrecedent = nil
 
-	def initialize
-		super()
+	def initialize(orientation)
+		super(orientation)
 
 		@@fenetre.signal_connect('destroy') { @@fenetre.exit(@@config) }
 

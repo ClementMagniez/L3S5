@@ -18,9 +18,9 @@ class HudChoixDifficulte < Hud
 	# - window : la Fenetre de l'application
 	# - mode : un symbole ∈ { :rapide, :exploration, :aventure } - détermine quel mode de jeu est lancé
 	def initialize(mode)
-		super()
+		super(Gtk::Orientation::VERTICAL)
 
- 		self.setTitre("Choix de la difficulté - mode #{mode.to_s}")
+ 		self.setTitre("Choix de la difficulté - mode #{mode.to_s.capitalize}")
  		@@joueur.mode=mode
  		# Définit la fonction de lancement utilisée selon le symbole fourni
 		@mode="lancement"+mode.to_s.capitalize
@@ -29,9 +29,8 @@ class HudChoixDifficulte < Hud
 		initBoutonRetour
 		initBoutonProfil
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			@btnProfil.halign = Gtk::Align::END
-		vBox.add(@btnProfil)
+		self.add(@btnProfil)
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.halign = Gtk::Align::CENTER
 				@btnFacile.vexpand = true
@@ -39,7 +38,7 @@ class HudChoixDifficulte < Hud
 			vBox2.add(@btnFacile)
 			vBox2.add(@btnMoyen)
 			vBox2.add(@btnDifficile)
-		vBox.add(vBox2)
+		self.add(vBox2)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -50,10 +49,7 @@ class HudChoixDifficulte < Hud
 				@btnRetour.valign = Gtk::Align::END
 				@btnRetour.halign = Gtk::Align::END
 			hBox.add(@btnRetour)
-		vBox.add(hBox)
-
-		self.attach(vBox, 0, 0, 1, 1)
-
+		self.add(hBox)
 	end
 
 private

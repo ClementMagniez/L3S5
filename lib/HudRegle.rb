@@ -4,7 +4,7 @@ class HudRegle < Hud
 	# - window : la fenêtre principale de l'application
 	# - fenetrePrecedente : la fenêtre précédente pour pouvoir y retourner
 	def initialize(traitements)
-		super()
+		super(Gtk::Orientation::VERTICAL)
 
 		lblRegle = CustomLabel.new(" But du jeu : Dans un camping, seuls les arbres sont dessinés.\n Plantez les tentes, sachant que : \n
 			Règle n°1 : \n
@@ -21,16 +21,12 @@ class HudRegle < Hud
 
 
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 				lblRegle.hexpand = true
 				lblRegle.vexpand = true
-
-		vBox.add(lblRegle)
+		self.add(lblRegle)
 			@btnRetour.halign = Gtk::Align::CENTER
 			@btnRetour.valign = Gtk::Align::CENTER
-		vBox.add(@btnRetour)
-
-		self.attach(vBox, 0, 0, 1, 1)
+		self.add(@btnRetour)
 	end
 
 	def initBoutonRetour(listToDo)

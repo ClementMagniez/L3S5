@@ -10,7 +10,7 @@ class HudJeu < Hud
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
 	def initialize(grille,timerStart=0)
-		super()
+		super(Gtk::Orientation::VERTICAL)
 		self.setTitre("Partie #{@@joueur.mode.to_s.capitalize}")
 		@aide = Aide.new(grille)
 		# Le label d'aide est placé dans une Gtk::Grid afin de pouvoir y attacher une image de fond
@@ -38,14 +38,13 @@ class HudJeu < Hud
 		@btnRetour.text = "Abandonner"
 
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(@lblScore)
 				@lblTimer.hexpand = true
 				@lblTimer.halign = Gtk::Align::CENTER
 			hBox.add(@lblTimer)
 			hBox.add(@btnRegle)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			hBox.valign = Gtk::Align::CENTER
@@ -60,13 +59,13 @@ class HudJeu < Hud
 				vBox2.add(@btnRemplissage)
 				vBox2.add(@btnSauvegarde)
 			hBox.add(vBox2)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			hBox.valign = Gtk::Align::CENTER
 			hBox.vexpand = true
 			hBox.add(@lblAide)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -77,11 +76,7 @@ class HudJeu < Hud
 				@btnRetour.valign = Gtk::Align::END
 				@btnRetour.halign = Gtk::Align::END
 			hBox.add(@btnRetour)
-		vBox.add(hBox)
-
-		self.attach(vBox, 0, 0, 1, 1)
-
-
+		self.add(hBox)
 
 # Disposition alternative où lblAide est dans la même vbox que gridJeu
 # et est donc strictement en dessous

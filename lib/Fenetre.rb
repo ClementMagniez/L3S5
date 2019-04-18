@@ -28,7 +28,7 @@ class Fenetre < Gtk::Window
 		self.style_context.add_provider(Stylizable::getStyle, Gtk::StyleProvider::PRIORITY_APPLICATION)
 		self.set_default_size(480,270)
 		self.window_position=Gtk::WindowPosition::CENTER
-		
+
 		self.signal_connect('configure-event') {
 			@width=self.size[0]
 			@height=self.size[1]
@@ -46,8 +46,8 @@ class Fenetre < Gtk::Window
 		self.show_all
 		return self
 	end
-	
-	# Wrapper de Gtk.main_quit ; rentre les 
+
+	# Wrapper de Gtk.main_quit ; rentre les
 	def exit(config)
 		unless config==nil
 			config.writeResolution(@width, @height)

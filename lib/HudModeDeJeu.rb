@@ -12,7 +12,7 @@ class HudModeDeJeu < Hud
 	#
 	# Paramètre : window - la Fenetre de l'application
 	def initialize
-		super()
+		super(Gtk::Orientation::VERTICAL)
  		self.setTitre
 		@lblErr = CustomLabel.new("", "lblErr")
 
@@ -25,14 +25,13 @@ class HudModeDeJeu < Hud
 		initBoutonRegle
 		initBoutonTuto
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.halign = Gtk::Align::END
 			hBox.add(@btnRegle)
 			hBox.add(@btnProfil)
-		vBox.add(hBox)
-		vBox.add(@lblErr)
+		self.add(hBox)
+		self.add(@lblErr)
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.halign = Gtk::Align::CENTER
 				@btnSauvegarde.valign = Gtk::Align::CENTER
@@ -44,7 +43,7 @@ class HudModeDeJeu < Hud
 			vBox2.add(@btnAventure)
 			vBox2.add(@btnChrono)
 			vBox2.add(@btnExplo)
-		vBox.add(vBox2)
+		self.add(vBox2)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -55,9 +54,7 @@ class HudModeDeJeu < Hud
 				@btnQuitter.valign = Gtk::Align::END
 				@btnQuitter.halign = Gtk::Align::END
 			hBox.add(@btnQuitter)
-		vBox.add(hBox)
-
-		self.attach(vBox, 0, 0, 1, 1)
+		self.add(hBox)
 	end
 
 	# Surcharge le setter du titre de la fentre afin qu'il affiche toujours le meme message

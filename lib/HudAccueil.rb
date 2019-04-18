@@ -4,9 +4,9 @@ class HudAccueil < Hud
 	def initialize(window)
 		@@fenetre = window
 		window.set_resizable(false)
-		super()
+		super(Gtk::Orientation::VERTICAL)
 		@lblErr = CustomLabel.new("","lblErr")
-		
+
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 		@entryMotDePasse.set_visibility(false)
@@ -19,17 +19,16 @@ class HudAccueil < Hud
 		initBoutonInscription
 		initBoutonConnecter
 		initBoutonQuitter
-		
-				
+
+
 		# Rend le mot de passe entré invisible
 		@entryMotDePasse.set_visibility(false)
 
 		width = 150
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			@lblErr.vexpand = true
 			@lblErr.halign = Gtk::Align::CENTER
-		vBox.add(@lblErr)
+		self.add(@lblErr)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			# hBox.homogeneous = true
@@ -41,7 +40,7 @@ class HudAccueil < Hud
 				@entryIdentifiant.valign = Gtk::Align::END
 				@entryIdentifiant.halign = Gtk::Align::START
 			hBox.add(@entryIdentifiant)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			#hBox.homogeneous = true
@@ -49,14 +48,14 @@ class HudAccueil < Hud
 				lbl.width_request = width
 			hBox.add(lbl)
 			hBox.add(@entryMotDePasse)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			hBox.homogeneous = true
 				@btnInscrire.width_request = width
 			hBox.add(@btnInscrire)
 			hBox.add(@btnConnecter)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -64,10 +63,7 @@ class HudAccueil < Hud
 				@btnQuitter.valign = Gtk::Align::END
 				@btnQuitter.halign = Gtk::Align::END
 			hBox.add(@btnQuitter)
-		vBox.add(hBox)
-
-		self.attach(vBox, 0, 0, 1, 1)
-
+		self.add(hBox)
 	end
 
 
@@ -97,15 +93,15 @@ private
 				# S'assure que le répertoire est sain
 				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
 				Dir.mkdir("../config")	unless Dir.exist?("../config")
-				
+
 				unless File.exist?("../config/#{strId}.ini")
 					File.write("../config/#{strId}.ini", "")
 				end
 				@@config=Config.new(strId)
 				@@fenetre.window_position=Gtk::WindowPosition::NONE
-				@@fenetre.resize(@@config['resolution']['width'], 
+				@@fenetre.resize(@@config['resolution']['width'],
 												 @@config['resolution']['height'])
-				@@fenetre.move(@@config['position']['x'], 
+				@@fenetre.move(@@config['position']['x'],
 												 @@config['position']['y'])
 
 				self.lancementModeJeu

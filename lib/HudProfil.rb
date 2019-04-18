@@ -7,13 +7,12 @@ require_relative "Profil.rb"
 
 class HudProfil < Hud
 	def initialize
-		super()
+		super(Gtk::Orientation::VERTICAL)
 		self.setTitre("#{@@joueur.login} - Profil")
 		@lblErreur = CustomLabel.new('', 'lblErr')
 		entNom = Gtk::Entry.new
 		entMdp = Gtk::Entry.new
 		entMdp.set_visibility(false)
-		@@joueur.mode = :aventure
 
 		initBoutonRetour
 
@@ -23,40 +22,36 @@ class HudProfil < Hud
 		@champScores.set_min_content_height(150)
 		@champScores.name="boxScores"
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-		vBox.add(@lblErreur)
+		self.add(@lblErreur)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.add(CustomLabel.new("Nouveau nom"))
 			hBox.add(entNom)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.add(CustomLabel.new("Nouveau mot de passe"))
 			hBox.add(entMdp)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.add(@btnAventure)
 			hBox.add(@btnExploration)
 			hBox.add(@btnChrono)
-		vBox.add(initBoutonSauvegarderLogin(entNom, entMdp))
-		vBox.add(CustomLabel.new("Vos scores"))
-		vBox.add(hBox)
+		self.add(initBoutonSauvegarderLogin(entNom, entMdp))
+		self.add(CustomLabel.new("Vos scores"))
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
-
-
 			hBox.add(initBoutonTri("Score", :montantScore))
 			hBox.add(initBoutonTri("Date", :dateObtention))
-		vBox.add(hBox)
-		vBox.add(@champScores)
-		vBox.add(@btnRetour)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
-
-		self.attach(vBox, 0, 0, 1, 1)
-
+		self.add(hBox)
+		self.add(@champScores)
+		self.add(@btnRetour)
+		self.hexpand = true
+		self.vexpand = true
+		self.valign = Gtk::Align::CENTER
+		self.halign = Gtk::Align::CENTER
 	end
 
 private
@@ -70,9 +65,9 @@ private
 	# - sortDown : booléen, true => afficher une liste décroissante,
 	# false => croissante ; par défaut true, affichant les derniers/meilleurs scores
 	# - return self
-	def refreshChampScore(sortCriteria=:montantScore, sortDown=true)
+	def refreshChampScore(mode, sortCriteria=:montantScore, sortDown=true)
 		@champScores.remove(@champScores.child)		 if @champScores.child != nil
-		listeScores = @@joueur.rechercherScores(@@joueur.mode.to_s)
+		listeScores = @@joueur.rechercherScores(mode.to_s)
 
 		# trie la liste en ordre ascendant selon le critère donné
 		arr = listeScores.sort do |a, b|
@@ -100,18 +95,15 @@ private
 
 	def initBoutonsChampScore
 		@btnAventure = CustomButton.new("Aventure") do
-			@@joueur.mode = :aventure
-			refreshChampScore
+			refreshChampScore(:aventure)
 		end
 
 		@btnExploration = CustomButton.new("Exploration") do
-			@@joueur.mode = :explo
-			refreshChampScore
+			refreshChampScore(:exploration)
 		end
 
 		@btnChrono = CustomButton.new("Contre-la-montre") do
-			@@joueur.mode = :rapide
-			refreshChampScore
+			refreshChampScore(:rapide)
 		end
 	end
 
@@ -168,7 +160,7 @@ private
 	# - return self
 	def initChampScore
 		@champScores = Gtk::ScrolledWindow.new
-		refreshChampScore
+		refreshChampScore(:aventure)
 		self
 	end
 

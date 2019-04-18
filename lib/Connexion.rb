@@ -18,9 +18,11 @@ class Connexion
 	# 	@login contient le login de l'utilisateur connecté
 	# 	@difficulte contient la difficulte de la grille jouée par l'utilisateur (ou le difficulté de la derniere grille)
 	# 	@mode symbole parmis {:tutoriel, :aventure, :exploration, :rapide}, définie dans quel mode de jeu le joueur se trouve (ou la derniere partie lancée)
+	# 	@score entier stockant le score de la derniere partie jouée, le cumul des points en mode aventure
+	# 	@enregistrerScore booléen permettant de savoir si le joueur souhaite enre ses scores
 
-	attr_reader :id, :login, :difficulte, :mode, :score
-	attr_writer :login, :difficulte, :mode, :score
+	attr_reader :id, :login, :difficulte, :mode, :score, :sauvegardeScores
+	attr_writer :login, :difficulte, :mode, :score, :sauvegardeScores
 
 	# Méthode permettant de modifier les informations liées à une session, lors de la
 	# connexion d'un nouvel utilisateur par exemple.
@@ -54,6 +56,7 @@ class Connexion
 			@id = reqProfil.id
 			@login = login
 			@score = 0
+			@enregistrerScore = true
 			return true
 		end
 	end
@@ -101,15 +104,17 @@ class Connexion
 	# 	+2+ - Le montant du score obtenu à la fin de la partie
 	#
 	def enregistrerScore
-		reqScore = Score.create(
-			modeJeu: mode.to_s,# infoGrille[0],
-			difficulte: difficulte,# infoGrille[1],
-			montantScore: score,
-			dateObtention: Time.now.to_s.split(" ").at(0).to_s,
-			profil_id: id
-		);
-		# puts "Score enregistré dans la BDD !"
-		return Score.last.id
+		if sauvegardeScores
+			reqScore = Score.create(
+				modeJeu: mode.to_s,# infoGrille[0],
+				difficulte: difficulte,# infoGrille[1],
+				montantScore: score,
+				dateObtention: Time.now.to_s.split(" ").at(0).to_s,
+				profil_id: id
+			);
+			# puts "Score enregistré dans la BDD !"
+			return Score.last.id
+		end
 	end
 
 	##
