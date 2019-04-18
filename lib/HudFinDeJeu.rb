@@ -70,7 +70,7 @@ private
 		listeScores.each do |score|
 			lblScore = CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
 			# Le nouveau score du joueur est mis en évidence
-			lblScore.color = (score.id == @id) ? "blue" : 'white'
+			lblScore.name = (score.id == @id) ? "lblErr" : 'lblWhite'# TODO
 			boxChamp.add(lblScore)
 		end
 		@champScores.add(boxChamp)

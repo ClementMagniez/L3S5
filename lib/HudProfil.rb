@@ -9,14 +9,11 @@ class HudProfil < Hud
 	def initialize
 		super()
 		self.setTitre("#{@@joueur.login} - Profil")
-		@lblErreur = CustomLabel.new
-		@lblErreur.color = 'red'
+		@lblErreur = CustomLabel.new('', 'lblErr')
 		entNom = Gtk::Entry.new
 		entMdp = Gtk::Entry.new
 		entMdp.set_visibility(false)
 		@@joueur.mode = :aventure
-		@sortCriteria= :montantScore
-		@sortDown=true
 
 		initBoutonRetour
 
@@ -24,6 +21,7 @@ class HudProfil < Hud
 		initChampScore
 #		initBoutonsTriScore
 		@champScores.set_min_content_height(150)
+		@champScores.name="boxScores"
 
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		vBox.add(@lblErreur)

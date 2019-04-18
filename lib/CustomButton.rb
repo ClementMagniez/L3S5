@@ -1,15 +1,13 @@
 # Gtk::Button dont le label est un CustomLabel
 class CustomButton < Gtk::Button
-	def initialize(str="", couleur="black", size="large", weight="bold",nom: "button")
+	def initialize(str="", nom="button", labelNom="label")
 		super()
-		
-		# TODO
+
 		self.style_context.add_provider(Stylizable::getStyle)
-#		self.set_relief(Gtk::ReliefStyle::NONE)
-
-
-		self.add(CustomLabel.new(str,couleur,size,weight))
+		self.add(CustomLabel.new(str,labelNom))
 		self.set_name(nom)
+		
+
 
 		if block_given?
 			signal_connect("clicked") {
@@ -17,23 +15,6 @@ class CustomButton < Gtk::Button
 			}
 		end
 	end
-
-	# Modifie la couleur du bouton
-	# - return self
-	def set_color(c)
-		self.child.set_color(c)
-		self
-	end
-	alias :color= :set_color
-
-	# Modifie le label du bouton
-	# - return self
-	def set_label(lbl)
-		self.remove(self.child)
-		self.add(lbl)
-		self
-	end
-	alias :label= :set_label
 
 	# Modifie le texte du bouton
 	# - return self

@@ -154,20 +154,20 @@ class HudJeu < Hud
 
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
-		return 'large' if @@winY>700
-		return @grille.length < 9 ? "large" : (@grille.length < 12 ?	"medium" : "x-small")
+#		return 'large' if @@winY>700
+#		return @grille.length < 9 ? "large" : (@grille.length < 12 ?	"medium" : "x-small")
+		return 'medium'
 		# return @grille.length>=12 || @@winY<700 ? "small" : "x-large"
 	end
 
-	# Crée et stylise le label indiquant le nombre de tentes dans une ligne/colonne
+	# Crée le String indiquant le nombre de tentes dans une ligne/colonne
 	# - i : indice de la ligne/colonne
 	# - ligneOuColonne : symbole ∈ { :varTentesCol, :varTentesLigne } - accesseur
 	# de la variable d'instance Grille#varTentesCol ou Grille#varTentesLigne selon
 	# le symbole passé
-	# - return le CustomLabel créé
+	# - return le String créé
 	def labelIndice(i,ligneOuColonne)
-		return CustomLabel.new(@grille.send(ligneOuColonne)[i].to_s,
-													 "white",self.getIndiceSize,'ultrabold')
+		return  @grille.send(ligneOuColonne)[i].to_s
 	end
 
 	# Rend lisible le temps écoulé @timer et renvoie le String calculé
@@ -210,10 +210,7 @@ class HudJeu < Hud
 	# - return self
 
 	def afficherAide(typeAide="rapide")
-		# TODO afficher l'image de fond en la mettant dans une grid avec le label
-#		image = Gtk::Image.new( :file => "../img/gris.png")
-#		image.pixbuf = image.pixbuf.scale((@@winX/2.5),(@@winY/@sizeGridWin)*2)
-		# self.attach(image,@varDebutPlaceGrid,@varFinPlaceGrid+3,@sizeGridJeu,2)
+
 		@caseSurbrillanceList = Array.new
 		#Met une case en surbrillance
 		tableau=@aide.cycle(typeAide)
@@ -227,13 +224,13 @@ class HudJeu < Hud
 		#Affiche le message d'aide
 		 @lblAide.set_text(tableau.at(MESSAGE))
 
-	 		if @@winY>800
-		 		@lblAide.set_size('xx-large')
-			elsif @@winY>600
-				@lblAide.set_size('large')
-			elsif @@winY>400
-				@lblAide.set_size('medium')
-			end
+#	 		if @@winY>800
+#		 		@lblAide.set_size('xx-large')
+#			elsif @@winY>600
+#				@lblAide.set_size('large')
+#			elsif @@winY>400
+#				@lblAide.set_size('medium')
+#			end
 
 		#Met un indice de colonne ou ligne en surbrillance
 		indice = tableau.at(INDICE_LIG_COL)
@@ -298,14 +295,14 @@ class HudJeu < Hud
 	# return self
 	def initIndice(i,isRow)
 		#Quand on clique dessus, met toutes les cases vides à gazon
-		btnIndice = CustomButton.new(nom: "caseJeu") do
+		btnIndice = CustomButton.new("","caseJeu", "lblIndice") do
 			(@grille.length).times do |k|
 				isRow ?	self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
 			end
 			self.desurbrillanceIndice
 			yield	if block_given?
 		end
-		btnIndice.label = labelIndice(i, isRow ? :varTentesLigne : :varTentesCol)
+		btnIndice.text = labelIndice(i, isRow ? :varTentesLigne : :varTentesCol)
 		btnIndice.set_relief(Gtk::ReliefStyle::NONE)
 
 		posX=(isRow ? 0 : i+1)
@@ -356,9 +353,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @lblAide
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
-		@lblAide = CustomLabel.new
-		@lblAide.color = "white"
-		@lblAide.set_background("#000000", 40)
+		@lblAide = CustomLabel.new("", "lblWhite")
 		@btnAide = CustomButton.new("Aide") {
 			@grille.score.appelerAssistant
 			self.afficherAide
@@ -454,7 +449,7 @@ class HudJeu < Hud
 	# - return self
 	def initTimer(start=0)
 		@timer = start
-		@lblTimer = CustomLabel.new(self.parseTimer, "white")
+		@lblTimer = CustomLabel.new(self.parseTimer, "lblWhite")
 		self.startTimer
 		self
 	end
@@ -517,17 +512,17 @@ class HudJeu < Hud
 
 	# Redimensionne les widgets ; permet de réagir à un changement de résolution
 	def rescaleGrille
-		@grille.each do |row|
-			row.each do |cell|
-				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
-			end
-		end
-		1.upto(@grille.length) do |i|
-			@gridJeu.get_child_at(0,i).set_size(self.getIndiceSize)
-			@gridJeu.get_child_at(i,0).set_size(self.getIndiceSize)
-		end
-		@btnOptions.image.pixbuf=@btnOptions.image.pixbuf.scale(@@winX/20, @@winX/20)
-		self
+#		@grille.each do |row|
+#			row.each do |cell|
+#				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
+#			end
+#		end
+#		1.upto(@grille.length) do |i|
+#			@gridJeu.get_child_at(0,i).set_size(self.getIndiceSize)
+#			@gridJeu.get_child_at(i,0).set_size(self.getIndiceSize)
+#		end
+#		@btnOptions.image.pixbuf=@btnOptions.image.pixbuf.scale(36, 36)
+#		self
 	end
 
 	# A partir du fichier en path _string_, crée une Gtk::Image
@@ -537,9 +532,9 @@ class HudJeu < Hud
 	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
-		imgSize = @@winY / (@grille.length*1.4)
-		imgSize*=0.75
-		image.pixbuf = image.pixbuf.scale(imgSize,imgSize)	if image.pixbuf != nil
+#		imgSize = @@winY / (@grille.length*1.4)
+#		imgSize*=0.75
+		image.pixbuf = image.pixbuf.scale(24,24)	if image.pixbuf != nil
 		return image
 
 	end

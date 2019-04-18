@@ -9,17 +9,16 @@ require_relative 'CustomEventBox'
 # à la connexion, instancie les éléments communs aux menus et permet le passage
 # de l'un à l'autre
 class Hud < Gtk::Grid
-	@@initblock = false
 	@@joueur = Connexion.new
 	@@fenetre = nil
 	@@hudPrecedent = nil
 
 	def initialize
 		super()
-		# Hacky façon de n'exécuter initWindow qu'une fois
-		@@initblock=@@initblock||self.initWindow
-		setTitre("Des Tentes et des Arbres")
 
+		# Hacky façon de n'exécuter initWindow qu'une fois
+
+		setTitre("Des Tentes et des Arbres")
 		initBoutonOptions
 	end
 
@@ -93,7 +92,7 @@ protected
 		@btnOptions = Gtk::Button.new
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
-		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
+		engrenage.pixbuf = engrenage.pixbuf.scale(36,36)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
 			@@hudPrecedent = self
@@ -115,18 +114,16 @@ protected
 	# -	initialise son comportement
 	# - - par défaut, interrompt l'exécution ; peut accepter un block
 	def initBoutonQuitter
-		@btnQuitter = Gtk::Button.new
-		@btnQuitter.set_relief(Gtk::ReliefStyle::NONE)
-		quitter = Gtk::Image.new(:file => '../img/quitter.png')
-		quitter.pixbuf = quitter.pixbuf.scale(@@winX/20,@@winX/20)	if quitter.pixbuf != nil
-		@btnQuitter.set_image(quitter)
-		@btnQuitter.signal_connect('clicked') {
+		@btnQuitter = CustomButton.new("", "btnQuit") {
 			if block_given?
 				yield
 			else
 				Gtk.main_quit
 			end
 		}
+		quitter = Gtk::Image.new(:file => '../img/quitter.png')
+		quitter.pixbuf = quitter.pixbuf.scale(36,36)	if quitter.pixbuf != nil
+		@btnQuitter.set_image(quitter)
 	end
 
 	# Initialise le bouton des règles de jeu :
@@ -134,7 +131,7 @@ protected
 	# 	initialise sont comportement
 	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @hudPrecedent lors du clique sur le bouton retoure du hud
 	def initBoutonRegle(traitements=nil)
-		@btnRegle = CustomButton.new("?", "pink") {
+		@btnRegle = CustomButton.new("?","btnRegle") {
 			@@hudPrecedent = self
 			@@fenetre.changerWidget(HudRegle.new(traitements))
 		}
@@ -151,21 +148,6 @@ protected
 				self.lancementModeJeu
 			end
 		}
-	end
-
-	# TODO : vraiment utile ?
-
-	def initWindow
-		@@winX = @@fenetre.size.fetch(0)
-		@@winY = @@fenetre.size.fetch(1)
-
-		true
-	end
-
-	def resizeWindow(width, height)
-		@@fenetre.set_resizable(true)
-		@@fenetre.resize(width,height)
-		@@fenetre.set_resizable(false)
 	end
 
 	# Modifie le titre de la fenetre

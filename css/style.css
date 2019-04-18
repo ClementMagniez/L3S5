@@ -1,3 +1,5 @@
+
+/* Fenêtre de l'application */
 #mainWindow {
 	background-image: url("../img/fond2.png");
 	background-repeat: no-repeat;
@@ -5,32 +7,58 @@
   background-size: cover;
 }
 
+/* Bouton par défaut */
 #button {
-	border-radius: 1px;
-	background: transparent;
-	background-color:  #c2c6ce;
-	margin: 5px;
+	border-radius: 20px;
+	border-width: 1px;
+	background-image:  url("../img/gris.png");
+/*	margin: 1px;*/
+}
+#button:hover {
+	background-color: rgba(186, 194, 209, 0.5);
 }
 
-
+/* Bouton désactivé (encore utile ?) */
 #disabledutton {
 	border-radius: 1px;
 	color: black;
 	opacity: 0.5; 
-	padding: 5px;
+/*	padding: 5px;*/
 }
 
-#caseJeu {
+/* Indices des lignes et colonnes, met en évidence l'hover */
+#caseJeu:hover {
+	background-color: rgba(186, 194, 209, 0.8);
+	
 }
 
-
+/* Label par défaut */
 #label {
 	color: black;
 	font-weight: bold;
 }
+/* Label des lignes et colonnes, outline noir */
+#lblIndice {
+	color: white;
+	font-size: medium;
+  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;
+}
+/* Label par défaut blanc */
+
+#lblWhite {
+	color: white;
+	font-weight: bold;
+}
+/* Label d'information */
 
 #lblErreur {
 	color: red;
 	font-weight: bold;
+}
 
+/* Affichage des scores - inachevé */
+
+#champScores {
+	background-image:  url("../img/gris.png");
+	opacity: 0.8;
 }

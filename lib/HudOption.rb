@@ -1,3 +1,5 @@
+# TODO virer le menu résolution, ou voir ce qu'on peut en faire
+
 class HudOption < Hud
 	# @btnPlEcran
 	# @btnRetour
@@ -19,9 +21,9 @@ class HudOption < Hud
 		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Résolution (16:9) : "))
-			hBox.add(@menuResolution)
+#			hBox.add(@menuResolution)
 		vBox.add(hBox)
-		vBox.add(@btnSauvegardeResolution)
+#		vBox.add(@btnSauvegardeResolution)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Enregistrer les scores : "))
 			@group.each { |btn| hBox.add(btn) }

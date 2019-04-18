@@ -2,9 +2,7 @@ class HudAccueil < Hud
 	def initialize(window)
 		@@fenetre = window
 		super()
-		@lblErr = CustomLabel.new
-		
-		@lblErr.name="lblErreur"
+		@lblErr = CustomLabel.new("","lblErreur")
 		
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
@@ -18,7 +16,8 @@ class HudAccueil < Hud
 		initBoutonInscription
 		initBoutonConnecter
 		initBoutonQuitter
-
+		
+				
 		# Rend le mot de passe entré invisible
 		@entryMotDePasse.set_visibility(false)
 
@@ -73,7 +72,7 @@ private
 
 	# Initialise le bouton de connection
 	# 	ajoute une variable d'instance @btnConnecter
-	# 	initialise sont comportement
+	# 	initialise sont comportement # TODO QUEL comportement ?
 	def initBoutonConnecter
 		@btnConnecter = CustomButton.new("Se connecter") {
 			# Vérification de l'existence du profil dans la BDD
@@ -96,13 +95,7 @@ private
 				Dir.mkdir("../config")	unless Dir.exist?("../config")
 				unless File.exist?("../config/#{strId}.ini")
 					f=IniFile.new(filename:"../config/#{strId}.ini", encoding: 'UTF-8')
-					f['resolution']={'width' => 1280, 'height'=> 720}
-					f.write
 				end
-				f=IniFile.load("../config/#{strId}.ini", encoding: 'UTF-8')
-				@@winX=f['resolution']['width']
-				@@winY=f['resolution']['height']
-				self.resizeWindow(@@winX, @@winY)
 				self.lancementModeJeu
 			end
 		}

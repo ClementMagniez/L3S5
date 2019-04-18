@@ -10,8 +10,7 @@ class HudInscription < Hud
 		@entMdp = Gtk::Entry.new
 		# Rend le mot de passe entré invisible
 		@entMdp.set_visibility(false)
-		@lblErreur = CustomLabel.new
-		@lblErreur.color = 'red'
+		@lblErreur = CustomLabel.new('', 'lblErr')
 
 		initBoutonEnregistrement
 		initBoutonRetour

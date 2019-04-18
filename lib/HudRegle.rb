@@ -16,15 +16,10 @@ class HudRegle < Hud
 			Règle n°4 : \n
 			Le nombre de places est limité : les chiffres en haut et à\n gauche indiquent le nombre de tentes dans chaque travée.","white")
 
-		lblRegle.set_size('xx-large')  if @@winY<1100
-		lblRegle.set_size('large')  if @@winY<800
-		lblRegle.set_size('small')  if @@winY<600
-
-
 		image = Gtk::Image.new( :file => "../img/gris.png")
 		 #Scale de l'image
-		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	)  if @@winY>600
-		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	) if @@winY<600
+#		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	)  if @@winY>600
+#		image.pixbuf = image.pixbuf.scale(@@winX,(@@winY*0.8)	) if @@winY<600
 
 		initBoutonRetour(traitements)
 

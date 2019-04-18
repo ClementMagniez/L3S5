@@ -14,7 +14,7 @@ class HudModeDeJeu < Hud
 	def initialize
 		super()
  		self.setTitre
-		@lblErr = CustomLabel.new("", "red")
+		@lblErr = CustomLabel.new("", "lblErr")
 
 		initBoutonAventure
 		initBoutonChargerSauvegarde
