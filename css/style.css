@@ -1,7 +1,7 @@
 
 /* Fenêtre de l'application */
 #mainWindow {
-	background-image: url("../img/fond2.png");
+	background-image: url("../img/test/fond2.jpg");
 	background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -74,6 +74,6 @@
 /* Bouton de retour au menu précédent / fermeture de l'app */
 #btnQuit {
 	border: none;
-	background: transparent;
+	background-color: #FFF;
 
 }

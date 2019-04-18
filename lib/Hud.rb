@@ -124,7 +124,7 @@ protected
 				@@fenetre.exit(@@config)
 			end
 		}
-		quitter = Gtk::Image.new(:file => '../img/quitter.png')
+		quitter = Gtk::Image.new(:file => '../img/test/quitter.png')
 		quitter.pixbuf = quitter.pixbuf.scale(36,36)	if quitter.pixbuf != nil
 		@btnQuitter.set_image(quitter)
 	end
