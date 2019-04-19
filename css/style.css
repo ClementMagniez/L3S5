@@ -95,11 +95,6 @@
 	font-weight: bold;
 }
 
-#lblButton {
-	font-weight: bold;
-	color: white;
-}
-
 
 #lblErr {
 	color: red;
@@ -107,8 +102,9 @@
 }
 
 #lblInfo {
-	color: green;
+	color: blue;
 	font-weight: bold;
+	background-color: rgba(68, 71, 76, 0.7);
 }
 
 #lblScores {
@@ -120,9 +116,10 @@
 
 /* Panneau de rappel des règles */
 #lblRegles {
-	color: black;
+	color: white;
 	font-weight: bold;
-	background-color: rgba(147, 148, 150, 0.4);
+	background-color: rgba(147, 148, 150, 0.8);
+	  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;
 }
 /* Affichage des scores - inachevé */
 

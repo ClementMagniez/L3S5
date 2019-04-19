@@ -20,6 +20,7 @@ class HudExploration < HudJeu
 				@lblAide.text = "Nombre maximal d'aide demandé !"
 			end
 		}
+		super
 	end
 
 end

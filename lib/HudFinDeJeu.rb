@@ -8,7 +8,7 @@ class HudFinDeJeu < Hud
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
 	
-			bVictoire=@@joueur.score > 0
+			bVictoire=@@joueur.score >= 0 || @@joueur.mode!= :chrono
 			
 		if !finTuto && @@config['misc']['score']==true && bVictoire
 			@id = @@joueur.enregistrerScore

@@ -172,11 +172,6 @@ class HudJeu < Hud
 		return  @grille.send(ligneOuColonne)[i].to_s
 	end
 
-	# Rend lisible le temps écoulé @timer et renvoie le String calculé
-	# - return un String contenant un temps mm:ss
-	def parseTimer
-		[self.timer/60, self.timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
-	end
 
 	# Réinitialise la grille et les affichages
 	# - return self
@@ -204,7 +199,7 @@ class HudJeu < Hud
 	end
 
 	protected
-
+		attr_writer :timer
 
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
 	# dans @lblAide ; peut mettre en surbrillance (changement de couleur) une case ou un indice
@@ -297,7 +292,6 @@ class HudJeu < Hud
 			yield	if block_given?
 		end
 		btnIndice.text = labelIndice(i, isRow ? :varTentesLigne : :varTentesCol)
-		btnIndice.set_relief(Gtk::ReliefStyle::NONE)
 
 		posX=(isRow ? 0 : i+1)
 		posY=i+1-posX
@@ -362,7 +356,7 @@ class HudJeu < Hud
 	end
 
 	def initBoutonOptions
-		super([:rescaleGrille,:pause])
+		super([:pause])
 		@btnOptions.signal_connect("clicked") {
 			self.pause
 			self.setTitre("Partie #{@@joueur.mode.to_s.capitalize} - Options")
@@ -370,9 +364,9 @@ class HudJeu < Hud
 		}
 	end
 
-	# Initialise le bouton d'annulation :
-	# 	ajoute une variable d'instance @btnCancel
-	# 	initialise sont comportement
+	# Initialise le bouton d'annulation @btnCancel, qui reload le dernier score et annule
+	# la dernière case cochée
+	# - return self
 	def initBoutonCancel
 		@btnCancel = CustomButton.new("Annuler") {
 			cell = @grille.cancel
@@ -380,7 +374,9 @@ class HudJeu < Hud
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=(scaleImage(cell.affichage))
 			end
 			self.reloadScore
+			yield if block_given?
 		}
+		self
 	end
 
 	# Initialise le bouton pause :
@@ -437,7 +433,7 @@ class HudJeu < Hud
 	def initBoutonSauvegarde
 		@btnSauvegarde = CustomButton.new("Sauvegarder") do
 			File.open("../saves/"+@@joueur.login+".txt", "w+", 0644) do |f|
-				f.write(Marshal.dump([@grille,@@joueur.mode,@@joueur.difficulte,@timer]))
+				f.write(Marshal.dump([@grille,@@joueur.mode,@@joueur.difficulte,self.timer]))
 			end
 		end
 	end
@@ -448,6 +444,16 @@ class HudJeu < Hud
 	# 	@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
 	# end
 
+	# Rend lisible le temps écoulé self.timer et renvoie le String calculé
+	# - return un String contenant un temps mm:ss
+
+public
+	
+	def parseTimer
+		[self.timer/60, self.timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
+	end
+	
+protected
 	# Initialise le timer ; ajoute une variable d'instance @lblTimer, le label associé au timer.
 	# - start : par défaut 0, le temps de départ du timer
 	# - return self
@@ -505,28 +511,16 @@ class HudJeu < Hud
 		self
 	end
 
-	# Méthode invoquée a la fin du jeu
+	# Calcule le score final de la partia via le timer et l'enregistre dans 
+	# @@joueur.score
+	# Lance le menu de fin de jeu (@see Hud#lancementFinDeJeu)
+	# - return self
 	def jeuTermine
 		@grille.score.recupererTemps(self.timer)
 		scoreFinal = @grille.score.calculerScoreFinal
 		@@joueur.score = scoreFinal > 0 ? scoreFinal : - 1
 		self.lancementFinDeJeu
-	end
-
-
-	# Redimensionne les widgets ; permet de réagir à un changement de résolution
-	def rescaleGrille
-#		@grille.each do |row|
-#			row.each do |cell|
-#				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=(scaleImage(cell.affichage))
-#			end
-#		end
-#		1.upto(@grille.length) do |i|
-#			@gridJeu.get_child_at(0,i).set_size(self.getIndiceSize)
-#			@gridJeu.get_child_at(i,0).set_size(self.getIndiceSize)
-#		end
-#		@btnOptions.image.pixbuf=@btnOptions.image.pixbuf.scale(36, 36)
-#		self
+		self
 	end
 
 	# A partir du fichier en path _string_, crée une Gtk::Image
@@ -536,8 +530,7 @@ class HudJeu < Hud
 	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
-		imgSize = @@fenetre.height / (@grille.length*1.5)
-		image.pixbuf = image.pixbuf.scale(24,24)	if image.pixbuf != nil
+		image.pixbuf = image.pixbuf.scale(28,28)	if image.pixbuf != nil
 		return image
 
 	end

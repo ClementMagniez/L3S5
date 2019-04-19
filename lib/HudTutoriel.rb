@@ -28,6 +28,10 @@ protected
 	def chargementGrille
 		super { self.afficherAide }
 	end
+	
+	def initBoutonCancel
+		super { self.afficherAide }
+	end
 
 
 	# Affiche l'aide pour le mode Tutoriel

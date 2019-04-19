@@ -104,7 +104,7 @@ class ScorePartie
 				coefTemps = (100 - @tempsDeJeu) * 0.01
 			elsif(@tempsDeJeu >= 100 && @tempsDeJeu <= 899)
 				coefTemps = (1000 - @tempsDeJeu) * 0.001
-			elsif(@tempsDeJeu >= 900)
+			else
 				coefTemps = 0
 			end
 		end

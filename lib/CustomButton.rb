@@ -1,6 +1,6 @@
 # Gtk::Button dont le label est un CustomLabel
 class CustomButton < Gtk::Button
-	def initialize(str="", nom="button", labelNom="lblButton")
+	def initialize(str="", nom="button", labelNom="lblWhite")
 		super()
 
 		Stylizable::setStyle(self)

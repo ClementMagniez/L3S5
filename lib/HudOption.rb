@@ -134,6 +134,8 @@ private
 	def initChoixFullScreen
 		@bChoixFS=true
 		rYesButton=Gtk::RadioButton.new(label: "Oui")
+		rYesButton.name="button"
+		Stylizable::setStyle(rYesButton)
 		group=rYesButton.group
 		rNoButton=Gtk::RadioButton.new(group: group, label: "Non")
 		group << rNoButton # bizarrement nécessaire car @group, contrairement

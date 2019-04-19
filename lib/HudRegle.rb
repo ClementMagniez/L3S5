@@ -15,19 +15,15 @@ class HudRegle < Hud
 															+"\tDeux tentes ne peuvent être placées côte à côte, même en diagonale. \n"\
 															+"\nRègle n°3 : \n"\
 															+"\tSi un arbre accueille une tente, il est \"occupé\" et aucune \n"\
-															+"nouvelle tente ne peut s'y installer. Cependant, une tente \n"\
-															+"déjà associée à un arbre peut en côtoyer un autre. \n"\
+															+"\tnouvelle tente ne peut s'y installer. Cependant, une tente \n"\
+															+"\tdéjà associée à un arbre peut en côtoyer un autre. \n"\
 															+"\nRègle n°4 : \n"\
 															+"\tLe nombre de places est limité : les chiffres en haut et à\n"\
-															+" gauche indiquent le nombre de tentes dans chaque travée.", "lblRegles")
-
-
+															+"\tgauche indiquent le nombre de tentes dans chaque travée.", "lblRegles")
 		initBoutonRetour(traitements)
 
-
-
-				lblRegle.hexpand = true
-				lblRegle.vexpand = true
+		lblRegle.hexpand = true
+		lblRegle.vexpand = true
 		self.add(lblRegle)
 			@btnRetour.halign = Gtk::Align::CENTER
 			@btnRetour.valign = Gtk::Align::CENTER
