@@ -1,4 +1,3 @@
-
 require_relative 'Case'
 require_relative 'StatutArbre'
 
@@ -39,9 +38,9 @@ class CaseArbre < Case
 
 	def affichage
 		if self.statutVisible.isArbreCoche?
-			'../img/arbreCoche.png'
+			'../img/test/arbreCoche.png'
 		else
-			'../img/arbre.png'
+			'../img/test/arbre.png'
 		end
 	end
 end

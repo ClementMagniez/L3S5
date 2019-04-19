@@ -2,6 +2,7 @@ require_relative 'Case'
 require_relative 'CaseArbre'
 require_relative 'CaseTente'
 require_relative 'CaseGazon'
+require_relative 'ScorePartie'
 require_relative 'Pile'
 
 # Parse le fichier de génération des grilles et l'implémente
@@ -9,7 +10,7 @@ require_relative 'Pile'
 class Grille
 	include Enumerable
 	attr_reader :varTentesCol, :tentesCol, :varTentesLigne, :tentesLigne, :grille,
-						  :estValide, :stack
+						  :estValide, :score, :stack
 
 
 	# Obtient et génère la grille de taille size
@@ -43,6 +44,7 @@ class Grille
 		@grille=Array.new(matSize) { Array.new(matSize) {0} }
 		@tentesCol=Array.new(matSize)
 		@tentesLigne=Array.new(matSize)
+		@score = ScorePartie.new(matSize)
 		@stack=Pile.new()
 
 		parseText(result)
@@ -178,5 +180,4 @@ class Grille
 			else abort("Erreur de parsing : #{chr}")
 		end
 	end
-
 end

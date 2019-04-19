@@ -2,6 +2,7 @@ require 'gtk3'
 
 # TODO génériciser ce truc
 
+require_relative 'Stylizable'
 require_relative 'Hud'
 require_relative 'HudAccueil'
 require_relative 'HudOption'
@@ -19,12 +20,22 @@ require_relative 'HudPresentationTutoriel'
 require_relative 'HudRegle'
 
 class Fenetre < Gtk::Window
+
 	def initialize
 		super()
+		self.name="mainWindow"
+#		self.style_context.add_provider(Stylizable::getStyle, )
+		Stylizable::setStyle(self)
 		self.set_default_size(480,270)
-		self.set_resizable(false)
 		self.window_position=Gtk::WindowPosition::CENTER
-		self.signal_connect('destroy') { Gtk.main_quit }
+
+		update
+		self.signal_connect('configure-event') {
+			update
+			false # exécute le handler par défaut
+		}
+
+
 		self.add(HudAccueil.new(self))
 		self.show_all
 		Gtk.main
@@ -35,4 +46,28 @@ class Fenetre < Gtk::Window
 		self.show_all
 		return self
 	end
+
+	# Wrapper de Gtk.main_quit ; enregistre les données utiles (position/taille
+	# de la fenêtre) dans le fichier .ini _config_
+	# - config : un Config initialisé
+	# - return self
+	def exit(config)
+		unless config==nil
+			config.writeResolution(@width, @height)
+			config.writePosition(@x, @y)
+		end
+		Gtk.main_quit
+		self
+	end
+	
+	attr_reader :width, :height
+
+private
+	def update
+			@width=self.size[0]
+			@height=self.size[1]
+			@x=self.position[0]
+			@y=self.position[1]
+	end
+	
 end

@@ -16,6 +16,7 @@ class HudRapide < HudJeu
 			@temps = timer
 		end
 		super(grille,@temps)
+		@grille.score.estModeChrono
 		# malus de temps (en seconde) lors d'une demande d'aide
 		@@malus = 15
 	end

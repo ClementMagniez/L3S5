@@ -1,3 +1,5 @@
+# TODO virer le menu résolution, ou voir ce qu'on peut en faire
+
 class HudOption < Hud
 	# @btnPlEcran
 	# @btnRetour
@@ -5,36 +7,30 @@ class HudOption < Hud
 	# @fullscreen
 
 	def initialize(traitement=nil)
-		super()
-		self.setTitre("#{@@name} - Options")
-		configFile=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
-
+		super(Gtk::Orientation::VERTICAL)
+		self.setTitre("#{@@joueur.login} - Options")
 
 		initBoutonRetour(traitement)
 		initChoixScore
-		initBoutonSauvegarderChoixScore(configFile)
+		initBoutonSauvegarderChoixScore
 		initMenuResolution
-		initBoutonSauvegarderResolution(configFile)
+		initBoutonSauvegarderResolution
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Résolution (16:9) : "))
 			hBox.add(@menuResolution)
-		vBox.add(hBox)
-		vBox.add(@btnSauvegardeResolution)
+		self.add(hBox)
+		self.add(@btnSauvegardeResolution)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Enregistrer les scores : "))
 			@group.each { |btn| hBox.add(btn) }
-		vBox.add(hBox)
-		vBox.add(@btnChoixScore)
-		vBox.add(@btnRetour)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
-
-		self.attach(vBox, 0, 0, 1, 1)
-
-		ajoutFondEcran
-
+		self.add(hBox)
+		self.add(@btnChoixScore)
+		self.add(@btnRetour)
+		self.hexpand = true
+		self.vexpand = true
+		self.valign = Gtk::Align::CENTER
+		self.halign = Gtk::Align::CENTER
 	end
 
 private
@@ -85,18 +81,15 @@ private
 		end
 	end
 
-	# Crée un bouton enregistrant laésolution choisie dans un fichier ini
+	# Crée un bouton enregistrant la résolution choisie dans @@config
 	# et appliquant le changement à l'application active
-	def initBoutonSauvegarderResolution(configFile)
+	def initBoutonSauvegarderResolution
 		@btnSauvegardeResolution=CustomButton.new("Appliquer") do
-			configFile=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
-			@@winX=@resolution.split('*')[0].to_i
-			@@winY=@resolution.split('*')[1].to_i
-			configFile['resolution']={'width' => @@winX,
-											 'height'=> @@winY}
-			configFile.write
-			self.resizeWindow(@@winX,
-												@@winY)
+			winX=@resolution.split('*')[0].to_i
+			winY=@resolution.split('*')[1].to_i
+
+			@@config.writeResolution(winX,winY)
+			@@fenetre.resize(winX,winY)
 		end
 	end
 
@@ -110,18 +103,17 @@ private
 		@group << rNoButton # bizarrement nécessaire car @group, contrairement
 												# à ce qu'affirme la doc, ne se met pas à jour
 		@group.each do |btn|
-			btn.signal_connect('clicked') { @bChoixScore=btn.label }
+			btn.signal_connect('clicked') { @bChoixScore=(btn.label=="Oui") }
 		end
 		self
 	end
 
 	# Génère le bouton récupérant le choix de initChoixScore et l'écrivant dans
-	# le .ini
+	# le .ini (score : true/false)
 	# - return self
-	def initBoutonSauvegarderChoixScore(configFile)
+	def initBoutonSauvegarderChoixScore
 		@btnChoixScore=CustomButton.new("Appliquer") do
-			configFile['misc']={'score'=>@bChoixScore}
-			configFile.write
+			@@config.writeEnregistrementScore(@bChoixScore)
 		end
 		self
 	end

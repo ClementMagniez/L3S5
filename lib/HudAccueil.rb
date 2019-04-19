@@ -1,13 +1,14 @@
-require_relative "connectSqlite3.rb"
-require_relative "Profil.rb"
-require_relative "Connexion.rb"
+require_relative 'Config'
 
 class HudAccueil < Hud
 	def initialize(window)
 		@@fenetre = window
-		super()
-		@lblErr = CustomLabel.new
-		@lblErr.color = 'red'
+#		window.resize(480,270)
+		window.set_resizable(false)
+
+		super(Gtk::Orientation::VERTICAL)
+		@lblErr = CustomLabel.new("","lblErr")
+
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
 		@entryMotDePasse.set_visibility(false)
@@ -21,15 +22,15 @@ class HudAccueil < Hud
 		initBoutonConnecter
 		initBoutonQuitter
 
+
 		# Rend le mot de passe entré invisible
 		@entryMotDePasse.set_visibility(false)
 
 		width = 150
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			@lblErr.vexpand = true
 			@lblErr.halign = Gtk::Align::CENTER
-		vBox.add(@lblErr)
+		self.add(@lblErr)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			# hBox.homogeneous = true
@@ -41,22 +42,22 @@ class HudAccueil < Hud
 				@entryIdentifiant.valign = Gtk::Align::END
 				@entryIdentifiant.halign = Gtk::Align::START
 			hBox.add(@entryIdentifiant)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
-			hBox.homogeneous = true
+			#hBox.homogeneous = true
 				lbl = CustomLabel.new("Mot de passe")
 				lbl.width_request = width
 			hBox.add(lbl)
 			hBox.add(@entryMotDePasse)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			hBox.homogeneous = true
 				@btnInscrire.width_request = width
 			hBox.add(@btnInscrire)
 			hBox.add(@btnConnecter)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -64,12 +65,7 @@ class HudAccueil < Hud
 				@btnQuitter.valign = Gtk::Align::END
 				@btnQuitter.halign = Gtk::Align::END
 			hBox.add(@btnQuitter)
-		vBox.add(hBox)
-
-
-		self.attach(vBox, 0, 0, 1, 1)
-
-		ajoutFondEcran
+		self.add(hBox)
 	end
 
 
@@ -77,42 +73,39 @@ private
 
 	# Initialise le bouton de connection
 	# 	ajoute une variable d'instance @btnConnecter
-	# 	initialise sont comportement
+	# 	initialise sont comportement # TODO QUEL comportement ?
 	def initBoutonConnecter
 		@btnConnecter = CustomButton.new("Se connecter") {
 			# Vérification de l'existence du profil dans la BDD
-			session = Connexion.new
+			# session = Connexion.new
 			strId = @entryIdentifiant.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = @entryMotDePasse.text
 			if strId != @entryIdentifiant.text
 				@lblErr.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
-				puts "Connexion : Caractère(s) non autorisé(s)"
 			elsif strId.length > 32
 				@lblErr.text = "Identifiant trop long (> 32) !"
-				puts "Connexion : L'identifiant trop long !"
 			elsif strId.empty?
 				@lblErr.text = "L'identifiant ne peut être vide !"
-				puts "Connexion : L'identifiant ne peut être vide !"
 			elsif strMdp.empty?
 				@lblErr.text = "Le mot de passe ne peut être vide !"
-				puts "Connexion : Le mot de passe ne peut être vide !"
-			elsif(session.seConnecter(strId, strMdp) == -1)
+			elsif(@@joueur.seConnecter(strId, strMdp) == false)
 				@lblErr.text = "Echec : connexion impossible !"
-				puts "Connexion : connexion impossible !"
 			else
+				@@fenetre.set_resizable(true)
 				# S'assure que le répertoire est sain
 				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
 				Dir.mkdir("../config")	unless Dir.exist?("../config")
-				@@name=strId
-				unless File.exist?("../config/#{@@name}.ini")
-					f=IniFile.new(filename:"../config/#{@@name}.ini", encoding: 'UTF-8')
-					f['resolution']={'width' => 1280, 'height'=> 720}
-					f.write
+
+				unless File.exist?("../config/#{strId}.ini")
+					File.write("../config/#{strId}.ini", "")
 				end
-				f=IniFile.load("../config/#{@@name}.ini", encoding: 'UTF-8')
-				@@winX=f['resolution']['width']
-				@@winY=f['resolution']['height']
-				self.resizeWindow(@@winX, @@winY)
+				@@config=Config.new(strId)
+				@@fenetre.window_position=Gtk::WindowPosition::NONE
+				@@fenetre.resize(@@config['resolution']['width'],
+												 @@config['resolution']['height'])
+				@@fenetre.move(@@config['position']['x'],
+												 @@config['position']['y'])
+
 				self.lancementModeJeu
 			end
 		}

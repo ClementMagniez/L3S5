@@ -7,17 +7,11 @@ class HudTutoriel < HudJeu
 	def initialize(grille,timer=0)
 		super(grille,timer)
 		self.setTitre("Tutoriel")
-		@@difficulte="Facile"
+		@@joueur.difficulte="Facile"
 		@btnAide.sensitive = false
 		@btnPause.sensitive = false
 		@lblTimer.set_visible(false)
 		self.afficherAide
-	end
-
-	# Surcharge de la méthode jeuTermine de HudJeu
-	# pour que le menu de fin de jeu n'affiche pas certains éléments
-	def jeuTermine
-		self.lancementFinDeJeu(true)
 	end
 
 	def reset
@@ -45,11 +39,10 @@ protected
 			if listCase != nil
 				while not listCase.empty?
 					caseAide = listCase.pop
-					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage('../img/Subr.png'))
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).name="cellJeuSurbri"
 					@caseSurbrillanceList.push(caseAide)
 				end
 			end
 		end
 	end
-
 end

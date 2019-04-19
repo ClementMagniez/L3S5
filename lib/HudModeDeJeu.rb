@@ -12,9 +12,9 @@ class HudModeDeJeu < Hud
 	#
 	# Paramètre : window - la Fenetre de l'application
 	def initialize
-		super()
+		super(Gtk::Orientation::VERTICAL)
  		self.setTitre
-		@lblErr = CustomLabel.new("", "red")
+		@lblErr = CustomLabel.new("", "lblErr")
 
 		initBoutonAventure
 		initBoutonChargerSauvegarde
@@ -25,14 +25,13 @@ class HudModeDeJeu < Hud
 		initBoutonRegle
 		initBoutonTuto
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.halign = Gtk::Align::END
 			hBox.add(@btnRegle)
 			hBox.add(@btnProfil)
-		vBox.add(hBox)
-		vBox.add(@lblErr)
+		self.add(hBox)
+		self.add(@lblErr)
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.halign = Gtk::Align::CENTER
 				@btnSauvegarde.valign = Gtk::Align::CENTER
@@ -44,7 +43,7 @@ class HudModeDeJeu < Hud
 			vBox2.add(@btnAventure)
 			vBox2.add(@btnChrono)
 			vBox2.add(@btnExplo)
-		vBox.add(vBox2)
+		self.add(vBox2)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.hexpand = true
@@ -55,19 +54,18 @@ class HudModeDeJeu < Hud
 				@btnQuitter.valign = Gtk::Align::END
 				@btnQuitter.halign = Gtk::Align::END
 			hBox.add(@btnQuitter)
-		vBox.add(hBox)
-
-		self.attach(vBox, 0, 0, 1, 1)
-		ajoutFondEcran
+		self.add(hBox)
 	end
 
 	# Surcharge le setter du titre de la fentre afin qu'il affiche toujours le meme message
 	# 	- str Le parametre est rendu inutil
 	def setTitre(str=nil)
-		super("#{@@name} - Choix du mode de jeu")
+		super("#{@@joueur.login} - Choix du mode de jeu")
 	end
 
 private
+
+
 
 	# Crée et connecte le bouton de lancement du mode aventure
 	# Return self
@@ -82,17 +80,17 @@ private
 	# Return self
 	def initBoutonChargerSauvegarde
 		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde") do
-			if !File.exist?("../saves/"+@@name+".txt")
+			if !File.exist?("../saves/"+@@joueur.login+".txt")
 				@lblErr.text = "Vous n'avez pas encore de sauvegarde d'enregistrée !"
 			else
 				begin
-					File.open("../saves/"+@@name+".txt", 'r') do |f|
+					File.open("../saves/"+@@joueur.login+".txt", 'r') do |f|
 						dataLoaded=Marshal.load(f)
 						grille=dataLoaded[0]
-						@@mode=dataLoaded[1]
-						@@difficulte=dataLoaded[2]
+						@@joueur.mode=dataLoaded[1]
+						@@joueur.difficulte=dataLoaded[2]
 						timer=dataLoaded[3]
-						case @@mode
+						case @@joueur.mode
 							when :rapide then lancementRapide(grille,timer)
 							when :tutoriel then lancementTutoriel(grille,timer)
 							when :aventure then lancementAventure(grille,timer)
@@ -145,7 +143,7 @@ private
 
 	# Ecrase Hud#initBoutonQuitter pour rediriger vers l'écran de connexion
 	def initBoutonQuitter
-		super {	self.lancementAccueil }
+		super { @@fenetre.resize(480,270);	self.lancementAccueil }
 	end
 protected
 	attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
