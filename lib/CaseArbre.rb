@@ -27,20 +27,11 @@ class CaseArbre < Case
 		super(grille)
 	end
 
-
-	def affichageSubr
-		if self.statutVisible.isArbreCoche?
-			'../img/arbreCocheSubr.png'
-		else
-			'../img/arbreSubr.png'
-		end
-	end
-
 	def affichage
 		if self.statutVisible.isArbreCoche?
-			'../img/test/arbreCoche.png'
+			'../img/arbreCoche.png'
 		else
-			'../img/test/arbre.png'
+			'../img/arbre.png'
 		end
 	end
 end

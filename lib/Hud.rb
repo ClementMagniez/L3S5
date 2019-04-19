@@ -94,7 +94,7 @@ protected
 	def initBoutonOptions(traitements=nil)
 		@btnOptions = Gtk::Button.new
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
-		engrenage = Gtk::Image.new(:file => '../img/test/options.png')
+		engrenage = Gtk::Image.new(:file => '../img/options.png')
 		engrenage.pixbuf = engrenage.pixbuf.scale(36,36)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
@@ -124,7 +124,7 @@ protected
 				@@fenetre.exit(@@config)
 			end
 		}
-		quitter = Gtk::Image.new(:file => '../img/test/quitter.png')
+		quitter = Gtk::Image.new(:file => '../img/quitter.png')
 		quitter.pixbuf = quitter.pixbuf.scale(36,36)	if quitter.pixbuf != nil
 		@btnQuitter.set_image(quitter)
 	end
