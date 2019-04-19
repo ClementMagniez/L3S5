@@ -82,11 +82,22 @@ private
 			boxChamp = Gtk::Grid.new
 			boxChamp.set_column_homogeneous(true)
 			arr.each_with_index do |score,i|
+			
+				hbox=Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+				btnDeleteRow=CustomButton.new {
+					puts score.id
+					Connexion.supprimerScore(score.profil_id)
+					refreshChampScore(mode,sortCriteria, sortDown)
+				}
+				btnDeleteRow.image=Gtk::Image.new(stock: Gtk::Stock::DELETE, size: Gtk::IconSize::BUTTON)
+				hbox.add(btnDeleteRow)
+				hbox.add(CustomLabel.new("#{score.montantScore.to_s.rjust(4,' ')}",
+																				"lblScores"))
+			
 				# /!\ Le whitespace ASCII typique n'est apparemment pas reconnu par
 				# rjust ; il s'agit ici d'un whitespace U+2000, à ne pas remplacer
 				# naïvement
-				boxChamp.attach(CustomLabel.new("#{score.montantScore.to_s.rjust(4,' ')}",
-																				"lblScores"), 0,i,1,1)
+				boxChamp.attach(hbox, 0,i,1,1)
 				boxChamp.attach(CustomLabel.new("#{score.dateObtention}",
 																			  "lblScores"), 1,i,1,1)
 			end

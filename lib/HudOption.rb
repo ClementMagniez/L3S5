@@ -103,7 +103,7 @@ private
 		@group << rNoButton # bizarrement nécessaire car @group, contrairement
 												# à ce qu'affirme la doc, ne se met pas à jour
 		@group.each do |btn|
-			btn.signal_connect('clicked') { @bChoixScore=btn.label }
+			btn.signal_connect('clicked') { @bChoixScore=(btn.label=="Oui") }
 		end
 		self
 	end

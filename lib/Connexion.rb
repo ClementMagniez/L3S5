@@ -103,11 +103,11 @@ class Connexion
 	#
 	def enregistrerScore
 		reqScore = Score.create(
-			modeJeu: mode.to_s,# infoGrille[0],
-			difficulte: difficulte,# infoGrille[1],
-			montantScore: score,
+			modeJeu: self.mode.to_s,# infoGrille[0],
+			difficulte: self.difficulte,# infoGrille[1],
+			montantScore: self.score,
 			dateObtention: Time.now.to_s.split(" ").at(0).to_s,
-			profil_id: id
+			profil_id: self.id
 		);
 		# puts "Score enregistré dans la BDD !"
 		return Score.last.id
@@ -146,8 +146,9 @@ class Connexion
 	#
 	# * +idScore+ - L'identifiant numérique du score à supprimer
 	#
-	def supprimerScore(idScore)
-		Score.destroy(id: idScore)
+	def self.supprimerScore(idScore)
+		puts Score.where(id: idScore)
+		Score.destroy(profil_id: idScore)
 	end
 end
 # puts Score.where(modeJeu: "rapide", profil_id: 1)
