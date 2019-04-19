@@ -15,24 +15,15 @@ class CaseVide < Case
 		@statutVisible=StatutVide.new(:VIDE)
 	end
 
-	# TODO refactoriser cycle/cancel
-
 	# Fait cycler la case sur "vide->gazon->tente" et met à jour les indicateurs
 	# de tente restante
 	# - grille : la Grille de jeu
 	# - return self
 	def cycle(grille)
 		self.statutVisible.cycle
+		valeurScore={:'isTente?'=>5, :'isVide?'=>-10, :'isGazon?'=>1}
 
-		if self.statutVisible.isGazon? # le statut vient de devenir "gazon"
-			grille.score.recupererPoints(1)
-		elsif self.statutVisible.isTente? # le statut vient de devenir "tente"
-			grille.score.recupererPoints(5)
-		elsif self.statutVisible.isVide? # le statut vient de devenir "vide"
-			grille.score.recupererPoints(-10)
-		end
-
-		self.updateNbTents(grille, :'isVide?')
+		self.updateNbTents(grille, :'isGazon?', :'isVide?', valeurScore)
 		super(grille)
 		self
 	end
@@ -40,35 +31,35 @@ class CaseVide < Case
 	def cancel(grille)
 
 		self.statutVisible.cancel
-		self.updateNbTents(grille, :'isGazon?')
+		
+		valeurScore={:'isVide?'=>-1, :'isTente?'=>10, :'isGazon?'=>-5}
 
-
-		if self.statutVisible.isGazon? # le statut vient de repasser à "gazon"
-			grille.score.recupererPoints(-5)
-		elsif self.statutVisible.isTente? # le statut vient de repasser à "tente"
-			grille.score.recupererPoints(10)
-		elsif self.statutVisible.isVide? # le statut vient de repasser à "vide"
-			grille.score.recupererPoints(-1)
-		end
-
-		self.updateNbTents(grille, :'isGazon?')
+		self.updateNbTents(grille, :'isGazon?', :'isVide?', valeurScore)
 		self
 	end
 
-	# Met à jour les varTentesCol et varTentesLigne de la grille selon le statut
-	# de self et vérifie la validité de la grille
+	# Met à jour self, les varTentesCol et varTentesLigne de la grille selon le statut
+	# de self, et vérifie la validité de la grille
 	# - grille : la Grille de jeu
-	# - afterTent : symbol de 'isGazon?' ou 'isVide?' déterminant quel type de case
+	# - beforeTent : symbole de 'isGazon?' ou 'isVide?' opposé à _afterTent_ ; 
+	# sert au calcul du score
+	# - afterTent : symbole de 'isGazon?' ou 'isVide?' déterminant quel type de case
 	# vient après :TENTE dans le cycle ; permet de différencier cancel et cycle
-	# - return true si la grille est complète, false sinon
-	def updateNbTents(grille, afterTent)
-
+	# - pointsHash : Hash liant un symbole de afterTent au nombre de points
+	# gagné lors du passage à ce statut 
+	# - return true si la grille est complète après mise à jour, false sinon
+	def updateNbTents(grille, beforeTent, afterTent, pointsHash)
+	
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[self.x]-=1
 			grille.varTentesCol[self.y]-=1
+			grille.score.recupererPoints(pointsHash[:'isTente?'])
 		elsif self.statutVisible.send(afterTent) # le statut était "tente"
 			grille.varTentesLigne[self.x]+=1
 			grille.varTentesCol[self.y]+=1
+			grille.score.recupererPoints(pointsHash[afterTent])
+		else # statut précédant tente
+			grille.score.recupererPoints(pointsHash[beforeTent])
 		end
 
 		if grille.varTentesLigne[self.x]==0 && grille.varTentesCol[self.y]==0
@@ -77,23 +68,11 @@ class CaseVide < Case
 		false
 	end
 
-
-
-	def affichageSubr
-		if self.statutVisible.isGazon?
-			'../img/gazonSubr.png'
-		elsif self.statutVisible.isTente?
-			'../img/tenteSubr.png'
-		else
-			'../img/Subr.png'
-		end
-	end
-
 	def affichage
 		if self.statutVisible.isGazon?
-			'../img/test/gazon.png'
+			'../img/gazon.png'
 		elsif self.statutVisible.isTente?
-			'../img/test/tente.png'
+			'../img/tente.png'
 		end
 	end
 end

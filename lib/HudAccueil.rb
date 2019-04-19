@@ -97,15 +97,18 @@ private
 				Dir.mkdir("../config")	unless Dir.exist?("../config")
 
 				unless File.exist?("../config/#{strId}.ini")
-					File.write("../config/#{strId}.ini", "")
+					Config.initFile(strId)
 				end
 				@@config=Config.new(strId)
 				@@fenetre.window_position=Gtk::WindowPosition::NONE
-				@@fenetre.resize(@@config['resolution']['width'],
+
+				@@fenetre.resize(@@config['resolution']['width'], 
 												 @@config['resolution']['height'])
 				@@fenetre.move(@@config['position']['x'],
-												 @@config['position']['y'])
+											 @@config['position']['y'])
 
+				@@fenetre.fullscreen if @@config['resolution']['fullscreen']
+	
 				self.lancementModeJeu
 			end
 		}

@@ -92,6 +92,7 @@ class Connexion
 	# Cette méthode permet d'insérer un nouveau score dans la base de données à la fin
 	# d'une partie. Toutes les informations liées à cette partie sont enregistrées dans
 	# la table *Score*.
+	# Le cumul des scores du joueur est remis à 0.
 	#
 	# === Paramètres
 	#
@@ -109,6 +110,7 @@ class Connexion
 			dateObtention: Time.now.to_s.split(" ").at(0).to_s,
 			profil_id: self.id
 		);
+		score = 0
 		# puts "Score enregistré dans la BDD !"
 		return Score.last.id
 	end
@@ -147,7 +149,6 @@ class Connexion
 	# * +idScore+ - L'identifiant numérique du score à supprimer
 	#
 	def self.supprimerScore(idScore)
-		puts Score.where(id: idScore)
 		Score.destroy(idScore)
 	end
 end
