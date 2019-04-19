@@ -23,19 +23,19 @@ class Fenetre < Gtk::Window
 
 	def initialize
 		super()
-
 		self.name="mainWindow"
-		self.style_context.add_provider(Stylizable::getStyle, Gtk::StyleProvider::PRIORITY_APPLICATION)
+#		self.style_context.add_provider(Stylizable::getStyle, )
+		Stylizable::setStyle(self)
 		self.set_default_size(480,270)
 		self.window_position=Gtk::WindowPosition::CENTER
-		
+
+		update
 		self.signal_connect('configure-event') {
-			@width=self.size[0]
-			@height=self.size[1]
-			@x=self.position[0]
-			@y=self.position[1]
+			update
 			false # exécute le handler par défaut
 		}
+
+
 		self.add(HudAccueil.new(self))
 		self.show_all
 		Gtk.main
@@ -46,13 +46,28 @@ class Fenetre < Gtk::Window
 		self.show_all
 		return self
 	end
-	
-	# Wrapper de Gtk.main_quit ; rentre les 
+
+	# Wrapper de Gtk.main_quit ; enregistre les données utiles (position/taille
+	# de la fenêtre) dans le fichier .ini _config_
+	# - config : un Config initialisé
+	# - return self
 	def exit(config)
 		unless config==nil
 			config.writeResolution(@width, @height)
 			config.writePosition(@x, @y)
 		end
 		Gtk.main_quit
+		self
 	end
+	
+	attr_reader :width, :height
+
+private
+	def update
+			@width=self.size[0]
+			@height=self.size[1]
+			@x=self.position[0]
+			@y=self.position[1]
+	end
+	
 end

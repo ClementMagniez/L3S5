@@ -8,14 +8,14 @@ require_relative 'CustomEventBox'
 # Superclasse abstraite de tous les menus de l'application : enregistre le nom du joueur
 # à la connexion, instancie les éléments communs aux menus et permet le passage
 # de l'un à l'autre
-class Hud < Gtk::Grid
+class Hud < Gtk::Box
 	@@joueur = Connexion.new
 	@@fenetre = nil
 	@@config=nil
 	@@hudPrecedent = nil
 
-	def initialize
-		super()
+	def initialize(orientation)
+		super(orientation)
 
 		@@fenetre.signal_connect('destroy') { @@fenetre.exit(@@config) }
 
@@ -94,7 +94,7 @@ protected
 	def initBoutonOptions(traitements=nil)
 		@btnOptions = Gtk::Button.new
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
-		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
+		engrenage = Gtk::Image.new(:file => '../img/test/options.png')
 		engrenage.pixbuf = engrenage.pixbuf.scale(36,36)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {

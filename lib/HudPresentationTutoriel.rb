@@ -1,6 +1,6 @@
 class HudPresentationTutoriel < Hud
 	def initialize(grille)
-		super()
+		super(Gtk::Orientation::VERTICAL)
 		@@joueur.mode = :tutoriel
 		@grille=grille
 
@@ -10,10 +10,9 @@ class HudPresentationTutoriel < Hud
 		@btnRegle.set_text("Règles")
 
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			lbl = CustomLabel.new("Bienvenue dans le mode tutoriel, \ncliquez sur sur \"Continuer\" si vous voulez tester une grille \nou cliquez sur \"Règles\" pour lire les règles avant de jouer !", "lblWhite")
 			lbl.vexpand = true
-		vBox.add(lbl)
+		self.add(lbl)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.vexpand = true
 			hBox.valign = Gtk::Align::CENTER
@@ -26,9 +25,11 @@ class HudPresentationTutoriel < Hud
 				hbox2.halign=Gtk::Align::END
 				hbox2.add(@btnRetour)
 			hBox.add(hbox2)
-		vBox.add(hBox)
-
-		self.attach(vBox, 0, 0, 1, 1)
+		self.add(hBox)
+		self.hexpand = true
+		self.vexpand = true
+		self.valign = Gtk::Align::CENTER
+		self.halign = Gtk::Align::CENTER
 	end
 
 private

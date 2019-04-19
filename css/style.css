@@ -1,7 +1,7 @@
 
 /* Fenêtre de l'application */
 #mainWindow {
-	background-image: url("../img/test/fond2.jpg");
+	background-image: url("../img/test/test.jpg");
 	background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -26,47 +26,102 @@
 /*	padding: 5px;*/
 }
 
+
+#caseJeu {
+	background-color: rgba(68, 71, 76, 0.8);	
+	font-weight: bold;
+	color: white;
+	opacity:0.5;
+	border-radius: 0px;
+}
 /* Indices des lignes et colonnes, met en évidence l'hover */
 #caseJeu:hover {
-	background-color: rgba(186, 194, 209, 0.8);
-	
+	background-color: rgba(255,255,255,0.8);	
+}
+
+#cellJeu {
+	background-color: rgba(68, 71, 76, 0.5);	
+	border: none;
+	margin: 1px;
+	   outline: none;
+	border-radius: 0px;
+}
+
+#cellJeuSurbri {
+	background-color: rgba(224, 139, 222, 1);	
+	border: none;
+	margin: 1px;
+	border-radius: 0px;
+
+   outline: none;
+}
+
+#gridJeu {
+	background-color: rgba(205, 208, 214, 0.4);
+
 }
 
 /* Label par défaut */
 #label {
-	color: black;
+	background-color: rgba(68, 71, 76, 0.7);	
+	color: white;
 	font-weight: bold;
+	margin:3px;
 }
 /* Label des lignes et colonnes, outline noir */
 #lblIndice {
 	color: white;
+	font-weight: bold;
 	font-size: medium;
-/*  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;*/
+  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;
 }
 /* Label par défaut blanc */
 
 #lblWhite {
 	color: white;
 	font-weight: bold;
+
 }
 /* Label d'information */
+
+#lblAide {
+	border-style: solid;
+	font-size: large;
+	border-width:3px;
+	border-color: rgb(147, 148, 150);
+	background-color: rgba(68, 71, 76, 0.7);	
+	color: white;
+	font-weight: bold;
+}
+
+#lblButton {
+	font-weight: bold;
+	color: black;
+}
+
 
 #lblErr {
 	color: red;
 	font-weight: bold;
 }
 
-/* Panneau de rappel des règles */
-#lblRegles {
+#lblScores {
 	color: white;
 	font-weight: bold;
-	background-image: url("../img/gris.png");
-	opacity: 0.8;
+	font-size: large;
+
+}
+
+/* Panneau de rappel des règles */
+#lblRegles {
+	color: black	;
+	font-weight: bold;
+	background-color: rgba(147, 148, 150, 0.4);
 }
 /* Affichage des scores - inachevé */
 
 #champScores {
-	background-image:  url("../img/gris.png");
+	background-color: rgba(147, 148, 150, 0.4);
 	opacity: 0.8;
 }
 
@@ -75,5 +130,10 @@
 #btnQuit {
 	border: none;
 	background-color: #FFF;
-
 }
+
+#boxUtil {
+	padding:50px;
+}
+
+

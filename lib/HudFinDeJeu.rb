@@ -4,7 +4,7 @@ class HudFinDeJeu < Hud
 	# 	window : La Fenetre contenant le HudFinDeJeu
 	# 	fenetrePrecedente : Le HudJeu qui appel ce constructeur, permet de recommencer une meme partie
 	def initialize()
-		super()
+		super(Gtk::Orientation::VERTICAL)
 		finTuto = @@joueur.mode == :tutoriel
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
@@ -13,21 +13,19 @@ class HudFinDeJeu < Hud
 			@id = @@joueur.enregistrerScore
 		end
 		initChampScore
-		@champScores.set_min_content_height(200)
+		@champScores.min_content_height = 200
+		@champScores.min_content_width = 200
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
 
-		# @scorePartie = 0 # À placer après le champ des scores pour avoir la surbrillance de la ligne du score obtenu
-
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			lblTxt = CustomLabel.new("Partie terminée !")
 			lblTxt.vexpand = true
-		vBox.add(lblTxt)
+		self.add(lblTxt)
 			lblTemps.vexpand = true
-		vBox.add(lblTemps)
+		self.add(lblTemps)
 			lblScore.vexpand = true
-		vBox.add(lblScore)
-		vBox.add(@champScores) if @champScores
+		self.add(lblScore)
+		self.add(@champScores) if @champScores
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			vBox2.vexpand = true
 			vBox2.hexpand = false
@@ -35,10 +33,11 @@ class HudFinDeJeu < Hud
 			vBox2.halign = Gtk::Align::CENTER
 			vBox2.add(@btnRecommencer)
 			vBox2.add(@btnModeDeJeu)
-		vBox.add(vBox2)
-
-		self.attach(vBox, 0, 0, 1, 1)
-
+		self.add(vBox2)
+		self.hexpand = true
+		self.vexpand = true
+		self.valign = Gtk::Align::CENTER
+		self.halign = Gtk::Align::CENTER
 
 		if finTuto
 			# On ne doit pas voir les scores à la fin du tuto
@@ -70,7 +69,8 @@ private
 		listeScores.each do |score|
 			lblScore = CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
 			# Le nouveau score du joueur est mis en évidence
-			lblScore.name = (score.id == @id) ? "lblErr" : 'lblWhite'# TODO
+			# TODO
+			lblScore.name = (score.id == @id) ? "lblErr" : 'lblWhite'	if @@joueur.enregistrerScore
 			boxChamp.add(lblScore)
 		end
 		@champScores.add(boxChamp)

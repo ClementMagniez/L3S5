@@ -7,7 +7,7 @@ class HudOption < Hud
 	# @fullscreen
 
 	def initialize(traitement=nil)
-		super()
+		super(Gtk::Orientation::VERTICAL)
 		self.setTitre("#{@@joueur.login} - Options")
 
 		initBoutonRetour(traitement)
@@ -16,23 +16,21 @@ class HudOption < Hud
 		initMenuResolution
 		initBoutonSauvegarderResolution
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Résolution (16:9) : "))
 			hBox.add(@menuResolution)
-		vBox.add(hBox)
-		vBox.add(@btnSauvegardeResolution)
+		self.add(hBox)
+		self.add(@btnSauvegardeResolution)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Enregistrer les scores : "))
 			@group.each { |btn| hBox.add(btn) }
-		vBox.add(hBox)
-		vBox.add(@btnChoixScore)
-		vBox.add(@btnRetour)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
-
-		self.attach(vBox, 0, 0, 1, 1)
-
+		self.add(hBox)
+		self.add(@btnChoixScore)
+		self.add(@btnRetour)
+		self.hexpand = true
+		self.vexpand = true
+		self.valign = Gtk::Align::CENTER
+		self.halign = Gtk::Align::CENTER
 	end
 
 private
@@ -116,6 +114,7 @@ private
 	def initBoutonSauvegarderChoixScore
 		@btnChoixScore=CustomButton.new("Appliquer") do
 			@@config.writeEnregistrementScore(@bChoixScore)
+			@@joueur.enregistrerScore = (@bChoixScore == "Oui")
 		end
 		self
 	end

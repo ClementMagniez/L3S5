@@ -4,7 +4,7 @@ require_relative "Connexion.rb"
 class HudInscription < Hud
 
 	def initialize
-		super()
+		super(Gtk::Orientation::VERTICAL)
 		self.setTitre("Inscription")
 		@entId = Gtk::Entry.new
 		@entMdp = Gtk::Entry.new
@@ -16,26 +16,23 @@ class HudInscription < Hud
 		initBoutonRetour
 
 
-
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-		vBox.add(@lblErreur)
+		self.add(@lblErreur)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.add(CustomLabel.new("Identifiant"))
 			hBox.add(@entId)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.homogeneous = true
 			hBox.add(CustomLabel.new("Mot de passe"))
 			hBox.add(@entMdp)
-		vBox.add(hBox)
-		vBox.add(@btnEnr)
-		vBox.add(@btnRetour)
-		vBox.valign = Gtk::Align::CENTER
-		vBox.halign = Gtk::Align::CENTER
-
-		self.attach(vBox, 0, 0, 1, 1)
-
+		self.add(hBox)
+		self.add(@btnEnr)
+		self.add(@btnRetour)
+		self.hexpand = true
+		self.vexpand = true
+		self.valign = Gtk::Align::CENTER
+		self.halign = Gtk::Align::CENTER
 	end
 
 private
@@ -48,16 +45,16 @@ private
 			mdp = @entMdp.text
 			if id != @entId.text
 				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
-				puts "Insription : Caractère(s) non autorisé(s)"
+				# puts "Insription : Caractère(s) non autorisé(s)"
 			elsif id.length > 32
 				@lblErr.text = "Identifiant trop long (> 32) !"
-				puts "Connexion : L'identifiant trop long !"
+				# puts "Connexion : L'identifiant trop long !"
 			elsif id.empty?
 				@lblErreur.text = "L'identifiant ne peut être vide !"
-				puts "Insription : L'identifiant ne peut être vide !"
+				# puts "Insription : L'identifiant ne peut être vide !"
 			elsif mdp.empty?
 				@lblErreur.text = "Le mot de passe ne peut être vide !"
-				puts "Insription : Le mot de passe ne peut être vide !"
+				# puts "Insription : Le mot de passe ne peut être vide !"
 			else
 				session = Connexion.new
 				mdp = session.crypterMdp(mdp)
@@ -70,7 +67,7 @@ private
 					)
 					# Sauvegarde du profil dans la BDD
 					user.save
-					
+
 					# Création du fichier ini par défaut
 					f=Config.new(id).writeResolution(1280,720)\
 													.writeEnregistrementScore("Oui")\

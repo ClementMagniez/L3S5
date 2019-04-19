@@ -10,13 +10,18 @@ class HudJeu < Hud
 	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
 	def initialize(grille,timerStart=0)
-		super()
+		super(Gtk::Orientation::VERTICAL)
 		self.setTitre("Partie #{@@joueur.mode.to_s.capitalize}")
 		@aide = Aide.new(grille)
 		# Le label d'aide est placé dans une Gtk::Grid afin de pouvoir y attacher une image de fond
 		@gridJeu = Gtk::Grid.new
 		@gridJeu.row_homogeneous = true
 		@gridJeu.column_homogeneous = true
+		
+		@gridJeu.name="gridJeu"
+		Stylizable::setStyle(@gridJeu)
+		
+		
 		@grille = grille
 		@lblScore = CustomLabel.new
 		self.reloadScore
@@ -38,37 +43,44 @@ class HudJeu < Hud
 		@btnRetour.text = "Abandonner"
 
 
-		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(@lblScore)
 				@lblTimer.hexpand = true
 				@lblTimer.halign = Gtk::Align::CENTER
 			hBox.add(@lblTimer)
 			hBox.add(@btnRegle)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.halign = Gtk::Align::CENTER
-			hBox.valign = Gtk::Align::CENTER
+			hBox.halign = Gtk::Align::FILL
+			hBox.valign = Gtk::Align::FILL
 			hBox.vexpand = true
 			hBox.add(@gridJeu)
 				vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 				vBox2.valign = Gtk::Align::CENTER
 				vBox2.add(@btnAide)
+				[@btnAide, @btnPause, @btnReset, @btnCancel, @btnRemplissage,@btnSauvegarde].each do |btn|
+					btn.vexpand=true
+					btn.valign=Gtk::Align::FILL
+				end
 				vBox2.add(@btnPause)
 				vBox2.add(@btnReset)
 				vBox2.add(@btnCancel)
 				vBox2.add(@btnRemplissage)
 				vBox2.add(@btnSauvegarde)
+				vBox2.name="boxUtil"
+				vBox2.vexpand=true
+				vBox2.valign=Gtk::Align::CENTER
+				Stylizable::setStyle(vBox2)
 			hBox.add(vBox2)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			hBox.valign = Gtk::Align::CENTER
-			hBox.vexpand = true
+#			hBox.vexpand = true
 			hBox.add(@lblAide)
-		vBox.add(hBox)
+		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.vexpand = true
+#			hBox.vexpand = true
 			hBox.hexpand = true
 			hBox.homogeneous = true
 				@btnOptions.valign = Gtk::Align::END
@@ -77,11 +89,7 @@ class HudJeu < Hud
 				@btnRetour.valign = Gtk::Align::END
 				@btnRetour.halign = Gtk::Align::END
 			hBox.add(@btnRetour)
-		vBox.add(hBox)
-
-		self.attach(vBox, 0, 0, 1, 1)
-
-
+		self.add(hBox)
 
 # Disposition alternative où lblAide est dans la même vbox que gridJeu
 # et est donc strictement en dessous
@@ -146,8 +154,7 @@ class HudJeu < Hud
 		if @caseSurbrillanceList != nil
 			while not @caseSurbrillanceList.empty?
 				caseSubr = @caseSurbrillanceList.shift
-				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).\
-				replace(scaleImage(@grille[caseSubr.x][caseSubr.y].affichage))
+				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).name="cellJeu"
 			end
 		end
 	end
@@ -182,7 +189,7 @@ class HudJeu < Hud
 		@grille.each do |line|
 			line.each do |cell|
 				cell.reset
-				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=(scaleImage(cell.affichage))
 			end
 		end
 		@grille.raz
@@ -217,20 +224,11 @@ class HudJeu < Hud
 		caseAide = tableau.at(CASE)
 
 		if caseAide != nil
-			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).\
-			replace(scaleImage(caseAide.affichageSubr))
+			@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).name="cellJeuSurbri"
 			@caseSurbrillanceList.push(caseAide)
 		end
 		#Affiche le message d'aide
 		 @lblAide.set_text(tableau.at(MESSAGE))
-
-#	 		if @@winY>800
-#		 		@lblAide.set_size('xx-large')
-#			elsif @@winY>600
-#				@lblAide.set_size('large')
-#			elsif @@winY>400
-#				@lblAide.set_size('medium')
-#			end
 
 		#Met un indice de colonne ou ligne en surbrillance
 		indice = tableau.at(INDICE_LIG_COL)
@@ -280,7 +278,7 @@ class HudJeu < Hud
 		if @grille[i][k].statutVisible.isVide?
 			@grille[i][k].cycle(@grille)
 			# @gridJeu.get_child_at(i+1,k+1).image=scaleImage(@grille[k][i].affichage)
-			@gridJeu.get_child_at(k+1,i+1).replace(scaleImage(@grille[i][k].affichage))
+			@gridJeu.get_child_at(k+1,i+1).image=(scaleImage(@grille[i][k].affichage))
 		end
 		self
 	end
@@ -325,15 +323,11 @@ class HudJeu < Hud
 		# positionne les cases de la grille
 		@grille.each do |line|
 			line.each do |cell|
-				button = CustomEventBox.new
-
-				button.set_border_width(1)
-				button.add(scaleImage(cell.affichage))
-				button.signal_connect('button-release-event') do
+				button = CustomButton.new("", "cellJeu", "lblIndice") do
 					unless @pause
 						cell.cycle(@grille)
 						self.reloadScore
-						button.replace(scaleImage(cell.affichage))
+						button.image=(scaleImage(cell.affichage))
 						desurbrillanceCase
 						desurbrillanceIndice
 						self.jeuTermine		if @grille.estValide
@@ -343,6 +337,17 @@ class HudJeu < Hud
 					# sans quoi le tutoriel voit ses indices effacés instantanément
 					yield if block_given?
 				end
+
+
+				img=scaleImage(cell.affichage)
+				if img
+					button.set_image(scaleImage(cell.affichage))
+				else
+					button.text=""
+				end
+
+				button.hexpand=true
+				button.vexpand=true
 				@gridJeu.attach(button,cell.y+1,cell.x+1,1,1)
 			end
 		end
@@ -353,7 +358,7 @@ class HudJeu < Hud
 	# 	ajoute une variable d'instance @lblAide
 	# 	ajoute une variable d'instance @btnAide
 	def initBoutonAide
-		@lblAide = CustomLabel.new("", "lblWhite")
+		@lblAide = CustomLabel.new("", "lblAide")
 		@btnAide = CustomButton.new("Aide") {
 			@grille.score.appelerAssistant
 			self.afficherAide
@@ -376,7 +381,7 @@ class HudJeu < Hud
 		@btnCancel = CustomButton.new("Annuler") {
 			cell = @grille.cancel
 			if cell != nil
-				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
+				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=(scaleImage(cell.affichage))
 			end
 			self.reloadScore
 		}
@@ -411,7 +416,7 @@ class HudJeu < Hud
 				if caseRemp.statutVisible.isVide?
 					caseRemp.cycle(@grille)
 					self.reloadScore
-					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).replace(scaleImage(caseRemp.affichage))
+					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).image=(scaleImage(caseRemp.affichage))
 				end
 			end
 		}
@@ -514,7 +519,7 @@ class HudJeu < Hud
 	def rescaleGrille
 #		@grille.each do |row|
 #			row.each do |cell|
-#				@gridJeu.get_child_at(cell.y+1,cell.x+1).replace(scaleImage(cell.affichage))
+#				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=(scaleImage(cell.affichage))
 #			end
 #		end
 #		1.upto(@grille.length) do |i|
@@ -526,14 +531,13 @@ class HudJeu < Hud
 	end
 
 	# A partir du fichier en path _string_, crée une Gtk::Image
-	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu sans forcer
-	# la redimension de la fenêtre
+	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu, qui occupe
+	# 66% de la hauteur de la fenêtre
 	# - string : path d'un fichier image à charger
 	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
 		image=Gtk::Image.new(:file => string)
-#		imgSize = @@winY / (@grille.length*1.4)
-#		imgSize*=0.75
+		imgSize = @@fenetre.height / (@grille.length*1.5)
 		image.pixbuf = image.pixbuf.scale(24,24)	if image.pixbuf != nil
 		return image
 

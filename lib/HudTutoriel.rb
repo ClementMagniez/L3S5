@@ -39,7 +39,7 @@ protected
 			if listCase != nil
 				while not listCase.empty?
 					caseAide = listCase.pop
-					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).replace(scaleImage('../img/Subr.png'))
+					@gridJeu.get_child_at(caseAide.y+1,caseAide.x+1).name="cellJeuSurbri"
 					@caseSurbrillanceList.push(caseAide)
 				end
 			end
