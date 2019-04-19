@@ -23,36 +23,52 @@ class HudProfil < Hud
 		Stylizable::setStyle(@champScores)
 
 
-		self.add(@lblErreur)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.homogeneous = true
-			hBox.add(CustomLabel.new("Nouveau nom"))
-			hBox.add(entNom)
+			# hBox.hexpand = true
+				vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+				vBox.hexpand = true
+				vBox.vexpand = true
+				# vBox.halign = Gtk::Align::CENTER
+				vBox.valign = Gtk::Align::CENTER
+				vBox.add(@lblErreur)
+					hBox2 = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+					hBox2.homogeneous = true
+					hBox2.add(CustomLabel.new("Nouveau nom"))
+					hBox2.add(entNom)
+				vBox.add(hBox2)
+					hBox2 = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+					hBox2.homogeneous = true
+					hBox2.add(CustomLabel.new("Nouveau mot de passe"))
+					hBox2.add(entMdp)
+				vBox.add(hBox2)
+				vBox.add(initBoutonSauvegarderLogin(entNom, entMdp))
+			hBox.add(vBox)
+				vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
+				vBox.hexpand = true
+				vBox.vexpand = true
+				# vBox.halign = Gtk::Align::CENTER
+				vBox.valign = Gtk::Align::CENTER
+				vBox.add(CustomLabel.new("Vos scores"))
+					hBox2 = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+					hBox2.homogeneous = true
+					hBox2.add(@btnAventure)
+					hBox2.add(@btnExploration)
+					hBox2.add(@btnChrono)
+				vBox.add(hBox2)
+					hBox2 = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+					hBox2.homogeneous = true
+					hBox2.add(initBoutonTri("Score", :montantScore))
+					hBox2.add(initBoutonTri("Date", :dateObtention))
+				vBox.add(hBox2)
+				vBox.add(@champScores)
+			hBox.add(vBox)
 		self.add(hBox)
-			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.homogeneous = true
-			hBox.add(CustomLabel.new("Nouveau mot de passe"))
-			hBox.add(entMdp)
-		self.add(hBox)
-			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.homogeneous = true
-			hBox.add(@btnAventure)
-			hBox.add(@btnExploration)
-			hBox.add(@btnChrono)
-		self.add(initBoutonSauvegarderLogin(entNom, entMdp))
-		self.add(CustomLabel.new("Vos scores"))
-		self.add(hBox)
-			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.homogeneous = true
-			hBox.add(initBoutonTri("Score", :montantScore))
-			hBox.add(initBoutonTri("Date", :dateObtention))
-		self.add(hBox)
-		self.add(@champScores)
+			@btnRetour.halign = Gtk::Align::END
 		self.add(@btnRetour)
-		self.hexpand = true
-		self.vexpand = true
-		self.valign = Gtk::Align::CENTER
-		self.halign = Gtk::Align::CENTER
+		# self.hexpand = true
+		# self.vexpand = true
+		# self.valign = Gtk::Align::CENTER
+		# self.halign = Gtk::Align::CENTER
 	end
 
 private
@@ -86,7 +102,7 @@ private
 				hbox=Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 				btnDeleteRow=CustomButton.new {
 					puts score.id
-					Connexion.supprimerScore(score.profil_id)
+					Connexion.supprimerScore(score.id)
 					refreshChampScore(mode,sortCriteria, sortDown)
 				}
 				btnDeleteRow.image=Gtk::Image.new(stock: Gtk::Stock::DELETE, size: Gtk::IconSize::BUTTON)
@@ -141,7 +157,7 @@ private
 			if strNom != entNom.text
 				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
 			elsif strNom.length > 32
-				@lblErr.text = "Identifiant trop long (> 32) !"
+				@lblErreur.text = "Identifiant trop long (> 32) !"
 			elsif(strNom.empty? && strMdp.empty?)
 				@lblErreur.text = "Vous devez remplir au moins un champ !"
 			else

@@ -22,13 +22,13 @@
 #disabledutton {
 	border-radius: 1px;
 	color: black;
-	opacity: 0.5; 
+	opacity: 0.5;
 /*	padding: 5px;*/
 }
 
 
 #caseJeu {
-	background-color: rgba(68, 71, 76, 0.8);	
+	background-color: rgba(68, 71, 76, 0.8);
 	font-weight: bold;
 	color: white;
 	opacity:0.5;
@@ -36,7 +36,7 @@
 }
 /* Indices des lignes et colonnes, met en évidence l'hover */
 #caseJeu:hover {
-	background-color: rgba(255,255,255,0.8);	
+	background-color: rgba(255,255,255,0.8);
 }
 
 #cellJeu {
@@ -48,7 +48,7 @@
 }
 
 #cellJeuSurbri {
-	background-color: rgba(224, 139, 222, 1);	
+	background-color: rgba(224, 139, 222, 1);
 	border: none;
 	margin: 1px;
 	border-radius: 0px;
@@ -63,7 +63,7 @@
 
 /* Label par défaut */
 #label {
-	background-color: rgba(68, 71, 76, 0.7);	
+	background-color: rgba(68, 71, 76, 0.7);
 	border-radius: 50px;
 	color: white;
 	font-weight: bold;
@@ -90,7 +90,7 @@
 	font-size: large;
 	border-width:3px;
 	border-color: rgb(147, 148, 150);
-	background-color: rgba(68, 71, 76, 0.7);	
+	background-color: rgba(68, 71, 76, 0.7);
 	color: white;
 	font-weight: bold;
 }
@@ -121,7 +121,7 @@
 }
 /* Affichage des scores - inachevé */
 
-#boxScores { 
+#boxScores {
 /* TODO	background-color: rgba(147, 148, 150, 1);*/
 }
 
@@ -135,5 +135,3 @@
 #boxUtil {
 	padding:50px;
 }
-
-

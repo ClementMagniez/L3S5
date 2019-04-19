@@ -17,11 +17,11 @@ class HudJeu < Hud
 		@gridJeu = Gtk::Grid.new
 		@gridJeu.row_homogeneous = true
 		@gridJeu.column_homogeneous = true
-		
+
 		@gridJeu.name="gridJeu"
 		Stylizable::setStyle(@gridJeu)
-		
-		
+
+
 		@grille = grille
 		@lblScore = CustomLabel.new
 		self.reloadScore
@@ -56,39 +56,34 @@ class HudJeu < Hud
 			hBox.vexpand = true
 			hBox.add(@gridJeu)
 				vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				vBox2.valign = Gtk::Align::CENTER
-				vBox2.add(@btnAide)
 				[@btnAide, @btnPause, @btnReset, @btnCancel, @btnRemplissage,@btnSauvegarde].each do |btn|
 					btn.vexpand=true
-					btn.valign=Gtk::Align::FILL
+					btn.valign=Gtk::Align::CENTER
 				end
+				vBox2.add(@btnAide)
 				vBox2.add(@btnPause)
 				vBox2.add(@btnReset)
 				vBox2.add(@btnCancel)
 				vBox2.add(@btnRemplissage)
 				vBox2.add(@btnSauvegarde)
+					@btnRetour.vexpand = true
+					@btnRetour.valign = Gtk::Align::END
+				vBox2.add(@btnRetour)
 				vBox2.name="boxUtil"
-				vBox2.vexpand=true
-				vBox2.valign=Gtk::Align::CENTER
 				Stylizable::setStyle(vBox2)
 			hBox.add(vBox2)
 		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			hBox.valign = Gtk::Align::CENTER
-#			hBox.vexpand = true
 			hBox.add(@lblAide)
 		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-#			hBox.vexpand = true
 			hBox.hexpand = true
 			hBox.homogeneous = true
 				@btnOptions.valign = Gtk::Align::END
 				@btnOptions.halign = Gtk::Align::START
 			hBox.add(@btnOptions)
-				@btnRetour.valign = Gtk::Align::END
-				@btnRetour.halign = Gtk::Align::END
-			hBox.add(@btnRetour)
 		self.add(hBox)
 
 # Disposition alternative où lblAide est dans la même vbox que gridJeu

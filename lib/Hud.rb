@@ -134,7 +134,7 @@ protected
 	# 	initialise sont comportement
 	# - traitement : par défaut nil, symbole d'une méthode exécutée sur @hudPrecedent lors du clique sur le bouton retoure du hud
 	def initBoutonRegle(traitements=nil)
-		@btnRegle = CustomButton.new("?","btnRegle") {
+		@btnRegle = CustomButton.new("Règles") {
 			@@hudPrecedent = self
 			@@fenetre.changerWidget(HudRegle.new(traitements))
 		}

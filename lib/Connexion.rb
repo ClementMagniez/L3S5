@@ -148,7 +148,7 @@ class Connexion
 	#
 	def self.supprimerScore(idScore)
 		puts Score.where(id: idScore)
-		Score.destroy(profil_id: idScore)
+		Score.destroy(idScore)
 	end
 end
 # puts Score.where(modeJeu: "rapide", profil_id: 1)
