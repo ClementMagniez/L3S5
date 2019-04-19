@@ -61,6 +61,7 @@ class Fenetre < Gtk::Window
 	end
 	
 	attr_reader :width, :height
+	
 
 private
 	def update

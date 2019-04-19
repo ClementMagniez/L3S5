@@ -10,12 +10,13 @@ class HudOption < Hud
 		super(Gtk::Orientation::VERTICAL)
 		self.setTitre("#{@@joueur.login} - Options")
 
+	
+
 		initBoutonRetour(traitement)
-		initChoixScore
 		initBoutonSauvegarderChoixScore
 		initMenuResolution
 		initBoutonSauvegarderResolution
-
+		initBoutonSauvegarderFullScreen
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Résolution (16:9) : "))
 			hBox.add(@menuResolution)
@@ -23,9 +24,14 @@ class HudOption < Hud
 		self.add(@btnSauvegardeResolution)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(CustomLabel.new("Enregistrer les scores : "))
-			@group.each { |btn| hBox.add(btn) }
+			initChoixScore.each { |btn| hBox.add(btn) }
 		self.add(hBox)
 		self.add(@btnChoixScore)
+			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox.add(CustomLabel.new("Plein écran : "))
+			initChoixFullScreen.each { |btn| hBox.add(btn) }
+		self.add(hBox)
+		self.add(@btnChoixFS)
 		self.add(@btnRetour)
 		self.hexpand = true
 		self.vexpand = true
@@ -93,19 +99,23 @@ private
 		end
 	end
 
+
+	# TODO factoriser ce foutoir
+
 	# Génère les deux radiobuttons "oui"/"non" permettant de choisir si on
 	# enregistre les scores
 	# - return self
 	def initChoixScore
 		rYesButton=Gtk::RadioButton.new(label: "Oui")
-		@group=rYesButton.group
-		rNoButton=Gtk::RadioButton.new(group: @group, label: "Non")
-		@group << rNoButton # bizarrement nécessaire car @group, contrairement
+		group=rYesButton.group
+		@bChoixScore=true
+		rNoButton=Gtk::RadioButton.new(group: group, label: "Non")
+		group << rNoButton # bizarrement nécessaire car @group, contrairement
 												# à ce qu'affirme la doc, ne se met pas à jour
-		@group.each do |btn|
+		group.each do |btn|
 			btn.signal_connect('clicked') { @bChoixScore=(btn.label=="Oui") }
 		end
-		self
+		group
 	end
 
 	# Génère le bouton récupérant le choix de initChoixScore et l'écrivant dans
@@ -118,4 +128,32 @@ private
 		self
 	end
 
+	# Génère les deux radiobuttons "oui"/"non" permettant de choisir si on
+	# enregistre les scores
+	# - return l'array contenant les deux boutons
+	def initChoixFullScreen
+		@bChoixFS=true
+		rYesButton=Gtk::RadioButton.new(label: "Oui")
+		group=rYesButton.group
+		rNoButton=Gtk::RadioButton.new(group: group, label: "Non")
+		group << rNoButton # bizarrement nécessaire car @group, contrairement
+												# à ce qu'affirme la doc, ne se met pas à jour
+		group.each do |btn|
+			btn.signal_connect('clicked') { @bChoixFS=(btn.label=="Oui") }
+		end
+		group
+	end
+
+	# Génère le bouton récupérant le choix de initChoixScore et l'écrivant dans
+	# le .ini (score : true/false)
+	# - return self
+	def initBoutonSauvegarderFullScreen
+		@btnChoixFS=CustomButton.new("Appliquer") do
+			@@config.writeFullScreen(@bChoixFS)
+			@@fenetre.send(@bChoixFS ? :fullscreen : :unfullscreen)
+			@@fenetre.resize(@@config['resolution']['width'], 
+											 @@config['resolution']['height'])
+		end
+		self
+	end
 end
