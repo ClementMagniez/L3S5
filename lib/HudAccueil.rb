@@ -97,7 +97,7 @@ private
 				Dir.mkdir("../config")	unless Dir.exist?("../config")
 
 				unless File.exist?("../config/#{strId}.ini")
-					File.write("../config/#{strId}.ini", "") 	# TODO : complètement erroné : créer un ini file avec des paramètres par défaut
+					Config.initFile(strId)
 				end
 				@@config=Config.new(strId)
 				@@fenetre.window_position=Gtk::WindowPosition::NONE

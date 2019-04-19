@@ -54,13 +54,30 @@ class Config
 	end	
 	
 	# Accesseur au contenu de file, permet d'écrire Config[val]
+	# - val : clé dans le .ini
+	# - return : un Hash décrivant le contenu de la section _val_ du .ini	
 	def [](val)
 		self.file[val]
 	end
 	
-#	def []=(key,val)
-#		self.file[key]=val	
-#	end
+	# Génère un .ini par défaut pour le profil _name_ et enregistre le fichier 
+	# - name : nom d'un profil à enregistrer
+	# - return un IniFile configuré par défaut 
+	def self.initFile(name)
+		content="[resolution]\n"+
+						"width = 1280\n"+
+						"height = 720\n" +
+						"fullscreen = false\n"+
+						"[shortcuts]\n"+
+						"[misc]\n"+
+						"score = true\n"+
+						"[position]\n"+
+						"x = 300\n"+
+						"y = 300\n"
+		filename="../config/#{name}.ini"
+		IniFile.new(content: content, encoding: 'UTF-8', filename: filename).write
+		
+	end
 	attr_accessor :file
 	private
 end

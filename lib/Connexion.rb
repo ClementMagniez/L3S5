@@ -149,7 +149,6 @@ class Connexion
 	# * +idScore+ - L'identifiant numérique du score à supprimer
 	#
 	def self.supprimerScore(idScore)
-		puts Score.where(id: idScore)
 		Score.destroy(idScore)
 	end
 end

@@ -1,5 +1,6 @@
 require "rubygems"
-require_relative "Connexion.rb"
+require_relative "Connexion"
+require_relative "Config"
 
 class HudInscription < Hud
 
@@ -69,9 +70,7 @@ private
 					user.save
 
 					# Création du fichier ini par défaut
-					f=Config.new(id).writeResolution(1280,720)\
-													.writeEnregistrementScore("Oui")\
-													.writePosition(0,0)
+					Config.initFile(id)
 
 					self.lancementAccueil
 				end
