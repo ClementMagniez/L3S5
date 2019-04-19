@@ -193,6 +193,7 @@ class HudJeu < Hud
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer" : "Pause"
 		@lblAide.text=""
+		desurbrillanceCase
 		desurbrillanceIndice
 		self
 	end
@@ -409,6 +410,9 @@ class HudJeu < Hud
 			while not liste.empty?
 				caseRemp = liste.pop
 				if caseRemp.statutVisible.isVide?
+					desurbrillanceCase
+					desurbrillanceIndice
+
 					caseRemp.cycle(@grille)
 					self.reloadScore
 					@gridJeu.get_child_at(caseRemp.y+1,caseRemp.x+1).image=(scaleImage(caseRemp.affichage))
