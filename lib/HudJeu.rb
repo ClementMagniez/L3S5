@@ -175,7 +175,7 @@ class HudJeu < Hud
 	# Rend lisible le temps écoulé @timer et renvoie le String calculé
 	# - return un String contenant un temps mm:ss
 	def parseTimer
-		[@timer/60, @timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
+		[self.timer/60, self.timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
 	end
 
 	# Réinitialise la grille et les affichages
@@ -509,7 +509,7 @@ class HudJeu < Hud
 	def jeuTermine
 		@grille.score.recupererTemps(self.timer)
 		scoreFinal = @grille.score.calculerScoreFinal
-		@@joueur.score = scoreFinal
+		@@joueur.score = scoreFinal > 0 ? scoreFinal : - 1
 		self.lancementFinDeJeu
 	end
 

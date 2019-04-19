@@ -1,15 +1,16 @@
 class HudFinDeJeu < Hud
 
 	# Nouvelle instance de fin de jeu
-	# 	window : La Fenetre contenant le HudFinDeJeu
-	# 	fenetrePrecedente : Le HudJeu qui appel ce constructeur, permet de recommencer une meme partie
+	
 	def initialize()
 		super(Gtk::Orientation::VERTICAL)
 		finTuto = @@joueur.mode == :tutoriel
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
 	
-		if !finTuto && @@config['misc']['score']==true
+			bVictoire=@@joueur.score > 0
+			
+		if !finTuto && @@config['misc']['score']==true && bVictoire
 			@id = @@joueur.enregistrerScore
 		end
 		initChampScore
@@ -17,13 +18,18 @@ class HudFinDeJeu < Hud
 		@champScores.min_content_width = 200
 		initBoutonRecommencer
 		initBoutonChangerModeDeJeu
+		
 
-			lblTxt = CustomLabel.new("Partie terminée !")
-			lblTxt.vexpand = true
+		if bVictoire
+			lblTxt = CustomLabel.new("Partie terminée !", "lblInfo")
+		else
+			lblTxt = CustomLabel.new("Défaite", "lblErr")
+		end
+		lblTxt.vexpand = true
 		self.add(lblTxt)
-			lblTemps.vexpand = true
+		lblTemps.vexpand = true
 		self.add(lblTemps)
-			lblScore.vexpand = true
+		lblScore.vexpand = true
 		self.add(lblScore)
 		self.add(@champScores) if @champScores
 			vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
@@ -70,9 +76,7 @@ private
 		boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		listeScores.each do |score|
 			lblScore = CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
-			# Le nouveau score du joueur est mis en évidence
-			# TODO
-			lblScore.name = (score.id == @id) ? "lblErr" : 'lblWhite'	if @id
+			lblScore.name = (score.id == @id) ? "lblInfo" : 'lblWhite'	if @id
 			boxChamp.add(lblScore)
 		end
 		@champScores.add(boxChamp)
