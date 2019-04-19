@@ -64,6 +64,8 @@ private
 
 	def initChampScore
 		@champScores = Gtk::ScrolledWindow.new
+		@champScores.name="boxScores"
+		Stylizable::setStyle(@champScores)
 		listeScores = @@joueur.rechercherScores(@@joueur.mode.to_s,@@joueur.difficulte)
 		boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		listeScores.each do |score|
