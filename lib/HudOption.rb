@@ -109,12 +109,11 @@ private
 	end
 
 	# Génère le bouton récupérant le choix de initChoixScore et l'écrivant dans
-	# le .ini
+	# le .ini (score : true/false)
 	# - return self
 	def initBoutonSauvegarderChoixScore
 		@btnChoixScore=CustomButton.new("Appliquer") do
 			@@config.writeEnregistrementScore(@bChoixScore)
-			@@joueur.enregistrerScore = (@bChoixScore == "Oui")
 		end
 		self
 	end

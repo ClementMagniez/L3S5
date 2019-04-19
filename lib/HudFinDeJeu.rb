@@ -9,7 +9,7 @@ class HudFinDeJeu < Hud
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
 
-		unless finTuto
+		if !finTuto && @@config['score']!="false"
 			@id = @@joueur.enregistrerScore
 		end
 		initChampScore

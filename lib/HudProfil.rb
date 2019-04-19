@@ -95,13 +95,16 @@ private
 		arr.reverse! if sortDown
 
 		unless listeScores.empty?
-			boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-			arr.each do |score|
+			boxChamp = Gtk::Grid.new
+			boxChamp.set_column_homogeneous(true)
+			arr.each_with_index do |score,i|
 				# /!\ Le whitespace ASCII typique n'est apparemment pas reconnu par
 				# rjust ; il s'agit ici d'un whitespace U+2000, à ne pas remplacer
 				# naïvement
-				boxChamp.add(CustomLabel.new("#{score.montantScore.to_s.rjust(4,' ')}"+" "*25	+
-																		 "#{score.dateObtention}", "lblScores"))
+				boxChamp.attach(CustomLabel.new("#{score.montantScore.to_s.rjust(4,' ')}",
+																				"lblScores"), 0,i,1,1)
+				boxChamp.attach(CustomLabel.new("#{score.dateObtention}",
+																			  "lblScores"), 1,i,1,1)
 			end
 			@champScores.add(boxChamp)
 		else
