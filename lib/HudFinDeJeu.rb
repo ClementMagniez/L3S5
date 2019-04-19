@@ -8,8 +8,8 @@ class HudFinDeJeu < Hud
 		finTuto = @@joueur.mode == :tutoriel
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
 		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
-
-		if !finTuto && @@config['score']!="false"
+	
+		if !finTuto && @@config['misc']['score']==true
 			@id = @@joueur.enregistrerScore
 		end
 		initChampScore
@@ -72,7 +72,7 @@ private
 			lblScore = CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
 			# Le nouveau score du joueur est mis en évidence
 			# TODO
-			lblScore.name = (score.id == @id) ? "lblErr" : 'lblWhite'	if @@joueur.enregistrerScore
+			lblScore.name = (score.id == @id) ? "lblErr" : 'lblWhite'	if @id
 			boxChamp.add(lblScore)
 		end
 		@champScores.add(boxChamp)
