@@ -4,11 +4,19 @@ require_relative 'AidesConstantes'
 # Classe abstraite permettant de créer un écran de jeu
 class HudJeu < Hud
 	include AidesConstantes
-	attr_reader :grille, :timer
-
-	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
-	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
+	# - timer : entier décrivant le temps écoulé depuis le début de la partie
+	attr_reader :grille, :timer
+	# - tempsRestant : méthode assurant la compatibilité avec HudRapide, par défaut
+	# équivalente à :timer
+	alias :tempsRestant :timer 
+	
+	
+	
+	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
+	# - grille : une Grille de jeu
+	# - timerStart : valeur initiale de @timer
+	# - return une nouvelle instance de HudJeu
 	def initialize(grille,timerStart=0)
 		super(Gtk::Orientation::VERTICAL)
 		self.setTitre("Partie #{@@joueur.mode.to_s.capitalize}")
@@ -126,19 +134,25 @@ class HudJeu < Hud
 
 	end
 
+	# Retire la surbrillance d'un indice de tente/colonne
+	# - return self
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
 			@lblIndiceSubr.name = "lblIndice"
 			@lblIndiceSubr = nil
 		end
+		self
 	end
 
+	# @see Hud#initBoutonRetour
+	# - return self
+	def initBoutonRetour
+		@btnRetour = CustomButton.new("Retour") {self.lancementModeJeu }
+		self
+	end
 
-	 def initBoutonRetour
-		 @btnRetour = CustomButton.new("Retour") {self.lancementModeJeu }
-	 end
-
-	 # Les cases mises en évidence ne le sont plus
+	# Retire la surbrillance des cases mises en évidence
+	# - return self
 	def desurbrillanceCase
 		if @caseSurbrillanceList != nil
 			while not @caseSurbrillanceList.empty?
@@ -146,9 +160,11 @@ class HudJeu < Hud
 				@gridJeu.get_child_at(caseSubr.y+1,caseSubr.x+1).name="cellJeu"
 			end
 		end
+		self
 	end
 
 	# Renvoie la taille préférentielle des nombres encadrant la grille
+	# - return un String comportement un attribut css de type font-size
 	def getIndiceSize
 		return 'medium'
 	end
@@ -185,8 +201,10 @@ class HudJeu < Hud
 	end
 
 	# Met à jour l'affichage du score avec une valeur modifiée
+	# - return self
 	def reloadScore
 		@lblScore.set_text("Score : " + @grille.score.getValeur.to_s)
+		self
 	end
 
 	protected
@@ -197,7 +215,6 @@ class HudJeu < Hud
 	# - typeAide : par défaut "rapide", indique le mode de jeu
 	# (donc le degré de précision de l'aide) voulu
 	# - return self
-
 	def afficherAide(typeAide="rapide")
 
 		@caseSurbrillanceList = Array.new
@@ -269,12 +286,11 @@ class HudJeu < Hud
 	# l'attache à la grille de jeu et permet de remplir toute la ligne/colonne
 	# de gazon en cliquant dessus
 	#
-	# Peut accepter un block, exécuté dans le signal handler du bouton
+	# Peut accepter un bloc sans paramètre, exécuté dans le signal handler du bouton
 	# - i : indice du bouton sur la tente/colonne, tel que i<@ŋrille.length
 	# - isRow : true => initialise les lignes, false => initialise les colonnes
 	# return self
 	def initIndice(i,isRow)
-		#Quand on clique dessus, met toutes les cases vides à gazon
 		btnIndice = CustomButton.new("","caseJeu", "lblIndice") do
 			(@grille.length).times do |k|
 				isRow ?	self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
@@ -293,10 +309,10 @@ class HudJeu < Hud
 	end
 
 
-	# Initialise la grille de jeu :
-	# 	ajoute une variable d'instance @gridJeu : la grille de jeu avec laquelle le joueur interagira
+	# Initialise @gridJeu : la grille de jeu avec laquelle le joueur interagira
 	#
  	# Peut accepter un block, exécuté dans le signal handler de la case
+ 	# - return self
 	def chargementGrille
 		self.initIndicesColonnes
 		self.initIndicesLignes
@@ -318,14 +334,7 @@ class HudJeu < Hud
 					# sans quoi le tutoriel voit ses indices effacés instantanément
 					yield if block_given?
 				end
-
-
-				img=scaleImage(cell.affichage)
-				if img
-					button.set_image(scaleImage(cell.affichage))
-				else
-					button.text=""
-				end
+				button.set_image(scaleImage(cell.affichage))
 
 				button.hexpand=true
 				button.vexpand=true
@@ -335,17 +344,20 @@ class HudJeu < Hud
 		return self
 	end
 
-	# Initialise le bouton d'aide :
-	# 	ajoute une variable d'instance @lblAide
-	# 	ajoute une variable d'instance @btnAide
+	# Initialise @lblAide et @btnAide, bouton rechargeant le score et appelant
+	# HudJeu#afficherAide au clic
+	# - return self
 	def initBoutonAide
 		@lblAide = CustomLabel.new("", "lblAide")
 		@btnAide = CustomButton.new("Aide") {
 			@grille.score.appelerAssistant
 			self.afficherAide
 		}
+		self
 	end
 
+	# @see Hud#initBoutonOptions : met le jeu à pause quand le bouton est cliqué
+	# - return self
 	def initBoutonOptions
 		super([:pause])
 		@btnOptions.signal_connect("clicked") {
@@ -353,6 +365,7 @@ class HudJeu < Hud
 			self.setTitre("Partie #{@@joueur.mode.to_s.capitalize} - Options")
 			self.setTitre("#{@@joueur.mode.to_s.capitalize} - Options")		if @@joueur.mode == :tutoriel
 		}
+		self
 	end
 
 	# Initialise le bouton d'annulation @btnCancel, qui reload le dernier score et annule
@@ -370,15 +383,17 @@ class HudJeu < Hud
 		self
 	end
 
-	# Initialise le bouton pause :
-	# 	ajoute une variable d'instance @btnPause
-	# 	initialise sont comportement
+	# Initialise @btnPause, bouton appelant HudJeu#pause au clic
+	# - return self
 	def initBoutonPause
 		@btnPause = CustomButton.new("Pause") {
 			self.pause
 		}
+		self
 	end
 
+	# @see Hud#initBoutonRegle ; met le jeu à pause tant que le joueur est sur ce  menu
+	# - return self
 	def initBoutonRegle
 		super([:pause])
 		@btnRegle.signal_connect("clicked") {
@@ -386,11 +401,12 @@ class HudJeu < Hud
 			self.setTitre("Partie #{@@joueur.mode.to_s.capitalize} - Règles")
 			self.setTitre("#{@@joueur.mode.to_s.capitalize} - Règles")		if @@joueur.mode == :tutoriel
 		}
+		self
 	end
 
-	# Initialise le bouton de remplisssage des cases triviales, les cases non adjascentes à un arbre :
-	# 	ajoute une variable d'instance @btnRemplissage
-	# 	initialise sont comportement
+	# Initialise @btnRemplissage, remplissant les cases non adjascentes à un arbre
+	# au clic
+	# - return self
 	def initBoutonRemplissage
 		@btnRemplissage = CustomButton.new("Remplir") {
 			liste = @aide.listeCasesGazon
@@ -408,19 +424,17 @@ class HudJeu < Hud
 		}
 	end
 
-	# Initialise le bouton reset (qui fait recommencer la grille) :
-	# 	ajoute une variable d'instance @btnReset
-	# 	initialise sont comportement
+	# Initialise @btnReset, appelant HudJeu#reset au clic
+	# - return self
 	def initBoutonReset
 		@btnReset = CustomButton.new("Reset") {
-			@grille.score.reset
 			self.reset
 		}
 	end
 
-	# Initialise le bouton de sauvegarde :
-	# 	ajoute une variable d'instance @btnSauvegarde
-	# 	initialise son comportement
+	# Initialise @btnSauvegarde : au clic, sérialise les données de jeu (grille, mode, 
+	# difficulté, timer) dans un fichier au nom du joueur
+	# - return self 
 	def initBoutonSauvegarde
 		@btnSauvegarde = CustomButton.new("Sauvegarder") do
 			File.open("../saves/"+@@joueur.login+".txt", "w+", 0644) do |f|
@@ -441,25 +455,14 @@ class HudJeu < Hud
 		self
 	end
 
-	# A partir du fichier en path _string_, crée une Gtk::Image
-	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu, qui occupe
-	# 66% de la hauteur de la fenêtre
+	# A partir du fichier en path _string_, crée une Gtk::Image 28*28
 	# - string : path d'un fichier image à charger
 	# - return cette Gtk::Image redimensionnée
 	def scaleImage(string)
-		image=Gtk::Image.new(:file => string)
-		image.pixbuf = image.pixbuf.scale(28,28)	if image.pixbuf != nil
+		image=Gtk::Image.new(:file => string)		
+		image.pixbuf = image.pixbuf.scale(28,28) if image.pixbuf!=nil
 		return image
-
 	end
-
-
-
-
-
-
-
-
 
 	# # # # # # # # # # #
 	#
@@ -471,11 +474,15 @@ class HudJeu < Hud
 public
 
 	# Rend lisible le temps écoulé self.timer et renvoie le String calculé
+	# - time : symbole { :timer, :tempsRestant }, indique s'il faut afficher 
+	# le temps tel que décrit par HudJeu#timer ou par HudJeu#tempsRestant ; 
+	# par défaut :timer, n'a de raison de changer que pour HudRapide
 	# - return un String contenant un temps mm:ss
-	def parseTimer
-		[self.timer/60, self.timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
+	def parseTimer(time = :timer)
+		[self.send(time)/60, self.send(time)%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
 	end
 
+	
 protected
 	# Initialise le timer ; ajoute une variable d'instance @lblTimer, le label associé au timer.
 	# - start : par défaut 0, le temps de départ du timer
@@ -504,7 +511,7 @@ protected
 		@btnRemplissage.sensitive = !@pause
 	end
 
-	# Lance le décompte du temps
+	# Lance le décompte du temps, incrémenté chaque seconde
 	# - return self
 	def startTimer
 		GLib::Timeout.add(1000) do
@@ -512,6 +519,7 @@ protected
 		end
 		self
 	end
+	
 	# Incrémente le timer et met @lblTimer à jour
 	# - modeCalcul : symbole { :+, +- } déterminant si le timer est croissant
 	# ou décroissant - par défaut croissant

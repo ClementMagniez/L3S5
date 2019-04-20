@@ -1,23 +1,21 @@
 class HudFinDeJeu < Hud
 
-	# Nouvelle instance de fin de jeu
-	
-	def initialize()
+	# Return une nouvelle instance de fin de jeu, aka un écran récapitulatif
+	# de la partie
+	def initialize
 		super(Gtk::Orientation::VERTICAL)
 		finTuto = @@joueur.mode == :tutoriel
-		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer)
+		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer(:tempsRestant))
 		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
 	
 			bVictoire=@@joueur.score >= 0 || @@joueur.mode!= :chrono
 			
-		if !finTuto && @@config['misc']['score']==true && bVictoire
+		if !finTuto && @@config['misc']['score']==true && bVictoire # TODO est-ce que ça fonctionne seulement
 			@id = @@joueur.enregistrerScore
 		end
 		initChampScore
 		@champScores.min_content_height = 200
 		@champScores.min_content_width = 200
-		initBoutonRecommencer
-		initBoutonChangerModeDeJeu
 		
 
 		if bVictoire
@@ -37,8 +35,8 @@ class HudFinDeJeu < Hud
 			vBox2.hexpand = false
 			vBox2.valign = Gtk::Align::CENTER
 			vBox2.halign = Gtk::Align::CENTER
-			vBox2.add(@btnRecommencer)
-			vBox2.add(@btnModeDeJeu)
+			vBox2.add(initBoutonRecommencer)
+			vBox2.add(initBoutonChangerModeDeJeu)
 		self.add(vBox2)
 		self.hexpand = true
 		self.vexpand = true
@@ -53,21 +51,24 @@ class HudFinDeJeu < Hud
 	end
 
 private
-
+	# Génère un bouton de retour au menu de choix du mode de jeu
+	# - return un CustomButton appelant Hud#lancementModeJeu au clic
 	def initBoutonChangerModeDeJeu
-		@btnModeDeJeu = CustomButton.new("Retour au menu") {
-			self.lancementModeJeu
-		}
+		CustomButton.new("Retour au menu") { self.lancementModeJeu }
 
 	end
-
+	# Génère un bouton permettant de relancer la grille précédente
+	# - return un CustomButton appelant Hud#lancementHudPrecedent au clic
 	def initBoutonRecommencer
-		@btnRecommencer = CustomButton.new("Recommencer") {
+		CustomButton.new("Recommencer") do
 			@@hudPrecedent.reset
 			self.lancementHudPrecedent
-		}
+		end
 	end
 
+	# Génère une liste des scores où le dernier en date du joueur (s'il les enregistre) est
+	# mis en évidence
+	# - return self
 	def initChampScore
 		@champScores = Gtk::ScrolledWindow.new
 		@champScores.name="boxScores"
@@ -80,5 +81,6 @@ private
 			boxChamp.add(lblScore)
 		end
 		@champScores.add(boxChamp)
+		self
 	end
 end
