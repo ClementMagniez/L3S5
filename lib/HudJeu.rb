@@ -244,6 +244,7 @@ class HudJeu < Hud
 		end
 
 		yield(tableau) if block_given?
+		self
 	end
 
 	# @see initIndices : initialise le nombre de tentes sur chaque colonne
@@ -368,8 +369,8 @@ class HudJeu < Hud
 		self
 	end
 
-	# Initialise le bouton d'annulation @btnCancel, qui reload le dernier score et annule
-	# la dernière case cochée
+	# Initialise le bouton d'annulation @btnCancel, qui reload le dernier score, annule
+	# la dernière case cochée et retire les surbrillances
 	# - return self
 	def initBoutonCancel
 		@btnCancel = CustomButton.new("Annuler") {
@@ -377,6 +378,8 @@ class HudJeu < Hud
 			if cell != nil
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=(scaleImage(cell.affichage))
 			end
+			desurbrillanceCase
+			desurbrillanceIndice
 			self.reloadScore
 			yield if block_given?
 		}

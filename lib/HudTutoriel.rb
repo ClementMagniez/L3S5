@@ -2,8 +2,9 @@
 class HudTutoriel < HudJeu
 
 	# Génère le menu de jeu
-	# - window : la fenêtre principale de l'application
 	# - grille : une Grille de jeu
+	# - timer : temps au début de la partie, par défaut 0
+	# - return une nouvelle instance de HudTutoriel 
 	def initialize(grille,timer=0)
 		super(grille,timer)
 		self.setTitre("Tutoriel")
@@ -20,21 +21,29 @@ class HudTutoriel < HudJeu
 	end
 
 protected
-
+	# @see HudJeu#initIndice ; de plus, affiche l'aide
+	# - return self
 	def initIndice(i, isRow)
 		super { self.afficherAide }
 	end
 
+	# @see HudJeu#chargementGrille ; de plus, affiche l'aide
+	# - return self
 	def chargementGrille
 		super { self.afficherAide }
 	end
 	
+	# @see HudJeu#initIndice ; de plus, affiche  l'aide
+	# - return self
 	def initBoutonCancel
-		super { self.afficherAide }
+		super do
+			self.afficherAide
+		end
 	end
 
 
-	# Affiche l'aide pour le mode Tutoriel
+	# @see HudJeu#afficherAide ; génère par ailleurs un tableau de cases surlignées
+	# - return self
 	def afficherAide
 
 		super("tuto") do |tableau|
@@ -48,5 +57,6 @@ protected
 				end
 			end
 		end
+	self
 	end
 end

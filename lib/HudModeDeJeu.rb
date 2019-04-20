@@ -81,7 +81,7 @@ private
 	def initBoutonChargerSauvegarde
 		@btnSauvegarde = CustomButton.new("Charger la dernière sauvegarde") do
 			if !File.exist?("../saves/"+@@joueur.login+".txt")
-				@lblErr.text = "Vous n'avez pas encore de sauvegarde d'enregistrée !"
+				@lblErr.text = "Aucune sauvegarde trouvée"
 			else
 				begin
 					File.open("../saves/"+@@joueur.login+".txt", 'r') do |f|
@@ -90,12 +90,9 @@ private
 						@@joueur.mode=dataLoaded[1]
 						@@joueur.difficulte=dataLoaded[2]
 						timer=dataLoaded[3]
-						case @@joueur.mode
-							when :rapide then lancementRapide(grille,timer)
-							when :tutoriel then lancementTutoriel(grille,timer)
-							when :aventure then lancementAventure(grille,timer)
-							when :exploration then lancementExplo(grille,timer)
-						end
+
+						
+						self.send("lancement"+@@joueur.mode.to_s.capitalize, grille,timer)
 					end
 				rescue
 					@lblErr.text="La sauvegarde est corrompue"
