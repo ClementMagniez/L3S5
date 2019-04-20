@@ -1,6 +1,6 @@
 require "test/unit"
-require_relative '../lib/Grille'
-require_relative '../lib/Aide'
+require_relative '../lib/grille/Grille'
+require_relative '../lib/misc/Aide'
 
 
 # Classe TestAide qui teste toutes les aides du fichier Aide.rb

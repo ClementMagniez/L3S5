@@ -1,8 +1,8 @@
 require "test/unit"
 
-require_relative '../lib/CaseArbre'
-require_relative '../lib/CaseGazon'
-require_relative '../lib/Grille'
+require_relative '../lib/grille/CaseArbre'
+require_relative '../lib/grille/CaseGazon'
+require_relative '../lib/grille/Grille'
 
 
 class TestCase < Test::Unit::TestCase

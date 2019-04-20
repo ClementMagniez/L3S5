@@ -1,5 +1,11 @@
 require "rake/testtask"
 
+task :default => [:run]
+
+
+task :run do
+	ruby "lib/main.rb"
+end
 
 Rake::TestTask.new do |t|
   t.libs << "lib"
