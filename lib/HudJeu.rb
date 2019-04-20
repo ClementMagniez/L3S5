@@ -134,17 +134,11 @@ class HudJeu < Hud
 	end
 
 
- def initBoutonRetour
-	 @btnRetour = CustomButton.new("Retour") {self.lancementModeJeu }
- end
+	 def initBoutonRetour
+		 @btnRetour = CustomButton.new("Retour") {self.lancementModeJeu }
+	 end
 
-	# =======================
-	# TODO
-	# est-ce vraiment utile ???
-	# @caseSurbrillanceList n'est utilisé nulle part ailleurs, je suppose donc que cette méthode ne sert à rien...
-	# Ca a le mérite d'avoir une utilité en tuto
-	# =======================
-
+	 # Les cases mises en évidence ne le sont plus
 	def desurbrillanceCase
 		if @caseSurbrillanceList != nil
 			while not @caseSurbrillanceList.empty?
@@ -156,10 +150,7 @@ class HudJeu < Hud
 
 	# Renvoie la taille préférentielle des nombres encadrant la grille
 	def getIndiceSize
-#		return 'large' if @@winY>700
-#		return @grille.length < 9 ? "large" : (@grille.length < 12 ?	"medium" : "x-small")
 		return 'medium'
-		# return @grille.length>=12 || @@winY<700 ? "small" : "x-large"
 	end
 
 	# Crée le String indiquant le nombre de tentes dans une ligne/colonne
@@ -438,21 +429,53 @@ class HudJeu < Hud
 		end
 	end
 
-	# Initialise l'affichage du score :
-	# 	récupère la valeur actuelle de l'objet "ScorePartie"
-	# def initScore
-	# 	@lblScore = CustomLabel.new("Score : " + @grille.score.getValeur.to_s)
-	# end
+	# Calcule le score final de la partia via le timer et l'enregistre dans
+	# @@joueur.score
+	# Lance le menu de fin de jeu (@see Hud#lancementFinDeJeu)
+	# - return self
+	def jeuTermine
+		@grille.score.recupererTemps(self.timer)
+		scoreFinal = @grille.score.calculerScoreFinal
+		@@joueur.score = scoreFinal > 0 ? scoreFinal : - 1
+		self.lancementFinDeJeu
+		self
+	end
+
+	# A partir du fichier en path _string_, crée une Gtk::Image
+	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu, qui occupe
+	# 66% de la hauteur de la fenêtre
+	# - string : path d'un fichier image à charger
+	# - return cette Gtk::Image redimensionnée
+	def scaleImage(string)
+		image=Gtk::Image.new(:file => string)
+		image.pixbuf = image.pixbuf.scale(28,28)	if image.pixbuf != nil
+		return image
+
+	end
+
+
+
+
+
+
+
+
+
+	# # # # # # # # # # #
+	#
+	# 		TIMER
+	#
+	# # # # # # # # # # #
+
+
+public
 
 	# Rend lisible le temps écoulé self.timer et renvoie le String calculé
 	# - return un String contenant un temps mm:ss
-
-public
-	
 	def parseTimer
 		[self.timer/60, self.timer%60].map { |t| t.to_i.to_s.rjust(2,'0') }.join(':')
 	end
-	
+
 protected
 	# Initialise le timer ; ajoute une variable d'instance @lblTimer, le label associé au timer.
 	# - start : par défaut 0, le temps de départ du timer
@@ -510,30 +533,4 @@ protected
 		@lblTimer.text=self.parseTimer
 		self
 	end
-
-	# Calcule le score final de la partia via le timer et l'enregistre dans 
-	# @@joueur.score
-	# Lance le menu de fin de jeu (@see Hud#lancementFinDeJeu)
-	# - return self
-	def jeuTermine
-		@grille.score.recupererTemps(self.timer)
-		scoreFinal = @grille.score.calculerScoreFinal
-		@@joueur.score = scoreFinal > 0 ? scoreFinal : - 1
-		self.lancementFinDeJeu
-		self
-	end
-
-	# A partir du fichier en path _string_, crée une Gtk::Image
-	# et la redimensionne pour pouvoir l'intégrer à la grille de jeu, qui occupe
-	# 66% de la hauteur de la fenêtre
-	# - string : path d'un fichier image à charger
-	# - return cette Gtk::Image redimensionnée
-	def scaleImage(string)
-		image=Gtk::Image.new(:file => string)
-		image.pixbuf = image.pixbuf.scale(28,28)	if image.pixbuf != nil
-		return image
-
-	end
-
-
 end

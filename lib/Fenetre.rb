@@ -59,9 +59,9 @@ class Fenetre < Gtk::Window
 		Gtk.main_quit
 		self
 	end
-	
+
 	attr_reader :width, :height
-	
+
 
 private
 	def update
@@ -70,5 +70,5 @@ private
 			@x=self.position[0]
 			@y=self.position[1]
 	end
-	
+
 end

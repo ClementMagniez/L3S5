@@ -102,13 +102,13 @@ private
 				@@config=Config.new(strId)
 				@@fenetre.window_position=Gtk::WindowPosition::NONE
 
-				@@fenetre.resize(@@config['resolution']['width'], 
+				@@fenetre.resize(@@config['resolution']['width'],
 												 @@config['resolution']['height'])
 				@@fenetre.move(@@config['position']['x'],
 											 @@config['position']['y'])
 
 				@@fenetre.fullscreen if @@config['resolution']['fullscreen']
-	
+
 				self.lancementModeJeu
 			end
 		}
