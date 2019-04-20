@@ -21,10 +21,11 @@ require_relative 'HudRegle'
 
 class Fenetre < Gtk::Window
 
+	# Return une instance de Fenetre 480*270 centrée, exécutant Fenetre#update
+	# au déplacement/redimensionnement
 	def initialize
 		super()
 		self.name="mainWindow"
-#		self.style_context.add_provider(Stylizable::getStyle, )
 		Stylizable::setStyle(self)
 		self.set_default_size(480,270)
 		self.window_position=Gtk::WindowPosition::CENTER
@@ -41,10 +42,14 @@ class Fenetre < Gtk::Window
 		Gtk.main
 	end
 
+	# Une HudWindow ne comporte qu'un widget direct : changerWidget remplace le 
+	# widget actuel par _nouveau_ et l'affiche
+	# - nouveau : un Gtk::Widget à afficher dans self
+	# - return self
 	def changerWidget(nouveau)
 		self.remove(self.child).add(nouveau)
 		self.show_all
-		return self
+		self
 	end
 
 	# Wrapper de Gtk.main_quit ; enregistre les données utiles (position/taille
@@ -60,15 +65,19 @@ class Fenetre < Gtk::Window
 		self
 	end
 
+	# - width : largeur de la fenêtre, équivalente à self.size[0]
+	# - height : hauteur de la fenêtre, équivalente à self.size[1]
 	attr_reader :width, :height
 
 
 private
+
+	# Met à jour @width, @height, @x, @y selon les coordonnées de la fenêtre
+	# - return self
 	def update
-			@width=self.size[0]
-			@height=self.size[1]
-			@x=self.position[0]
-			@y=self.position[1]
+		@width, @height=self.size
+		@x, @y=self.position
+		self
 	end
 
 end
