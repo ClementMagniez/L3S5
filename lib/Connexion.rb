@@ -110,7 +110,7 @@ class Connexion
 			dateObtention: Time.now.to_s.split(" ").at(0).to_s,
 			profil_id: self.id
 		);
-		score = 0
+		@score = 0
 		# puts "Score enregistré dans la BDD !"
 		return Score.last.id
 	end

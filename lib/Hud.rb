@@ -82,6 +82,7 @@ protected
 		if @@hudPrecedent == nil
 			puts "ATTENTION : tentative de retour à hud précédent hors @@hudPrecedent = nil"
 		else
+			@@joueur.score = 0
 			@@fenetre.changerWidget(@@hudPrecedent)
 		end
 	end
