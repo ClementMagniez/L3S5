@@ -12,7 +12,7 @@ class HudAventure < HudJeu
 	# La méthode va maintenant lancer une autre grille (toujours en mode aventure) de plus en plus grande
 	def jeuTermine
 		@@joueur.score = @@joueur.score + @grille.score.calculerScoreFinal
-		lancementAventure(Grille.new(@grille.length+(@@NbPartie % 5 == 0 ? 1 : 0).to_i))
+		lancementAventure(Grille.new(@grille.length+(@@NbPartie % 5 == 0 ? 1 : 0).to_i), @timer)
 	end
 
 	def reloadScore

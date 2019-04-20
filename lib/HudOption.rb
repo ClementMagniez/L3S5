@@ -10,7 +10,7 @@ class HudOption < Hud
 		super(Gtk::Orientation::VERTICAL)
 		self.setTitre("#{@@joueur.login} - Options")
 
-	
+
 
 		initBoutonRetour(traitement)
 		initBoutonSauvegarderChoixScore
@@ -40,23 +40,6 @@ class HudOption < Hud
 	end
 
 private
-
-#	def initBoutonFenetre
-#		if @fenetre.isFullscreen?
-#			@btnFenetre = Gtk::Button.new :label =>"Fenêtré"
-#		else
-#			@btnFenetre = Gtk::Button.new :label =>"Plein écran"
-#		end
-#		@btnFenetre.signal_connect('clicked') {
-#			if @fenetre.isFullscreen?
-#				@fenetre.unfullscreen
-#				@btnFenetre.set_label("Plein écran")
-#			else
-#				@fenetre.fullscreen
-#				@btnFenetre.set_label("Fenêtré")
-#			end
-#		}
-#	end
 
 	# Surcharge le bouton retour pour renvoyer à la fenêtre précédente ;
 	# exécute les traitements sur la fenêtre précédente
@@ -153,7 +136,7 @@ private
 		@btnChoixFS=CustomButton.new("Appliquer") do
 			@@config.writeFullScreen(@bChoixFS)
 			@@fenetre.send(@bChoixFS ? :fullscreen : :unfullscreen)
-			@@fenetre.resize(@@config['resolution']['width'], 
+			@@fenetre.resize(@@config['resolution']['width'],
 											 @@config['resolution']['height'])
 		end
 		self
