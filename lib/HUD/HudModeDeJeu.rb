@@ -131,7 +131,6 @@ private
 	# Return self
 	def initBoutonTuto
 		@btnTutoriel = CustomButton.new("Tutoriel") do
-			puts "Lancement du mode tutoriel"
 			#Niveau le plus facile : 6
 			 lancementHudPresentationTutoriel(Grille.new(HudChoixDifficulte::TAILLE_FACILE))
 		end

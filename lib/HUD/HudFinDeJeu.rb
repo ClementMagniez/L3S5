@@ -76,7 +76,7 @@ private
 		boxChamp = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 		listeScores.each do |score|
 			lblScore = CustomLabel.new("#{score.profil.pseudonyme}\t#{score.montantScore}\t#{score.dateObtention}")
-			lblScore.name = (score.id == @id) ? "lblInfo" : 'lblWhite'	if @id
+			lblScore.name = (score.id == @id) ? "lblScorePerso" : 'lblWhite'	if @id
 			boxChamp.add(lblScore)
 		end
 		@champScores.add(boxChamp)
