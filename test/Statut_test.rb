@@ -1,8 +1,8 @@
 require "test/unit"
 
 
-Dir[File.join(__dir__, '../lib', '*.rb')].each { |file|
-	 require file if (!file.match('main*') && (!file.match('HUD*')))  }
+Dir[File.join(__dir__, '../lib/grille', '*.rb')].each { |file|
+	 require file if file.match('Statut')  }
 
 
 
