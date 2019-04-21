@@ -151,6 +151,7 @@ class HudJeu < Hud
 		end
 		@grille.raz
 		@grille.score.reset
+		self.setTitre("Partie #{@@joueur.mode.to_s.capitalize}")
 		self.reloadScore
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer" : "Pause"
