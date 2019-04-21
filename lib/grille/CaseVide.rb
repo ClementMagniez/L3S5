@@ -34,7 +34,7 @@ class CaseVide < Case
 		
 		valeurScore={:'isVide?'=>-1, :'isTente?'=>10, :'isGazon?'=>-5}
 
-		self.updateNbTents(grille, :'isGazon?', :'isVide?', valeurScore)
+		self.updateNbTents(grille, :'isVide?', :'isGazon?', valeurScore)
 		self
 	end
 
@@ -50,6 +50,7 @@ class CaseVide < Case
 	# - return true si la grille est complète après mise à jour, false sinon
 	def updateNbTents(grille, beforeTent, afterTent, pointsHash)
 	
+	
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[self.x]-=1
 			grille.varTentesCol[self.y]-=1
@@ -61,6 +62,7 @@ class CaseVide < Case
 		else # statut précédant tente
 			grille.score.recupererPoints(pointsHash[beforeTent])
 		end
+		print grille.varTentesLigne, "\n", grille.varTentesCol, "\n"
 
 		if grille.varTentesLigne[self.x]==0 && grille.varTentesCol[self.y]==0
 			return grille.estComplete?
