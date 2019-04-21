@@ -100,7 +100,6 @@ private
 			
 				hbox=Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 				btnDeleteRow=CustomButton.new {
-					puts score.id
 					Connexion.supprimerScore(score.id)
 					refreshChampScore(mode,sortCriteria, sortDown)
 				}

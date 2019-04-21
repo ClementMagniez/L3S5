@@ -62,7 +62,6 @@ class CaseVide < Case
 		else # statut précédant tente
 			grille.score.recupererPoints(pointsHash[beforeTent])
 		end
-		print grille.varTentesLigne, "\n", grille.varTentesCol, "\n"
 
 		if grille.varTentesLigne[self.x]==0 && grille.varTentesCol[self.y]==0
 			return grille.estComplete?
