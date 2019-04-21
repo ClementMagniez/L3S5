@@ -161,3 +161,8 @@ menubar {
 	background-color: rgba(10,10,10,0.90);
 	color: white;
 }
+
+button {
+    background: none;
+    border: none;
+}
