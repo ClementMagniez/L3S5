@@ -10,7 +10,7 @@ require_relative 'CustomEventBox'
 # de l'un à l'autre
 class Hud < Gtk::Grid
 	@@initblock = false
-	@@difficulte = nil
+	# @@difficulte = nil
 	@@joueur = Connexion.new
 	@@mode = nil
 	@@scoreTotal = 0
@@ -109,14 +109,14 @@ protected
 	# Initialise le bouton des options :
 	# 	ajoute une variable d'instance @btnOptions
 	# 	initialise sont comportement
-	def initBoutonOptions
+	def initBoutonOptions(traitement=nil)
 		@btnOptions = Gtk::Button.new
 		@btnOptions.set_relief(Gtk::ReliefStyle::NONE)
 		engrenage = Gtk::Image.new(:file => '../img/Engrenage.png')
 		engrenage.pixbuf = engrenage.pixbuf.scale(@@winX/20,@@winX/20)	if engrenage.pixbuf != nil
 		@btnOptions.set_image(engrenage)
 		@btnOptions.signal_connect("clicked") {
-				@fenetre.changerWidget(self,HudOption.new(@fenetre,self))
+				@fenetre.changerWidget(self,HudOption.new(@fenetre,self, traitement))
 		}
 	end
 

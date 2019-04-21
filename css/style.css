@@ -1,0 +1,175 @@
+
+/* Fenêtre de l'application */
+#mainWindow {
+	background-image: url("../img/fond.jpg");
+	background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+button {
+	background: none;
+	border: none;
+}
+
+/* Bouton par défaut */
+#button {
+	border-radius: 20px;
+	color: blue;
+	border-width: 1px;
+/*	background: none;*/
+	background-color: rgba(10,10,10,0.80);
+	margin: 5px;
+}
+#button:hover {
+	background-color: rgba(186, 194, 209, 0.7);
+}
+
+/* Bouton désactivé (encore utile ?) */
+#disabledutton {
+	border-radius: 1px;
+	color: black;
+	opacity: 0.5;
+/*	padding: 5px;*/
+}
+
+
+#caseJeu {
+	background-color: rgba(0.1, 0.1, 0.1, 0.8);
+	font-weight: bold;
+	color: white;
+	opacity:0.5;
+	border-radius: 0px;
+}
+/* Indices des lignes et colonnes, met en évidence l'hover */
+#caseJeu:hover {
+	background-color: rgba(255,255,255,0.8);
+}
+
+#cellJeu {
+	background-color: rgba(68, 71, 76, 0.7);
+	border: none;
+	margin: 1px;
+	   outline: none;
+	border-radius: 0px;
+}
+
+#cellJeuSurbri {
+	background-color: rgba(224, 139, 222, 1);
+	border: none;
+	margin: 1px;
+	border-radius: 0px;
+
+   outline: none;
+}
+
+#gridJeu {
+	background-color: rgba(205, 208, 214, 0.4);
+
+}
+
+/* Label par défaut */
+#label {
+	background-color: rgba(10,10,10,0.90);
+	border-radius: 15px;
+	color: white;
+	font-weight: bold;
+	margin:3px;
+}
+/* Label des lignes et colonnes, outline noir */
+#lblIndice {
+	color: white;
+	font-weight: bold;
+	font-size: medium;
+  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;
+}
+/* Label par défaut blanc */
+
+#lblWhite {
+	color: white;
+	font-weight: bold;
+
+}
+
+#lblScorePerso {
+	color: rgb(77, 174, 226);
+	font-weight: bold;
+
+}
+
+/* Label d'information */
+
+#lblAide {
+	border-style: solid;
+	font-size: large;
+	border-width:3px;
+	border-color: rgb(147, 148, 150);
+	background-color: rgba(10,10,10,0.90);
+	color: white;
+	font-weight: bold;
+}
+
+
+#lblErr {
+	color: red;
+	font-size: large;
+	font-weight: bold;
+	border-radius: 15px;
+}
+
+#lblInfo {
+	border-radius: 15px;
+	color: rgb(78, 201, 30);
+	font-weight: bold;
+	background-color: rgba(10,10,10,0.90);
+}
+
+#lblInfo {
+	color: blue;
+	font-weight: bold;
+	background-color: rgba(68, 71, 76, 0.7);
+}
+
+#lblScores {
+	color: white;
+	font-weight: bold;
+	font-size: large;
+
+}
+
+/* Panneau de rappel des règles */
+#lblRegles {
+	color: white;
+	font-weight: bold;
+	background-color: rgba(147, 148, 150, 0.8);
+	  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;
+}
+/* Affichage des scores - inachevé */
+
+#boxScores {
+	background-color: rgba(68, 71, 76, 0.7);
+	border-radius: 25px;
+}
+
+
+/* Bouton de retour au menu précédent / fermeture de l'app */
+#btnQuit {
+	border: none;
+	background-color: #FFF;
+}
+
+#boxUtil {
+	padding:50px;
+}
+
+
+menubar {
+	background-color: rgba(10,10,10,0.90);
+
+}
+
+/* menus déroulants */
+#dropdown	 {
+	background-color: rgba(10,10,10,0.90);
+	color: white;
+}

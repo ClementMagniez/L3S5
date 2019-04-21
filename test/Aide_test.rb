@@ -1,6 +1,12 @@
+##
+# @title Aide_test
+# @author LALOY Alexandre
+# @version 1.0
+##
+
 require "test/unit"
-require_relative '../lib/Grille'
-require_relative '../lib/Aide'
+require_relative '../lib/grille/Grille'
+require_relative '../lib/misc/Aide'
 
 
 # Classe TestAide qui teste toutes les aides du fichier Aide.rb
@@ -12,19 +18,19 @@ class TestAide < Test::Unit::TestCase
 
 	# test de nbCasesIncorrect
 	def test_nbCasesIncorrect
-    grille=Grille.new(6, true, 1097)
+    	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 
 		# On met la case en gazon alors qu'il s'agit d'une tente (1 erreur)
 		grille[15][15].cycle(grille)
-    assert(aide.nbCasesIncorrect != @@sansSucces, "Il n'y a pas d'erreur")
+    	assert(aide.nbCasesIncorrect != @@sansSucces, "Il n'y a pas d'erreur")
 
  		# On met la case en tente cette fois ci (0 erreur)
 		grille[15][15].cycle(grille)
 		assert(aide.nbCasesIncorrect == @@sansSucces, "Il y a au moins 1 erreur")
 	end
 
-  # test de listeCasesIncorrect
+  	# test de listeCasesIncorrect
 	def test_listeCasesIncorrect
 		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
@@ -33,7 +39,7 @@ class TestAide < Test::Unit::TestCase
 		grille[15][15].cycle(grille)
 		grille[15][12].cycle(grille)
 		grille[13][14].cycle(grille)
-    assert(aide.listeCasesIncorrect != @@sansSucces, "Il n'y a pas d'erreur")
+    	assert(aide.listeCasesIncorrect != @@sansSucces, "Il n'y a pas d'erreur")
 
  		# On met les cases en tentes cette fois ci (0 erreur)
 		grille[15][15].cycle(grille)
@@ -42,7 +48,7 @@ class TestAide < Test::Unit::TestCase
 		assert(aide.listeCasesIncorrect == @@sansSucces, "Il y a au moins 1 erreur")
 	end
 
-  # test de impossibleTenteAdjacente
+  	# test de impossibleTenteAdjacente
 	def test_impossibleTenteAdjacente
 		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
@@ -54,7 +60,7 @@ class TestAide < Test::Unit::TestCase
 		grille[15][15].cycle(grille)
 		grille[15][12].cycle(grille)
 		grille[13][14].cycle(grille)
-    assert(aide.impossibleTenteAdjacente != @@sansSucces, "Il y a du gazon tout autour des tentes déjà placées")
+    	assert(aide.impossibleTenteAdjacente != @@sansSucces, "Il y a du gazon tout autour des tentes déjà placées")
 
  		# On met du gazon autour des cases tentes
 		grille[12][13].cycle(grille)
@@ -97,7 +103,7 @@ class TestAide < Test::Unit::TestCase
 		grille[10][12].cycle(grille)
 		grille[11][12].cycle(grille)
 		grille[12][12].cycle(grille)
-	  assert(aide.resteQueTentesColonne != @@sansSucces, "Il n'y a plus de colonne ou il ne reste que des tentes a placer")
+	  	assert(aide.resteQueTentesColonne != @@sansSucces, "Il n'y a plus de colonne ou il ne reste que des tentes a placer")
 	end
 
 	# test de resteQueGazonLigne
@@ -105,7 +111,6 @@ class TestAide < Test::Unit::TestCase
 		# Dans cette grille, il n'y a qu'une seule ligne qui est à 0 tente
 		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
-		newStatutVide = StatutVide.new(:VIDE)
 
 	    assert(aide.resteQueGazonLigne != @@sansSucces, "Il n'y a plus de ligne ou il ne reste que du gazon a placer")
 
@@ -117,16 +122,16 @@ class TestAide < Test::Unit::TestCase
 		assert(aide.resteQueGazonLigne == @@sansSucces, "Il y a une/plusieurs ligne(s) ou il reste que du gazon a placer")
 	end
 
-  # test de resteQueGazonColonne
+  	# test de resteQueGazonColonne
 	def test_resteQueGazonColonne
-    # Dans cette grille, il n'y a qu'une seule colonne qui est à 0 tente
-    grille=Grille.new(6, true, 1097)
+    	# Dans cette grille, il n'y a qu'une seule colonne qui est à 0 tente
+    	grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(:VIDE)
 
-    assert(aide.resteQueGazonColonne != @@sansSucces, "Il n'y a plus de colonne ou il ne reste que du gazon a placer")
+    	assert(aide.resteQueGazonColonne != @@sansSucces, "Il n'y a plus de colonne ou il ne reste que du gazon a placer")
 
-    # On met toutes les cases vides en gazon sur la colonne avec 0 tente
+    	# On met toutes les cases vides en gazon sur la colonne avec 0 tente
  		for i in 0..15
 			grille[i][13].cycle(grille) if grille[i][13].statutVisible == newStatutVide
 		end
@@ -134,9 +139,9 @@ class TestAide < Test::Unit::TestCase
 		assert(aide.resteQueGazonColonne == @@sansSucces, "Il y a une/plusieurs colonne(s) ou il reste que du gazon a placer")
 	end
 
-  # test de casePasACoteArbre
+  	# test de casePasACoteArbre
 	def test_casePasACoteArbre
-  	grille=Grille.new(6, true, 1097)
+  		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(:VIDE)
 
@@ -154,12 +159,10 @@ class TestAide < Test::Unit::TestCase
 		assert(aide.casePasACoteArbre == @@sansSucces, "Il y a une/plusieurs case(s) ou il reste du gazon a placer sans qu'il ne touche d'arbre")
 	end
 
-  # test de uniquePossibiliteArbre
+  	# test de uniquePossibiliteArbre
 	def test_uniquePossibiliteArbre
-    # Dans la grille, il y a au début de la partie une seule case arbre qui ne contient qu'une seule possibilité de placer une tente
-
-  	grille=Grille.new(6, true, 1097)
-
+    	# Dans la grille, il y a au début de la partie une seule case arbre qui ne contient qu'une seule possibilité de placer une tente
+  		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 
 		assert(aide.uniquePossibiliteArbre != @@sansSucces, "Il n'y a plus aucune case arbre qui contient qu'une seule possibilité de placer une tente")
@@ -171,10 +174,9 @@ class TestAide < Test::Unit::TestCase
 		assert(aide.uniquePossibiliteArbre == @@sansSucces, "Il y a une/plusieurs case(s) arbre(s) qui contient une seule possibilité de placer une tente")
 	end
 
-  # test de dispositionPossibleLigne
+  	# test de dispositionPossibleLigne
 	def test_dispositionPossibleLigne
-  	grille=Grille.new(6, true, 1097)
-
+  		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(:VIDE)
 
@@ -190,12 +192,10 @@ class TestAide < Test::Unit::TestCase
 		assert(aide.dispositionPossibleLigne == @@sansSucces, "Il y a une/plusieurs disposition(s) favorable afin de modifier une case")
 	end
 
-  # test de dispositionPossibleColonne
+  	# test de dispositionPossibleColonne
 	def test_dispositionPossibleColonne
-    # Dans la grille, il y a au début de la partie plusieurs disposition favorable
-
-  	grille=Grille.new(6, true, 1097)
-
+    	# Dans la grille, il y a au début de la partie plusieurs disposition favorable
+  		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(:VIDE)
 
@@ -211,11 +211,9 @@ class TestAide < Test::Unit::TestCase
 		assert(aide.dispositionPossibleColonne == @@sansSucces, "Il y a une/plusieurs disposition(s) favorable afin de modifier une case")
 	end
 
-  # test de arbreAutourCasePossedeTente
+  	# test de arbreAutourCasePossedeTente
 	def test_arbreAutourCasePossedeTente
-
-  	grille=Grille.new(6, true, 1097)
-
+  		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(:VIDE)
 
@@ -231,11 +229,9 @@ class TestAide < Test::Unit::TestCase
 		assert(aide.arbreAutourCasePossedeTente == @@sansSucces, "Il y a une/plusieurs case(s) vide(s) qui n'ont aucune cases tentes à coté associé à un arbre")
 	end
 
-  # test de caseArbreAssocieTente
+  	# test de caseArbreAssocieTente
 	def test_caseArbreAssocieTente
-
-  	grille=Grille.new(6, true, 1097)
-
+  		grille=Grille.new(6, true, 1097)
 		aide = Aide.new(grille)
 		newStatutVide = StatutVide.new(:VIDE)
 
