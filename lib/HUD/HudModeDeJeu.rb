@@ -139,7 +139,13 @@ private
 
 	# Ecrase Hud#initBoutonQuitter pour rediriger vers l'écran de connexion
 	def initBoutonQuitter
-		super { @@fenetre.resize(480,270);	self.lancementAccueil }
+		super do
+			@@fenetre.updateData
+			@@fenetre.updateConfig(@@config)
+			@@fenetre.resize(480,270)
+			@@config=nil
+			self.lancementAccueil 
+		end
 	end
 protected
 	attr_reader :btnTutoriel, :btnExploFacile, :btnExploMoy
