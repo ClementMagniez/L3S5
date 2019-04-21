@@ -10,6 +10,7 @@
 /* Bouton par défaut */
 #button {
 	border-radius: 20px;
+	color: blue;
 	border-width: 1px;
 	background-color: rgba(10,10,10,0.80);
 	margin: 5px;

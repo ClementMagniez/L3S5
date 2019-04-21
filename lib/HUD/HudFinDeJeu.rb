@@ -10,7 +10,7 @@ class HudFinDeJeu < Hud
 	
 			bVictoire=@@joueur.score >= 0 || @@joueur.mode!= :chrono
 			
-		if !finTuto && @@config['misc']['score']==true && bVictoire # TODO est-ce que ça fonctionne seulement
+		if !finTuto && @@config.score==true && bVictoire # TODO est-ce que ça fonctionne seulement
 			@id = @@joueur.enregistrerScore
 		end
 		initChampScore

@@ -9,6 +9,8 @@ class Config
 		else
 			@file=IniFile.new(filename: "../config/#{name}.ini", encoding: 'UTF-8')
 		end
+	
+		Config.genAccessors(self.file)
 	end
 	
 	# Entre dans [resolution] les nouvelles dimensions de la fenêtre
@@ -53,11 +55,19 @@ class Config
 		self
 	end	
 	
-	# Accesseur au contenu de file, permet d'écrire Config[val]
-	# - val : clé dans le .ini
-	# - return : un Hash décrivant le contenu de la section _val_ du .ini	
-	def [](val)
-		self.file[val]
+	# Génère un ensemble d'accesseurs en lecture à chaque clé du .ini _file_, de 
+	# sorte que (ie.) _self.score_ renvoie self.file[{section}]['score']
+	# - considère que chaque clé est unique : si tel n'est pas le cas, 
+	# la dernière dans l'ordre de lecture de chaque groupe identique sera considérée
+	# - file : un IniFile initialisé
+	# - return self
+	def self.genAccessors(file) 
+		file.each do |section, param|
+			define_method :"#{param}" do
+				self.file[section][param]
+			end
+		end
+		self
 	end
 	
 	# Génère un .ini par défaut pour le profil _name_ et enregistre le fichier 
