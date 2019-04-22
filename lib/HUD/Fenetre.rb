@@ -58,7 +58,6 @@ class Fenetre < Gtk::Window
 	# - config : un Config initialisé
 	# - return self
 	def exit(config)
-
 		self.updateConfig(config)
 		Gtk.main_quit
 		self

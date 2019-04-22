@@ -396,7 +396,7 @@ class Aide
 							caseArbre = pileCaseArbre.pop
 							nbCasesVide = 0
 							# On prend connaissance pour les 4 cases adjacentes
-							self.liste4Cases(cases).each do |uneCase|
+							self.liste4Cases(caseArbre).each do |uneCase|
 								nbCasesVide += 1 if uneCase.statutVisible == @newStatutVide && uneCase != cases
 								# si uneCase == tente et que cette tente à un autre arbre a cote d'elle que celui de depart
 								if uneCase.statut == @newStatutTente
@@ -410,7 +410,7 @@ class Aide
 							end
 							isOk = 0 if nbCasesVide != 0
 						end # Fin while
-						return [cases, "La case en surbrillance est forcement du gazon puisque tous les arbres autours ont leurs tentes.", nil, nil, true, nil] if isOk == 1
+						return [cases, "La case en surbrillance est forcement du gazon puisque tous les arbres autour ont leur tente.", nil, nil, true, nil] if isOk == 1
 					end
 				end
 			end # Fin each
@@ -438,8 +438,8 @@ class Aide
 	# Paramètre :
 	# - col : parcourt en ligne ou colonne
 	def dispositionPossible(col)
-		grille=@grille.grille
-		grille=grille.transpose if col
+		grille = @grille.grille
+		grille = grille.transpose if col
 
 		grille.each_with_index do | ligne, i |
 			nbCasesTente = 0
@@ -454,14 +454,14 @@ class Aide
 					nbCaseVideSucc += 1
 					nbTentePoss += 1 if nbCaseVideSucc%2 != 0
 				elsif cases.statutVisible != @newStatutVide
-				(nbCaseVideSucc-1).times do
+					1.upto(nbCaseVideSucc) do
 						hashGroupeCase[listeCase.shift] = nbCaseVideSucc
 					end
 					nbCaseVideSucc = 0
 				end
 			end # Fin each j
 			if nbCaseVideSucc != 0
-				(nbCaseVideSucc-1).times do
+				1.upto(nbCaseVideSucc) do
 					hashGroupeCase[listeCase.shift] = nbCaseVideSucc
 				end
 			end
@@ -520,13 +520,13 @@ class Aide
 
 			if nbTentePoss == nombreTentes-nbCasesTente
 				if ! tabCaseEnTente.empty?
-					return [tabCaseEnTente.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est une tente.", false, i+1, true, nil]
+					return [tabCaseEnTente.shift, "D'après les dispositions de la " + (col ? "colonne" : "ligne") + " en surbrillance, la case en surbrillance est une tente.", col, i+1, true, nil]
 				elsif ! tabCaseEnGazon1.empty?
-					return [tabCaseEnGazon1.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est du gazon.", false, i+1, true, nil]
+					return [tabCaseEnGazon1.shift, "D'après les dispositions de la " + (col ? "colonne" : "ligne") + " en surbrillance, la case en surbrillance est du gazon.", col, i+1, true, nil]
 				end
 			elsif nbTentePoss == nombreTentes-nbCasesTente+1
 				if ! tabCaseEnGazon2.empty?
-					return [tabCaseEnGazon2.shift, "D'après les dispositions de la ligne en surbrillance, la case en surbrillance est du gazon.", false, i+1, true, nil]
+					return [tabCaseEnGazon2.shift, "D'après les dispositions de la " + (col ? "colonne" : "ligne") + " en surbrillance, la case en surbrillance est du gazon.", col, i+1, true, nil]
 				end
 			end
 		end # Fin each i
