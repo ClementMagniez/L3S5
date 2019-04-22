@@ -143,6 +143,7 @@ private
 			@@fenetre.updateData
 			@@fenetre.updateConfig(@@config)
 			@@fenetre.resize(480,270)
+			@@fenetre.unfullscreen
 			@@config=nil
 			self.lancementAccueil 
 		end

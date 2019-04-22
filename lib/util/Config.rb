@@ -3,16 +3,37 @@ class Config
 
 	# - name : nom du fichier .ini placé dans ./config, qui sera créé s'il n'existe pas
 	# - return une nouvelle instance de Config basée sur ce fichier
-	def initialize(name)
-		if File.exist?("../config/#{name}.ini")
-			@file=IniFile.load("../config/#{name}.ini", encoding: 'UTF-8')
+	def initialize(filename)
+		if File.exist?("../config/#{filename}.ini")
+			@file=IniFile.load("../config/#{filename}.ini", encoding: 'UTF-8')
 		else
-			@file=IniFile.new(filename: "../config/#{name}.ini", encoding: 'UTF-8')
+			@file=IniFile.new(filename: "../config/#{filename}.ini", encoding: 'UTF-8')
 		end
 	
-		Config.genAccessors(self.file)
+		validateFile
 	end
 	
+	# Renvoie le nom du fichier ini
+	def filename
+		self.file.filename
+	end
+	
+	# Modifie le nom du fichier ini
+	# - val : nouveau String à lui attribuer
+	# - return self
+	def filename=(val)
+		self.file.filename=val
+		self
+	end
+
+	# Enregistre les modifications de l'instance de Config dans un fichier physique
+	# selon Config#filename
+	# - return self
+	def save
+		self.file.write
+		self
+	end
+
 	# Entre dans [resolution] les nouvelles dimensions de la fenêtre
 	# - width,height : les coordonnées en largeur*hauteur
 	# - return self
@@ -69,18 +90,6 @@ class Config
 		end
 		self
 	end
-	
-	def filename
-		self.file.filename
-	end
-	
-	def filename=(val)
-		self.file.filename=val
-	end
-	
-	def save
-		self.file.write
-	end
 	# Génère un .ini par défaut pour le profil _name_ et enregistre le fichier 
 	# - name : nom d'un profil à enregistrer
 	# - return un IniFile configuré par défaut 
@@ -101,4 +110,27 @@ class Config
 	end
 	attr_accessor :file
 	private
+		
+	# Vérifie la validité de chaque entrée du fichier 
+	def validateFile
+		validateEntry('resolution', 'width', 896)
+		validateEntry('resolution', 'height', 504)
+		validateEntry('resolution', 'fullscreen', false)
+		validateEntry('misc', 'score', true)
+		validateEntry('position', 'x', 300)
+		validateEntry('position', 'y', 300)
+		Config.genAccessors(self.file)
+	end
+	
+	# Génère une entrée _param_=_val_ dans _section_ si elle n'existe pas
+	# - section : bloc de données dans le .ini, exemple : [misc]
+	# - param : clé dans une section, exemple : score
+	# - val : valeur d'une clé 
+	# - return self
+	def validateEntry(section,param, val)
+		if !self.file[section][param]
+			self.file[section][param]=val
+		end
+		self
+	end
 end
