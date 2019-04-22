@@ -17,9 +17,10 @@ class Hud < Gtk::Box
 	def initialize(orientation)
 		super(orientation)
 
-		@@fenetre.signal_connect('destroy') { @@fenetre.exit(@@config) }
-
-		# Hacky façon de n'exécuter initWindow qu'une fois
+		@@fenetre.signal_connect('destroy') { 
+			@@fenetre.exit(@@config) 
+			false
+		}
 
 		setTitre("Des Tentes et des Arbres")
 		initBoutonOptions

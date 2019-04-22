@@ -1,9 +1,6 @@
-# Cette classe fait à peu près les mêmes choses que HudInscription
 require 'inifile'
-#require "rubygems"
-#require "digest/sha1"
-#require_relative "connectSqlite3.rb"
-require_relative "../DB/Profil.rb"
+
+require_relative "../DB/Profil"
 
 class HudProfil < Hud
 	def initialize
@@ -100,7 +97,6 @@ private
 			
 				hbox=Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 				btnDeleteRow=CustomButton.new {
-					puts score.id
 					Connexion.supprimerScore(score.id)
 					refreshChampScore(mode,sortCriteria, sortDown)
 				}
@@ -150,15 +146,18 @@ private
 	# - return un CustomButton
 	def initBoutonSauvegarderLogin(entNom, entMdp)
 		btnSauvegarde = CustomButton.new("Sauvegarder les modifications") do
+
 			strNom = entNom.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = entMdp.text
-			@lblErreur.name = 'lblErr'
-			if strNom != entNom.text
+
+			if(strNom.empty? && strMdp.empty?)
+				@lblErreur.text = "Vous devez remplir au moins un champ !"
+			elsif strNom != entNom.text
 				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
 			elsif strNom.length > 32
 				@lblErreur.text = "Identifiant trop long (> 32) !"
-			elsif(strNom.empty? && strMdp.empty?)
-				@lblErreur.text = "Vous devez remplir au moins un champ !"
+			elsif !strMdp.empty? && strMdp.length < 2
+				@lblErreur.text = "Le mot de passe doit faire au moins 2 caractères"
 			else
 				user = Profil.find_by(pseudonyme: @@joueur.login)
 				unless strMdp.empty?
@@ -166,7 +165,7 @@ private
 					user.mdpEncrypted = strMdp.crypt(strMdp)
 					user.save
 				end
-				unless strNom.empty?
+				unless strNom.empty? || @@joueur.login==strNom
 					# Enregistrement du pseudo
 					# Si l'identifiant est déjà présent dans la base de données
 					if Profil.find_by(pseudonyme: strNom) != nil
@@ -174,10 +173,15 @@ private
 					else
 						user.pseudonyme = strNom
 						user.save
-						File.rename("../config/#{@@joueur.login}.ini", "../config/#{strNom}.ini")
-						File.rename("../saves/#{@@joueur.login}.txt", "../saves/#{strNom}.txt")		if File.exist?("../saves/#{@@joueur.login}.txt")
+						@@config.filename=@@config.filename.sub(@@joueur.login, strNom)						
+						puts @@config.filename
+						@@config.save
+						File.delete("../config/#{@@joueur.login}.ini")
+						if File.exist?("../saves/#{@@joueur.login}.txt")
+							File.rename("../saves/#{@@joueur.login}.txt", "../saves/#{strNom}.txt")	
 						@@joueur.login = strNom
 						self.setTitre("#{@@joueur.login} - Profil")
+						end
 					end
 				end
 				@lblErreur.name = 'lblInfo'

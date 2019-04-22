@@ -92,45 +92,6 @@ class HudJeu < Hud
 				@btnOptions.halign = Gtk::Align::START
 			hBox.add(@btnOptions)
 		self.add(hBox)
-
-# Disposition alternative où lblAide est dans la même vbox que gridJeu
-# et est donc strictement en dessous
-# pour l'instant dysfonctionnel car les labels d'aide étendent trop la box
-# TODO
-#######################################################################
-#		vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-#			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-#				@lblTime.hexpand = true
-#				@lblTime.halign = Gtk::Align::CENTER
-#			hBox.add(@lblTime)
-#			hBox.add(@btnRegle)
-#		vBox.add(hBox)
-#			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-#			hBox.halign = Gtk::Align::CENTER
-#			hBox.valign = Gtk::Align::CENTER
-#			hBox.vexpand = true
-#				vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-#				vBox2.valign = Gtk::Align::CENTER
-#				vBox2.add(@gridJeu)
-#					gridLblAide = Gtk::Grid.new
-#					gridLblAide.halign = Gtk::Align::CENTER
-#					gridLblAide.attach(@lblAide, 0, 0, 1, 1)
-#						image = Gtk::Image.new( :file => "../img/gris.png")
-#						image.pixbuf = image.pixbuf.scale((@@winX/3),(@@winY/15))
-#					gridLblAide.attach(image, 0, 0, 1, 1)
-#				vBox2.add(gridLblAide)
-#			hBox.add(vBox2)
-#				vBox3 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-#				vBox3.valign = Gtk::Align::CENTER
-#				vBox3.add(@btnAide)
-#				vBox3.add(@btnPause)
-#				vBox3.add(@btnReset)
-#				vBox3.add(@btnCancel)
-#				vBox3.add(@btnRemplissage)
-#				vBox3.add(@btnSauvegarde)
-#			hBox.add(vBox3)
-#######################################################################
-
 	end
 
 	# Retire la surbrillance d'un indice de tente/colonne
@@ -190,6 +151,7 @@ class HudJeu < Hud
 		end
 		@grille.raz
 		@grille.score.reset
+		self.setTitre("Partie #{@@joueur.mode.to_s.capitalize}")
 		self.reloadScore
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer" : "Pause"
@@ -296,6 +258,8 @@ class HudJeu < Hud
 				isRow ?	self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
 			end
 			self.desurbrillanceIndice
+			self.desurbrillanceCase
+			self.reloadScore
 			yield	if block_given?
 		end
 		btnIndice.text = labelIndice(i, isRow ? :varTentesLigne : :varTentesCol)

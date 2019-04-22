@@ -70,6 +70,17 @@ class Config
 		self
 	end
 	
+	def filename
+		self.file.filename
+	end
+	
+	def filename=(val)
+		self.file.filename=val
+	end
+	
+	def save
+		self.file.write
+	end
 	# Génère un .ini par défaut pour le profil _name_ et enregistre le fichier 
 	# - name : nom d'un profil à enregistrer
 	# - return un IniFile configuré par défaut 

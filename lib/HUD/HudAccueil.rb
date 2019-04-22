@@ -3,11 +3,11 @@ require_relative '../util/Config'
 class HudAccueil < Hud
 	def initialize(window)
 		@@fenetre = window
-#		window.resize(480,270)
+
 		window.set_resizable(false)
 
 		super(Gtk::Orientation::VERTICAL)
-		@lblErr = CustomLabel.new("","lblErr")
+		@lblErreur = CustomLabel.new("","lblErr")
 
 		@entryIdentifiant = Gtk::Entry.new
 		@entryMotDePasse = Gtk::Entry.new
@@ -28,9 +28,9 @@ class HudAccueil < Hud
 
 		width = 150
 
-			@lblErr.vexpand = true
-			@lblErr.halign = Gtk::Align::CENTER
-		self.add(@lblErr)
+			@lblErreur.vexpand = true
+			@lblErreur.halign = Gtk::Align::CENTER
+		self.add(@lblErreur)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.halign = Gtk::Align::CENTER
 			# hBox.homogeneous = true
@@ -73,33 +73,32 @@ private
 
 	# Initialise le bouton de connection
 	# 	ajoute une variable d'instance @btnConnecter
-	# 	initialise sont comportement # TODO QUEL comportement ?
 	def initBoutonConnecter
-		@btnConnecter = CustomButton.new("Se connecter") {
+		@btnConnecter = CustomButton.new("Se connecter") do
 			# Vérification de l'existence du profil dans la BDD
-			# session = Connexion.new
-			strId = @entryIdentifiant.text.tr("^[a-z][A-Z][0-9]\s_-", "")
+
+
+			strNom = @entryIdentifiant.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = @entryMotDePasse.text
-			if strId != @entryIdentifiant.text
-				@lblErr.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
-			elsif strId.length > 32
-				@lblErr.text = "Identifiant trop long (> 32) !"
-			elsif strId.empty?
-				@lblErr.text = "L'identifiant ne peut être vide !"
-			elsif strMdp.empty?
-				@lblErr.text = "Le mot de passe ne peut être vide !"
-			elsif(@@joueur.seConnecter(strId, strMdp) == false)
-				@lblErr.text = "Echec : connexion impossible !"
+
+			if strNom != @entryIdentifiant.text
+				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
+			elsif strNom.length > 32
+				@lblErreur.text = "Identifiant trop long (> 32) !"
+			elsif strMdp.length < 2
+				@lblErreur.text = "Le mot de passe doit faire au moins 2 caractères"
+			elsif strNom.empty?
+				@lblErreur.text = "L'identifiant ne peut être vide !"
+			elsif !@@joueur.seConnecter(strNom, strMdp)
+				@lblErreur.text = "Echec : connexion impossible !"
 			else
 				@@fenetre.set_resizable(true)
 				# S'assure que le répertoire est sain
-				Dir.mkdir("../saves")	unless Dir.exist?("../saves")
-				Dir.mkdir("../config")	unless Dir.exist?("../config")
-
-				unless File.exist?("../config/#{strId}.ini")
-					Config.initFile(strId)
-				end
-				@@config=Config.new(strId)
+				Dir.mkdir("../saves")	 unless Dir.exist?("../saves")
+				Dir.mkdir("../config") unless Dir.exist?("../config")
+				Config.initFile(strNom) unless File.exist?("../config/#{strNom}.ini")
+				
+				@@config=Config.new(strNom)
 				@@fenetre.window_position=Gtk::WindowPosition::NONE
 
 				@@fenetre.resize(@@config.width,
@@ -111,7 +110,7 @@ private
 
 				self.lancementModeJeu
 			end
-		}
+		end
 	end
 
 	# Initialise le bouton d'Inscription

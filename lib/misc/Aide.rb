@@ -454,7 +454,7 @@ class Aide
 					nbCaseVideSucc += 1
 					nbTentePoss += 1 if nbCaseVideSucc%2 != 0
 				elsif cases.statutVisible != @newStatutVide
-					for k in 1..nbCaseVideSucc
+					1.upto(nbCaseVideSucc) do
 						hashGroupeCase[listeCase.shift] = nbCaseVideSucc
 					end
 					nbCaseVideSucc = 0

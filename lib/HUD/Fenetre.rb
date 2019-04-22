@@ -31,9 +31,9 @@ class Fenetre < Gtk::Window
 		Gtk::StyleContext::add_provider_for_screen(Gdk::Screen.default,css,
 																		Gtk::StyleProvider::PRIORITY_APPLICATION)
 
-		update
+		self.updateData
 		self.signal_connect('configure-event') {
-			update
+			self.updateData
 			false # exécute le handler par défaut
 		}
 
@@ -58,10 +58,7 @@ class Fenetre < Gtk::Window
 	# - config : un Config initialisé
 	# - return self
 	def exit(config)
-		unless config==nil
-			config.writeResolution(@width, @height)
-			config.writePosition(@x, @y)
-		end
+		self.updateConfig(config)
 		Gtk.main_quit
 		self
 	end
@@ -70,12 +67,17 @@ class Fenetre < Gtk::Window
 	# - height : hauteur de la fenêtre, équivalente à self.size[1]
 	attr_reader :width, :height
 
-
-private
+	def updateConfig(config)
+		unless config==nil
+			config.writeResolution(@width, @height)
+			config.writePosition(@x, @y)
+		end
+		self
+	end
 
 	# Met à jour @width, @height, @x, @y selon les coordonnées de la fenêtre
 	# - return self
-	def update
+	def updateData
 		@width, @height=self.size
 		@x, @y=self.position
 		self
