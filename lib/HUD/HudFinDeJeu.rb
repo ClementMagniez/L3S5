@@ -8,8 +8,7 @@ class HudFinDeJeu < Hud
 		lblTemps = CustomLabel.new("Votre temps : " + @@hudPrecedent.parseTimer(:tempsRestant))
 		lblScore = CustomLabel.new("Votre score : #{@@joueur.score.to_i.to_s}")
 	
-			bVictoire=@@joueur.score >= 0 || @@joueur.mode!= :chrono
-			
+		bVictoire=@@joueur.score > 0 || @@joueur.mode!= :rapide
 		if !finTuto && @@config.score==true && bVictoire # TODO est-ce que ça fonctionne seulement
 			@id = @@joueur.enregistrerScore
 		end

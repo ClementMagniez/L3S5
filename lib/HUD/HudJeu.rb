@@ -416,7 +416,7 @@ class HudJeu < Hud
 	def jeuTermine
 		@grille.score.recupererTemps(self.timer)
 		scoreFinal = @grille.score.calculerScoreFinal
-		@@joueur.score = scoreFinal > 0 ? scoreFinal : - 1
+		@@joueur.score = scoreFinal > 0 ? scoreFinal : 0
 		self.lancementFinDeJeu
 		self
 	end
@@ -493,10 +493,9 @@ protected
 	def increaseTimer(modeCalcul = :'+' )
 		return false if @pause # interrompt le décompte en cas de pause
 
-
 		@timer=@timer.send(modeCalcul, 1)
 		@lblTimer.text=self.parseTimer
-		return true
+		true
 	end
 
 	# Réinitialise le timer à 0
