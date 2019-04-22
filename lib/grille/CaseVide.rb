@@ -49,8 +49,7 @@ class CaseVide < Case
 	# gagné lors du passage à ce statut 
 	# - return true si la grille est complète après mise à jour, false sinon
 	def updateNbTents(grille, beforeTent, afterTent, pointsHash)
-	
-	
+		
 		if self.statutVisible.isTente? # le statut vient de devenir "tente"
 			grille.varTentesLigne[self.x]-=1
 			grille.varTentesCol[self.y]-=1
