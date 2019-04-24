@@ -168,7 +168,7 @@ class HudJeu < Hud
 		self
 	end
 
-	protected
+#	protected
 		attr_writer :timer
 
 	# Calcule un coup possible selon l'état de la grille et affiche l'indice trouvé
@@ -316,6 +316,7 @@ class HudJeu < Hud
 		@btnAide = CustomButton.new("Aide") {
 			@grille.score.appelerAssistant
 			self.afficherAide
+			yield if block_given?
 		}
 		self
 	end

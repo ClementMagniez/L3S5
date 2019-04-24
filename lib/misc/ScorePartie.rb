@@ -12,6 +12,8 @@
 #
 class ScorePartie
 
+	attr_accessor :valeur
+
   # @bonus, @malus, @modeChrono, @nbAidesUsees, @taille, @tempsDeJeu, @valeur - Le pourcentage appliqué selon la difficulté
   # sélectionnée, le pourcentage appliqué pour pénaliser une utilisation trop répétitive des aides, le nombre d'aides
   # utilisées lors d'une partie, le booléen déterminant le type de chronomètre, la taille de la grille liée, le temps de jeu

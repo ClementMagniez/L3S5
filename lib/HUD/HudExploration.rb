@@ -13,14 +13,15 @@ class HudExploration < HudJeu
 
 	def initBoutonAide
 		super
-		@btnAide.signal_connect("clicked") {
+		@btnAide.signal_connect("clicked") do
+			@grille.score.valeur=Math.sqrt(@grille.score.valeur).to_i
+			self.reloadScore
 			@nbAides += 1
 			if @nbAides > @grille.length
 				@btnAide.sensitive = false
 				@lblAide.text = "Nombre maximal d'aide demandé !"
 			end
-		}
-		super
+		end
 	end
 
 end
