@@ -16,7 +16,7 @@ class HudAventure < HudJeu
 	end
 
 	def reloadScore
-		@lblScore.set_text("Score : " + (@grille.score.getValeur + @@joueur.score).to_i.to_s)
+		@lblScore.set_text("Score : " + (@grille.score.valeur + @@joueur.score).to_i.to_s)
 	end
 
 	# Redéfinis l'initialisation du bouton retour pour que celui-ci lance le menu de fin de jeu

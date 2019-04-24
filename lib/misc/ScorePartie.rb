@@ -57,22 +57,15 @@ class ScorePartie
   end
 
   ##
-  # == getValeur(0)
-  #
-  # Getter de la variable d'instance +valeur+.
-  #
-  def getValeur
-    return @valeur
-  end
-
-  ##
   # == appelerAssistant(0)
   #
   # Cette méthode permet d'incrémenter d'une unité le compteur lié aux aides. L'annulation de coups
   # par le joueur ne permet pas de diminuer ce compteur (le cas échéant, il s'agirait d'une triche).
   #
+  # Return self
   def appelerAssistant
     @nbAidesUsees += 1
+    self
   end
 
   ##
@@ -81,6 +74,7 @@ class ScorePartie
   # Cette méthode retourne le résultat de la partie, calculé avec toutes les variables d'instance
   # initialisées et modifiées depuis la création de l'objet.
   #
+	# Return un Integer décrivant le score final de la partie
   def calculerScoreFinal
     # FACILE
     if(@taille < 9 && @nbAidesUsees > 1)
@@ -116,7 +110,7 @@ class ScorePartie
   end
 
   ##
-  # == estModeChrono(0)
+  # == setModeChrono(0)
   #
   # Cette méthode permet de passer le booléen du mode "contre-la-montre" à +true+.
   #
@@ -124,8 +118,10 @@ class ScorePartie
   #
   # * +modeChrono+ - Le booléen indiquant si le score final doit être calculé selon la règle du "contre-la-montre"
   #
-  def estModeChrono
+  # Return self
+  def setModeChrono
     @modeChrono = true
+    self
   end
 
   ##
@@ -141,8 +137,10 @@ class ScorePartie
   #
   # * +valeur+ - L'entier déterminant le score d'une partie
   #
+  # Return self
   def recupererPoints(pointsCase)
     @valeur += pointsCase
+    self
   end
 
   ##
@@ -159,8 +157,10 @@ class ScorePartie
   #
   # * +tempsDeJeu+ - Le nombre de secondes indiquant le temps de jeu total (varie selon le mode)
   #
+  # Return self
   def recupererTemps(tempsGrille)
     @tempsDeJeu = tempsGrille
+    self
   end
 
   ##
@@ -174,16 +174,17 @@ class ScorePartie
   # * +nbAidesUsees+ - L'entier indiquant le nombre de fois où l'assistant a été activé par le joueur
   # * +valeur+ - L'entier déterminant le score d'une partie
   #
+  # Return self
   def reset
     @nbAidesUsees = 0
     @valeur = 0
+    self
   end
 
 	##
 	# == to_s
 	#
-	# On redéfinit la méthode *to_s* dans cette classe pour qu'elle puisse afficher les informations de
-	# l'objet appelé.
+	# Return les données décrivant self sous forme de String
 	#
 	def to_s
 		return "Score : #{@valeur} (bonus #{@bonus}x ; #{@nbAidesUsees} aide(s) utilisée(s) => malus de #{@malus}%, #{@tempsDeJeu} secondes)"

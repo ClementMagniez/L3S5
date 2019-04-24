@@ -164,7 +164,7 @@ class HudJeu < Hud
 	# Met à jour l'affichage du score avec une valeur modifiée
 	# - return self
 	def reloadScore
-		@lblScore.set_text("Score : " + @grille.score.getValeur.to_s)
+		@lblScore.set_text("Score : " + @grille.score.valeur.to_s)
 		self
 	end
 

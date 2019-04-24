@@ -20,7 +20,7 @@ class HudRapide < HudJeu
 		end
 		
 		super(grille,@temps)
-		@grille.score.estModeChrono
+		@grille.score.setModeChrono
 		# malus de temps (en seconde) lors d'une demande d'aide
 		@malus = 15
 	end
