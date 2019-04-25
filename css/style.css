@@ -100,10 +100,7 @@ button {
 /* Label d'information */
 
 #lblAide {
-	border-style: solid;
 	font-size: large;
-	border-width:3px;
-	border-color: rgb(147, 148, 150);
 	background-color: rgba(10,10,10,0.90);
 	color: white;
 	font-weight: bold;

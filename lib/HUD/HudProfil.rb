@@ -20,12 +20,12 @@ class HudProfil < Hud
 
 
 			hBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-			# hBox.hexpand = true
 				vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				vBox.hexpand = true
+				vBox.hexpand=true
 				vBox.vexpand = true
-				# vBox.halign = Gtk::Align::CENTER
+				vBox.halign = Gtk::Align::CENTER
 				vBox.valign = Gtk::Align::CENTER
+				vBox.add(CustomLabel.new("Votre compte"))
 				vBox.add(@lblErreur)
 					hBox2 = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 					hBox2.homogeneous = true
@@ -40,9 +40,8 @@ class HudProfil < Hud
 				vBox.add(initBoutonSauvegarderLogin(entNom, entMdp))
 			hBox.add(vBox)
 				vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				vBox.hexpand = true
 				vBox.vexpand = true
-				# vBox.halign = Gtk::Align::CENTER
+				vBox.halign = Gtk::Align::CENTER
 				vBox.valign = Gtk::Align::CENTER
 				vBox.add(CustomLabel.new("Vos scores"))
 					hBox2 = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)

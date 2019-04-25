@@ -50,6 +50,7 @@ class HudJeu < Hud
 		self.initBoutonRetour
 		@btnRetour.text = "Abandonner"
 
+		self.homogeneous=false
 
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
 			hBox.add(@lblScore)
@@ -64,9 +65,12 @@ class HudJeu < Hud
 			hBox.vexpand = true
 			hBox.add(@gridJeu)
 				vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
-				[@btnAide, @btnPause, @btnReset, @btnCancel, @btnRemplissage,@btnSauvegarde].each do |btn|
+				[@btnAide, @btnPause, @btnReset, @btnCancel,
+				@btnRemplissage,@btnSauvegarde].each do |btn|
 					btn.vexpand=true
 					btn.valign=Gtk::Align::CENTER
+					btn.hexpand=false
+					btn.halign=Gtk::Align::END
 				end
 				vBox2.add(@btnAide)
 				vBox2.add(@btnPause)
@@ -76,7 +80,11 @@ class HudJeu < Hud
 				vBox2.add(@btnSauvegarde)
 					@btnRetour.vexpand = true
 					@btnRetour.valign = Gtk::Align::END
+					@btnRetour.hexpand=false
+					@btnRetour.halign=Gtk::Align::CENTER
+
 				vBox2.add(@btnRetour)
+				vBox2.hexpand=true
 				vBox2.name="boxUtil"
 			hBox.add(vBox2)
 		self.add(hBox)
@@ -312,8 +320,8 @@ class HudJeu < Hud
 	# - return self
 	def initBoutonAide
 		@lblAide = CustomLabel.new
+		@lblAide.name="lblAide"
 		@btnAide = CustomButton.new("Aide") {
-			@lblAide.name="lblAide"
 			@grille.score.appelerAssistant
 			self.afficherAide
 			yield if block_given?
