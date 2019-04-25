@@ -131,6 +131,12 @@ button {
 
 }
 
+#lblTimer {
+	color: black;
+	font-weight: bold;
+	font-size: large;
+}
+
 /* Panneau de rappel des règles */
 #lblRegles {
 	color: white;

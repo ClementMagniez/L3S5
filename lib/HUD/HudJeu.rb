@@ -456,7 +456,7 @@ protected
 	# - return self
 	def initTimer(start=0)
 		@timer = start
-		@lblTimer = CustomLabel.new(self.parseTimer, "lblWhite")
+		@lblTimer = CustomLabel.new(self.parseTimer, "lblTimer")
 		self.startTimer
 		self
 	end
