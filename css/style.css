@@ -1,7 +1,7 @@
 
 /* Fenêtre de l'application */
 #mainWindow {
-	background-image: url("../img/fondtest.png");
+	background-image: url("../img/fond.png");
 	background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
