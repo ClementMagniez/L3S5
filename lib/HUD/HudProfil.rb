@@ -19,7 +19,7 @@ class HudProfil < Hud
 		@champScores.name="boxScores"
 
 
-			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
+			hBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 			# hBox.hexpand = true
 				vBox = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 				vBox.hexpand = true
