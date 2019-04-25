@@ -35,7 +35,7 @@ class HudJeu < Hud
 		self.reloadScore
 		# Un indices de ligne ou colonne est mis en valeur,
 		# cet attribut référencie l'indice afin de ne plus mettre en valeur l'indice en question
-		@lblIndiceSubr = nil
+		@indiceSurbri = nil
 		@pause=false
 
 		self.initTimer(timerStart)
@@ -70,7 +70,7 @@ class HudJeu < Hud
 					btn.vexpand=true
 					btn.valign=Gtk::Align::CENTER
 					btn.hexpand=false
-					btn.halign=Gtk::Align::END
+					btn.halign=Gtk::Align::CENTER
 				end
 				vBox2.add(@btnAide)
 				vBox2.add(@btnPause)
@@ -105,9 +105,10 @@ class HudJeu < Hud
 	# Retire la surbrillance d'un indice de tente/colonne
 	# - return self
 	def desurbrillanceIndice
-		if @lblIndiceSubr != nil
-			@lblIndiceSubr.name = "caseJeu"
-			@lblIndiceSubr = nil
+		if @indiceSurbri != nil
+			@indiceSurbri.name = "caseIndice"
+			
+			@indiceSurbri = nil
 		end
 		self
 	end
@@ -129,12 +130,6 @@ class HudJeu < Hud
 			end
 		end
 		self
-	end
-
-	# Renvoie la taille préférentielle des nombres encadrant la grille
-	# - return un String comportement un attribut css de type font-size
-	def getIndiceSize
-		return 'medium'
 	end
 
 	# Crée le String indiquant le nombre de tentes dans une ligne/colonne
@@ -260,7 +255,7 @@ class HudJeu < Hud
 	# - isRow : true => initialise les lignes, false => initialise les colonnes
 	# return self
 	def initIndice(i,isRow)
-		btnIndice = CustomButton.new("","caseJeu", "lblIndice") do
+		btnIndice = CustomButton.new("","caseIndice", "lblIndice") do
 			(@grille.length).times do |k|
 				isRow ?	self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
 			end

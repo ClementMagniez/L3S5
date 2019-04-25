@@ -1,7 +1,7 @@
 
 /* Fenêtre de l'application */
 #mainWindow {
-	background-image: url("../img/fond.jpg");
+	background-image: url("../img/fondtest.png");
 	background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -14,11 +14,11 @@ button {
 
 /* Bouton par défaut */
 #button {
-	border-radius: 20px;
+	border-radius: 0px;
 	color: blue;
 	border-width: 1px;
 /*	background: none;*/
-	background-color: rgba(10,10,10,0.80);
+	background-color: rgba(10,10,10,0.95);
 	margin: 5px;
 }
 #button:hover {
@@ -34,20 +34,19 @@ button {
 }
 
 
-#caseJeu {
-	background-color: rgba(0.1, 0.1, 0.1, 0.8);
+#caseIndice {
+	background-color: rgba(10, 10, 10, 0.8);
 	font-weight: bold;
 	color: white;
-	opacity:0.5;
 	border-radius: 0px;
 }
 /* Indices des lignes et colonnes, met en évidence l'hover */
-#caseJeu:hover {
-	background-color: rgba(255,255,255,0.8);
+#caseIndice:hover {
+	background-color: white;
 }
 
 #cellJeu {
-	background-color: rgba(68, 71, 76, 0.7);
+	background-color: rgba(10, 10, 10, 0.8);
 	border: none;
 	margin: 1px;
 	   outline: none;
@@ -64,14 +63,14 @@ button {
 }
 
 #gridJeu {
-	background-color: rgba(205, 208, 214, 0.4);
+	background-color: rgba(250, 250, 250, 0.1);
 
 }
 
 /* Label par défaut */
 #label {
 	background-color: rgba(10,10,10,0.90);
-	border-radius: 15px;
+	border-radius: 5px;
 	color: white;
 	font-weight: bold;
 	margin:3px;
@@ -81,7 +80,7 @@ button {
 	color: white;
 	font-weight: bold;
 	font-size: medium;
-  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;
+/*  text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000;*/
 }
 /* Label par défaut blanc */
 
