@@ -3,7 +3,7 @@ Projet "jeu de tentes et arbre" de fin de L3.
 # Comment jouer
 
 ## Installation
-Après avoir téléchargé le zip ou cloné le repo, exécuter `./install.sh` si sur une distro Debian/Ubuntu ; sur une autre, installer à la main GTK et Ruby ainsi que les gemmes gtk3, inifile et activerecord.
+Après avoir téléchargé le zip ou cloné le repo, exécuter `./install.sh` si sur une distro Debian/Ubuntu ; sur une autre, installer à la main GTK, SQLite3 et Ruby ainsi que les gemmes sqlite3, gtk3, inifile et activerecord.
 
 ## Exécution
 Entrer `./tents-trees` depuis la racine du projet.
