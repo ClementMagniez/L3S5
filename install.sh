@@ -17,7 +17,7 @@ if [ $OS = "Ubuntu" ] || [ $OS = "Debian"]; then
 	echo "Installation de la gemme SQLite"
 	sudo gem install sqlite3 > /dev/null
 	echo "Installation de la gemme ActiveRecord"
-	sudo gem install activerecord > /dev/null
+	sudo gem install active_record > /dev/null
 	echo "Installation de la gemme IniFile"
 	sudo gem install inifile > /dev/null
 	echo "Installation de la gemme GTK"
