@@ -316,6 +316,7 @@ class HudJeu < Hud
 	def initBoutonAide
 		@lblAide = CustomLabel.new
 		@lblAide.name="lblAide"
+		@lblAide.wrap=true
 		@btnAide = CustomButton.new("Aide") {
 			@grille.score.appelerAssistant
 			self.afficherAide
