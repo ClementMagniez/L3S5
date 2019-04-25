@@ -98,7 +98,7 @@ class HudJeu < Hud
 	# - return self
 	def desurbrillanceIndice
 		if @lblIndiceSubr != nil
-			@lblIndiceSubr.name = "lblIndice"
+			@lblIndiceSubr.name = "caseJeu"
 			@lblIndiceSubr = nil
 		end
 		self
@@ -193,15 +193,14 @@ class HudJeu < Hud
 		#Met un indice de colonne ou ligne en surbrillance
 		indice = tableau.at(INDICE_LIG_COL)
 		if tableau.at(BOOL_LIG_COL) != nil
-			if tableau.at(BOOL_LIG_COL) == false
-				lblIndice = @gridJeu.get_child_at(0,indice).child
+			if tableau.at(BOOL_LIG_COL)
+				@indiceSurbri = @gridJeu.get_child_at(indice,0)
 			else
-				lblIndice = @gridJeu.get_child_at(indice,0).child
+				@indiceSurbri = @gridJeu.get_child_at(0,indice)
 			end
 			# Un indice des lignes ou colonnes est mis en valeur : en rouge
-			lblIndice.name = "lblErr"
+			@indiceSurbri.name = "cellJeuSurbri"
 			# On garde une référence sur le label de la ligne ou colonne mise en évidence
-			@lblIndiceSubr = lblIndice
 		end
 
 		yield(tableau) if block_given?
@@ -312,8 +311,9 @@ class HudJeu < Hud
 	# HudJeu#afficherAide au clic
 	# - return self
 	def initBoutonAide
-		@lblAide = CustomLabel.new("", "lblAide")
+		@lblAide = CustomLabel.new
 		@btnAide = CustomButton.new("Aide") {
+			@lblAide.name="lblAide"
 			@grille.score.appelerAssistant
 			self.afficherAide
 			yield if block_given?
