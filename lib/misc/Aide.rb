@@ -126,7 +126,7 @@ class Aide
 				if cases.statutVisible == @newStatutVide
 					# On prend connaissance pour les 8 cases adjacentes
 					self.liste8Cases(cases).each do |uneCase|
-						return [cases, "Les tentes ne peuvent pas se toucher, donc la case en surbrillance est du gazon.", nil, nil, true, nil] if uneCase.statutVisible == @newStatutTente
+						return [cases, "Les tentes ne peuvent pas se toucher, donc\n la case en surbrillance est du gazon.", nil, nil, true, nil] if uneCase.statutVisible == @newStatutTente
 					end
 				end # Fin if
 			end

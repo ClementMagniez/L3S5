@@ -33,6 +33,7 @@ class HudExploration < HudJeu
 	# @see HudJeu#reset ; réinitialise @nbAides à 0
 	def reset
 		@nbAides=0
+		@btnAide.sensitive = true
 		super
 	end
 end

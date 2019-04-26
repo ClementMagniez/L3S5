@@ -159,8 +159,7 @@ class HudJeu < Hud
 		self.resetTimer
 		@btnPause.text = @pause ? "Jouer" : "Pause"
 		@lblAide.text=""
-		desurbrillanceCase
-		desurbrillanceIndice
+		desurbrillance
 		self
 	end
 
@@ -259,8 +258,7 @@ class HudJeu < Hud
 			(@grille.length).times do |k|
 				isRow ?	self.fillCellGrid(i,k) : self.fillCellGrid(k,i)
 			end
-			self.desurbrillanceIndice
-			self.desurbrillanceCase
+			self.desurbrillance
 			self.reloadScore
 			yield	if block_given?
 		end
@@ -291,8 +289,7 @@ class HudJeu < Hud
 						cell.cycle(@grille)
 						self.reloadScore
 						button.image=(scaleImage(cell.affichage))
-						desurbrillanceCase
-						desurbrillanceIndice
+						desurbrillance
 						self.jeuTermine		if @grille.estValide
 					end
 
@@ -348,8 +345,7 @@ class HudJeu < Hud
 			if cell != nil
 				@gridJeu.get_child_at(cell.y+1,cell.x+1).image=(scaleImage(cell.affichage))
 			end
-			desurbrillanceCase
-			desurbrillanceIndice
+			desurbrillance
 			self.reloadScore
 			yield if block_given?
 		}
@@ -386,8 +382,7 @@ class HudJeu < Hud
 			while not liste.empty?
 				caseRemp = liste.pop
 				if caseRemp.statutVisible.isVide?
-					desurbrillanceCase
-					desurbrillanceIndice
+					desurbrillance
 
 					caseRemp.cycle(@grille)
 					self.reloadScore
@@ -397,12 +392,19 @@ class HudJeu < Hud
 		}
 	end
 
+	# Normalise les cases ou indices mis en évidence et vide @lblAide
+	# - return self
+	def desurbrillance
+		desurbrillanceCase
+		desurbrillanceIndice
+		@lblAide.text=""
+	end
+
+
 	# Initialise @btnReset, appelant HudJeu#reset au clic
 	# - return self
 	def initBoutonReset
-		@btnReset = CustomButton.new("Reset") {
-			self.reset
-		}
+		@btnReset = CustomButton.new("Reset") { self.reset }
 	end
 
 	# Initialise @btnSauvegarde : au clic, sérialise les données de jeu (grille, mode, 
