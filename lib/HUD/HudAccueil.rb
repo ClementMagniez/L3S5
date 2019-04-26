@@ -77,16 +77,16 @@ private
 			strNom = @entryIdentifiant.text.tr("^[a-z][A-Z][0-9]\s_-", "")
 			strMdp = @entryMotDePasse.text
 
-			if strNom != @entryIdentifiant.text
+			if strNom.empty?
+				@lblErreur.text = "L'identifiant ne peut être vide !"
+			elsif strNom != @entryIdentifiant.text
 				@lblErreur.text = "Caractères autorisés :\nmajuscules, minuscules, nombres, -, _, espace"
 			elsif strNom.length > 32
 				@lblErreur.text = "Identifiant trop long (> 32) !"
 			elsif strMdp.length < 2
 				@lblErreur.text = "Le mot de passe doit faire au moins 2 caractères"
-			elsif strNom.empty?
-				@lblErreur.text = "L'identifiant ne peut être vide !"
 			elsif !@@joueur.seConnecter(strNom, strMdp)
-				@lblErreur.text = "Echec : connexion impossible !"
+				@lblErreur.text = "Identifiant ou mot de passe erroné"
 			else
 				@@fenetre.set_resizable(true)
 				# S'assure que le répertoire est sain
