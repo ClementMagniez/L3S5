@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0 
-Type=Application
-Terminal=false
-Icon=/home/kel/Desktop/L3S5/img/tente.png
-Exec=/home/kel/Desktop/L3S5/tents-trees
-Name=Tents And Trees
-Comment=L3S5 info
-Categories=Game;

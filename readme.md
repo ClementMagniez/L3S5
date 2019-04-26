@@ -6,7 +6,7 @@ Projet "jeu de tentes et arbre" de fin de L3.
 Après avoir téléchargé le zip ou cloné le repo, exécuter `./install.sh` si sur une distro Debian/Ubuntu ; sur une autre, installer à la main GTK, SQLite3 et Ruby ainsi que les gemmes sqlite3, gtk3, inifile et activerecord.
 
 ## Exécution
-Entrer `./tents-trees` depuis la racine du projet.
+Entrer `./tents-trees` depuis la racine du projet si install.sh a été utilisé ; sinon, entrer `rake` ou `ruby lib/main.rb`
 
 ### Jouer
 
@@ -16,9 +16,9 @@ Une configuration basique est proposée dans le menu d'options, accessible en ba
 
 Quatre modes de jeu sont proposés :
 - Tutoriel
-- Chrono (la partie s'achevant, et le score étant ignoré, si le décompte atteint 00:00)
-- Aventure (cinq parties de suite sur une même taille de grille avant de passer à la suivante, la taille de départ dépendant de la difficulté)
-- Exploration (mode libre)
+- Chrono (la partie s'achevant, et le score étant ignoré, si le décompte atteint 00:00 ; l'aide retire des secondes au temps)
+- Aventure (cinq parties de suite sur une même taille de grille avant de passer à la suivante, la taille de départ dépendant de la difficulté ; l'aide est indisponible)
+- Exploration (mode libre ; l'aide est cependant limitée à n usages pour une grille n*n)
 
 # Membres
 - BUON Romane
