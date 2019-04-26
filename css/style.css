@@ -15,24 +15,28 @@ button {
 /* Bouton par défaut */
 #button {
 	border-radius: 0px;
-	color: blue;
 	border-width: 1px;
 /*	background: none;*/
 	background-color: rgba(10,10,10,0.95);
 	margin: 5px;
 }
 #button:hover {
-	background-color: rgba(186, 194, 209, 0.7);
+	background-color: rgba(156, 164, 179, 0.7);
 }
 
-/* Bouton désactivé (encore utile ?) */
-#disabledutton {
-	border-radius: 1px;
-	color: black;
-	opacity: 0.5;
-/*	padding: 5px;*/
+/* Bouton désactivé */
+#button:disabled {
+	background-color: rgba(10,10,10,0.95);
+	border-radius: 0px;
+	opacity: 0.6;
+	margin: 5px;
 }
 
+/* Bouton de retour au menu précédent / fermeture de l'app */
+#btnQuit {
+	border: none;
+	background-color: #FFF;
+}
 
 #caseIndice {
 	background-color: rgba(10, 10, 10, 0.8);
@@ -42,7 +46,7 @@ button {
 }
 /* Indices des lignes et colonnes, met en évidence l'hover */
 #caseIndice:hover {
-	background-color: white;
+	background-color: rgba(80,80,80,0.8	);
 }
 
 #cellJeu {
@@ -74,6 +78,7 @@ button {
 	color: white;
 	font-weight: bold;
 	margin:3px;
+
 }
 /* Label des lignes et colonnes, outline noir */
 #lblIndice {
@@ -87,7 +92,7 @@ button {
 #lblWhite {
 	color: white;
 	font-weight: bold;
-
+ text-shadow: -1px 0px #000, 0px 1px #000, 1px 0px #000, 0px -1px #000
 }
 
 #lblScorePerso {
@@ -148,11 +153,6 @@ button {
 }
 
 
-/* Bouton de retour au menu précédent / fermeture de l'app */
-#btnQuit {
-	border: none;
-	background-color: #FFF;
-}
 
 #boxUtil {
 	padding:50px;

@@ -12,7 +12,7 @@
 #
 class ScorePartie
 
-	attr_accessor :valeur
+	attr_reader :valeur
 
   # @bonus, @malus, @modeChrono, @nbAidesUsees, @taille, @tempsDeJeu, @valeur - Le pourcentage appliqué selon la difficulté
   # sélectionnée, le pourcentage appliqué pour pénaliser une utilisation trop répétitive des aides, le nombre d'aides
@@ -162,6 +162,19 @@ class ScorePartie
     @tempsDeJeu = tempsGrille
     self
   end
+
+
+	##
+	# == reduceScoreExplo(0)
+	#
+	# Méthode donnant un accesseur restreint à @valeur, réduite à sa racine 
+	# lors d'un appel d'aide en mode exploration
+	# Return self
+	def reduceScoreExplo
+		@valeur=Math.sqrt(@valeur).to_i
+		self
+	end
+
 
   ##
   # == reset(0)

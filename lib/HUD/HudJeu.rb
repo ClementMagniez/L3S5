@@ -11,7 +11,7 @@ class HudJeu < Hud
 	# équivalente à :timer
 	alias :tempsRestant :timer 
 	
-	
+	attr_writer :pause
 	
 	# Positionne les boutons de sauvegarde/réinitialisation/annulation/etc
 	# - grille : une Grille de jeu
@@ -330,7 +330,9 @@ class HudJeu < Hud
 	def initBoutonOptions
 		super([:pause])
 		@btnOptions.signal_connect("clicked") {
+			@pause=true
 			self.pause
+			@pause=true # hacky - @pause est inversé par self.pause, on ré-inverse donc
 			self.setTitre("Partie #{@@joueur.mode.to_s.capitalize} - Options")
 			self.setTitre("#{@@joueur.mode.to_s.capitalize} - Options")		if @@joueur.mode == :tutoriel
 		}

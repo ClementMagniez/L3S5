@@ -45,19 +45,17 @@ class HudRapide < HudJeu
 	end
 
 
-	# @see HudJeu#initBoutonPause ; de plus, masque la grille durant la pause
+	# @see HudJeu#pause ; de plus, masque la grille durant la pause
 	# - return self
-	def initBoutonPause
+	def pause
 		super
-		@btnPause.signal_connect("clicked") do
-			@gridJeu.set_visible(!@pause)
-			@btnAide.set_visible(!@pause)
-			@btnReset.set_visible(!@pause)
-			@btnCancel.set_visible(!@pause)
-			@btnRemplissage.set_visible(!@pause)
-			@btnSauvegarde.set_visible(!@pause)
-			@lblAide.set_visible(!@pause)
-		end
+		@gridJeu.set_visible(!@pause)
+		@btnAide.set_visible(!@pause)
+		@btnReset.set_visible(!@pause)
+		@btnCancel.set_visible(!@pause)
+		@btnRemplissage.set_visible(!@pause)
+		@btnSauvegarde.set_visible(!@pause)
+		@lblAide.set_visible(!@pause)
 		self
 	end
 
