@@ -28,8 +28,6 @@ class HudJeu < Hud
 
 		@gridJeu.name="gridJeu"
 
-
-
 		@grille = grille
 		@lblScore = CustomLabel.new
 		self.reloadScore
@@ -66,7 +64,7 @@ class HudJeu < Hud
 			hBox.add(@gridJeu)
 				vBox2 = Gtk::Box.new(Gtk::Orientation::VERTICAL)
 				[@btnAide, @btnPause, @btnReset, @btnCancel,
-				@btnRemplissage,@btnSauvegarde].each do |btn|
+				@btnRemplissage,@btnSauvegarde	].each do |btn|
 					btn.vexpand=true
 					btn.valign=Gtk::Align::CENTER
 					btn.hexpand=false
@@ -89,8 +87,9 @@ class HudJeu < Hud
 			hBox.add(vBox2)
 		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)
-			hBox.halign = Gtk::Align::CENTER
+			hBox.halign = Gtk::Align::START
 			hBox.valign = Gtk::Align::CENTER
+			hBox.add(CustomLabel.new("\n\n")) # force la taille minimale de lblAide
 			hBox.add(@lblAide)
 		self.add(hBox)
 			hBox = Gtk::Box.new(Gtk::Orientation::HORIZONTAL)

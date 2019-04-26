@@ -13,10 +13,6 @@ class HudAccueil < Hud
 		@entryMotDePasse = Gtk::Entry.new
 		@entryMotDePasse.set_visibility(false)
 
-		# TODO TEMPORAIRE - confort de tests
-		@entryIdentifiant.text="test"
-		@entryMotDePasse.text="test"
-		####################################
 
 		initBoutonInscription
 		initBoutonConnecter

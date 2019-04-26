@@ -24,8 +24,7 @@ class HudExploration < HudJeu
 			if @nbAides > @grille.length
 				@btnAide.sensitive = false
 				@lblAide.text = "Nombre maximal d'aide demandé !"
-				desurbrillanceCase
-				desurbrillanceIndice
+				desurbrillance
 			end
 		end
 	end
